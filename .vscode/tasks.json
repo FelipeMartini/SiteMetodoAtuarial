@@ -1,0 +1,71 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "shell",
+      "label": "Instalar dependências",
+      "command": "npm install",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Atualizar dependências",
+      "command": "npm update",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Lint",
+      "command": "npm run lint",
+      "group": "test",
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Build Next.js",
+      "command": "npm run build",
+      "group": "build",
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Iniciar Next.js",
+      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force; npm run dev",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Reiniciar Next.js",
+      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force; npm run dev",
+      "group": "build",
+      "isBackground": true,
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Parar Next.js",
+      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force",
+      "group": "build",
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
+    {
+      "type": "shell",
+      "label": "Finalizar todas as instâncias Node.js",
+      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force",
+      "group": "build",
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    }
+  ]
+}

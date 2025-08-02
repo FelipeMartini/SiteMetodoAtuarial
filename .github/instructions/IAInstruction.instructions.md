@@ -1,0 +1,17 @@
+---
+applyTo: '**'
+---
+Forneça contexto do projeto e diretrizes de codificação que a IA deve seguir ao gerar código, responder perguntas ou revisar alterações.
+
+# Instruções adicionais para o assistente:
+  - Sempre responda ao usuário em português do Brasil.
+  - Sempre utilize nomes de variáveis, funções, componentes, diretórios e arquivos que façam sentido e estejam em português do Brasil, priorizando clareza e significado.
+  - Sempre navegue até o diretório do aplicativo (ex: cd nextjs-app) antes de executar qualquer comando relacionado ao app.
+- Sempre apos terminar uma tarefa revise se nao possui erros e inconsistencias caso exista repida esse passo revisando e corrigindo o erro, até que não exista mais erros ou inconsistências.
+- Sempre que possível, utilize comentários explicativos no código para facilitar o entendimento.
+- Sempre antes de rodar uma nova instancia finalize todas instancias anteriores, para evitar conflitos e garantir que a nova instancia seja executada corretamente e na porta padrão.
+- Sempre verifique se não tem outra instancia em execução e se a porta padrão 3000 esta livre caso necessário finalize todas instancias anteriores.
+- Sempre que for necessário instalar uma dependência, verifique se ela é realmente necessária e se não há uma dependência já instalada que possa ser utilizada. Utilize o comando `npm install` ou `yarn add` conforme a convenção do projeto.
+- Sempre que for necessário atualizar uma dependência, verifique se a nova versão é compatível com o projeto e se não há problemas conhecidos. Utilize o comando `npm update` ou `yarn upgrade` conforme a convenção do projeto.
+- Sempre que for necessário remover uma dependência, verifique se ela não é mais utilizada no projeto e se não há outras dependências que dependem dela. Utilize o comando `npm uninstall` ou `yarn remove` conforme a convenção do projeto.
+
