@@ -1,9 +1,5 @@
-"use client"; // 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
-import { Container, Typography, Box } from '@mui/material';
-import Button from '@mui/material/Button'; // Import do componente Button do Material UI
-import { useTema } from "./contextoTema";
-import { coresCustomizadas } from "./temas";
 // 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
+"use client";
 import React from 'react';
 import { Container, Typography, Box } from '@mui/material';
 import Button from '@mui/material/Button'; // Import do componente Button do Material UI
