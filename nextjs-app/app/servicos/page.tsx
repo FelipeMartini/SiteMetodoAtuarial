@@ -13,32 +13,33 @@ const servicos = [
   {
     titulo: "Avaliação de Passivos",
     descricao: "Cálculo preciso de passivos atuariais para planos de benefícios definidos, considerando todas as variáveis demográficas e econômicas.",
-    icone: <AssessmentIcon fontSize="large" color="primary" />,
+    // Ícone escuro para temática dark
+    icone: <AssessmentIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
   {
     titulo: "Relatórios Regulatórios",
     descricao: "Elaboração de relatórios para atendimento às exigências da PREVIC, CVM e demais órgãos reguladores.",
-    icone: <DescriptionIcon fontSize="large" color="primary" />,
+    icone: <DescriptionIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
   {
     titulo: "Consultoria Previdenciária",
     descricao: "Assessoria completa na estruturação e gestão de planos de previdência empresarial e fundos de pensão.",
-    icone: <SettingsIcon fontSize="large" color="primary" />,
+    icone: <SettingsIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
   {
     titulo: "Modelagem Atuarial",
     descricao: "Desenvolvimento de modelos matemáticos personalizados para análise de riscos e projeções financeiras.",
-    icone: <FunctionsIcon fontSize="large" color="primary" />,
+    icone: <FunctionsIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
   {
     titulo: "Gestão de Riscos",
     descricao: "Identificação, mensuração e mitigação de riscos atuariais em carteiras de seguros e previdência.",
-    icone: <ShieldIcon fontSize="large" color="primary" />,
+    icone: <ShieldIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
   {
     titulo: "Treinamentos",
     descricao: "Capacitação de equipes em conceitos atuariais, regulamentação e melhores práticas do mercado.",
-    icone: <SchoolIcon fontSize="large" color="primary" />,
+    icone: <SchoolIcon fontSize="large" sx={{ color: '#fff' }} />,
   },
 ];
 
@@ -64,7 +65,8 @@ export default function Servicos() {
                     {servico.titulo}
                   </Typography>
                 </Box>
-                <Typography variant="body2" color="text.secondary">
+                {/* Texto secundário escuro para temática dark */}
+                <Typography variant="body2" sx={{ color: '#bdbdbd' }}>
                   {servico.descricao}
                 </Typography>
               </CardContent>

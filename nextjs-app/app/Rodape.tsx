@@ -13,8 +13,9 @@ export default function Rodape() {
   return (
     <Box
       component="footer"
+      // Alterando o fundo do rodapé para preto com gradiente escuro
       sx={{
-        background: "linear-gradient(90deg, #1a237e 0%, #512da8 100%)",
+        background: "linear-gradient(90deg, #000000 0%, #222 100%)", // Gradiente preto
         color: "#fff",
         py: 6,
         px: { xs: 2, md: 8 },
@@ -26,12 +27,13 @@ export default function Rodape() {
     >
       {/* Elemento visual abstrato */}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
+        {/* Elemento visual abstrato agora com gradiente escuro */}
         <Box
           sx={{
             width: 64,
             height: 64,
             borderRadius: "50%",
-            background: "radial-gradient(circle, #7c4dff 0%, #1a237e 100%)",
+            background: "radial-gradient(circle, #333 0%, #000 100%)", // Gradiente escuro
             boxShadow: 3,
             opacity: 0.7,
           }}

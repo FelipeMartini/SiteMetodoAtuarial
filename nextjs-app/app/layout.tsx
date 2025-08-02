@@ -43,7 +43,8 @@ export default function RootLayout({
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <ThemeProvider theme={theme}>
-          <AppBar position="static" color="primary">
+          {/* Alterando o AppBar para usar a cor primária preta definida no tema */}
+          <AppBar position="static" color="primary" sx={{ backgroundColor: '#000000' }}>
             <Toolbar>
               <Typography variant="h6" sx={{ flexGrow: 1 }}>
                 Método Atuarial
