@@ -1,3 +1,4 @@
+import React from 'react';
 // Página Sobre - Inspirada no site métodoatuarial.com.br
 // Apresenta informações institucionais, equipe e ambiente
 "use client";

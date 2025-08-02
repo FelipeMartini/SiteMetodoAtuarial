@@ -1,3 +1,4 @@
+import React from 'react';
 "use client";
 import { Container, Typography } from '@mui/material';
 import { useTema } from "../contextoTema";

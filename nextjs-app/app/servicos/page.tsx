@@ -1,3 +1,4 @@
+import React from 'react';
 "use client";
 // Página Serviços - Inspirada no site métodoatuarial.com.br
 // Lista todos os serviços oferecidos pela consultoria

@@ -1,3 +1,4 @@
+// ...existing code...
 "use client";
 import React from 'react';
 import { useTema } from '../contextoTema';
