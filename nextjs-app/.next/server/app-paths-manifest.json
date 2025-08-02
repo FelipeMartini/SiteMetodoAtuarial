@@ -1,9 +1,1 @@
-{
-  "/page": "app/page.js",
-  "/sobre/page": "app/sobre/page.js",
-  "/orcamento/page": "app/orcamento/page.js",
-  "/servicos/page": "app/servicos/page.js",
-  "/clientes/page": "app/clientes/page.js",
-  "/contato/page": "app/contato/page.js",
-  "/login/page": "app/login/page.js"
-}
+{}

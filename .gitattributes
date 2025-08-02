@@ -1,0 +1,6 @@
+# Este arquivo força o Git a tratar todos os arquivos de texto com final de linha LF (Unix)
+* text eol=lf
+
+# Comentário explicativo:
+# Isso evita avisos de conversão de final de linha (LF/CRLF) ao trabalhar em diferentes sistemas operacionais.
+# Caso prefira CRLF (Windows), troque 'lf' por 'crlf'.
