@@ -1,3 +1,4 @@
+"use client";
 // Página Serviços - Inspirada no site métodoatuarial.com.br
 // Lista todos os serviços oferecidos pela consultoria
 
@@ -8,6 +9,8 @@ import SchoolIcon from '@mui/icons-material/School';
 import ShieldIcon from '@mui/icons-material/Shield';
 import SettingsIcon from '@mui/icons-material/Settings';
 import FunctionsIcon from '@mui/icons-material/Functions';
+import { useTema } from "../contextoTema";
+import { coresCustomizadas } from "../temas";
 
 const servicos = [
   {
@@ -44,36 +47,35 @@ const servicos = [
 ];
 
 export default function Servicos() {
+  // Obtém o tema atual para aplicar cores dinâmicas
+  const { temaAtual, temaMui } = useTema();
+  const cores = coresCustomizadas[temaAtual];
   // Componente principal da página de serviços
   // Renderiza todos os serviços em um grid responsivo
   return (
     <Container maxWidth="lg" sx={{ py: 6 }}>
-      {/* Título da página */}
-      <Typography variant="h4" align="center" gutterBottom>
+      <Typography variant="h3" color="primary" gutterBottom sx={{ color: cores.destaque, textShadow: `0 2px 8px ${temaMui.palette.background.paper}` }}>
         Serviços Atuariais
       </Typography>
-      {/* Grid de serviços */}
       <Grid container spacing={4}>
-        {servicos.map((servico, index) => (
-          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
-            {/* Card de serviço individual */}
-            <Card sx={{ minHeight: 220 }}>
-              <CardContent>
-                <Box display="flex" alignItems="center" mb={2}>
-                  {servico.icone}
-                  <Typography variant="h6" ml={2}>
-                    {servico.titulo}
-                  </Typography>
-                </Box>
-                {/* Texto secundário escuro para temática dark */}
-                <Typography variant="body2" sx={{ color: '#bdbdbd' }}>
-                  {servico.descricao}
-                </Typography>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+        {servicos.map((servico, idx) => {
+          const IconComp = servico.icone.type; // Get the icon component type
+          return (
+            <Grid item xs={12} sm={6} md={4} key={idx}>
+              <Card sx={{ background: cores.card, color: temaMui.palette.text.primary, borderRadius: 4, boxShadow: 3, minHeight: 260, transition: 'background 0.3s, color 0.3s' }}>
+                <CardContent>
+                  <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                    <IconComp fontSize="large" sx={{ color: cores.destaque }} />
+                    <Typography variant="h6" sx={{ ml: 2, color: cores.destaque }}>{servico.titulo}</Typography>
+                  </Box>
+                  <Typography variant="body2" sx={{ color: temaMui.palette.text.secondary }}>{servico.descricao}</Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          );
+        })}
       </Grid>
+      {/* Comentário: Todas as cores da página Serviços agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
     </Container>
   );
 }

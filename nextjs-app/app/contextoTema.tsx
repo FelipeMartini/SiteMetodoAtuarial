@@ -1,3 +1,4 @@
+"use client";
 // Arquivo: contextoTema.tsx
 // Contexto React para controle global do tema (dark, claro, etc.)
 // Permite alternância de tema e fácil expansão para novos temas
@@ -22,7 +23,7 @@ interface ContextoTemaProps {
   temaMui: Theme;
 }
 
-const ContextoTema = createContext<ContextoTemaProps | undefined>(undefined);
+export const ContextoTema = createContext<ContextoTemaProps | undefined>(undefined);
 
 // Provedor do contexto
 export function ProvedorTema({ children }: { children: ReactNode }) {

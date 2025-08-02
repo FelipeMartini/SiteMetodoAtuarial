@@ -1,30 +1,17 @@
+// Página de contato adaptada para alternância de tema
 "use client";
-import { Container, Typography, TextField, Button } from '@mui/material';
-import { useForm } from 'react-hook-form';
-import axios from 'axios';
+// Página de contato adaptada para alternância de tema
+import React from 'react';
+import { useTema } from '../contextoTema';
+import { coresCustomizadas } from '../temas';
 
 export default function Contato() {
-  type FormData = {
-    nome: string;
-    email: string;
-    mensagem: string;
-  };
-  const { register, handleSubmit, reset } = useForm<FormData>();
-  const onSubmit = async (data: FormData) => {
-    await axios.post('/api/send-email', data);
-    reset();
-    alert('Mensagem enviada com sucesso!');
-  };
-
+  const { temaAtual } = useTema();
+  const cores = coresCustomizadas[temaAtual];
   return (
-    <Container maxWidth="sm" sx={{ py: 8 }}>
-      <Typography variant="h4" gutterBottom>Contato</Typography>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <TextField label="Nome" fullWidth margin="normal" {...register('nome', { required: true })} />
-        <TextField label="Email" type="email" fullWidth margin="normal" {...register('email', { required: true })} />
-        <TextField label="Mensagem" multiline rows={4} fullWidth margin="normal" {...register('mensagem', { required: true })} />
-        <Button type="submit" variant="contained" sx={{ mt: 2 }}>Enviar</Button>
-      </form>
-    </Container>
+    <main style={{ background: cores.rodape, color: cores.rodapeTexto, minHeight: '100vh', padding: 32 }}>
+      <h1>Contato</h1>
+      <p>Entre em contato conosco!</p>
+    </main>
   );
 }

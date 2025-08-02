@@ -1,20 +1,26 @@
+import React from 'react';
+"use client";
 import { Container, Typography, Box } from '@mui/material';
+import Button from '@mui/material/Button'; // Import do componente Button do Material UI
+import { useTema } from "./contextoTema";
+import { coresCustomizadas } from "./temas";
 
 export default function Home() {
+  const { temaAtual, temaMui } = useTema();
+  const cores = coresCustomizadas[temaAtual];
   return (
     <Container maxWidth="md" sx={{ py: 8 }}>
-      <Box sx={{ textAlign: 'center' }}>
-        <Typography variant="h2" gutterBottom>Método Atuarial</Typography>
-        <Typography variant="h5" gutterBottom>
-          Bem-vindo à Método Atuarial!
-        </Typography>
-        <Typography variant="body1" sx={{ mt: 4 }}>
-          Somos uma consultoria especializada em previdência e soluções atuariais, com foco em inovação, transparência e resultados para nossos clientes. Nossa equipe é formada por profissionais experientes e comprometidos com a excelência.
-        </Typography>
-        <Typography variant="body1" sx={{ mt: 2 }}>
-          Entre em contato para saber como podemos ajudar sua empresa a alcançar seus objetivos com segurança e eficiência.
-        </Typography>
+      <Typography variant="h2" gutterBottom sx={{ textAlign: 'center', fontWeight: 700, color: cores.destaque, textShadow: `0 2px 8px ${temaMui.palette.background.paper}` }}>
+        Método Atuarial
+      </Typography>
+      <Typography variant="h5" gutterBottom sx={{ textAlign: 'center', mb: 4, color: temaMui.palette.text.primary }}>
+        Consultoria especializada em previdência e soluções atuariais
+      </Typography>
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
+        <Button variant="contained" sx={{ background: cores.botao, color: cores.botaoTexto, transition: 'background 0.3s, color 0.3s' }} href="/orcamento">Solicitar Orçamento</Button>
+        <Button variant="outlined" sx={{ borderColor: cores.destaque, color: cores.destaque, transition: 'border-color 0.3s, color 0.3s' }} href="/sobre">Sobre</Button>
       </Box>
+      {/* Comentário: Todas as cores da página principal agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
     </Container>
   );
 }
