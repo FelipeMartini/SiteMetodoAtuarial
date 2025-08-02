@@ -3,23 +3,25 @@
 
 import { createTheme } from '@mui/material/styles';
 
-// Tema escuro (dark)
-export const temaDark = createTheme({
+// Tema escuro (escuro)
+export const temaEscuro = createTheme({
   palette: {
     mode: 'dark',
     primary: {
-      main: '#000000', // Preto
+      main: '#21243d', // Azul profundo para conforto visual
+      contrastText: '#fff',
     },
     secondary: {
       main: '#512da8',
+      contrastText: '#fff',
     },
     background: {
-      default: '#121212',
-      paper: '#1a1a1a',
+      default: '#181a20', // Cinza escuro para fundo
+      paper: '#23263a', // Cinza/azul escuro para cards
     },
     text: {
-      primary: '#fff',
-      secondary: '#bdbdbd',
+      primary: '#e0e0e0', // Cinza claro para texto principal
+      secondary: '#bdbdbd', // Cinza para texto secundário
     },
   },
   typography: {
@@ -32,18 +34,20 @@ export const temaClaro = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#1976d2', // Azul padrão MUI
+      main: '#2196f3', // Azul claro moderno
+      contrastText: '#fff',
     },
     secondary: {
-      main: '#512da8',
+      main: '#90caf9', // Azul claro secundário
+      contrastText: '#212121',
     },
     background: {
-      default: '#f5f5f5',
-      paper: '#fff',
+      default: '#e3f2fd', // Azul muito claro para fundo
+      paper: '#ffffff', // Branco para cards e papel
     },
     text: {
-      primary: '#212121',
-      secondary: '#333',
+      primary: '#212121', // Preto para texto principal
+      secondary: '#1976d2', // Azul para texto secundário
     },
   },
   typography: {
