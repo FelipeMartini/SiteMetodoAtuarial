@@ -1,0 +1,10 @@
+{
+  "/_not-found/page": "/_not-found",
+  "/clientes/page": "/clientes",
+  "/contato/page": "/contato",
+  "/login/page": "/login",
+  "/orcamento/page": "/orcamento",
+  "/page": "/",
+  "/servicos/page": "/servicos",
+  "/sobre/page": "/sobre"
+}

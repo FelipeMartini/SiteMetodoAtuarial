@@ -54,8 +54,7 @@ export default function Servicos() {
       {/* Grid de serviços */}
       <Grid container spacing={4}>
         {servicos.map((servico, index) => (
-          {/* Forçando tipagem do Grid como 'any' para contornar erro de tipagem do TypeScript */}
-          <Grid item xs={12} sm={6} md={4} key={index} as={"div" as any}>
+          <Grid size={{ xs: 12, sm: 6, md: 4 }} key={index}>
             {/* Card de serviço individual */}
             <Card sx={{ minHeight: 220 }}>
               <CardContent>
