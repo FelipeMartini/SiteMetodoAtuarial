@@ -42,11 +42,22 @@ export default function Sobre() {
         </Box>
       </Box>
       {/* Imagens do ambiente */}
-      <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center" }}>
-        <Image src="/office-team.jpg" alt="Equipe Método Atuarial" width={320} height={213} style={{ borderRadius: 16 }} />
-        <Image src="/office-1.jpg" alt="Recepção" width={220} height={147} style={{ borderRadius: 16 }} />
-        <Image src="/office-2.jpg" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16 }} />
-        <Image src="/office-3.jpg" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16 }} />
+      {/* Imagens do ambiente: responsivas, lado a lado em telas médias/grandes e empilhadas em telas pequenas. */}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 2,
+          justifyContent: "center",
+          flexWrap: { xs: "wrap", sm: "nowrap" }, // Empilha no mobile, lado a lado no desktop
+          width: "100%",
+          alignItems: "center"
+        }}
+      >
+        {/* Todas as imagens padronizadas para 220x147px. flexWrap: 'wrap' no xs (mobile) empilha, 'nowrap' no sm+ mantém lado a lado. */}
+        <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} />
+        <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} />
+        <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} />
+        <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} />
       </Box>
       {/* Comentário: Todas as cores da página Sobre agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
     </Container>
