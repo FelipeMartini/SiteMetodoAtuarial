@@ -26,7 +26,7 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="pt-br">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}> 
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <AppBar position="static" color="primary">
           <Toolbar>
             <Typography variant="h6" sx={{ flexGrow: 1 }}>
@@ -43,9 +43,9 @@ export default function RootLayout({
             {children}
           </Box>
         </Container>
-        <Box component="footer" sx={{ textAlign: "center", py: 2, mt: 4, color: "#888" }}>
-          <Typography variant="body2">© {new Date().getFullYear()} Método Atuarial. Todos os direitos reservados.</Typography>
-        </Box>
+        {/* Footer moderno e abstrato */}
+        {/* Importa o componente Rodape */}
+        {require('./Rodape').default()}
       </body>
     </html>
   );
