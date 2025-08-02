@@ -67,5 +67,14 @@
       "problemMatcher": [],
       "options": { "cwd": "${workspaceFolder}/nextjs-app" }
     }
+    ,
+    {
+      "type": "shell",
+      "label": "Cobertura de Testes",
+      "command": "npx jest --coverage",
+      "group": "test",
+      "problemMatcher": ["$tsc"],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    }
   ]
 }
