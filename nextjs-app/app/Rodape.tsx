@@ -8,6 +8,8 @@ import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 
 export default function Rodape() {
+  // Componente Rodape: Footer moderno e inovador para consultoria atuarial
+  // Utiliza elementos abstratos, ícones, layout responsivo e informações institucionais
   return (
     <Box
       component="footer"

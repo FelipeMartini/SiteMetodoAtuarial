@@ -24,6 +24,8 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
+  // Arquivo principal de layout do projeto Next.js
+  // Define o layout global, menu de navegação e integra o footer moderno
   return (
     <html lang="pt-br">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
@@ -33,6 +35,9 @@ export default function RootLayout({
               Método Atuarial
             </Typography>
             <Button color="inherit" component={Link} href="/">Início</Button>
+            <Button color="inherit" component={Link} href="/sobre">Sobre</Button>
+            <Button color="inherit" component={Link} href="/servicos">Serviços</Button>
+            <Button color="inherit" component={Link} href="/orcamento">Orçamento</Button>
             <Button color="inherit" component={Link} href="/clientes">Área do Cliente</Button>
             <Button color="inherit" component={Link} href="/contato">Contato</Button>
             <Button color="inherit" component={Link} href="/login">Login / Cadastro</Button>
