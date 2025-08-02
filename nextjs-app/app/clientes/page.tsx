@@ -1,5 +1,6 @@
-import React from 'react';
+// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 "use client";
+import React from 'react';
 import { Container, Typography } from '@mui/material';
 import { useTema } from "../contextoTema";
 import { coresCustomizadas } from "../temas";

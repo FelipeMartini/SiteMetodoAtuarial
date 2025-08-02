@@ -1,8 +1,8 @@
-import React from 'react';
+// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 "use client";
+import React from 'react';
 // Página Serviços - Inspirada no site métodoatuarial.com.br
 // Lista todos os serviços oferecidos pela consultoria
-
 import { Container, Typography, Box, Card, CardContent, Grid } from "@mui/material";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import DescriptionIcon from '@mui/icons-material/Description';

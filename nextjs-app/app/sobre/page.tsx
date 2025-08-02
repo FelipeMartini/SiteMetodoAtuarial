@@ -1,10 +1,8 @@
+// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
+"use client";
 import React from 'react';
 // Página Sobre - Inspirada no site métodoatuarial.com.br
 // Apresenta informações institucionais, equipe e ambiente
-"use client";
-// Página Sobre - Inspirada no site métodoatuarial.com.br
-// Apresenta informações institucionais, equipe e ambiente
-
 import { Container, Typography, Box } from "@mui/material";
 import Image from "next/image";
 import { useTema } from "../contextoTema";
