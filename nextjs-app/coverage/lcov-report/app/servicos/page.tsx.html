@@ -25,7 +25,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>7/7</span>
+                <span class='fraction'>17/17</span>
             </div>
         
             
@@ -146,7 +146,25 @@
 <a name='L81'></a><a href='#L81'>81</a>
 <a name='L82'></a><a href='#L82'>82</a>
 <a name='L83'></a><a href='#L83'>83</a>
-<a name='L84'></a><a href='#L84'>84</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L84'></a><a href='#L84'>84</a>
+<a name='L85'></a><a href='#L85'>85</a>
+<a name='L86'></a><a href='#L86'>86</a>
+<a name='L87'></a><a href='#L87'>87</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -161,23 +179,6 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -198,10 +199,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -229,12 +234,14 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">import React from 'react';
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span></td><td class="text"><pre class="prettyprint lang-js">// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 "use client";
+import React from 'react';
 // Página Serviços - Inspirada no site métodoatuarial.com.br
 // Lista todos os serviços oferecidos pela consultoria
-&nbsp;
-import { Container, Typography, Box, Card, CardContent, Grid } from "@mui/material";
+import { Container, Typography, Box, Card, CardContent } from "@mui/material";
+import { Box as MuiBox } from "@mui/material";
 import AssessmentIcon from '@mui/icons-material/Assessment';
 import DescriptionIcon from '@mui/icons-material/Description';
 import SchoolIcon from '@mui/icons-material/School';
@@ -248,33 +255,32 @@ const servicos = [
   {
     titulo: "Avaliação de Passivos",
     descricao: "Cálculo preciso de passivos atuariais para planos de benefícios definidos, considerando todas as variáveis demográficas e econômicas.",
-    // Ícone escuro para temática dark
-    icone: &lt;AssessmentIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: AssessmentIcon,
   },
   {
     titulo: "Relatórios Regulatórios",
     descricao: "Elaboração de relatórios para atendimento às exigências da PREVIC, CVM e demais órgãos reguladores.",
-    icone: &lt;DescriptionIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: DescriptionIcon,
   },
   {
     titulo: "Consultoria Previdenciária",
     descricao: "Assessoria completa na estruturação e gestão de planos de previdência empresarial e fundos de pensão.",
-    icone: &lt;SettingsIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: SettingsIcon,
   },
   {
     titulo: "Modelagem Atuarial",
     descricao: "Desenvolvimento de modelos matemáticos personalizados para análise de riscos e projeções financeiras.",
-    icone: &lt;FunctionsIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: FunctionsIcon,
   },
   {
     titulo: "Gestão de Riscos",
     descricao: "Identificação, mensuração e mitigação de riscos atuariais em carteiras de seguros e previdência.",
-    icone: &lt;ShieldIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: ShieldIcon,
   },
   {
     titulo: "Treinamentos",
     descricao: "Capacitação de equipes em conceitos atuariais, regulamentação e melhores práticas do mercado.",
-    icone: &lt;SchoolIcon fontSize="large" sx={{ color: '#fff' }} /&gt;,
+    icone: SchoolIcon,
   },
 ];
 &nbsp;
@@ -289,24 +295,27 @@ export default function Servicos() {
       &lt;Typography variant="h3" color="primary" gutterBottom sx={{ color: cores.destaque, textShadow: `0 2px 8px ${temaMui.palette.background.paper}` }}&gt;
         Serviços Atuariais
       &lt;/Typography&gt;
-      &lt;Grid container spacing={4}&gt;
+      {/* Grid responsivo MUI v5+ usando columns e gridColumn */}
+      {/* Grid responsivo MUI v5+ usando columns e gridColumn */}
+      &lt;MuiBox sx={{ display: 'flex', flexWrap: 'wrap', gap: 4 }}&gt;
         {servicos.map((servico, idx) =&gt; {
-          const IconComp = servico.icone.type; // Get the icon component type
+          const IconComp = servico.icone;
           return (
-            &lt;Grid item xs={12} sm={6} md={4} key={idx}&gt;
+            &lt;MuiBox key={idx} sx={{ flex: '1 1 300px', minWidth: 260, maxWidth: 400 }}&gt;
               &lt;Card sx={{ background: cores.card, color: temaMui.palette.text.primary, borderRadius: 4, boxShadow: 3, minHeight: 260, transition: 'background 0.3s, color 0.3s' }}&gt;
                 &lt;CardContent&gt;
                   &lt;Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}&gt;
+                    {/* Renderiza o ícone do serviço, cor dinâmica conforme tema */}
                     &lt;IconComp fontSize="large" sx={{ color: cores.destaque }} /&gt;
                     &lt;Typography variant="h6" sx={{ ml: 2, color: cores.destaque }}&gt;{servico.titulo}&lt;/Typography&gt;
                   &lt;/Box&gt;
                   &lt;Typography variant="body2" sx={{ color: temaMui.palette.text.secondary }}&gt;{servico.descricao}&lt;/Typography&gt;
                 &lt;/CardContent&gt;
               &lt;/Card&gt;
-            &lt;/Grid&gt;
+            &lt;/MuiBox&gt;
           );
         })}
-      &lt;/Grid&gt;
+      &lt;/MuiBox&gt;
       {/* Comentário: Todas as cores da página Serviços agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
     &lt;/Container&gt;
   );
@@ -319,7 +328,7 @@ export default function Servicos() {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2025-08-02T19:26:49.212Z
+                at 2025-08-02T22:24:33.693Z
             </div>
         <script src="../../prettify.js"></script>
         <script>
