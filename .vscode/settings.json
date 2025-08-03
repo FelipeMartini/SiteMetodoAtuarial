@@ -1,3 +1,29 @@
 {
-  "terminal.integrated.cwd": "${workspaceFolder}/nextjs-app"
+  // Configurações de performance para projetos Next.js
+  "terminal.integrated.cwd": "${workspaceFolder}/nextjs-app",
+  "files.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/build": true,
+    "**/dist": true,
+    "**/.git": true,
+    "**/coverage": true
+  },
+  "files.watcherExclude": {
+    "**/node_modules/**": true,
+    "**/.next/**": true,
+    "**/build/**": true,
+    "**/dist/**": true
+  },
+  "search.exclude": {
+    "**/node_modules": true,
+    "**/.next": true,
+    "**/build": true,
+    "**/dist": true
+  },
+  "editor.minimap.enabled": false,
+  "breadcrumbs.enabled": false,
+  "files.autoSave": "onFocusChange",
+  "typescript.suggest.autoImports": false,
+  "typescript.disableAutomaticTypeAcquisition": true
 }
