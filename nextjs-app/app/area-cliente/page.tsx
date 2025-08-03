@@ -2,12 +2,13 @@
 // Só pode ser acessada por usuários autenticados
 // Exibe informações do perfil do usuário logado
 // Importações necessárias para autenticação, imagem e navegação
+import React from "react";
 import { getServerSession } from "next-auth";
 import authOptions from "../api/auth/[...nextauth]/authOptions";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import type { Session } from "next-auth";
-import type React from "react";
+// Removido import duplicado de React como tipo para evitar erro de sintaxe no Jest/TypeScript
 
 // Função assíncrona da página protegida da área do cliente
 export default async function AreaCliente(): Promise<React.ReactElement> {

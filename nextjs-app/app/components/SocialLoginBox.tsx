@@ -11,9 +11,7 @@ import {
   Divider,
   Avatar,
   Stack,
-  useTheme,
 } from "@mui/material";
-import Image from "next/image";
 import {
   Apple as AppleIcon,
   Login as LoginIcon,
@@ -30,7 +28,6 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
   onGoogleLogin,
   onAppleLogin,
 }) => {
-  const theme = useTheme();
   // Usa o contexto de tema do projeto para definir se está no modo escuro
   const { temaAtual } = useTema();
   const isDarkMode = temaAtual === "escuro";
