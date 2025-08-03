@@ -105,5 +105,7 @@ const Rodape: React.FC = React.memo(function Rodape() {
     </Box>
   );
 });
+// Adiciona displayName para evitar erro de lint e facilitar debug
+Rodape.displayName = "Rodape";
 
 export default Rodape;

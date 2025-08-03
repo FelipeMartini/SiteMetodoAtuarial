@@ -1,6 +1,7 @@
 import GoogleProvider from "next-auth/providers/google";
 import AppleProvider from "next-auth/providers/apple";
-
+import { Session } from "next-auth";
+import { JWT } from "next-auth/jwt";
 const authOptions = {
   providers: [
     GoogleProvider({
@@ -18,11 +19,13 @@ const authOptions = {
     error: "/login",
   },
   callbacks: {
-    async session({ session, token }: { session: any; token: any }) {
-      // Tipagem explícita: idealmente importar tipos corretos do NextAuth
-      session.id = token.sub;
-      session.picture = token.picture;
-      session.email = token.email;
+    async session({ session, token }: { session: Session; token: JWT }) {
+      // Adiciona campos extras à sessão, mantendo compatibilidade com NextAuth
+      if (token) {
+        (session as Session & { id?: string; picture?: string; email?: string }).id = token.sub ?? undefined;
+        (session as Session & { id?: string; picture?: string; email?: string }).picture = token.picture ?? undefined;
+        (session as Session & { id?: string; picture?: string; email?: string }).email = token.email ?? undefined;
+      }
       return session;
     },
     async redirect() {

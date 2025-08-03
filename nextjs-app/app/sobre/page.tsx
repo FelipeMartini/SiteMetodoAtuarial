@@ -1,9 +1,9 @@
+"use client";
+// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 // Importações individuais do Material-UI para melhor performance e evitar duplicidade
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
-// 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
-"use client";
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 // Página Sobre - Inspirada no site métodoatuarial.com.br
@@ -63,13 +63,13 @@ const Sobre: React.FC = React.memo(function Sobre() {
             {/* Todas as imagens padronizadas para 220x147px. flexWrap: 'wrap' no xs (mobile) empilha, 'nowrap' no sm+ mantém lado a lado. */}
             {/* Imagens otimizadas com loading="lazy" para melhor performance */}
             {/* Imagem otimizada com quality e blur */}
-            <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da equipe Método Atuarial" />
+            <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da equipe Método Atuarial" />
             {/* Imagem otimizada com quality e blur */}
-            <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da recepção" />
+            <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da recepção" />
             {/* Imagem otimizada com quality e blur */}
-            <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da sala de reuniões" />
+            <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da sala de reuniões" />
             {/* Imagem otimizada com quality e blur */}
-            <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da área de trabalho" />
+            <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da área de trabalho" />
           </Box>
         </>
         {/* Comentário: Todas as cores da página Sobre agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}

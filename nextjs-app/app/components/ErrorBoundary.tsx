@@ -20,10 +20,10 @@ export class ErrorBoundary extends React.Component<{ children: React.ReactNode }
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, info: React.ErrorInfo) {
+  componentDidCatch() {
     // Aqui pode-se logar o erro para serviço externo
     // Exemplo: Sentry, Datadog, etc.
-    // console.error('Erro capturado pelo ErrorBoundary:', error, info);
+    // console.error('Erro capturado pelo ErrorBoundary');
   }
 
   render() {

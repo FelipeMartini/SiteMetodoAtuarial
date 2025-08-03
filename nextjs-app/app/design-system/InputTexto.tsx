@@ -15,10 +15,13 @@ import React from "react";
  * O componente InputTexto utiliza o TextField do Material-UI, garantindo acessibilidade, responsividade e integração com o tema global.
  */
 // Memoização do componente para evitar renderizações desnecessárias quando as props não mudam
-const InputTexto: React.FC<TextFieldProps> = React.memo((props) => {
+
+const InputTexto: React.FC<TextFieldProps> = React.memo(function InputTextoMemo(props) {
   return (
     <TextField {...props} sx={{ borderRadius: 2, ...props.sx }} />
   );
 });
+// Adiciona displayName para evitar erro de lint e facilitar debug
+InputTexto.displayName = "InputTexto";
 
 export default InputTexto;

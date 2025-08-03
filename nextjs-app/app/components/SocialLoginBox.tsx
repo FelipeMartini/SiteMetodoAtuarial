@@ -23,7 +23,7 @@ interface SocialLoginBoxProps {
   Utiliza memoização para otimizar renderização.
   Comentários explicativos estão fora do JSX para evitar erros de sintaxe.
 */
-const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogin, onAppleLogin }) => {
+const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function SocialLoginBoxMemo({ onGoogleLogin, onAppleLogin }) {
   const { temaAtual } = useTema();
   const isDarkMode = temaAtual === "escuro";
 
@@ -185,5 +185,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
   );
 });
 
+// Adiciona displayName para evitar erro de lint e facilitar debug
+SocialLoginBox.displayName = "SocialLoginBox";
 // Exportação do componente memoizado
 export default SocialLoginBox;

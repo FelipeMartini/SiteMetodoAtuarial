@@ -16,12 +16,15 @@ import React from "react";
  * O componente Botao utiliza o Button do Material-UI, permitindo personalização via props e integração com o tema global.
  */
 // Memoização do componente para evitar renderizações desnecessárias quando as props não mudam
-const Botao: React.FC<ButtonProps> = React.memo(({ children, ...props }) => {
+
+const Botao: React.FC<ButtonProps> = React.memo(function BotaoMemo({ children, ...props }) {
   return (
     <Button {...props} sx={{ borderRadius: 2, fontWeight: 600, textTransform: 'none', ...props.sx }}>
       {children}
     </Button>
   );
 });
+// Adiciona displayName para evitar erro de lint e facilitar debug
+Botao.displayName = "Botao";
 
 export default Botao;

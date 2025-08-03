@@ -28,7 +28,8 @@ interface CardInfoProps extends CardProps {
 }
 
 // Memoização do componente para evitar renderizações desnecessárias quando as props não mudam
-const CardInfo: React.FC<CardInfoProps> = React.memo(({ titulo, descricao, children, ...props }) => {
+
+const CardInfo: React.FC<CardInfoProps> = React.memo(function CardInfoMemo({ titulo, descricao, children, ...props }) {
   return (
     <Card {...props} sx={{ borderRadius: 4, boxShadow: 3, ...props.sx }}>
       <CardContent>
@@ -39,5 +40,7 @@ const CardInfo: React.FC<CardInfoProps> = React.memo(({ titulo, descricao, child
     </Card>
   );
 });
+// Adiciona displayName para evitar erro de lint e facilitar debug
+CardInfo.displayName = "CardInfo";
 
 export default CardInfo;
