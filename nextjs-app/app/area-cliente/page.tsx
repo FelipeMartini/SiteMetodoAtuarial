@@ -67,6 +67,8 @@ export default async function AreaCliente(): Promise<React.ReactElement> {
                 height={120}
                 style={{ borderRadius: "50%" }}
                 loading="lazy"
+                quality={85}
+                placeholder="blur"
               />
             ) : null}
             <div>

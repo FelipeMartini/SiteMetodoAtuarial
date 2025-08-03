@@ -62,40 +62,19 @@ const Sobre: React.FC = React.memo(function Sobre() {
           >
             {/* Todas as imagens padronizadas para 220x147px. flexWrap: 'wrap' no xs (mobile) empilha, 'nowrap' no sm+ mantém lado a lado. */}
             {/* Imagens otimizadas com loading="lazy" para melhor performance */}
-            <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-            <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-            <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-            <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
+            {/* Imagem otimizada com quality e blur */}
+            <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da equipe Método Atuarial" />
+            {/* Imagem otimizada com quality e blur */}
+            <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da recepção" />
+            {/* Imagem otimizada com quality e blur */}
+            <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da sala de reuniões" />
+            {/* Imagem otimizada com quality e blur */}
+            <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} placeholder="blur" role="img" aria-label="Foto da área de trabalho" />
           </Box>
         </>
         {/* Comentário: Todas as cores da página Sobre agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
       </Container>
     </ErrorBoundary>
-  );
-// ...existing code...
-        </Box >
-      </Box >
-  {/* Imagens do ambiente */ }
-{/* Imagens do ambiente: responsivas, lado a lado em telas médias/grandes e empilhadas em telas pequenas. */ }
-<Box
-  sx={{
-    display: "flex",
-    gap: 2,
-    justifyContent: "center",
-    flexWrap: { xs: "wrap", sm: "nowrap" }, // Empilha no mobile, lado a lado no desktop
-    width: "100%",
-    alignItems: "center"
-  }}
->
-  {/* Todas as imagens padronizadas para 220x147px. flexWrap: 'wrap' no xs (mobile) empilha, 'nowrap' no sm+ mantém lado a lado. */}
-  {/* Imagens otimizadas com loading="lazy" para melhor performance */}
-  <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-  <Image src="/office-1.png" alt="Recepção" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-  <Image src="/office-2.png" alt="Sala de Reuniões" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-  <Image src="/office-3.png" alt="Área de Trabalho" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" />
-</Box>
-{/* Comentário: Todas as cores da página Sobre agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */ }
-    </Container >
   );
 });
 export default Sobre;

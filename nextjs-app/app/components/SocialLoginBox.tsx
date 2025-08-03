@@ -17,10 +17,17 @@ interface SocialLoginBoxProps {
   onAppleLogin?: () => void;
 }
 
+/*
+  Componente SocialLoginBox
+  Exibe opções de login social (Google e Apple) com estilos adaptados ao tema.
+  Utiliza memoização para otimizar renderização.
+  Comentários explicativos estão fora do JSX para evitar erros de sintaxe.
+*/
 const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogin, onAppleLogin }) => {
   const { temaAtual } = useTema();
   const isDarkMode = temaAtual === "escuro";
 
+  // Estilos do container principal
   const containerStyles = React.useMemo(() => ({
     width: 400,
     maxWidth: "90vw",
@@ -33,6 +40,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
     border: isDarkMode ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.05)",
   }), [isDarkMode]);
 
+  // Estilos do botão Google
   const googleButtonStyles = React.useMemo(() => ({
     width: "100%",
     height: 56,
@@ -46,6 +54,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
     boxShadow: "none",
   }), [isDarkMode]);
 
+  // Estilos do botão Apple
   const appleButtonStyles = React.useMemo(() => ({
     width: "100%",
     height: 56,
@@ -58,6 +67,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
     boxShadow: "none",
   }), [isDarkMode]);
 
+  // Função de login Google
   const handleGoogleLogin = React.useCallback(() => {
     if (onGoogleLogin) {
       onGoogleLogin();
@@ -66,6 +76,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
     }
   }, [onGoogleLogin]);
 
+  // Função de login Apple
   const handleAppleLogin = React.useCallback(() => {
     if (onAppleLogin) {
       onAppleLogin();
@@ -76,6 +87,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
 
   return (
     <Paper elevation={0} sx={containerStyles}>
+      {/* Box superior com avatar e título */}
       <Box
         sx={{
           background: isDarkMode ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
@@ -105,8 +117,10 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
           Acesse sua conta rapidamente
         </Typography>
       </Box>
+      {/* Box inferior com botões de login e informações */}
       <Box sx={{ p: 4 }}>
         <Stack spacing={3}>
+          {/* Botão de login com Google */}
           <Button
             variant="outlined"
             startIcon={
@@ -122,6 +136,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
           >
             Continuar com Google
           </Button>
+          {/* Botão de login com Apple */}
           <Button
             variant="contained"
             startIcon={<AppleIcon sx={{ fontSize: 20 }} />}
@@ -130,6 +145,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
           >
             Continuar com Apple
           </Button>
+          {/* Divisor visual entre opções */}
           <Box sx={{ position: "relative", my: 3 }}>
             <Divider sx={{ borderColor: isDarkMode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)" }} />
             <Typography
@@ -148,16 +164,17 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
               ou
             </Typography>
           </Box>
+          {/* Informações de termos e privacidade */}
           <Typography
             variant="caption"
             align="center"
             sx={{ color: isDarkMode ? "#888" : "#666", lineHeight: 1.4, mt: 2, textAlign: "center" }}
           >
-            Ao continuar, você concorda com nossos{' '}
+            Ao continuar, você concorda com nossos{" "}
             <Box component="a" href="/termos" target="_blank" sx={{ color: isDarkMode ? "#4facfe" : "#1976d2", cursor: "pointer", textDecoration: "underline", mx: 0.5 }}>
               Termos de Uso
-            </Box>{' '}
-            e{' '}
+            </Box>{" "}
+            e{" "}
             <Box component="a" href="/privacidade" target="_blank" sx={{ color: isDarkMode ? "#4facfe" : "#1976d2", cursor: "pointer", textDecoration: "underline", mx: 0.5 }}>
               Política de Privacidade
             </Box>
@@ -168,4 +185,5 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogi
   );
 });
 
+// Exportação do componente memoizado
 export default SocialLoginBox;

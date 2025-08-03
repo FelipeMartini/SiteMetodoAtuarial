@@ -1,6 +1,7 @@
 // Arquivo central de temas e cores customizadas do projeto
-// Todas as cores e configurações de tema ficam aqui para facilitar manutenção e expansão
-// Basta alterar este arquivo para criar novos temas ou modificar cores globais
+// Todas as cores e configurações de tema ficam aqui para facilitar manutenção e expansão.
+// Cada tema possui cores específicas para fundo, texto, destaque e rodapé.
+// Basta alterar este arquivo para criar novos temas ou modificar cores globais, garantindo padronização visual em todo o sistema.
 
 import { createTheme } from '@mui/material/styles';
 

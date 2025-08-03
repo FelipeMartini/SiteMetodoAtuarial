@@ -33,8 +33,9 @@ describe('Página Contato', () => {
     fireEvent.change(nomeInput, { target: { value: 'João' } });
     fireEvent.change(emailInput, { target: { value: 'joao@email.com' } });
     fireEvent.change(mensagemInput, { target: { value: 'Olá, gostaria de mais informações.' } });
-    // Simula envio
-    screen.getByRole('button', { name: /enviar/i }).click();
+    // Simula envio do formulário usando querySelector, pois role 'form' não existe por padrão
+    const formulario = document.querySelector('form');
+    fireEvent.submit(formulario!);
     // Pode-se mockar função de envio futuramente
   });
 });

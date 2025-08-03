@@ -74,10 +74,10 @@ const Rodape: React.FC = React.memo(function Rodape() {
             Institucional
           </Typography>
           <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-            <Link href="/sobre" sx={{ color: cores.rodapeTexto }} underline="hover">Sobre</Link>
-            <Link href="/servicos" sx={{ color: cores.rodapeTexto }} underline="hover">Serviços</Link>
-            <Link href="/contato" sx={{ color: cores.rodapeTexto }} underline="hover">Contato</Link>
-            <Link href="/privacidade" sx={{ color: cores.rodapeTexto }} underline="hover">Privacidade</Link>
+            <Link href="/sobre" sx={{ color: cores.rodapeTexto }} underline="hover" aria-label="Ir para página Sobre">Sobre</Link>
+            <Link href="/servicos" sx={{ color: cores.rodapeTexto }} underline="hover" aria-label="Ir para página Serviços">Serviços</Link>
+            <Link href="/contato" sx={{ color: cores.rodapeTexto }} underline="hover" aria-label="Ir para página Contato">Contato</Link>
+            <Link href="/privacidade" sx={{ color: cores.rodapeTexto }} underline="hover" aria-label="Ir para página de Privacidade">Privacidade</Link>
           </Box>
         </Box>
         <Box>

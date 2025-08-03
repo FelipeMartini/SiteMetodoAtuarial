@@ -1,7 +1,8 @@
 "use client";
 // Arquivo: contextoTema.tsx
-// Contexto React para controle global do tema (dark, claro, etc.)
-// Permite alternância de tema e fácil expansão para novos temas
+// Contexto React para controle global do tema (escuro, claro, etc.)
+// Permite alternância de tema e fácil expansão para novos temas.
+// Este contexto permite que qualquer componente acesse e altere o tema do sistema, garantindo consistência visual e integração com o Material-UI.
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { temaEscuro, temaClaro } from './temas';
