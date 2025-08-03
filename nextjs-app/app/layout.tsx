@@ -4,6 +4,7 @@ import "./globals.css";
 import "../styles/App.css";
 import "../styles/index.css";
 import LayoutCliente from "./LayoutCliente";
+import ProvedorSessao from "./ProvedorSessao";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -22,21 +23,27 @@ export const metadata: Metadata = {
   authors: [{ name: "Método Atuarial" }],
 };
 
+
 export const viewport = {
   width: 'device-width',
   initialScale: 1.0,
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+
+// Componente padrão do Next.js para layout global
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-br">
       <head>
         <meta name="emotion-insertion-point" content="" />
       </head>
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <LayoutCliente>{children}</LayoutCliente>
+        {/* ProvedorSessao garante que SessionProvider seja client-side, evitando erro de contexto em Server Components */}
+        <ProvedorSessao>
+          <LayoutCliente>{children}</LayoutCliente>
+        </ProvedorSessao>
       </body>
     </html>
   );
 }
-// ...existing code...
+// Comentário: Corrigido erro de sintaxe. O layout global agora segue o padrão do Next.js, recebendo children como parâmetro e retornando o HTML corretamente.
