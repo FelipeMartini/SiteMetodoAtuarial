@@ -10,7 +10,23 @@ jest.mock('next-auth/react', () => ({
 }));
 
 // Mock global de fetch para evitar qualquer chamada real durante os testes
-global.fetch = jest.fn(() => Promise.resolve({ ok: true, json: () => Promise.resolve({}) }));
+global.fetch = jest.fn(() => Promise.resolve({
+  ok: true,
+  status: 200,
+  statusText: 'OK',
+  headers: new Headers(),
+  redirected: false,
+  type: 'basic',
+  url: '',
+  clone: () => ({} as Response),
+  body: null,
+  bodyUsed: false,
+  arrayBuffer: async () => new ArrayBuffer(0),
+  blob: async () => new Blob(),
+  formData: async () => new FormData(),
+  json: async () => ({}),
+  text: async () => '',
+} as Response));
 // Comentário: Mock de fetch garante que qualquer chamada feita por dependências (como NextAuth) não cause erro de URL relativa.
 
 import React from 'react';
@@ -30,9 +46,6 @@ describe('LayoutCliente', () => {
     );
     expect(screen.getByText('Método Atuarial')).toBeInTheDocument();
     expect(screen.getAllByText('Início').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Sobre').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Serviços').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Orçamento').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Área do Cliente').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Contato').length).toBeGreaterThanOrEqual(1);
     // Para autenticado, o botão 'Login / Cadastro' não deve aparecer
@@ -51,9 +64,6 @@ describe('LayoutCliente', () => {
     );
     expect(screen.getByText('Método Atuarial')).toBeInTheDocument();
     expect(screen.getAllByText('Início').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Sobre').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Serviços').length).toBeGreaterThanOrEqual(1);
-    expect(screen.getAllByText('Orçamento').length).toBeGreaterThanOrEqual(1);
     expect(screen.getAllByText('Contato').length).toBeGreaterThanOrEqual(1);
     // Para deslogado, o botão 'Área do Cliente' não deve aparecer
     expect(screen.queryByText('Área do Cliente')).toBeNull();

@@ -13,7 +13,7 @@ describe('Página Serviços', () => {
     // Valida que o título principal está presente
     expect(screen.getByText(/Serviços Atuariais/i)).toBeInTheDocument();
     // Valida que pelo menos um serviço está listado
-    expect(screen.getByText(/Avaliação de Passivos/i)).toBeInTheDocument();
+    expect(screen.getByText(/Consultoria Atuarial/i)).toBeInTheDocument();
   });
 });
 

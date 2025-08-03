@@ -18,7 +18,8 @@ const authOptions = {
     error: "/login",
   },
   callbacks: {
-    async session({ session, token }) {
+    async session({ session, token }: { session: any; token: any }) {
+      // Tipagem explícita: idealmente importar tipos corretos do NextAuth
       session.id = token.sub;
       session.picture = token.picture;
       session.email = token.email;

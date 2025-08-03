@@ -1,10 +1,11 @@
-// Componente de Menu Lateral exclusivo para área do cliente
-// Só aparece para usuário autenticado
+/**
+ * Componente MenuLateralCliente
+ * Menu lateral exclusivo para área do cliente, exibido apenas para usuários autenticados.
+ * Os itens podem ser personalizados conforme necessidade do projeto.
+ */
 import Link from "next/link";
 
 export default function MenuLateralCliente() {
-  // Exemplos de itens do menu lateral
-  // Adiciona data-testid para facilitar testes automatizados
   return (
     <aside data-testid="menu-lateral" style={{ width: 220, background: "#f5f5f5", borderRadius: 12, boxShadow: "0 2px 8px #0001", padding: 24, marginRight: 32, minHeight: 320 }}>
       <nav style={{ display: "flex", flexDirection: "column", gap: 18 }}>
@@ -16,5 +17,3 @@ export default function MenuLateralCliente() {
     </aside>
   );
 }
-
-// Comentário: Este menu lateral é exclusivo da área do cliente e só aparece para usuários autenticados. Os itens são exemplos e podem ser personalizados conforme necessidade.

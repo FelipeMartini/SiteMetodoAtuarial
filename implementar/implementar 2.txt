@@ -1,0 +1,47 @@
+Próximos Passos
+Vou dividir em tarefas pequenas e sequenciais, buscar fontes oficiais para cada item e implementar/revisar cada recomendação até estar 100%:
+
+Ativar TypeScript strict mode e corrigir tipos.
+Refatorar imports do Material-UI.
+Implementar memoização nos principais componentes.
+Refatorar estrutura de pastas.
+Consolidar e otimizar CSS.
+Otimizar imagens.
+Separar Client/Server Components.
+Unificar sistema de temas.
+Implementar design system e componentes reutilizáveis.
+Remover código duplicado.
+Padronizar nomenclatura.
+Adicionar documentação e remover comentários excessivos.
+Implementar Error Boundaries.
+Adotar React 19 features e Next.js 15 recursos avançados.
+Adicionar React Query, Zod, Framer Motion, React Hook Form.
+Atualizar dependências conforme recomendação.
+Usar ferramentas de análise de bundle e performance.
+Vou iniciar pela ativação do modo strict do TypeScript e correção dos tipos. Após cada etapa, revisarei e seguirei para a próxima, buscando fontes oficiais e complementares sempre que necessário. Se desejar prioridade em algum item, me avise!
+
+
+
+
+e depois 
+
+Todos os imports do Material-UI nos arquivos principais foram refatorados para o padrão recomendado, eliminando barrel imports e duplicidades.
+Agora o bundle está otimizado e os arquivos seguem as melhores práticas de importação.
+
+Vou seguir para os próximos passos:
+
+Refatoração dos imports nos demais arquivos (se necessário).
+Implementação de memoização (React.memo, useMemo, useCallback) nos componentes que processam dados ou recebem props.
+Lazy loading de componentes e imagens.
+Refatoração da estrutura de pastas.
+Unificação e modernização do sistema de temas.
+Implementação de design system e componentes reutilizáveis.
+Remoção de código duplicado.
+Padronização de nomenclatura.
+Adição de documentação e remoção de comentários excessivos.
+Implementação de Error Boundaries.
+Adoção de features modernas do React 19 e Next.js 15.
+Adição de dependências recomendadas (React Query, Zod, Framer Motion, React Hook Form).
+Uso de ferramentas de análise de bundle e performance.
+Vou executar cada etapa de forma sequencial e completa, sem interrupções, até finalizar todas as recomendações.
+

@@ -3,6 +3,7 @@
 // Exibe informações do perfil do usuário logado
 // Importações necessárias para autenticação, imagem e navegação
 import React from "react";
+import { ErrorBoundary } from '../components/ErrorBoundary';
 import { getServerSession } from "next-auth";
 import authOptions from "../api/auth/[...nextauth]/authOptions";
 import Image from "next/image";
@@ -25,55 +26,59 @@ export default async function AreaCliente(): Promise<React.ReactElement> {
 
   // Renderiza o layout flexível e responsivo
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "row",
-        justifyContent: "center",
-        alignItems: "flex-start",
-        gap: 24,
-        marginTop: 40,
-      }}
-    >
-      {/* Menu lateral exclusivo para usuário autenticado */}
-      <MenuLateralCliente />
-      <main
+    <ErrorBoundary>
+      <div
         style={{
-          maxWidth: 400,
-          padding: 24,
-          borderRadius: 12,
-          boxShadow: "0 2px 8px #0002",
-          background: "#fff",
+          display: "flex",
+          flexDirection: "row",
+          justifyContent: "center",
+          alignItems: "flex-start",
+          gap: 24,
+          marginTop: 40,
         }}
       >
-        <h2 style={{ textAlign: "center" }}>Perfil do Cliente</h2>
-        <div
+        {/* Menu lateral exclusivo para usuário autenticado */}
+        <MenuLateralCliente />
+        <main
           style={{
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: 16,
+            maxWidth: 400,
+            padding: 24,
+            borderRadius: 12,
+            boxShadow: "0 2px 8px #0002",
+            background: "#fff",
           }}
         >
-          {/* Exibe foto do usuário se disponível */}
-          {session.user?.image && (
-            <Image
-              src={session.user.image}
-              alt="Foto do usuário"
-              width={120}
-              height={120}
-              style={{ borderRadius: "50%" }}
-            />
-          )}
-          <div>
-            <strong>Nome:</strong> {session.user?.name || "Não informado"}
+          <h2 style={{ textAlign: "center" }}>Perfil do Cliente</h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 16,
+            }}
+          >
+            {/* Exibe foto do usuário se disponível */}
+            {/* Imagem do usuário otimizada com loading="lazy" */}
+            {session.user?.image ? (
+              <Image
+                src={session.user.image}
+                alt="Foto do usuário"
+                width={120}
+                height={120}
+                style={{ borderRadius: "50%" }}
+                loading="lazy"
+              />
+            ) : null}
+            <div>
+              <strong>Nome:</strong> {session.user?.name || "Não informado"}
+            </div>
+            <div>
+              <strong>Email:</strong> {session.user?.email || "Não informado"}
+            </div>
           </div>
-          <div>
-            <strong>Email:</strong> {session.user?.email || "Não informado"}
-          </div>
-        </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </ErrorBoundary>
   );
 }
 

@@ -1,39 +1,27 @@
 "use client";
-// Componente moderno de login social com Google e Apple, adaptado para Next.js + MUI
 import React from "react";
 import { signIn } from "next-auth/react";
-import { useTema } from "../contextoTema"; // Importa o contexto de tema do projeto
-import {
-  Box,
-  Paper,
-  Typography,
-  Button,
-  Divider,
-  Avatar,
-  Stack,
-} from "@mui/material";
-import {
-  Apple as AppleIcon,
-  Login as LoginIcon,
-} from "@mui/icons-material";
+import { useTema } from "../contextoTema";
+import Box from "@mui/material/Box";
+import Paper from "@mui/material/Paper";
+import Typography from "@mui/material/Typography";
+import Button from "@mui/material/Button";
+import Divider from "@mui/material/Divider";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import AppleIcon from "@mui/icons-material/Apple";
+import LoginIcon from "@mui/icons-material/Login";
 
-// O componente agora utiliza o tema global do projeto, não precisa mais receber isDarkMode
 interface SocialLoginBoxProps {
-  // Funções de callback opcionais para login customizado
   onGoogleLogin?: () => void;
   onAppleLogin?: () => void;
 }
 
-const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
-  onGoogleLogin,
-  onAppleLogin,
-}) => {
-  // Usa o contexto de tema do projeto para definir se está no modo escuro
+const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(({ onGoogleLogin, onAppleLogin }) => {
   const { temaAtual } = useTema();
   const isDarkMode = temaAtual === "escuro";
 
-  // Estilos do container principal
-  const containerStyles = {
+  const containerStyles = React.useMemo(() => ({
     width: 400,
     maxWidth: "90vw",
     mx: "auto",
@@ -41,41 +29,24 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
     backgroundColor: isDarkMode ? "#18181b" : "#fff",
     borderRadius: 3,
     overflow: "hidden",
-    boxShadow: isDarkMode
-      ? "0 8px 32px rgba(0,0,0,0.4)"
-      : "0 4px 20px rgba(0,0,0,0.1)",
-    border: isDarkMode
-      ? "1px solid rgba(255,255,255,0.1)"
-      : "1px solid rgba(0,0,0,0.05)",
-  };
+    boxShadow: isDarkMode ? "0 8px 32px rgba(0,0,0,0.4)" : "0 4px 20px rgba(0,0,0,0.1)",
+    border: isDarkMode ? "1px solid rgba(255,255,255,0.1)" : "1px solid rgba(0,0,0,0.05)",
+  }), [isDarkMode]);
 
-  // Estilos do botão Google
-  const googleButtonStyles = {
+  const googleButtonStyles = React.useMemo(() => ({
     width: "100%",
     height: 56,
     borderRadius: 2,
     backgroundColor: isDarkMode ? "#232323" : "#fff",
     color: isDarkMode ? "#fff" : "#757575",
-    border: isDarkMode
-      ? "1px solid rgba(255,255,255,0.2)"
-      : "1px solid #dadce0",
+    border: isDarkMode ? "1px solid rgba(255,255,255,0.2)" : "1px solid #dadce0",
     textTransform: "none" as const,
     fontSize: "16px",
     fontWeight: 500,
     boxShadow: "none",
-    '&:hover': {
-      backgroundColor: isDarkMode ? "#333" : "#f8f9fa",
-      boxShadow: isDarkMode
-        ? "0 2px 8px rgba(255,255,255,0.1)"
-        : "0 1px 3px rgba(0,0,0,0.1)",
-    },
-    '&:active': {
-      transform: "translateY(1px)",
-    },
-  };
+  }), [isDarkMode]);
 
-  // Estilos do botão Apple
-  const appleButtonStyles = {
+  const appleButtonStyles = React.useMemo(() => ({
     width: "100%",
     height: 56,
     borderRadius: 2,
@@ -85,29 +56,34 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
     fontSize: "16px",
     fontWeight: 500,
     boxShadow: "none",
-    '&:hover': {
-      backgroundColor: isDarkMode ? "#f0f0f0" : "#333",
-      transform: "translateY(-1px)",
-    },
-    '&:active': {
-      transform: "translateY(1px)",
-    },
-  };
+  }), [isDarkMode]);
+
+  const handleGoogleLogin = React.useCallback(() => {
+    if (onGoogleLogin) {
+      onGoogleLogin();
+    } else {
+      signIn("google", { callbackUrl: "/area-cliente" });
+    }
+  }, [onGoogleLogin]);
+
+  const handleAppleLogin = React.useCallback(() => {
+    if (onAppleLogin) {
+      onAppleLogin();
+    } else {
+      signIn("apple", { callbackUrl: "/area-cliente" });
+    }
+  }, [onAppleLogin]);
 
   return (
     <Paper elevation={0} sx={containerStyles}>
-      {/* Header com gradiente e ícone */}
       <Box
         sx={{
-          background: isDarkMode
-            ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)"
-            : "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
+          background: isDarkMode ? "linear-gradient(135deg, #667eea 0%, #764ba2 100%)" : "linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)",
           p: 4,
           textAlign: "center",
           position: "relative",
         }}
       >
-        {/* Avatar centralizado com ícone de login, sem imagem personalizada */}
         <Avatar
           sx={{
             mx: "auto",
@@ -122,23 +98,15 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
         >
           <LoginIcon sx={{ fontSize: 32, color: "white" }} />
         </Avatar>
-        <Typography
-          variant="h4"
-          fontWeight="bold"
-          color="white"
-          sx={{ mb: 1, position: "relative", zIndex: 2 }}
-        >
+        <Typography variant="h4" fontWeight="bold" color="white" sx={{ mb: 1, position: "relative", zIndex: 2 }}>
           Login
         </Typography>
         <Typography variant="body1" color="rgba(255,255,255,0.8)" sx={{ position: "relative", zIndex: 2 }}>
           Acesse sua conta rapidamente
         </Typography>
       </Box>
-
-      {/* Conteúdo dos botões sociais */}
       <Box sx={{ p: 4 }}>
         <Stack spacing={3}>
-          {/* Botão Google integrado com NextAuth */}
           <Button
             variant="outlined"
             startIcon={
@@ -149,31 +117,21 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
                 sx={{ width: 20, height: 20 }}
               />
             }
-            onClick={onGoogleLogin || (() => signIn("google", { callbackUrl: "/area-cliente" }))}
+            onClick={handleGoogleLogin}
             sx={googleButtonStyles}
           >
             Continuar com Google
           </Button>
-
-          {/* Botão Apple integrado com NextAuth */}
           <Button
             variant="contained"
             startIcon={<AppleIcon sx={{ fontSize: 20 }} />}
-            onClick={onAppleLogin || (() => signIn("apple", { callbackUrl: "/area-cliente" }))}
+            onClick={handleAppleLogin}
             sx={appleButtonStyles}
           >
             Continuar com Apple
           </Button>
-
-          {/* Divider */}
           <Box sx={{ position: "relative", my: 3 }}>
-            <Divider
-              sx={{
-                borderColor: isDarkMode
-                  ? "rgba(255,255,255,0.2)"
-                  : "rgba(0,0,0,0.1)",
-              }}
-            />
+            <Divider sx={{ borderColor: isDarkMode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)" }} />
             <Typography
               variant="body2"
               sx={{
@@ -190,44 +148,17 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
               ou
             </Typography>
           </Box>
-
-          {/* Termos e privacidade - área destacada e acessível */}
           <Typography
             variant="caption"
             align="center"
-            sx={{
-              color: isDarkMode ? "#888" : "#666",
-              lineHeight: 1.4,
-              mt: 2,
-              textAlign: "center",
-            }}
+            sx={{ color: isDarkMode ? "#888" : "#666", lineHeight: 1.4, mt: 2, textAlign: "center" }}
           >
             Ao continuar, você concorda com nossos{' '}
-            <Box
-              component="a"
-              href="/termos"
-              target="_blank"
-              sx={{
-                color: isDarkMode ? "#4facfe" : "#1976d2",
-                cursor: "pointer",
-                textDecoration: "underline",
-                mx: 0.5,
-              }}
-            >
+            <Box component="a" href="/termos" target="_blank" sx={{ color: isDarkMode ? "#4facfe" : "#1976d2", cursor: "pointer", textDecoration: "underline", mx: 0.5 }}>
               Termos de Uso
             </Box>{' '}
             e{' '}
-            <Box
-              component="a"
-              href="/privacidade"
-              target="_blank"
-              sx={{
-                color: isDarkMode ? "#4facfe" : "#1976d2",
-                cursor: "pointer",
-                textDecoration: "underline",
-                mx: 0.5,
-              }}
-            >
+            <Box component="a" href="/privacidade" target="_blank" sx={{ color: isDarkMode ? "#4facfe" : "#1976d2", cursor: "pointer", textDecoration: "underline", mx: 0.5 }}>
               Política de Privacidade
             </Box>
           </Typography>
@@ -235,6 +166,6 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
       </Box>
     </Paper>
   );
-};
+});
 
 export default SocialLoginBox;

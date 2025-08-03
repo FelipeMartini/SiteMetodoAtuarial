@@ -1,21 +1,26 @@
-"use client";
-// Componente Footer moderno e inovador para consultoria atuarial
-// Utiliza elementos abstratos, ícones e layout responsivo
 
+"use client";
 import React from "react";
-import { Box, Typography, Link, IconButton } from "@mui/material";
+import Box from "@mui/material/Box";
+import Typography from "@mui/material/Typography";
+import Link from "@mui/material/Link";
+import IconButton from "@mui/material/IconButton";
 import LinkedInIcon from "@mui/icons-material/LinkedIn";
 import InstagramIcon from "@mui/icons-material/Instagram";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import { useTema } from "./contextoTema";
 import { coresCustomizadas } from "./temas";
 
-export default function Rodape() {
-  // Obtém o tema atual do contexto para aplicar cores dinâmicas
+/**
+ * Componente Rodape (Footer) padronizado para o site Método Atuarial.
+ * Apresenta informações institucionais, links úteis, redes sociais e créditos.
+ * Todas as cores e textos seguem o tema selecionado.
+ *
+ * @returns JSX.Element Rodapé institucional e responsivo.
+ */
+const Rodape: React.FC = React.memo(function Rodape() {
   const { temaAtual } = useTema();
   const cores = coresCustomizadas[temaAtual];
-  // Componente Rodape: Footer moderno e inovador para consultoria atuarial
-  // Utiliza elementos abstratos, ícones, layout responsivo e informações institucionais
   return (
     <Box
       component="footer"
@@ -28,12 +33,10 @@ export default function Rodape() {
         borderTopLeftRadius: 32,
         borderTopRightRadius: 32,
         boxShadow: 4,
-        transition: 'background 0.3s, color 0.3s', // Suaviza troca de tema
+        transition: 'background 0.3s, color 0.3s',
       }}
     >
-      {/* Elemento visual abstrato */}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 2 }}>
-        {/* Elemento visual abstrato agora com cor do destaque do tema */}
         <Box
           sx={{
             width: 64,
@@ -55,7 +58,6 @@ export default function Rodape() {
           gap: 4,
         }}
       >
-        {/* Informações institucionais */}
         <Box>
           <Typography variant="h6" fontWeight={700} mb={1} sx={{ color: cores.destaqueTexto }}>
             Consultoria Atuarial Inovadora
@@ -67,7 +69,6 @@ export default function Rodape() {
             contato@consultoriaexemplo.com | (61) 3322-0068
           </Typography>
         </Box>
-        {/* Links institucionais */}
         <Box>
           <Typography variant="subtitle2" fontWeight={600} mb={1} sx={{ color: cores.destaqueTexto }}>
             Institucional
@@ -79,7 +80,6 @@ export default function Rodape() {
             <Link href="/privacidade" sx={{ color: cores.rodapeTexto }} underline="hover">Privacidade</Link>
           </Box>
         </Box>
-        {/* Redes sociais */}
         <Box>
           <Typography variant="subtitle2" fontWeight={600} mb={1} sx={{ color: cores.destaqueTexto }}>
             Redes Sociais
@@ -97,13 +97,13 @@ export default function Rodape() {
           </Box>
         </Box>
       </Box>
-      {/* Direitos autorais e créditos */}
       <Box sx={{ textAlign: "center", mt: 4, opacity: 0.7 }}>
         <Typography variant="caption" sx={{ color: cores.rodapeTexto }}>
           © 2025 Consultoria Atuarial Inovadora. Todos os direitos reservados. Layout abstrato inspirado em tendências globais de consultoria.
         </Typography>
       </Box>
-      {/* Comentário: Todas as cores do rodapé agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
     </Box>
   );
-}
+});
+
+export default Rodape;
