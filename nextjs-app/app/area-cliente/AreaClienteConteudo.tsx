@@ -31,6 +31,7 @@ export default function AreaClienteConteudo({
       >
         {/* Menu lateral exclusivo para usuário autenticado */}
         <MenuLateralClienteWrapper />
+        {/* Conteúdo principal da área do cliente */}
         <main
           style={{
             maxWidth: 400,
@@ -59,7 +60,6 @@ export default function AreaClienteConteudo({
                 style={{ borderRadius: "50%" }}
                 loading="lazy"
                 quality={85}
-                placeholder="blur"
               />
             ) : null}
             <div>

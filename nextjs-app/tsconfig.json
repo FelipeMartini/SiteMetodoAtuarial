@@ -25,11 +25,17 @@
         "name": "next"
       }
     ],
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "baseUrl": "./",
+    "paths": {
+      "@/*": ["./*"],
+      "@/auth": ["auth.ts"]
+    }
   },
   "include": [
     "next-env.d.ts",
     ".next/types/**/*.ts",
+    "types/**/*.d.ts",
     "**/*.ts",
     "**/*.tsx"
   ],

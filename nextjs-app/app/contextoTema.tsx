@@ -31,19 +31,20 @@ export function ProvedorTema({ children }: { children: ReactNode }) {
   // Estado do tema atual, padrão: dark
   const [temaAtual, setTemaAtualState] = useState<NomeTema>('escuro');
 
-  // Carrega o tema salvo nos cookies ao montar
+
+  // Carrega o tema salvo no localStorage ao montar
   useEffect(() => {
-    const match = document.cookie.match(/(^|;)\s*temaSelecionado=([^;]*)/);
-    const temaSalvo = match ? decodeURIComponent(match[2]) as NomeTema : null;
+    const temaSalvo = localStorage.getItem('temaSelecionado') as NomeTema | null;
     if (temaSalvo && (temaSalvo === 'escuro' || temaSalvo === 'claro')) {
       setTemaAtualState(temaSalvo);
     }
   }, []);
 
-  // Função para alterar e salvar o tema nos cookies
+
+  // Função para alterar e salvar o tema no localStorage
   const setTemaAtual = (tema: NomeTema) => {
     setTemaAtualState(tema);
-    document.cookie = `temaSelecionado=${encodeURIComponent(tema)}; path=/; max-age=31536000`;
+    localStorage.setItem('temaSelecionado', tema);
   };
 
   // Retorna o tema MUI correspondente
@@ -65,4 +66,5 @@ export function useTema() {
   return contexto;
 }
 
-// Comentário: Para adicionar novos temas, basta incluir no objeto "temas" e no tipo NomeTema.
+
+// Comentário: Persistência do tema agora utiliza localStorage, garantindo melhor performance e compatibilidade com SPA. Para adicionar novos temas, basta incluir no objeto "temas" e no tipo NomeTema.

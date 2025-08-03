@@ -14,9 +14,9 @@ jest.mock("next/navigation", () => ({
   redirect: jest.fn(),
 }));
 
-// Mock do getServerSession para simular usuário autenticado
-jest.mock("next-auth", () => ({
-  getServerSession: jest.fn(() => Promise.resolve({
+// Mock do método universal 'auth' para simular usuário autenticado
+jest.mock("@/auth", () => ({
+  auth: jest.fn(() => Promise.resolve({
     user: {
       name: "Usuário Teste",
       email: "teste@exemplo.com",
@@ -45,9 +45,9 @@ describe("Página da Área do Cliente", () => {
   });
 
   it("deve redirecionar para login se não estiver autenticado", async () => {
-    // Mocka getServerSession para retornar null (usuário não autenticado)
-    const getServerSession = require("next-auth").getServerSession;
-    getServerSession.mockImplementationOnce(() => Promise.resolve(null));
+    // Mocka auth para retornar null (usuário não autenticado)
+    const auth = require("@/auth").auth;
+    auth.mockImplementationOnce(() => Promise.resolve(null));
     // Mocka redirect para lançar uma exceção e interromper o fluxo
     const redirect = require("next/navigation").redirect;
     redirect.mockImplementation(() => { throw new Error("Redirecionado"); });

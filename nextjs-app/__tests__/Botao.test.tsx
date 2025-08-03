@@ -10,9 +10,13 @@ describe("Botao", () => {
   });
 
   it("aplica as props corretamente", () => {
-    render(<Botao variant="contained" color="primary">Teste</Botao>);
+    render(<Botao color="primary">Teste</Botao>);
     const botao = screen.getByText("Teste");
-    expect(botao).toHaveClass("MuiButton-containedPrimary");
+    // Verifica se o botão está presente no documento
+    expect(botao).toBeInTheDocument();
+    // Opcional: verifica se a classe gerada pelo styled-components existe
+    expect(botao.className).toMatch(/sc-/);
+    // Comentário: Não existe mais classe do MUI, agora usamos styled-components
   });
 });
 

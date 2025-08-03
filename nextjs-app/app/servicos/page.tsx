@@ -75,7 +75,7 @@ const Servicos: React.FC = React.memo(function Servicos() {
                 <CardInfo
                   titulo={servico.titulo}
                   descricao={servico.descricao}
-                  sx={{ background: cores.card, color: temaMui.palette.text.primary, borderRadius: 4, boxShadow: 3, minHeight: 260, transition: 'background 0.3s, color 0.3s' }}
+                  style={{ background: cores.card, color: temaMui.palette.text.primary, borderRadius: 4, boxShadow: '0 2px 8px rgba(0,0,0,0.12)', minHeight: 260, transition: 'background 0.3s, color 0.3s' }} // Substituído sx por style para compatibilidade
                 >
                   <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                     {/* Renderiza o ícone do serviço, cor dinâmica conforme tema */}

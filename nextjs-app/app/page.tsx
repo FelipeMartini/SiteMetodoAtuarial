@@ -27,10 +27,18 @@ const Home: React.FC = React.memo(function Home() {
         </Typography>
         <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
           {/* Botões padronizados do design system, integrados ao tema */}
-          <Botao variant="contained" sx={{ background: cores.botao, color: cores.botaoTexto, transition: 'background 0.3s, color 0.3s' }} href="/orcamento">
+          <Botao
+            variant="contained"
+            style={{ background: cores.botao, color: cores.botaoTexto, transition: 'background 0.3s, color 0.3s' }}
+            href="/orcamento"
+          >
             Solicitar Orçamento
           </Botao>
-          <Botao variant="outlined" sx={{ borderColor: cores.destaque, color: cores.destaque, transition: 'border-color 0.3s, color 0.3s' }} href="/sobre">
+          <Botao
+            variant="outlined"
+            style={{ borderColor: cores.destaque, color: cores.destaque, transition: 'border-color 0.3s, color 0.3s' }}
+            href="/sobre"
+          >
             Sobre
           </Botao>
         </Box>

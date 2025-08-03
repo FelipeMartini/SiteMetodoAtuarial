@@ -4,24 +4,22 @@
 // Importações necessárias para autenticação, imagem e navegação
 import React from "react";
 // Importação removida: ErrorBoundary só pode ser usado em Client Component
-import { getServerSession } from "next-auth";
-import authOptions from "../api/auth/[...nextauth]/authOptions";
+import { auth } from "../../auth";
 import { redirect } from "next/navigation";
-import type { Session } from "next-auth";
+// Tipagem da sessão pode ser ajustada conforme necessário, mas o retorno de auth() já é tipado
 import AreaClienteConteudo from "./AreaClienteConteudo";
 // Importa o componente client-side que renderiza o menu e perfil do cliente
 // Removido import duplicado de React como tipo para evitar erro de sintaxe no Jest/TypeScript
 
-// Função assíncrona da página protegida da área do cliente
+// Função assíncrona exportada que representa a página protegida da área do cliente
 export default async function AreaCliente() {
-  // Obtém a sessão do usuário autenticado
-  const session: Session | null = await getServerSession(authOptions);
+  // Obtém a sessão do usuário autenticado usando o método universal do NextAuth.js v5+
+  const session = await auth();
 
   // Se não estiver logado, redireciona para login
   if (!session) {
     redirect("/login");
   }
-
 
   // Renderiza o conteúdo client-side passando os dados do usuário via props
   // Renderiza apenas o componente client-side, sem ErrorBoundary

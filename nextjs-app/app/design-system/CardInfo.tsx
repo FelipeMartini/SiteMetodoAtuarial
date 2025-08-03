@@ -1,43 +1,51 @@
 // Componente CardInfo reutilizável do design system
-import Card, { CardProps } from "@mui/material/Card";
-import CardContent from "@mui/material/CardContent";
-import Typography from "@mui/material/Typography";
 import React from "react";
+import styled from "styled-components";
 
 /**
- * CardInfo padronizado para exibir informações, já integrado ao tema.
+ * CardInfo padronizado para exibir informações, agora usando styled-components.
  * Recebe título, descrição e children para conteúdo extra.
  *
  * @example
- * // Exemplo de uso:
  * <CardInfo titulo="Informações" descricao="Descrição opcional">
  *   <div>Conteúdo adicional</div>
  * </CardInfo>
- *
- * @param titulo Título principal do card.
- * @param descricao Texto opcional abaixo do título.
- * @param children Elementos filhos exibidos dentro do card.
- * @param props Props do Card do Material-UI, como sx, elevation, etc.
- *
- * O componente CardInfo utiliza o Card do Material-UI, facilitando a exibição de informações padronizadas e integradas ao tema.
  */
-interface CardInfoProps extends CardProps {
+export interface CardInfoProps extends React.HTMLAttributes<HTMLDivElement> {
   titulo: string;
   descricao?: string;
   children?: React.ReactNode;
 }
 
-// Memoização do componente para evitar renderizações desnecessárias quando as props não mudam
+// Estilos do card usando styled-components
+const CardStyled = styled.div`
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+  background: ${({ theme }) => theme.palette?.background?.paper || '#fff'};
+  padding: 24px;
+  margin: 8px 0;
+`;
+
+const Titulo = styled.h2`
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: ${({ theme }) => theme.palette?.text?.primary || '#21243d'};
+`;
+
+const Descricao = styled.p`
+  font-size: 1rem;
+  color: ${({ theme }) => theme.palette?.text?.secondary || '#666'};
+  margin-bottom: 16px;
+`;
 
 const CardInfo: React.FC<CardInfoProps> = React.memo(function CardInfoMemo({ titulo, descricao, children, ...props }) {
   return (
-    <Card {...props} sx={{ borderRadius: 4, boxShadow: 3, ...props.sx }}>
-      <CardContent>
-        <Typography variant="h6" gutterBottom>{titulo}</Typography>
-        {descricao && <Typography variant="body2" sx={{ mb: 2 }}>{descricao}</Typography>}
-        {children}
-      </CardContent>
-    </Card>
+    <CardStyled {...props}>
+      <Titulo>{titulo}</Titulo>
+      {descricao && <Descricao>{descricao}</Descricao>}
+      {children}
+    </CardStyled>
   );
 });
 // Adiciona displayName para evitar erro de lint e facilitar debug

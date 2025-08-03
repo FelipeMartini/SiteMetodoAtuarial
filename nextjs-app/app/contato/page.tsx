@@ -18,10 +18,14 @@ export default function Contato() {
         <p>Entre em contato conosco!</p>
         {/* Formulário de contato padronizado com InputTexto e Botao do design system */}
         <form style={{ maxWidth: 400, margin: '32px auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          <InputTexto label="Nome" variant="outlined" fullWidth required />
-          <InputTexto label="Email" variant="outlined" type="email" fullWidth required />
-          <InputTexto label="Mensagem" variant="outlined" multiline rows={4} fullWidth required />
-          <Botao type="submit" variant="contained" color="primary">Enviar</Botao>
+          {/* Campo Nome: id único para acessibilidade, props inválidas removidas */}
+          <InputTexto label="Nome" id="contato-nome" required />
+          {/* Campo Email: id único para acessibilidade, props inválidas removidas */}
+          <InputTexto label="Email" id="contato-email" type="email" required />
+          {/* Campo Mensagem: id único para acessibilidade, props inválidas removidas */}
+          <InputTexto label="Mensagem" id="contato-mensagem" required />
+          {/* Botão de envio, props de MUI removidas */}
+          <Botao type="submit" color="primary">Enviar</Botao>
         </form>
       </main>
     </ErrorBoundary>

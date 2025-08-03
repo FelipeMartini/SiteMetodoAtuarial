@@ -5,13 +5,15 @@ import InputTexto from "../app/design-system/InputTexto";
 
 describe("InputTexto", () => {
   it("renderiza o label corretamente", () => {
-    render(<InputTexto label="Nome" />);
+    // Passa o id para garantir acessibilidade
+    render(<InputTexto label="Nome" id="input-nome" />);
     expect(screen.getByLabelText("Nome")).toBeInTheDocument();
   });
 
   it("chama onChange ao digitar", () => {
     const handleChange = jest.fn();
-    render(<InputTexto label="Nome" value="" onChange={handleChange} />);
+    // Passa o id para garantir acessibilidade
+    render(<InputTexto label="Nome" id="input-nome" value="" onChange={handleChange} />);
     fireEvent.change(screen.getByLabelText("Nome"), { target: { value: "Teste" } });
     expect(handleChange).toHaveBeenCalled();
   });

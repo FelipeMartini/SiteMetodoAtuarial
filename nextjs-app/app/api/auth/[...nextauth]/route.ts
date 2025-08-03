@@ -11,12 +11,10 @@
 //    APPLE_CLIENT_ID=seu_client_id_apple (opcional)
 //    APPLE_CLIENT_SECRET=seu_client_secret_apple (opcional)
 // 4. Nunca compartilhe esses segredos publicamente.
-import NextAuth from "next-auth";
 
-import authOptions from "./authOptions";
-const handler = NextAuth(authOptions);
-// Exporta apenas uma vez para evitar erro de identificador duplicado
-export { handler as GET, handler as POST };
-// Se aparecer erro de importação do next-auth, execute 'npm install next-auth' dentro do diretório nextjs-app
+// Migração para Auth.js (NextAuth v5+)
+// Utiliza configuração universal, exportando handlers para GET e POST conforme App Router
+import { handlers } from "@/auth";
+export const { GET, POST } = handlers;
 
-// Comentário: Este arquivo configura autenticação social com Google e Apple usando NextAuth.js, redirecionando o usuário para a área do cliente após login. Informações do perfil são adicionadas à sessão para uso posterior.
+// Comentário: Este arquivo agora utiliza Auth.js, exportando handlers universais para autenticação moderna e compatível com App Router.
