@@ -73,7 +73,7 @@ const Sobre: React.FC = React.memo(function Sobre() {
     </ErrorBoundary>
   );
 // ...existing code...
-        </Box>
+        </Box >
       </Box >
   {/* Imagens do ambiente */ }
 {/* Imagens do ambiente: responsivas, lado a lado em telas médias/grandes e empilhadas em telas pequenas. */ }
