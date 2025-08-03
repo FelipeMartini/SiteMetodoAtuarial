@@ -89,11 +89,3 @@ export default function LayoutCliente({ children }: { children: ReactNode }) {
     </ProvedorTema>
   );
 }
-// Comentário: O ContextoTema.Consumer permite acessar o contexto do tema dentro do componente,
-// garantindo que o hook useTema não seja chamado fora do Provider.
-// Exemplo de uso:
-// <ContextoTema.Consumer>
-//   {({ temaAtual, setTemaAtual, temaMui }) => (
-//     // ...conteúdo visual...
-//   )}
-// </ContextoTema.Consumer>

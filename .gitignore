@@ -1,1 +1,15 @@
-node_modules
+# Ignorar arquivos e pastas de build e cache do Next.js
+.next/
+# Ignorar variáveis de ambiente locais
+.env.local
+# Ignorar dependências
+node_modules/
+# Ignorar relatórios de cobertura de testes
+coverage/
+# Ignorar arquivos de log
+*.log
+# Ignorar arquivos temporários do sistema
+.DS_Store
+Thumbs.db
+
+# Comentário: O diretório .next, node_modules, arquivos de ambiente e cobertura não devem ir para o GitHub. Eles são gerados localmente e não fazem parte do versionamento do projeto.

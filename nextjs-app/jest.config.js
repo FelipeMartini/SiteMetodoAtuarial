@@ -6,8 +6,8 @@ module.exports = {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy", // Evita erro ao importar estilos
   },
   testPathIgnorePatterns: ["/node_modules/", "/.next/"], // Ignora pastas desnecessárias
-  // Utiliza o SWC como transformador para arquivos TypeScript/JSX, compatível com Next.js moderno
+  // Utiliza Babel apenas para os testes, apontando para o arquivo babel-jest.config.js
   transform: {
-    "^.+\\.(t|j)sx?$": ["@swc/jest"]
+    "^.+\\.(t|j)sx?$": ["babel-jest", { configFile: "./babel-jest.config.js" }]
   },
 };
