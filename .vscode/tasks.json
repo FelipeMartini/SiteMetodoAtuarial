@@ -66,8 +66,15 @@
       "group": "build",
       "problemMatcher": [],
       "options": { "cwd": "${workspaceFolder}/nextjs-app" }
-    }
-    ,
+    },
+    {
+      "type": "shell",
+      "label": "Finalizar servidores Next.js (portas 3000-3010)",
+      "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
+      "group": "build",
+      "problemMatcher": [],
+      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+    },
     {
       "type": "shell",
       "label": "Cobertura de Testes",
