@@ -1,49 +1,77 @@
-// Componente InputTexto reutilizável do design system
-import React from "react";
-import styled from "styled-components";
+// Componente InputTexto moderno usando o novo sistema de temas
 
-/**
- * InputTexto padronizado para campos de texto, agora usando styled-components.
- * Pode ser usado em formulários e páginas do sistema.
- *
- * @example
- * <InputTexto label="Nome" value={nome} onChange={handleChange} />
- */
-export interface InputTextoProps extends React.InputHTMLAttributes<HTMLInputElement> {
+import React, { forwardRef } from 'react';
+import { Input } from '../theme/ComponentesBase';
+import { Texto } from '../theme/ComponentesBase';
+import { Flex } from '../theme/ComponentesBase';
+
+interface InputTextoProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
-  // Removido suporte a props do MUI: multiline, rows, variant, fullWidth
+  erro?: string;
+  ajuda?: string;
+  obrigatorio?: boolean;
 }
 
-// Estilos do input usando styled-components
-const InputStyled = styled.input`
-  border-radius: 8px;
-  border: 1px solid #ccc;
-  padding: 10px 16px;
-  font-size: 1rem;
-  width: 100%;
-  box-sizing: border-box;
-  margin-bottom: 8px;
-  background: ${({ theme }) => theme.palette?.background?.default || '#fff'};
-  color: ${({ theme }) => theme.palette?.text?.primary || '#21243d'};
-`;
+export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
+  label,
+  erro,
+  ajuda,
+  obrigatorio = false,
+  className,
+  id,
+  ...props
+}, ref) => {
+  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
-const LabelStyled = styled.label`
-  font-size: 1rem;
-  font-weight: 500;
-  color: ${({ theme }) => theme.palette?.text?.secondary || '#666'};
-  margin-bottom: 4px;
-  display: block;
-`;
-
-const InputTexto: React.FC<InputTextoProps> = React.memo(function InputTextoMemo({ label, ...props }) {
-  // Renderiza label associado ao input via id para acessibilidade
   return (
-    <div>
-      {label && props.id && <LabelStyled htmlFor={props.id}>{label}</LabelStyled>}
-      <InputStyled {...props} />
-    </div>
+    <Flex $direcao="column" $gap="xs" className={className}>
+      {label && (
+        <Texto as="label" htmlFor={inputId} $variante="legenda" $peso="medio">
+          {label}
+          {obrigatorio && (
+            <Texto as="span" $cor="terciario" style={{ marginLeft: '4px' }}>
+              *
+            </Texto>
+          )}
+        </Texto>
+      )}
+
+      <Input
+        ref={ref}
+        id={inputId}
+        $erro={!!erro}
+        {...props}
+        aria-invalid={!!erro}
+        aria-describedby={
+          erro ? `${inputId}-erro` : ajuda ? `${inputId}-ajuda` : undefined
+        }
+      />
+
+      {erro && (
+        <Texto
+          id={`${inputId}-erro`}
+          $variante="legenda"
+          $cor="terciario"
+          style={{ color: 'var(--cor-erro, #ef4444)' }}
+          role="alert"
+        >
+          {erro}
+        </Texto>
+      )}
+
+      {ajuda && !erro && (
+        <Texto
+          id={`${inputId}-ajuda`}
+          $variante="legenda"
+          $cor="terciario"
+        >
+          {ajuda}
+        </Texto>
+      )}
+    </Flex>
   );
 });
-InputTexto.displayName = "InputTexto";
+
+InputTexto.displayName = 'InputTexto';
 
 export default InputTexto;

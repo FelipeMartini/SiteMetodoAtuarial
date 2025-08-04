@@ -5,6 +5,8 @@ import "../styles/App.css";
 import "../styles/index.css";
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
+import { ProvedorTema } from "./theme/ContextoTema";
+import { ErrorBoundary } from "./components/ErrorBoundary";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -21,29 +23,35 @@ export const metadata: Metadata = {
   description: "Consultoria especializada em previdência e soluções atuariais. Oferecemos avaliação de passivos, relatórios regulatórios, modelagem atuarial e gestão de riscos.",
   keywords: "consultoria atuarial, previdência, passivos atuariais, relatórios regulatórios, gestão de riscos, modelagem atuarial",
   authors: [{ name: "Método Atuarial" }],
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#4F46E5" },
+    { media: "(prefers-color-scheme: dark)", color: "#0F0F23" }
+  ],
 };
-
 
 export const viewport = {
   width: 'device-width',
   initialScale: 1.0,
 };
 
-
-// Componente padrão do Next.js para layout global
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
-    <html lang="pt-br">
-      <head>
-        <meta name="emotion-insertion-point" content="" />
-      </head>
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        {/* ProvedorSessao garante que SessionProvider seja client-side, evitando erro de contexto em Server Components */}
-        <ProvedorSessao>
-          <LayoutCliente>{children}</LayoutCliente>
-        </ProvedorSessao>
+    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body>
+        <ErrorBoundary>
+          <ProvedorSessao>
+            <ProvedorTema>
+              <LayoutCliente>
+                {children}
+              </LayoutCliente>
+            </ProvedorTema>
+          </ProvedorSessao>
+        </ErrorBoundary>
       </body>
     </html>
   );
 }
-// Comentário: Corrigido erro de sintaxe. O layout global agora segue o padrão do Next.js, recebendo children como parâmetro e retornando o HTML corretamente.

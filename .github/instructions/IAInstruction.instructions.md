@@ -5,7 +5,8 @@ Forneça contexto do projeto e diretrizes de codificação que a IA deve seguir 
 
 # Instruções adicionais para o assistente:
   - Sempre responda ao usuário em português do Brasil.
-  - Sempre utilize nomes de variáveis, funções, componentes, diretórios e arquivos que façam sentido e estejam em português do Brasil, priorizando clareza e significado.
+  - Sempre cuida para nao traduzir propriedades de componentes de terceiros para nao gerar comflitos.
+  - Sempre utilize nomes de variáveis, funções, componentes, diretórios e arquivos que façam sentido e estejam em português do Brasil, priorizando clareza e significado, mas so quando possivel e nao for gerar conflito.
   - Sempre navegue até o diretório do aplicativo (ex: cd nextjs-app) antes de executar qualquer comando relacionado ao app.
   - Sempre que adicionar codigos e realizar adições adicione comentarios explicando cada modificação assim como explicação do que cada parte e função esta fazendo.
 - Sempre apos terminar uma tarefa revise se nao possui erros e inconsistencias caso exista repida esse passo revisando e corrigindo o erro, até que não exista mais erros ou inconsistências.

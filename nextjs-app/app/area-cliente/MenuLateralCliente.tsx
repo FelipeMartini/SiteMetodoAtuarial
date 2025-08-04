@@ -1,4 +1,6 @@
 "use client";
+// A diretiva 'use client' deve ser sempre a primeira linha do arquivo para garantir que o componente seja client-side
+import React from "react";
 // Diretiva para garantir que o componente seja client-side
 /**
  * Componente MenuLateralCliente
@@ -8,6 +10,40 @@
 
 // Importação do componente Link do Next.js para navegação interna
 import Link from "next/link";
+import styled from "styled-components";
+
+// Componente estilizado para o menu lateral
+// Estilização do menu lateral e links para alternância de tema
+const AsideMenu = styled.aside`
+  width: 220px;
+  background: ${({ theme }) => theme.cores.superficie};
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #0001;
+  padding: 24px;
+  margin-right: 32px;
+  min-height: 320px;
+`;
+const NavMenu = styled.nav`
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+`;
+const TituloMenu = styled.strong`
+  margin-bottom: 12px;
+  font-size: 18px;
+  color: ${({ theme }) => theme.cores.secundario};
+`;
+const LinkMenu = styled(Link)`
+  color: ${({ theme }) => theme.cores.texto};
+  font-weight: 500;
+  text-decoration: none;
+  font-size: 1rem;
+  transition: color 0.2s;
+  &:hover {
+    color: ${({ theme }) => theme.cores.secundario};
+    text-decoration: underline;
+  }
+`;
 
 
 
@@ -18,17 +54,23 @@ import Link from "next/link";
  */
 export default function MenuLateralCliente() {
   return (
-    <aside data-testid="menu-lateral" style={{ width: 220, background: '#f5f5f5', borderRadius: 12, boxShadow: '0 2px 8px #0001', padding: 24, marginRight: 32, minHeight: 320 }}>
-      <nav style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+    <AsideMenu data-testid="menu-lateral">
+      <NavMenu>
         {/* Título do menu lateral */}
-        <strong style={{ marginBottom: 12, fontSize: 18 }}>Menu do Cliente</strong>
+        <TituloMenu>Menu do Cliente</TituloMenu>
         {/* Link para perfil do cliente */}
-        <Link href="/area-cliente" style={{ color: '#1976d2', fontWeight: 'bold' }}>Perfil</Link>
+        <LinkMenu href="/area-cliente">Perfil</LinkMenu>
+        {/* Link para serviços */}
+        <LinkMenu href="/servicos">Serviços</LinkMenu>
+        {/* Link para contato/orçamento */}
+        <LinkMenu href="/contato">Contato / Orçamento</LinkMenu>
         {/* Link para documentos do cliente */}
-        <Link href="#" style={{ color: '#1976d2' }}>Meus Documentos</Link>
-        {/* Link para solicitações do cliente, usando entidades HTML para caracteres especiais */}
-        <Link href="#" style={{ color: '#1976d2' }}>Solicita&ccedil;&otilde;es</Link>
-      </nav>
-    </aside>
+        <LinkMenu href="#">Meus Documentos</LinkMenu>
+        {/* Link para solicitações do cliente */}
+        <LinkMenu href="#">Solicitações</LinkMenu>
+        {/* Link para sair (logout) - pode ser implementado posteriormente */}
+        {/* <LinkMenu href="/logout">Sair</LinkMenu> */}
+      </NavMenu>
+    </AsideMenu>
   );
 }

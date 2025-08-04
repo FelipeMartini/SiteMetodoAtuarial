@@ -1,50 +1,118 @@
-
 "use client";
-// Importações individuais do Material-UI para melhor performance e evitar duplicidade
-import Container from "@mui/material/Container";
-import Typography from "@mui/material/Typography";
-import Box from "@mui/material/Box";
-import React from 'react';
-import { ErrorBoundary } from './components/ErrorBoundary';
-// Removido import agrupado do MUI para evitar duplicidade
-// import { Container, Typography, Box } from '@mui/material';
-import { Botao } from "./design-system";
-import { useTema } from "./contextoTema";
-import { coresCustomizadas } from "./temas";
 
-// Memoização do componente para evitar renderizações desnecessárias
-const Home: React.FC = React.memo(function Home() {
-  const { temaAtual, temaMui } = useTema();
-  const cores = coresCustomizadas[temaAtual];
+// Página inicial moderna com novo sistema de temas
+import React from 'react';
+import Link from 'next/link';
+import { Container, Flex, Texto, Secao, Card } from './theme/ComponentesBase';
+import { Botao } from './design-system/Botao';
+import { CardInfo } from './design-system/CardInfo';
+import { useUtilsTema } from './theme/hooks';
+
+const services = [
+  {
+    titulo: 'Consultoria Atuarial',
+    descricao: 'Análise de riscos e avaliação de passivos previdenciários',
+    icone: '📊',
+  },
+  {
+    titulo: 'Relatórios Regulatórios',
+    descricao: 'Atendimento às normas SUSEP, PREVIC e outros órgãos',
+    icone: '📋',
+  },
+  {
+    titulo: 'Modelagem Matemática',
+    descricao: 'Desenvolvimento de modelos atuariais customizados',
+    icone: '🔢',
+  },
+];
+
+export default function Home() {
+  const { ehModoEscuro } = useUtilsTema();
+
   return (
-    <ErrorBoundary>
-      <Container maxWidth="md" sx={{ py: 8 }}>
-        <Typography variant="h2" gutterBottom sx={{ textAlign: 'center', fontWeight: 700, color: cores.destaque, textShadow: `0 2px 8px ${temaMui.palette.background.paper}` }}>
-          Método Atuarial
-        </Typography>
-        <Typography variant="h5" gutterBottom sx={{ textAlign: 'center', mb: 4, color: temaMui.palette.text.primary }}>
-          Consultoria especializada em previdência e soluções atuariais
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2 }}>
-          {/* Botões padronizados do design system, integrados ao tema */}
-          <Botao
-            variant="contained"
-            style={{ background: cores.botao, color: cores.botaoTexto, transition: 'background 0.3s, color 0.3s' }}
-            href="/orcamento"
-          >
-            Solicitar Orçamento
-          </Botao>
-          <Botao
-            variant="outlined"
-            style={{ borderColor: cores.destaque, color: cores.destaque, transition: 'border-color 0.3s, color 0.3s' }}
-            href="/sobre"
-          >
-            Sobre
-          </Botao>
-        </Box>
-        {/* Comentário: Todas as cores da página principal agora mudam conforme o tema selecionado, facilitando manutenção e expansão. */}
-      </Container>
-    </ErrorBoundary>
+    <Container>
+      {/* Hero Section */}
+      <Secao $padding="lg">
+        <Flex $direcao="column" $alinhar="center" $gap="xl" style={{ textAlign: 'center' }}>
+          <div>
+            <Texto $variante="titulo" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+              Método Atuarial
+            </Texto>
+            <Texto $variante="subtitulo" $cor="secundario" style={{ maxWidth: '600px' }}>
+              Consultoria especializada em soluções atuariais, oferecendo excelência técnica
+              e inovação para o mercado de previdência e seguros.
+            </Texto>
+          </div>
+
+          <Flex $gap="md" $wrap>
+            <Link href="/sobre" style={{ textDecoration: 'none' }}>
+              <Botao variant="primary" size="lg">
+                Conheça Nossa História
+              </Botao>
+            </Link>
+            <Link href="/contato" style={{ textDecoration: 'none' }}>
+              <Botao variant="secondary" size="lg">
+                Solicitar Orçamento
+              </Botao>
+            </Link>
+          </Flex>
+        </Flex>
+      </Secao>
+
+      {/* Services Section */}
+      <Secao $padding="lg">
+        <Texto $variante="titulo" $alinhamento="centro" style={{ marginBottom: '3rem' }}>
+          Nossos Serviços
+        </Texto>
+
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gap: '2rem',
+          maxWidth: '1200px',
+          margin: '0 auto'
+        }}>
+          {services.map((service, index) => (
+            <CardInfo
+              key={index}
+              titulo={service.titulo}
+              descricao={service.descricao}
+              icone={<span style={{ fontSize: '3rem' }}>{service.icone}</span>}
+              elevacao={2}
+              hover={true}
+            />
+          ))}
+        </div>
+      </Secao>
+
+      {/* CTA Section */}
+      <Secao $padding="lg">
+        <Card $elevacao style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+          <Flex $direcao="column" $alinhar="center" $gap="lg">
+            <Texto $variante="subtitulo" $peso="medio">
+              Pronto para transformar seu negócio?
+            </Texto>
+            <Texto $cor="secundario">
+              Entre em contato conosco e descubra como nossas soluções atuariais
+              podem otimizar seus resultados e garantir conformidade regulatória.
+            </Texto>
+            <Link href="/contato" style={{ textDecoration: 'none' }}>
+              <Botao variant="primary" size="lg">
+                Fale Conosco
+              </Botao>
+            </Link>
+          </Flex>
+        </Card>
+      </Secao>
+
+      {/* Theme Demo */}
+      <Secao $padding="sm">
+        <Card $elevacao style={{ textAlign: 'center' }}>
+          <Texto $variante="legenda" $cor="terciario">
+            Tema atual: {ehModoEscuro ? 'Escuro 🌙' : 'Claro ☀️'}
+          </Texto>
+        </Card>
+      </Secao>
+    </Container>
   );
-});
-export default Home;
+}

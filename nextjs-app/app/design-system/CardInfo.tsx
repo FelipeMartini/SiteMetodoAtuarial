@@ -1,54 +1,73 @@
-// Componente CardInfo reutilizável do design system
-import React from "react";
-import styled from "styled-components";
+// Componente CardInfo moderno usando o novo sistema de temas
 
-/**
- * CardInfo padronizado para exibir informações, agora usando styled-components.
- * Recebe título, descrição e children para conteúdo extra.
- *
- * @example
- * <CardInfo titulo="Informações" descricao="Descrição opcional">
- *   <div>Conteúdo adicional</div>
- * </CardInfo>
- */
-export interface CardInfoProps extends React.HTMLAttributes<HTMLDivElement> {
+import React from 'react';
+import { Card, Texto, Flex } from '../theme/ComponentesBase';
+
+interface CardInfoProps {
   titulo: string;
   descricao?: string;
-  children?: React.ReactNode;
+  conteudo?: React.ReactNode;
+  icone?: React.ReactNode;
+  onClick?: () => void;
+  elevacao?: 1 | 2 | 3;
+  hover?: boolean;
+  className?: string;
 }
 
-// Estilos do card usando styled-components
-const CardStyled = styled.div`
-  border-radius: 16px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  background: ${({ theme }) => theme.palette?.background?.paper || '#fff'};
-  padding: 24px;
-  margin: 8px 0;
-`;
+export const CardInfo: React.FC<CardInfoProps> = ({
+  titulo,
+  descricao,
+  conteudo,
+  icone,
+  onClick,
+  elevacao = 1,
+  hover = true,
+  className,
+}) => {
+  const isClickable = !!onClick;
 
-const Titulo = styled.h2`
-  font-size: 1.25rem;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: ${({ theme }) => theme.palette?.text?.primary || '#21243d'};
-`;
-
-const Descricao = styled.p`
-  font-size: 1rem;
-  color: ${({ theme }) => theme.palette?.text?.secondary || '#666'};
-  margin-bottom: 16px;
-`;
-
-const CardInfo: React.FC<CardInfoProps> = React.memo(function CardInfoMemo({ titulo, descricao, children, ...props }) {
   return (
-    <CardStyled {...props}>
-      <Titulo>{titulo}</Titulo>
-      {descricao && <Descricao>{descricao}</Descricao>}
-      {children}
-    </CardStyled>
+    <Card
+      $elevacao={elevacao > 1}
+      onClick={onClick}
+      className={className}
+      style={{
+        cursor: isClickable ? 'pointer' : 'default',
+      }}
+      role={isClickable ? 'button' : undefined}
+      tabIndex={isClickable ? 0 : undefined}
+      onKeyDown={isClickable ? (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      } : undefined}
+    >
+      <Flex $direcao="column" $gap="md">
+        {icone && (
+          <Flex $justificar="center" $alinhar="center" style={{ marginBottom: '8px' }}>
+            {icone}
+          </Flex>
+        )}
+
+        <Texto $variante="subtitulo" $peso="medio" $alinhamento="centro">
+          {titulo}
+        </Texto>
+
+        {descricao && (
+          <Texto $variante="corpo" $cor="secundario" $alinhamento="centro">
+            {descricao}
+          </Texto>
+        )}
+
+        {conteudo && (
+          <div>
+            {conteudo}
+          </div>
+        )}
+      </Flex>
+    </Card>
   );
-});
-// Adiciona displayName para evitar erro de lint e facilitar debug
-CardInfo.displayName = "CardInfo";
+};
 
 export default CardInfo;

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import { signIn } from "next-auth/react";
-import { useTema } from "../contextoTema";
+import { useTema } from "../theme/ContextoTema";
 import Box from "@mui/material/Box";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
@@ -24,8 +24,8 @@ interface SocialLoginBoxProps {
   Comentários explicativos estão fora do JSX para evitar erros de sintaxe.
 */
 const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function SocialLoginBoxMemo({ onGoogleLogin, onAppleLogin }) {
-  const { temaAtual } = useTema();
-  const isDarkMode = temaAtual === "escuro";
+  const { temaAtual, nomeTemaAtual } = useTema();
+  const isDarkMode = nomeTemaAtual === "escuro";
 
   // Estilos do container principal
   const containerStyles = React.useMemo(() => ({

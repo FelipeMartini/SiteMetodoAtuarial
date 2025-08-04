@@ -1,21 +1,26 @@
 module.exports = {
   // Configuração do ambiente de testes para React/Next.js
   testEnvironment: "jest-environment-jsdom", // Simula o DOM para testes de componentes React
-  setupFilesAfterEnv: ["@testing-library/jest-dom", "./jest.setup.js"], // Extensões do Testing Library + polyfill fetch
+  setupFilesAfterEnv: ["./jest.setup.js"], // Carrega o ambiente customizado
   moduleNameMapper: {
     // Mapeia imports de estilos para evitar erro
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     // Mapeia o alias @/ para o diretório raiz do app, conforme tsconfig.json
     "^@/(.*)$": "<rootDir>/$1",
   },
+  testMatch: [
+    "**/__tests__/**/*.[jt]s?(x)",
+    "**/?(*.)+(spec|test).[jt]s?(x)"
+  ],
   testPathIgnorePatterns: ["/node_modules/", "/.next/"], // Ignora pastas desnecessárias
-  // Utiliza Babel apenas para os testes, apontando para o arquivo babel-jest.config.js
   transform: {
     "^.+\\.(t|j)sx?$": ["babel-jest", { configFile: "./babel-jest.config.js" }]
   },
-  // Permite que Babel processe o pacote next-auth (ESM)
   transformIgnorePatterns: [
     "/node_modules/(?!next-auth)/",
     "/.next/"
   ],
+  testTimeout: 10000, // Timeout de 10 segundos por teste
+  maxWorkers: 1, // Usa apenas 1 worker para evitar conflitos
+  forceExit: true, // Força saída após testes
 };

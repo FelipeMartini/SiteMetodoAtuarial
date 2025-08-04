@@ -1,3 +1,5 @@
+'use client';
+
 /**
  * Componente ErrorBoundary para captura de erros em componentes filhos.
  * Exibe mensagem amigável e permite recuperação sem travar toda a aplicação.

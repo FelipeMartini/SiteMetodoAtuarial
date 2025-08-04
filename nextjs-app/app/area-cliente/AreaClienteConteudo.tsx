@@ -3,20 +3,19 @@
 // Componente client-side para exibir o conteúdo da área do cliente.
 // Recebe os dados do usuário autenticado via props.
 
-import React from "react"; // Import necessário para JSX
+import React from "react";
 import MenuLateralClienteWrapper from "./MenuLateralClienteWrapper";
 import Image from "next/image";
 import { ErrorBoundary } from "../components/ErrorBoundary";
+import { useUtilsTema } from "../theme/ContextoTema";
 
 /**
  * Componente client-side para exibir o menu lateral e perfil do cliente.
- * Recebe os dados do usuário autenticado via props.
+ * Alterna cores do box e texto conforme tema selecionado.
  */
-export default function AreaClienteConteudo({
-  usuario,
-}: {
-  usuario: { name?: string; email?: string; image?: string | null };
-}) {
+export default function AreaClienteConteudo({ usuario }: { usuario: { name?: string; email?: string; image?: string | null } }) {
+  const { temaAtual } = useUtilsTema();
+  const cores = temaAtual.cores;
   return (
     <ErrorBoundary>
       <div
@@ -29,19 +28,19 @@ export default function AreaClienteConteudo({
           marginTop: 40,
         }}
       >
-        {/* Menu lateral exclusivo para usuário autenticado */}
         <MenuLateralClienteWrapper />
-        {/* Conteúdo principal da área do cliente */}
         <main
           style={{
             maxWidth: 400,
             padding: 24,
             borderRadius: 12,
             boxShadow: "0 2px 8px #0002",
-            background: "#fff",
+            background: cores.superficie,
+            color: cores.texto,
+            transition: "background 0.3s, color 0.3s",
           }}
         >
-          <h2 style={{ textAlign: "center" }}>Perfil do Cliente</h2>
+          <h2 style={{ textAlign: "center", color: cores.primario }}>Perfil do Cliente</h2>
           <div
             style={{
               display: "flex",
@@ -50,23 +49,22 @@ export default function AreaClienteConteudo({
               gap: 16,
             }}
           >
-            {/* Exibe foto do usuário se disponível */}
             {usuario.image ? (
               <Image
                 src={usuario.image}
                 alt="Foto do usuário"
                 width={120}
                 height={120}
-                style={{ borderRadius: "50%" }}
+                style={{ borderRadius: "50%", border: `3px solid ${cores.primario}` }}
                 loading="lazy"
                 quality={85}
               />
             ) : null}
-            <div>
-              <strong>Nome:</strong> {usuario.name || "Não informado"}
+            <div style={{ color: cores.textoSecundario }}>
+              <strong style={{ color: cores.primario }}>Nome:</strong> {usuario.name || "Não informado"}
             </div>
-            <div>
-              <strong>Email:</strong> {usuario.email || "Não informado"}
+            <div style={{ color: cores.textoSecundario }}>
+              <strong style={{ color: cores.primario }}>Email:</strong> {usuario.email || "Não informado"}
             </div>
           </div>
         </main>

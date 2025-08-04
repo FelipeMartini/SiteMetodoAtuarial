@@ -1,33 +1,82 @@
-// ...existing code...
-// Página de contato adaptada para alternância de tema
+
+// Página unificada de Contato e Orçamento
 "use client";
-// Página de contato adaptada para alternância de tema
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { InputTexto, Botao } from '../design-system';
-import { useTema } from '../contextoTema';
-import { coresCustomizadas } from '../temas';
+import { useTema } from '../theme/ContextoTema';
+import styled from 'styled-components';
 
-export default function Contato() {
-  const { temaAtual } = useTema();
-  const cores = coresCustomizadas[temaAtual];
+const ContatoContainer = styled.main`
+  background: ${({ theme }) => theme.cores.fundo};
+  color: ${({ theme }) => theme.cores.texto};
+  min-height: 100vh;
+  padding: 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+`;
+
+const Titulo = styled.h1`
+  text-align: center;
+  margin-bottom: 8px;
+  color: ${({ theme }) => theme.cores.primario};
+`;
+
+const Descricao = styled.p`
+  text-align: center;
+  max-width: 500px;
+  color: ${({ theme }) => theme.cores.textoSecundario};
+`;
+
+const FormContainer = styled.form`
+  width: 100%;
+  max-width: 420px;
+  margin: 32px auto;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+`;
+
+const TextArea = styled.textarea`
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid ${({ theme }) => theme.cores.borda};
+  background: ${({ theme }) => theme.cores.superficie};
+  color: ${({ theme }) => theme.cores.texto};
+  min-height: 80px;
+  font-family: inherit;
+  font-size: 16px;
+  resize: vertical;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.cores.primario};
+  }
+`;
+
+const Label = styled.label`
+  font-weight: 500;
+  color: ${({ theme }) => theme.cores.texto};
+`;
+
+export default function ContatoOrcamento() {
   return (
     <ErrorBoundary>
-      <main style={{ background: cores.rodape, color: cores.rodapeTexto, minHeight: '100vh', padding: 32 }}>
-        <h1>Contato</h1>
-        <p>Entre em contato conosco!</p>
-        {/* Formulário de contato padronizado com InputTexto e Botao do design system */}
-        <form style={{ maxWidth: 400, margin: '32px auto', display: 'flex', flexDirection: 'column', gap: 16 }}>
-          {/* Campo Nome: id único para acessibilidade, props inválidas removidas */}
+      <ContatoContainer>
+        <Titulo>Contato / Orçamento</Titulo>
+        <Descricao>Entre em contato conosco ou solicite seu orçamento personalizado!</Descricao>
+        <FormContainer>
           <InputTexto label="Nome" id="contato-nome" required />
-          {/* Campo Email: id único para acessibilidade, props inválidas removidas */}
           <InputTexto label="Email" id="contato-email" type="email" required />
-          {/* Campo Mensagem: id único para acessibilidade, props inválidas removidas */}
           <InputTexto label="Mensagem" id="contato-mensagem" required />
-          {/* Botão de envio, props de MUI removidas */}
-          <Botao type="submit" color="primary">Enviar</Botao>
-        </form>
-      </main>
+          <InputTexto label="Serviço desejado" id="orcamento-servico" required />
+          <Label htmlFor="orcamento-detalhes">Detalhes do orçamento</Label>
+          <TextArea id="orcamento-detalhes" required />
+          <Botao type="submit" variant="primary">Enviar</Botao>
+        </FormContainer>
+      </ContatoContainer>
     </ErrorBoundary>
   );
 }
