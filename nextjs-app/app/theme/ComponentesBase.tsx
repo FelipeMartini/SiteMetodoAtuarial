@@ -246,14 +246,16 @@ export const BotaoBase = styled.button<{
           }
         `;
       case 'ghost':
+        // Estilo aprimorado para menu no tema escuro
         return `
-          background: transparent;
-          color: ${props.theme.cores.texto};
-          border: 1px solid transparent;
+          background: ${props.theme.cores.fundoSecundario}; // cinza escuro para contraste
+          color: ${props.theme.cores.textoSecundario}; // texto claro
+          border: 1px solid ${props.theme.cores.borda}; // borda sutil
 
           &:hover:not(:disabled) {
-            background: ${props.theme.cores.fundoSecundario};
-            border-color: ${props.theme.cores.borda};
+            background: ${props.theme.cores.superficieElevada}; // cinza mais claro no hover
+            color: ${props.theme.cores.texto}; // texto principal no hover
+            border-color: ${props.theme.cores.bordaHover};
           }
         `;
       case 'danger':

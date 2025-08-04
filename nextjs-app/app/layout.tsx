@@ -7,6 +7,7 @@ import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
 import { ProvedorTema } from "./theme/ContextoTema";
 import { ErrorBoundary } from "./components/ErrorBoundary";
+import StyledComponentsRegistry from './StyledComponentsRegistry';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -43,7 +44,6 @@ export default function RootLayout({
   // Envolvendo todo o conteúdo do layout principal
   // Comentário: a ordem dos providers foi mantida para não alterar a lógica do app
   // Se precisar adicionar outros providers, coloque dentro do StyledComponentsRegistry
-  const StyledComponentsRegistry = require('./StyledComponentsRegistry').default;
   return (
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>

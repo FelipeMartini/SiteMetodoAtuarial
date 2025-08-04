@@ -219,22 +219,19 @@ export const temaEscuro: TemaCustomizado = {
     secundario: '#059669',    // Verde esmeralda
     secundariaHover: '#047857',
     terciario: '#06B6D4',     // Cyan
-    
-    fundo: '#0F0F23',         // Azul escuro profundo
-    fundoSecundario: '#1A1B3A',
-    fundoTerciario: '#262653',
-    superficie: '#1E1E2E',
-    superficieElevada: '#2A2A3A',
-    
-    texto: '#F8FAFC',
-    textoSecundario: '#CBD5E1',
+    // Paleta revisada para tons de cinza neutros
+    fundo: '#18181b',         // Cinza escuro neutro (fundo geral)
+    fundoSecundario: '#23232a', // Cinza intermediário (áreas externas)
+    fundoTerciario: '#262626', // Cinza para áreas elevadas
+    superficie: '#23232a',     // Menu/header
+    superficieElevada: '#262626', // Cards/boxes
+    texto: '#F8FAFC',          // Texto principal
+    textoSecundario: '#E2E8F0', // Texto de menu/link
     textoTerciario: '#94A3B8',
     textoInvertido: '#1E293B',
-    
-    borda: '#374151',
+    borda: '#2D2D34',          // Bordas suaves
     bordaFoco: '#6366F1',
-    bordaHover: '#4B5563',
-    
+    bordaHover: '#3A3A40',      // Hover de borda/menu
     sucesso: '#10B981',
     sucessoFundo: '#064E3B',
     aviso: '#F59E0B',
@@ -243,9 +240,9 @@ export const temaEscuro: TemaCustomizado = {
     erroFundo: '#7F1D1D',
     info: '#3B82F6',
     infoFundo: '#1E3A8A',
-    
-    gradiente: 'linear-gradient(135deg, #0F0F23 0%, #1A1B3A 50%, #262653 100%)',
+    gradiente: 'linear-gradient(135deg, #18181b 0%, #23232a 50%, #262626 100%)', // Gradiente adaptado
     gradienteSecundario: 'linear-gradient(135deg, #4F46E5 0%, #059669 100%)',
+    // Para reverter, basta restaurar os valores anteriores.
   },
   tipografia: tipografiaBase,
   espacamentos: espacamentosBase,
