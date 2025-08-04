@@ -19,39 +19,51 @@ interface ProvedorTemaProps {
   children: React.ReactNode;
 }
 
-export function ProvedorTema({ children }: ProvedorTemaProps) {
-  const [nomeTemaAtual, setNomeTemaAtual] = useState<NomesTema>('escuro');
 
-  // Carregar tema salvo do localStorage na inicialização
+export function ProvedorTema({ children }: ProvedorTemaProps) {
+  // Melhor prática: tema inicial igual ao SSR (pode ser ajustado para ler cookie no futuro)
+  // O tema padrão deve ser o mesmo do SSR para evitar FOUC
+  const temaPadrao: NomesTema = 'escuro';
+  const [nomeTemaAtual, setNomeTemaAtual] = useState<NomesTema>(temaPadrao);
+  const [carregandoTema, setCarregandoTema] = useState(true);
+
+  // Carrega tema salvo do localStorage apenas no client
   useEffect(() => {
+    // Comentário: Evita FOUC mantendo tema do SSR até carregar preferências do usuário
     if (typeof window !== 'undefined') {
       const temaSalvo = localStorage.getItem('tema-selecionado') as NomesTema;
       if (temaSalvo && temasDisponiveis.some(t => t.nome === temaSalvo)) {
         setNomeTemaAtual(temaSalvo);
       }
+      setCarregandoTema(false);
     }
   }, []);
 
-  // Salvar tema no localStorage quando mudado
+  // Salva tema no localStorage quando mudado
   useEffect(() => {
     if (typeof window !== 'undefined') {
       localStorage.setItem('tema-selecionado', nomeTemaAtual);
     }
   }, [nomeTemaAtual]);
 
+  // Obtém o tema atual
   const temaAtual = obterTemaPorNome(nomeTemaAtual);
 
+  // Alterna para o próximo tema disponível
   const alternarTema = () => {
     const proximoTema = obterProximoTema(nomeTemaAtual);
     setNomeTemaAtual(proximoTema.nome);
   };
 
+  // Seleciona um tema específico
   const selecionarTema = (nome: NomesTema) => {
     setNomeTemaAtual(nome);
   };
 
+  // Verifica se está no modo escuro
   const ehModoEscuro = nomeTemaAtual === 'escuro';
 
+  // Valor do contexto para o provider
   const valorContexto: ContextoTemaProps = {
     temaAtual,
     nomeTemaAtual,
@@ -61,6 +73,21 @@ export function ProvedorTema({ children }: ProvedorTemaProps) {
     ehModoEscuro,
   };
 
+  // Fallback visual neutro enquanto carrega preferências do usuário
+  // Comentário: Evita layout torto, mantendo fundo e altura mínima
+  if (carregandoTema) {
+    return (
+      <div
+        style={{
+          background: temaAtual.cores.fundo,
+          minHeight: '100vh',
+          transition: 'none', // Evita animações indesejadas
+        }}
+      />
+    );
+  }
+
+  // Provider do tema, garantindo que o ThemeProvider sempre recebe o tema correto
   return (
     <ContextoTema.Provider value={valorContexto}>
       <ThemeProvider theme={temaAtual}>

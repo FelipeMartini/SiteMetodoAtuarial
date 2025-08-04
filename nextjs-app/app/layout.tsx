@@ -39,18 +39,25 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+  // StyledComponentsRegistry garante SSR correto dos estilos do styled-components
+  // Envolvendo todo o conteúdo do layout principal
+  // Comentário: a ordem dos providers foi mantida para não alterar a lógica do app
+  // Se precisar adicionar outros providers, coloque dentro do StyledComponentsRegistry
+  const StyledComponentsRegistry = require('./StyledComponentsRegistry').default;
   return (
     <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
-        <ErrorBoundary>
-          <ProvedorSessao>
-            <ProvedorTema>
-              <LayoutCliente>
-                {children}
-              </LayoutCliente>
-            </ProvedorTema>
-          </ProvedorSessao>
-        </ErrorBoundary>
+        <StyledComponentsRegistry>
+          <ErrorBoundary>
+            <ProvedorSessao>
+              <ProvedorTema>
+                <LayoutCliente>
+                  {children}
+                </LayoutCliente>
+              </ProvedorTema>
+            </ProvedorSessao>
+          </ErrorBoundary>
+        </StyledComponentsRegistry>
       </body>
     </html>
   );
