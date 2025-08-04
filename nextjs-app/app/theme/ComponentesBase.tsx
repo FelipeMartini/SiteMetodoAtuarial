@@ -78,7 +78,7 @@ export const Texto = styled.p<{
 `;
 
 // Typography para textos com variantes
-export const Typography = styled(Texto)<{
+export const Typography = styled(Texto) <{
   $variante?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption';
   $peso?: 'normal' | 'medio' | 'negrito';
   $cor?: string;
@@ -142,7 +142,7 @@ export const Box = styled.div<{
 `;
 
 // Paper para containers elevados
-export const Paper = styled(Box)<{ $elevacao?: number }>`
+export const Paper = styled(Box) <{ $elevacao?: number }>`
   background: ${props => props.theme.cores.superficie};
   border-radius: ${props => props.theme.bordas.raios.lg};
   box-shadow: ${props => {

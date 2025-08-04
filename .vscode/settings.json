@@ -23,7 +23,8 @@
   },
   "editor.minimap.enabled": false,
   "breadcrumbs.enabled": false,
-  "files.autoSave": "onFocusChange",
   "typescript.suggest.autoImports": false,
   "typescript.disableAutomaticTypeAcquisition": true
+
+
 }
