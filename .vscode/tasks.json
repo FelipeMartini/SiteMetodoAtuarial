@@ -36,7 +36,7 @@
     {
       "type": "shell",
       "label": "Iniciar Next.js",
-      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force; npm run dev",
+      "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
       "group": "build",
       "isBackground": true,
       "problemMatcher": ["$tsc"],
@@ -45,7 +45,7 @@
     {
       "type": "shell",
       "label": "Reiniciar Next.js",
-      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force; npm run dev",
+      "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
       "group": "build",
       "isBackground": true,
       "problemMatcher": ["$tsc"],
@@ -54,7 +54,7 @@
     {
       "type": "shell",
       "label": "Parar Next.js",
-      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force",
+      "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
       "group": "build",
       "problemMatcher": [],
       "options": { "cwd": "${workspaceFolder}/nextjs-app" }
@@ -62,7 +62,7 @@
     {
       "type": "shell",
       "label": "Finalizar todas as instâncias Node.js",
-      "command": "Get-Process | Where-Object { $_.ProcessName -like 'node' } | Stop-Process -Force",
+      "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
       "group": "build",
       "problemMatcher": [],
       "options": { "cwd": "${workspaceFolder}/nextjs-app" }
