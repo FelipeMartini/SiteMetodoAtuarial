@@ -4,7 +4,6 @@
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { InputTexto, Botao } from '../design-system';
-import { useTema } from '../theme/ContextoTema';
 import styled from 'styled-components';
 
 const ContatoContainer = styled.main`

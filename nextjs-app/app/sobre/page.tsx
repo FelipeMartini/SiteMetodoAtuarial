@@ -9,7 +9,6 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 // Removido import agrupado do MUI para evitar duplicidade
 // import { Container, Typography, Box } from "@mui/material";
 import Image from "next/image";
-import { useTema } from "../theme/ContextoTema";
 
 
 // Styled-components fora do componente para evitar warnings e seguir boas práticas

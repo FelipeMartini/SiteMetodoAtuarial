@@ -21,7 +21,6 @@ export const CardInfo: React.FC<CardInfoProps> = ({
   icone,
   onClick,
   elevacao = 1,
-  hover = true,
   className,
 }) => {
   const isClickable = !!onClick;

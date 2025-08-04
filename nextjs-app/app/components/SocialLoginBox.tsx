@@ -24,7 +24,7 @@ interface SocialLoginBoxProps {
   Comentários explicativos estão fora do JSX para evitar erros de sintaxe.
 */
 const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function SocialLoginBoxMemo({ onGoogleLogin, onAppleLogin }) {
-  const { temaAtual, nomeTemaAtual } = useTema();
+  const { nomeTemaAtual } = useTema();
   const isDarkMode = nomeTemaAtual === "escuro";
 
   // Estilos do container principal
