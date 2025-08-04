@@ -77,7 +77,7 @@ const StatusIndicator = styled.div<{ $status: 'loading' | 'success' | 'error' }>
 `;
 
 export default function TestHydration() {
-  const { temaAtual, nomeTemaAtual, alternarTema, isHydrated } = useUtilsTema();
+  const { temaAtual, alternarTema, isHydrated } = useUtilsTema();
   const [renderTime, setRenderTime] = useState<string>('');
   const [clickCount, setClickCount] = useState(0);
 

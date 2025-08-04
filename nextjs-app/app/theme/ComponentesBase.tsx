@@ -77,6 +77,122 @@ export const Texto = styled.p<{
   line-height: ${props => props.theme.tipografia.alturas.normal};
 `;
 
+// Typography para textos com variantes
+export const Typography = styled(Texto)<{
+  $variante?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption';
+  $peso?: 'normal' | 'medio' | 'negrito';
+  $cor?: string;
+  $align?: 'esquerda' | 'centro' | 'direita';
+}>`
+  font-size: ${props => {
+    switch (props.$variante) {
+      case 'h1': return props.theme.tipografia.tamanhos['5xl'];
+      case 'h2': return props.theme.tipografia.tamanhos['4xl'];
+      case 'h3': return props.theme.tipografia.tamanhos['3xl'];
+      case 'h4': return props.theme.tipografia.tamanhos['2xl'];
+      case 'h5': return props.theme.tipografia.tamanhos.xl;
+      case 'h6': return props.theme.tipografia.tamanhos.lg;
+      case 'body2': return props.theme.tipografia.tamanhos.sm;
+      case 'caption': return props.theme.tipografia.tamanhos.xs;
+      default: return props.theme.tipografia.tamanhos.base;
+    }
+  }};
+  font-weight: ${props => {
+    switch (props.$peso) {
+      case 'medio': return props.theme.tipografia.pesos.medio;
+      case 'negrito': return props.theme.tipografia.pesos.negrito;
+      default: return props.theme.tipografia.pesos.normal;
+    }
+  }};
+  color: ${props => props.$cor || props.theme.cores.texto};
+  text-align: ${props => {
+    switch (props.$align) {
+      case 'centro': return 'center';
+      case 'direita': return 'right';
+      default: return 'left';
+    }
+  }};
+`;
+
+// Box genérico para layout flexível
+export const Box = styled.div<{
+  $padding?: string;
+  $margin?: string;
+  $bg?: string;
+  $radius?: string;
+  $shadow?: string;
+  $display?: string;
+  $align?: string;
+  $justify?: string;
+  $direction?: string;
+  $width?: string;
+  $height?: string;
+}>`
+  display: ${props => props.$display || 'block'};
+  padding: ${props => props.$padding || '0'};
+  margin: ${props => props.$margin || '0'};
+  background: ${props => props.$bg || 'transparent'};
+  border-radius: ${props => props.$radius || '0'};
+  box-shadow: ${props => props.$shadow || 'none'};
+  align-items: ${props => props.$align || 'stretch'};
+  justify-content: ${props => props.$justify || 'flex-start'};
+  flex-direction: ${props => props.$direction || 'row'};
+  width: ${props => props.$width || 'auto'};
+  height: ${props => props.$height || 'auto'};
+`;
+
+// Paper para containers elevados
+export const Paper = styled(Box)<{ $elevacao?: number }>`
+  background: ${props => props.theme.cores.superficie};
+  border-radius: ${props => props.theme.bordas.raios.lg};
+  box-shadow: ${props => {
+    switch (props.$elevacao) {
+      case 0: return props.theme.sombras.sm;
+      case 1: return props.theme.sombras.md;
+      case 2: return props.theme.sombras.lg;
+      default: return props.theme.sombras.sm;
+    }
+  }};
+`;
+
+// Avatar para imagens de perfil
+export const Avatar = styled.img<{
+  $size?: number;
+  $radius?: string;
+  $border?: string;
+}>`
+  width: ${props => props.$size || 48}px;
+  height: ${props => props.$size || 48}px;
+  border-radius: ${props => props.$radius || '50%'};
+  border: ${props => props.$border || 'none'};
+  object-fit: cover;
+`;
+
+// Stack para layout vertical/horizontal com espaçamento
+export const Stack = styled.div<{
+  $direction?: 'row' | 'column';
+  $gap?: string;
+  $align?: string;
+  $justify?: string;
+}>`
+  display: flex;
+  flex-direction: ${props => props.$direction || 'column'};
+  gap: ${props => props.$gap || props.theme.espacamentos.md};
+  align-items: ${props => props.$align || 'stretch'};
+  justify-content: ${props => props.$justify || 'flex-start'};
+`;
+
+// Divider para separação visual
+export const Divider = styled.hr<{
+  $cor?: string;
+  $espessura?: string;
+  $margin?: string;
+}>`
+  border: none;
+  border-top: ${props => props.$espessura || '1px'} solid ${props => props.$cor || props.theme.cores.borda};
+  margin: ${props => props.$margin || `${props.theme.espacamentos.md} 0`};
+`;
+
 // Seção para organizar layout
 export const Secao = styled.section<{
   $padding?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
