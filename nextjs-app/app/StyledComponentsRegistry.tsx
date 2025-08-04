@@ -12,10 +12,16 @@ export default function StyledComponentsRegistry({ children }: { children: React
   // Cria uma instância do ServerStyleSheet para coletar estilos SSR
   const [sheet] = useState(() => new ServerStyleSheet());
 
-  // Insere os estilos coletados no HTML renderizado pelo servidor
-  useServerInsertedHTML(() => <>{sheet.getStyleElement()}</>);
+  useServerInsertedHTML(() => {
+    const styles = sheet.getStyleElement();
+    sheet.instance.clearTag();
+    return <>{styles}</>;
+  });
 
-  // O StyleSheetManager garante que os estilos sejam aplicados corretamente
+  // No client, retorna apenas os children sem processamento
+  if (typeof window !== 'undefined') return <>{children}</>;
+
+  // No servidor, usa StyleSheetManager para coletar estilos
   return <StyleSheetManager sheet={sheet.instance}>{children}</StyleSheetManager>;
 }
 

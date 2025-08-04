@@ -1,0 +1,83 @@
+# 6. ARQUIVO: package.json limpo (removendo dependências conflitantes)
+package_json_limpo = '''{
+  "name": "site-metodo-atuarial",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "analyze": "cross-env ANALYZE=true npm run build",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage"
+  },
+  "dependencies": {
+    "@auth/core": "^0.40.0",
+    "@auth/prisma-adapter": "^2.10.0",
+    "@next/bundle-analyzer": "^15.4.5",
+    "@types/styled-components": "^5.1.34",
+    "axios": "^1.11.0",
+    "next": "^15.4.5",
+    "next-auth": "^5.0.0-beta.29",
+    "react": "^19.1.1",
+    "react-dom": "^19.1.1",
+    "react-hook-form": "^7.62.0",
+    "styled-components": "^6.1.19"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.0",
+    "@babel/preset-env": "^7.28.0",
+    "@babel/preset-react": "^7.27.1",
+    "@babel/preset-typescript": "^7.27.1",
+    "@swc/jest": "^0.2.39",
+    "@testing-library/jest-dom": "^6.6.4",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@types/jest": "^30.0.0",
+    "@types/node": "24.1.0",
+    "@types/react": "^18.3.0",
+    "@types/react-dom": "^18.3.0",
+    "babel-jest": "^30.0.5",
+    "babel-plugin-styled-components": "^2.1.4",
+    "cross-env": "^10.0.0",
+    "cross-fetch": "^4.1.0",
+    "eslint": "9.32.0",
+    "eslint-config-next": "15.4.5",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^30.0.5",
+    "jest-environment-jsdom": "^30.0.5",
+    "ts-jest": "^29.4.0",
+    "typescript": "5.9.2"
+  }
+}
+
+/**
+ * Principais mudanças no package.json:
+ * 
+ * ❌ REMOVIDAS (causavam conflitos):
+ * - @mui/icons-material
+ * - @mui/material  
+ * - @emotion/cache
+ * - @emotion/react
+ * - @emotion/styled
+ * 
+ * ✅ ADICIONADAS:
+ * - babel-plugin-styled-components (backup para SWC)
+ * - @types/react e @types/react-dom (essenciais)
+ * 
+ * 💡 MANTIDAS:
+ * - styled-components@6.1.19 (versão estável mais recente)
+ * - @types/styled-components (tipagem)
+ * 
+ * Esta configuração elimina conflitos entre diferentes
+ * bibliotecas CSS-in-JS e garante funcionamento limpo
+ * do styled-components com Next.js 15.
+ */'''
+
+# Salvando arquivo 6
+with open('package_limpo.json', 'w', encoding='utf-8') as f:
+    f.write(package_json_limpo)
+
+print("✅ Arquivo 6 criado: package_limpo.json")

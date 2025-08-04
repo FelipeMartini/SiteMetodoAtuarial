@@ -11,6 +11,7 @@ interface ContextoTemaProps {
   selecionarTema: (nome: NomesTema) => void;
   temasDisponiveis: TemaCustomizado[];
   ehModoEscuro: boolean;
+  isHydrated: boolean;
 }
 
 const ContextoTema = createContext<ContextoTemaProps | undefined>(undefined);
@@ -25,17 +26,16 @@ export function ProvedorTema({ children }: ProvedorTemaProps) {
   // O tema padrão deve ser o mesmo do SSR para evitar FOUC
   const temaPadrao: NomesTema = 'escuro';
   const [nomeTemaAtual, setNomeTemaAtual] = useState<NomesTema>(temaPadrao);
-  const [carregandoTema, setCarregandoTema] = useState(true);
+  const [isHydrated, setIsHydrated] = useState(false);
 
   // Carrega tema salvo do localStorage apenas no client
   useEffect(() => {
-    // Comentário: Evita FOUC mantendo tema do SSR até carregar preferências do usuário
     if (typeof window !== 'undefined') {
+      setIsHydrated(true);
       const temaSalvo = localStorage.getItem('tema-selecionado') as NomesTema;
       if (temaSalvo && temasDisponiveis.some(t => t.nome === temaSalvo)) {
         setNomeTemaAtual(temaSalvo);
       }
-      setCarregandoTema(false);
     }
   }, []);
 
@@ -71,11 +71,12 @@ export function ProvedorTema({ children }: ProvedorTemaProps) {
     selecionarTema,
     temasDisponiveis,
     ehModoEscuro,
+    isHydrated,
   };
 
   // Fallback visual neutro enquanto carrega preferências do usuário
   // Comentário: Evita layout torto, mantendo fundo e altura mínima
-  if (carregandoTema) {
+  if (!isHydrated) {
     return (
       <div
         style={{
