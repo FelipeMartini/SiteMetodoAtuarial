@@ -1,4 +1,4 @@
-
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import SocialLoginBox from '../app/components/SocialLoginBox';
 import { signIn } from 'next-auth/react';
@@ -12,9 +12,9 @@ jest.mock('next-auth/react', () => ({
 describe('SocialLoginBox', () => {
   it('renderiza os botões oficiais Google e Apple', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     expect(screen.getByAltText('Entrar com Google')).toBeInTheDocument();
     expect(screen.getByAltText('Entrar com Apple')).toBeInTheDocument();
@@ -22,9 +22,9 @@ describe('SocialLoginBox', () => {
 
   it('aciona signIn do Google ao clicar no botão', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     const googleBtn = screen.getByAltText('Entrar com Google').closest('button');
     expect(googleBtn).not.toBeNull();
@@ -34,9 +34,9 @@ describe('SocialLoginBox', () => {
 
   it('aciona signIn da Apple ao clicar no botão', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     const appleBtn = screen.getByAltText('Entrar com Apple').closest('button');
     expect(appleBtn).not.toBeNull();
@@ -46,9 +46,9 @@ describe('SocialLoginBox', () => {
 
   it('deve exibir imagem de fundo clara quando tema for claro', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     // Busca pelo elemento principal do box
     const box = screen.getByRole('img', { name: /login/i }).closest('div');
@@ -57,9 +57,9 @@ describe('SocialLoginBox', () => {
 
   it('deve exibir imagem de fundo escura quando tema for escuro', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     const box = screen.getByRole('img', { name: /login/i }).closest('div');
     expect(box).toHaveStyle('background: url(/loginboxescura.png)');
@@ -67,9 +67,9 @@ describe('SocialLoginBox', () => {
 
   it('deve exibir campos e botões de login sobre a imagem', () => {
     render(
-      <ProvedorTema>
+      <ThemeProvider>
         <SocialLoginBox />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     expect(screen.getByText(/login social/i)).toBeInTheDocument();
     expect(screen.getByAltText(/google/i)).toBeInTheDocument();

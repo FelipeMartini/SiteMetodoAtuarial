@@ -1,0 +1,1 @@
+export { SeletorTema } from './SeletorTemaModerno';

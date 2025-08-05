@@ -10,15 +10,13 @@
 // Componentes reutilizáveis para todo o projeto
 
 // Botões
-export { default as Botao } from './Botao';
 export { default as Button } from './Button';
 
 // Campos de entrada
-export { default as InputTexto } from './InputTexto';
 export { default as InputField } from './InputField';
 
 // Cards informativos
-export { default as CardInfo } from './CardInfo';
+// Se necessário, exportar Card moderno
 
 // Componentes de login
 export { default as SocialLoginButton } from './SocialLoginButton';
@@ -28,4 +26,4 @@ export { default as LoginForm } from './LoginForm';
 export type { ButtonVariant, ButtonSize } from './Button';
 
 // Exportação dos componentes base do design system
-export { Container, Flex, Texto, Secao, Card } from "../../styles/ComponentesBase";
+export { FlexContainer, CardBase, InputBase, LabelBase, Heading, Text, BotaoBase, Container, Secao } from "../../styles/ComponentesBase";

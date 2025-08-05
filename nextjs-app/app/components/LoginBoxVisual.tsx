@@ -66,9 +66,9 @@ const ButtonApple = styled.button`
 `;
 
 export default function LoginBoxVisual() {
-  const { nomeTemaAtual } = useTema();
+  const { themeName } = useTheme();
   let imgSrc = '/loginboxclara.png';
-  if (nomeTemaAtual === 'escuro') imgSrc = '/loginboxescura.png';
+  if (themeName === 'dark') imgSrc = '/loginboxescura.png';
 
   // Funções dos botões
   const handleLogin = (e: React.FormEvent) => {

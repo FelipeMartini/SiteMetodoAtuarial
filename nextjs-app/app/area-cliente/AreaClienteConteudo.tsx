@@ -13,9 +13,9 @@ import { useTema } from "../contexts/ThemeContext";
  * Componente client-side para exibir o menu lateral e perfil do cliente.
  * Alterna cores do box e texto conforme tema selecionado.
  */
-export default function AreaClienteConteudo({ usuario }: { usuario: { name?: string | null; email?: string | null; image?: string | null } }) {
-  const { theme } = useTema();
-  const cores = theme.colors;
+export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: string | null; email?: string | null; image?: string | null } }) {
+  const { currentTheme } = useTema();
+  const cores = currentTheme.colors;
   return (
     <ErrorBoundary>
       <div
@@ -49,7 +49,7 @@ export default function AreaClienteConteudo({ usuario }: { usuario: { name?: str
               gap: 16,
             }}
           >
-            {usuario.image ? (
+            {usuario?.image ? (
               <Image
                 src={usuario.image}
                 alt="Foto do usuário"
@@ -61,10 +61,10 @@ export default function AreaClienteConteudo({ usuario }: { usuario: { name?: str
               />
             ) : null}
             <div style={{ color: cores.textSecondary }}>
-              <strong style={{ color: cores.primary }}>Nome:</strong> {usuario.name || "Não informado"}
+              <strong style={{ color: cores.primary }}>Nome:</strong> {usuario?.name || "Não informado"}
             </div>
             <div style={{ color: cores.textSecondary }}>
-              <strong style={{ color: cores.primary }}>Email:</strong> {usuario.email || "Não informado"}
+              <strong style={{ color: cores.primary }}>Email:</strong> {usuario?.email || "Não informado"}
             </div>
           </div>
         </main>

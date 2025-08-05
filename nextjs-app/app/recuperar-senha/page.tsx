@@ -117,17 +117,17 @@ const RecuperarSenha: React.FC = () => {
   return (
     <PageContainer>
       <RecoveryCard $padding="lg" $shadow>
-        <FlexContainer $justify="end" $direction="row">
+        <FlexContainer justify="flex-end" direction="row">
           <ThemeToggle />
         </FlexContainer>
 
-        <Heading $level={2} $color="primary">
+        <Heading level={2} color="primary">
           Recuperar Senha
         </Heading>
 
         {!sent ? (
           <>
-            <Text $color="textSecondary" style={{ marginTop: currentTheme.spacing.md }}>
+            <Text color="textSecondary" style={{ marginTop: currentTheme.spacing.md }}>
               Digite seu email para receber instruções de recuperação de senha
             </Text>
 
@@ -154,10 +154,10 @@ const RecuperarSenha: React.FC = () => {
           </>
         ) : (
           <>
-            <Text $color="success" style={{ marginTop: currentTheme.spacing.md }}>
+            <Text color="success" style={{ marginTop: currentTheme.spacing.md }}>
               ✓ Instruções enviadas com sucesso!
             </Text>
-            <Text $color="textSecondary" $size="sm" style={{ marginTop: currentTheme.spacing.sm }}>
+            <Text color="textSecondary" size="sm" style={{ marginTop: currentTheme.spacing.sm }}>
               Verifique sua caixa de email e spam
             </Text>
           </>
@@ -165,7 +165,7 @@ const RecuperarSenha: React.FC = () => {
 
         {message && (
           <Text
-            $color={message.includes('sucesso') || message.includes('receberá') ? 'success' : 'error'}
+            color={message.includes('sucesso') || message.includes('receberá') ? 'success' : 'error'}
             $size="sm"
             style={{ marginTop: currentTheme.spacing.sm }}
           >

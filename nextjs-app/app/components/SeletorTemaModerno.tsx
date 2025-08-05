@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import { useTema } from '../contexts/ThemeContext';
-import { NomesTema } from '../theme/temas';
+import { ThemeName, availableThemes } from '../../styles/themes';
 import { Botao } from '../design-system/Botao';
 
 const ContainerSeletor = styled.div`
@@ -27,14 +27,14 @@ const MenuDropdown = styled.div<{ $aberto: boolean }>`
   min-width: 200px;
   background: ${props => props.theme.colors.surface};
   border: 1px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borders.raios.md};
-  box-shadow: ${props => props.theme.sombras.lg};
+  border-radius: ${props => props.theme.borderRadius.md};
+  box-shadow: ${props => props.theme.shadows.lg};
   padding: 0.5rem;
   margin-top: 0.25rem;
   opacity: ${props => props.$aberto ? 1 : 0};
   visibility: ${props => props.$aberto ? 'visible' : 'hidden'};
   transform: ${props => props.$aberto ? 'translateY(0)' : 'translateY(-10px)'};
-  transition: all ${props => props.theme.animacoes.transicoes.normal} ${props => props.theme.animacoes.curvas.easeOut};
+  transition: all ${props => props.theme.transitions.normal};
 `;
 
 const ItemTema = styled.button<{ $ativo: boolean }>`
@@ -46,18 +46,18 @@ const ItemTema = styled.button<{ $ativo: boolean }>`
   background: ${props => props.$ativo ? props.theme.colors.backgroundSecondary : 'transparent'};
   color: ${props => props.theme.colors.text};
   border: none;
-  border-radius: ${props => props.theme.borders.raios.sm};
+  border-radius: ${props => props.theme.borderRadius.sm};
   cursor: pointer;
-  font-size: ${props => props.theme.tipografia.tamanhos.sm};
-  font-family: ${props => props.theme.tipografia.fontes.principal};
-  transition: all ${props => props.theme.animacoes.transicoes.rapida};
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  font-family: ${props => props.theme.typography.fontFamily};
+  transition: all ${props => props.theme.transitions.fast};
 
   &:hover {
     background: ${props => props.theme.colors.backgroundSecondary};
   }
 
   &:focus {
-    outline: 2px solid ${props => props.theme.colors.borderFoco};
+    outline: 2px solid ${props => props.theme.colors.borderFocus};
     outline-offset: 1px;
   }
 `;
@@ -76,11 +76,11 @@ const InfoTema = styled.div`
 `;
 
 const NomeTema = styled.span`
-  font-weight: ${props => props.theme.tipografia.pesos.medio};
+  font-weight: ${props => props.theme.typography.fontWeight.medium};
 `;
 
 const DescricaoTema = styled.span<{ $cor: string }>`
-  font-size: ${props => props.theme.tipografia.tamanhos.xs};
+  font-size: ${props => props.theme.typography.fontSize.xs};
   color: ${props => props.theme.colors.textSecondary};
   
   &::before {
@@ -96,7 +96,7 @@ const DescricaoTema = styled.span<{ $cor: string }>`
 
 const SetaDropdown = styled.span<{ $aberto: boolean }>`
   transform: ${props => props.$aberto ? 'rotate(180deg)' : 'rotate(0deg)'};
-  transition: transform ${props => props.theme.animacoes.transicoes.rapida};
+  transition: transform ${props => props.theme.transitions.fast};
 `;
 
 // Overlay invisível para fechar o dropdown ao clicar fora
@@ -110,23 +110,20 @@ const Overlay = styled.div<{ $aberto: boolean }>`
   display: ${props => props.$aberto ? 'block' : 'none'};
 `;
 
-const descricoesPersonalizadas = {
-  'escuro': 'Padrão elegante',
-  'claro': 'Limpo e moderno',
-  'verde-natural': 'Sustentável',
-  'roxo-profissional': 'Criativo',
-  'coral-vibrante': 'Energético'
-} as const;
 
-export function SeletorTemaModerno() {
-  const { temaAtual, nomeTemaAtual, selecionarTema, temasDisponiveis } = useTema();
+export function SeletorTema() {
+  const { currentTheme, themeName, setTheme } = useTema();
+  const temasDisponiveis = availableThemes;
+  const temaAtual = currentTheme;
+  const nomeTemaAtual = themeName;
+  const selecionarTema = (nome: string) => setTheme(nome as ThemeName);
   const [menuAberto, setMenuAberto] = useState(false);
 
   const alternarMenu = () => {
     setMenuAberto(!menuAberto);
   };
 
-  const selecionarEFecharMenu = (nomeTema: NomesTema) => {
+  const selecionarEFecharMenu = (nomeTema: ThemeName) => {
     selecionarTema(nomeTema);
     setMenuAberto(false);
   };
@@ -148,8 +145,8 @@ export function SeletorTemaModerno() {
           aria-haspopup="true"
         >
           <span style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-            <IconeTema aria-hidden="true">{temaAtual.icone}</IconeTema>
-            {temaAtual.displayName}
+            <IconeTema aria-hidden="true" style={{ color: temaAtual.colors.primary }}>●</IconeTema>
+            {nomeTemaAtual.charAt(0).toUpperCase() + nomeTemaAtual.slice(1)}
           </span>
           <SetaDropdown $aberto={menuAberto} aria-hidden="true">
             ▼
@@ -159,17 +156,18 @@ export function SeletorTemaModerno() {
         <MenuDropdown $aberto={menuAberto} role="menu">
           {temasDisponiveis.map((tema) => (
             <ItemTema
-              key={tema.nome}
-              $ativo={tema.nome === nomeTemaAtual}
-              onClick={() => selecionarEFecharMenu(tema.nome)}
+              key={tema.name}
+              $ativo={tema.name === nomeTemaAtual}
+              onClick={() => selecionarEFecharMenu(tema.name as ThemeName)}
               role="menuitem"
-              aria-current={tema.nome === nomeTemaAtual ? 'true' : 'false'}
+              aria-current={tema.name === nomeTemaAtual ? 'true' : 'false'}
             >
-              <IconeTema aria-hidden="true">{tema.icone}</IconeTema>
+              <IconeTema aria-hidden="true" style={{ color: tema.colors.primary }}>●</IconeTema>
               <InfoTema>
-                <NomeTema>{tema.displayName}</NomeTema>
-                <DescricaoTema $cor={tema.cores.primary}>
-                  {descricoesPersonalizadas[tema.nome]}
+                <NomeTema>{tema.name.charAt(0).toUpperCase() + tema.name.slice(1)}</NomeTema>
+                <DescricaoTema $cor={tema.colors.primary}>
+                  {/* Descrição personalizada pode ser ajustada conforme necessidade */}
+                  {tema.name === 'light' ? 'Claro e moderno' : tema.name === 'dark' ? 'Escuro elegante' : 'Tema personalizado'}
                 </DescricaoTema>
               </InfoTema>
             </ItemTema>

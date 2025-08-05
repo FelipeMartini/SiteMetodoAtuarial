@@ -40,11 +40,13 @@ export const Botao: React.FC<BotaoProps> = ({
     <BotaoBase
       type={type}
       onClick={onClick}
-      $variant={variant}
-      $size={size}
-      $fullWidth={fullWidth}
       disabled={disabled || loading}
-      className={className}
+      className={[
+        className,
+        `botao-${variant}`,
+        `botao-${size}`,
+        fullWidth ? 'botao-full' : ''
+      ].filter(Boolean).join(' ')}
     >
       {loading ? 'Carregando...' : children}
     </BotaoBase>

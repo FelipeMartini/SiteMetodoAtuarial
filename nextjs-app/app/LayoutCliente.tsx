@@ -37,9 +37,9 @@ function Header() {
           </Link>
 
           {/* Navegação */}
-          <Flex $alinhar="center" $gap="md">
+          <Flex $align="center" $gap="1rem">
             <nav>
-              <Flex $gap="sm">
+              <Flex $gap="0.75rem">
                 <Link href="/" style={{ textDecoration: 'none' }}>
                   <Botao variant="ghost" size="sm">
                     Início
@@ -65,13 +65,13 @@ function Header() {
 
             {/* Área de usuário */}
             {session ? (
-              <Flex $alinhar="center" $gap="sm">
+              <Flex $align="center" $gap="0.75rem">
                 <Link href="/area-cliente" style={{ textDecoration: 'none' }}>
                   <Botao variant="secondary" size="sm">
                     Área Cliente
                   </Botao>
                 </Link>
-                <Texto $variante="legenda" $cor="secundario">
+                <Texto $variante="caption" $cor="secondary">
                   Olá, {session.user?.name || session.user?.email}
                 </Texto>
                 <Botao
@@ -106,7 +106,7 @@ interface LayoutClienteProps {
 const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
   return (
     <Container>
-      <Flex $direcao="column" style={{ minHeight: '100vh' }}>
+      <Flex $direction="column" style={{ minHeight: '100vh' }}>
         <Header />
 
         <main style={{ flex: 1 }}>
@@ -116,7 +116,7 @@ const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
         </main>
 
         <Suspense fallback={
-          <Flex $justificar="center" $alinhar="center" style={{ padding: '2rem' }}>
+          <Flex $justify="center" $align="center" style={{ padding: '2rem' }}>
             <Texto $cor="secundario">Carregando rodapé...</Texto>
           </Flex>
         }>

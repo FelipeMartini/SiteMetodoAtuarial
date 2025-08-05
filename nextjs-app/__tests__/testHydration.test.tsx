@@ -9,21 +9,25 @@ import TestHydration from '../app/components/TestHydration';
 describe('TestHydration', () => {
   it('deve renderizar o componente e exibir status de hydration', () => {
     const { getByText } = render(
-      <ProvedorTema>
+      <ThemeProvider>
         <TestHydration />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     // Verifica se o título aparece
     expect(getByText(/Teste de Hydration/i)).toBeInTheDocument();
     // Verifica se o status aparece
-    expect(getByText(/Status do Hydration/i)).toBeInTheDocument();
+    expect(getByText(/Hydrated|Erro/i)).toBeInTheDocument();
+    // Verifica se o campo de renderização aparece
+    expect(getByText(/Renderizado em:/i)).toBeInTheDocument();
+    // Verifica se o campo de cliques aparece
+    expect(getByText(/Cliques no botão:/i)).toBeInTheDocument();
   });
 
   it('deve alternar o tema ao clicar no botão', () => {
     const { getByText } = render(
-      <ProvedorTema>
+      <ThemeProvider>
         <TestHydration />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     const botao = getByText(/Alternar Tema/i);
     fireEvent.click(botao);

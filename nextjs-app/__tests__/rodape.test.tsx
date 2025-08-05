@@ -9,9 +9,9 @@ import Rodape from '../app/Rodape';
 describe('Rodape', () => {
   it('deve renderizar o rodapé com informações institucionais', () => {
     const { getByText } = render(
-      <ProvedorTema>
+      <ThemeProvider>
         <Rodape />
-      </ProvedorTema>
+      </ThemeProvider>
     );
     // Verifica se o nome da empresa aparece
     expect(getByText(/Método Atuarial/i)).toBeInTheDocument();

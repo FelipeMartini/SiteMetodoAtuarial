@@ -3,7 +3,7 @@
 "use client";
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
-import { InputTexto, Botao } from '../design-system';
+import { InputField, Button } from '../design-system';
 import styled from 'styled-components';
 
 const ContatoContainer = styled.main`
@@ -67,13 +67,13 @@ export default function ContatoOrcamento() {
         <Titulo>Contato / Orçamento</Titulo>
         <Descricao>Entre em contato conosco ou solicite seu orçamento personalizado!</Descricao>
         <FormContainer>
-          <InputTexto label="Nome" id="contato-nome" required />
-          <InputTexto label="Email" id="contato-email" type="email" required />
-          <InputTexto label="Mensagem" id="contato-mensagem" required />
-          <InputTexto label="Serviço desejado" id="orcamento-servico" required />
+          <InputField label="Nome" id="contato-nome" required />
+          <InputField label="Email" id="contato-email" type="email" required />
+          <InputField label="Mensagem" id="contato-mensagem" required />
+          <InputField label="Serviço desejado" id="orcamento-servico" required />
           <Label htmlFor="orcamento-detalhes">Detalhes do orçamento</Label>
           <TextArea id="orcamento-detalhes" required />
-          <Botao type="submit" variant="primary">Enviar</Botao>
+          <Button $variant="primary" type="submit">Enviar</Button>
         </FormContainer>
       </ContatoContainer>
     </ErrorBoundary>
