@@ -7,6 +7,7 @@ import GoogleProvider from "next-auth/providers/google";
 import GitHubProvider from "next-auth/providers/github";
 import MicrosoftEntraIdProvider from "next-auth/providers/microsoft-entra-id";
 import AppleProvider from "next-auth/providers/apple";
+import TwitterProvider from "next-auth/providers/twitter";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import { PrismaClient } from "@prisma/client";
@@ -27,21 +28,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   // Lista de provedores de autenticação
   providers: [
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
+      clientId: process.env.AUTH_GOOGLE_ID || "",
+      clientSecret: process.env.AUTH_GOOGLE_SECRET || "",
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      }
     }),
     GitHubProvider({
-      clientId: process.env.GITHUB_CLIENT_ID || "",
-      clientSecret: process.env.GITHUB_CLIENT_SECRET || "",
+      clientId: process.env.AUTH_GITHUB_ID || "",
+      clientSecret: process.env.AUTH_GITHUB_SECRET || "",
     }),
     MicrosoftEntraIdProvider({
-      clientId: process.env.MICROSOFT_CLIENT_ID || "",
-      clientSecret: process.env.MICROSOFT_CLIENT_SECRET || "",
-      tenantId: process.env.MICROSOFT_TENANT_ID || "",
+      clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID || "",
+      clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET || "",
+      issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER || "https://login.microsoftonline.com/common/v2.0",
     }),
     AppleProvider({
-      clientId: process.env.APPLE_CLIENT_ID || "",
-      clientSecret: process.env.APPLE_CLIENT_SECRET || "",
+      clientId: process.env.AUTH_APPLE_ID || "",
+      clientSecret: process.env.AUTH_APPLE_SECRET || "",
+    }),
+    TwitterProvider({
+      clientId: process.env.AUTH_TWITTER_ID || "",
+      clientSecret: process.env.AUTH_TWITTER_SECRET || "",
     }),
     CredentialsProvider({
       name: "credentials",
