@@ -244,7 +244,6 @@ const MicrosoftIcon = () => (
 
 // Tipos para as props do componente
 interface SocialLoginBoxProps {
-  onSuccess?: () => void;
   className?: string;
   showTitle?: boolean;
   providers?: ('google' | 'apple' | 'github' | 'twitter' | 'microsoft')[];
@@ -280,7 +279,6 @@ const PROVIDER_CONFIG = {
 };
 
 const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
-  onSuccess,
   className,
   showTitle = true,
   providers = ['google', 'apple', 'github', 'twitter', 'microsoft']
