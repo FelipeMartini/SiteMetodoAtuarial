@@ -52,7 +52,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     handleSubmit,
     formState: { errors },
     reset,
-    watch,
+    // watch, // Removido para evitar warning
   } = useForm<LoginFormData>();
 
   // const password = watch('password'); // Removido para evitar warning

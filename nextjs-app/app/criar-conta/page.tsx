@@ -7,7 +7,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import Link from 'next/link';
-import { useTema } from '../contexts/ThemeContext';
+// import { useTema } from '../contexts/ThemeContext'; // Removido para evitar warning
 import SocialLoginBox from '../components/SocialLoginBox';
 import { Botao } from '../design-system';
 

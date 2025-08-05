@@ -51,7 +51,9 @@ export async function POST(request: NextRequest) {
     });
 
     // Remove a senha da resposta
-    const { password: pw, ...userWithoutPassword } = user;
+    // Remove a senha da resposta
+    // Remove a senha da resposta
+    const { password: _, ...userWithoutPassword } = user; // '_' para indicar variável descartada
 
     return NextResponse.json(
       {

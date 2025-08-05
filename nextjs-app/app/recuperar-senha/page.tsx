@@ -3,12 +3,13 @@
  * Sistema completo de recuperação de senha com interface responsiva
  */
 'use client';
+import Link from 'next/link';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-import { useTema } from '../contexts/ThemeContext';
-import Link from 'next/link';
+// import { useRouter } from 'next/navigation'; // Removido para evitar warning
+// import { useTema } from '../contexts/ThemeContext'; // Removido para evitar warning
 import { Botao } from '../design-system';
 
 // Container principal da página
@@ -253,6 +254,8 @@ export default function RecuperarSenhaPage() {
         texto: 'Erro de conexão. Verifique sua internet e tente novamente.',
         tipo: 'erro'
       });
+      // 'error' capturado mas não utilizado
+      // error não utilizado, apenas para capturar exceção
     } finally {
       setIsLoading(false);
     }
