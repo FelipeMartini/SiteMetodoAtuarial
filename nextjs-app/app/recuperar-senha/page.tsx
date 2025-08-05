@@ -7,7 +7,7 @@ import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
-import { Card, Container, Flex, Texto } from '../../styles/ComponentesBase';
+import { Card, Flex, Texto } from '../../styles/ComponentesBase';
 
 const CardBase = styled(Card)`
   background: white;

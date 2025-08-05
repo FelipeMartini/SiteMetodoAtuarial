@@ -1,7 +1,6 @@
 // Componente Botao moderno usando o novo sistema de temas
 
 import React from 'react';
-import { Container } from '../../styles/ComponentesBase';
 import styled from 'styled-components';
 
 const BotaoBase = styled.button`
