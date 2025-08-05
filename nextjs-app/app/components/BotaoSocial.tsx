@@ -1,6 +1,7 @@
 // Componente reutilizável para botões de login social
 import React from 'react';
 
+// Interface para as props do botão social
 interface BotaoSocialProps {
   icone: React.ReactNode;
   texto: string;
