@@ -3,6 +3,8 @@
  * Corrige erro: The default export is not a React Component
  */
 
+'use client';
+
 import Servicos from '../components/Servicos';
 
 export default function Page() {
