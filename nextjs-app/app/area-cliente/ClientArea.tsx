@@ -198,7 +198,7 @@ const accessLevels = {
 const ClientArea: React.FC = () => {
   const { data: session, status } = useSession();
   const { currentTheme } = useTheme();
-  
+
   const [users, setUsers] = useState<User[]>([]);
   const [editingUser, setEditingUser] = useState<User | null>(null);
   const [formData, setFormData] = useState<UserFormData>({
@@ -252,12 +252,12 @@ const ClientArea: React.FC = () => {
     setMessage('');
 
     try {
-      const endpoint = editingUser 
-        ? `/api/users/${editingUser.id}` 
+      const endpoint = editingUser
+        ? `/api/users/${editingUser.id}`
         : '/api/users/profile';
-      
+
       const method = editingUser ? 'PUT' : 'PATCH';
-      
+
       const response = await fetch(endpoint, {
         method,
         headers: { 'Content-Type': 'application/json' },
@@ -358,7 +358,7 @@ const ClientArea: React.FC = () => {
         <SectionTitle>
           {editingUser ? `Editando: ${editingUser.name}` : 'Meu Perfil'}
         </SectionTitle>
-        
+
         <Form onSubmit={handleSubmit}>
           <FormGroup>
             <Label>Nome</Label>
@@ -422,7 +422,7 @@ const ClientArea: React.FC = () => {
             <Button type="submit" disabled={loading}>
               {loading ? 'Salvando...' : 'Salvar Alterações'}
             </Button>
-            
+
             {editingUser && (
               <Button
                 type="button"
@@ -443,7 +443,7 @@ const ClientArea: React.FC = () => {
       {isAdmin && (
         <Card>
           <SectionTitle>Gerenciar Usuários</SectionTitle>
-          
+
           {loading ? (
             <p>Carregando usuários...</p>
           ) : (
@@ -470,7 +470,7 @@ const ClientArea: React.FC = () => {
                     </Td>
                     <Td>{user.isActive ? 'Ativo' : 'Inativo'}</Td>
                     <Td>
-                      {user.lastLogin 
+                      {user.lastLogin
                         ? new Date(user.lastLogin).toLocaleDateString('pt-BR')
                         : 'Nunca'
                       }

@@ -10,7 +10,7 @@ import bcrypt from 'bcryptjs';
 export async function GET() {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
@@ -50,7 +50,7 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }

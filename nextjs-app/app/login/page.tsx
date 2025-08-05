@@ -17,10 +17,10 @@ const LoginPage: React.FC = () => {
           style={{ minHeight: '100vh', padding: '32px 0' }}
         >
           <div style={{ width: '100%', maxWidth: 480, margin: '0 auto' }}>
-            <Texto 
-              $variante="h3" 
-              $peso="negrito" 
-              $align="centro" 
+            <Texto
+              $variante="h3"
+              $peso="negrito"
+              $align="centro"
               style={{ marginBottom: 32, color: '#4F46E5' }}
             >
               Login

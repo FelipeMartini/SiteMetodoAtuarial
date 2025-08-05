@@ -10,7 +10,7 @@ import bcrypt from 'bcryptjs';
 export async function PATCH(request: NextRequest) {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
@@ -25,7 +25,7 @@ export async function PATCH(request: NextRequest) {
 
     // Verificar se email já está em uso por outro usuário
     const emailInUse = await db.user.findFirst({
-      where: { 
+      where: {
         email,
         NOT: { id: session.user.id }
       }

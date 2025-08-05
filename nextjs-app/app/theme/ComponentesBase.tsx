@@ -144,8 +144,8 @@ export const InputBase = styled.input<{
   background: ${({ theme }) => theme.colors?.surface || '#ffffff'};
   color: ${({ theme }) => theme.colors?.text || '#111827'};
   
-  border: 1px solid ${({ theme, $hasError }) => 
-    $hasError 
+  border: 1px solid ${({ theme, $hasError }) =>
+    $hasError
       ? theme.colors?.error || '#ef4444'
       : theme.colors?.border || '#d1d5db'
   };
@@ -155,16 +155,16 @@ export const InputBase = styled.input<{
   
   &:focus {
     outline: none;
-    border-color: ${({ theme, $hasError }) => 
-      $hasError 
-        ? theme.colors?.error || '#ef4444'
-        : theme.colors?.borderFocus || '#3b82f6'
-    };
-    box-shadow: 0 0 0 3px ${({ theme, $hasError }) => 
-      $hasError 
-        ? (theme.colors?.error || '#ef4444') + '20'
-        : (theme.colors?.borderFocus || '#3b82f6') + '20'
-    };
+    border-color: ${({ theme, $hasError }) =>
+    $hasError
+      ? theme.colors?.error || '#ef4444'
+      : theme.colors?.borderFocus || '#3b82f6'
+  };
+    box-shadow: 0 0 0 3px ${({ theme, $hasError }) =>
+    $hasError
+      ? (theme.colors?.error || '#ef4444') + '20'
+      : (theme.colors?.borderFocus || '#3b82f6') + '20'
+  };
   }
   
   &:disabled {
@@ -284,7 +284,7 @@ export const Heading = styled.h1<{
       '3xl': '1.875rem',
       '4xl': '2.25rem',
     };
-    
+
     switch ($level) {
       case 1: return `font-size: ${sizes['4xl'] || '2.25rem'};`;
       case 2: return `font-size: ${sizes['3xl'] || '1.875rem'};`;

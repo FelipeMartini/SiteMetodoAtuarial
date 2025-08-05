@@ -13,7 +13,7 @@ export async function PUT(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
@@ -51,7 +51,7 @@ export async function PUT(
 
     // Verificar se email já está em uso por outro usuário
     const emailInUse = await db.user.findFirst({
-      where: { 
+      where: {
         email,
         NOT: { id: userId }
       }
@@ -106,7 +106,7 @@ export async function DELETE(
 ) {
   try {
     const session = await auth();
-    
+
     if (!session?.user) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }

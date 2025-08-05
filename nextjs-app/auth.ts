@@ -109,7 +109,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             // Atualizar último login e garantir que Felipe seja Super Admin
             await prisma.user.update({
               where: { id: existingUser.id },
-              data: { 
+              data: {
                 lastLogin: new Date(),
                 ...(user.email === 'felipemartinii@gmail.com' && { accessLevel: 5 })
               },
@@ -117,7 +117,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           } else if (account.provider !== 'credentials') {
             // Criar novo usuário apenas para provedores OAuth (não credentials)
             const accessLevel = user.email === 'felipemartinii@gmail.com' ? 5 : 1;
-            
+
             await prisma.user.create({
               data: {
                 name: user.name,

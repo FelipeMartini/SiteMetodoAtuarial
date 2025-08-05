@@ -84,7 +84,7 @@ const RecuperarSenha: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       setMessage('Por favor, digite seu email');
       return;
@@ -120,17 +120,17 @@ const RecuperarSenha: React.FC = () => {
         <FlexContainer $justify="end" $direction="row">
           <ThemeToggle />
         </FlexContainer>
-        
+
         <Heading $level={2} $color="primary">
           Recuperar Senha
         </Heading>
-        
+
         {!sent ? (
           <>
             <Text $color="textSecondary" style={{ marginTop: currentTheme.spacing.md }}>
               Digite seu email para receber instruções de recuperação de senha
             </Text>
-            
+
             <Form onSubmit={handleSubmit}>
               <InputBase
                 type="email"
@@ -140,7 +140,7 @@ const RecuperarSenha: React.FC = () => {
                 disabled={loading}
                 required
               />
-              
+
               <BotaoBase
                 type="submit"
                 $variant="primary"
@@ -162,9 +162,9 @@ const RecuperarSenha: React.FC = () => {
             </Text>
           </>
         )}
-        
+
         {message && (
-          <Text 
+          <Text
             $color={message.includes('sucesso') || message.includes('receberá') ? 'success' : 'error'}
             $size="sm"
             style={{ marginTop: currentTheme.spacing.sm }}
@@ -172,7 +172,7 @@ const RecuperarSenha: React.FC = () => {
             {message}
           </Text>
         )}
-        
+
         <BackLink onClick={() => router.push('/login')}>
           ← Voltar para o login
         </BackLink>

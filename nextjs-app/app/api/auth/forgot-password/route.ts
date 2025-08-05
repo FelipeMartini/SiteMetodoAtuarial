@@ -20,8 +20,8 @@ export async function POST(request: NextRequest) {
 
     // Por segurança, sempre retornamos sucesso mesmo se o email não existir
     if (!user) {
-      return NextResponse.json({ 
-        message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.' 
+      return NextResponse.json({
+        message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.'
       });
     }
 
@@ -31,14 +31,14 @@ export async function POST(request: NextRequest) {
 
     // Salvar token no banco (você pode criar uma tabela específica para isso)
     // Por agora, vamos simular o processo
-    
+
     // Aqui você implementaria o envio de email
     // Por exemplo, usando Nodemailer, SendGrid, etc.
     console.log('Token de recuperação para', email, ':', resetToken);
     console.log('Link de recuperação: /redefinir-senha?token=' + resetToken);
 
-    return NextResponse.json({ 
-      message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.' 
+    return NextResponse.json({
+      message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.'
     });
   } catch (error) {
     console.error('Erro na recuperação de senha:', error);
