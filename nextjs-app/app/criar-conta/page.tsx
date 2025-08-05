@@ -235,11 +235,6 @@ export default function CriarContaPage() {
     }
   };
 
-  // Callback para sucesso do login social
-  const handleSocialSuccess = () => {
-    // Redirecionar para área do cliente (será feito automaticamente pelo Auth.js)
-    console.log('Login social realizado com sucesso');
-  };
 
   return (
     <PaginaContainer>
@@ -333,7 +328,6 @@ export default function CriarContaPage() {
             <span>ou crie usando</span>
           </Divisor>
           <SocialLoginBox
-            onSuccess={handleSocialSuccess}
             showTitle={false}
           />
         </div>
