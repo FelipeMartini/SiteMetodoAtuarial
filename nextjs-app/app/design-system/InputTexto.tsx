@@ -34,10 +34,10 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
         </Texto>
       )}
 
-      <Input
+      <InputBase
         ref={ref}
         id={inputId}
-        $erro={!!erro}
+        $hasError={!!erro}
         {...props}
         aria-invalid={!!erro}
         aria-describedby={
