@@ -7,6 +7,8 @@ import { useSession, signOut } from "next-auth/react";
 import { Container, Flex, Texto, Secao } from '../styles/ComponentesBase';
 import { Botao } from "./design-system/Botao";
 import ThemeToggle from "./components/ThemeToggle";
+import { GlobalStyles } from '../styles/GlobalStyles';
+import { useTheme } from './contexts/ThemeContext';
 
 // Lazy loading do Rodape para otimizar o carregamento
 const Rodape = React.lazy(() => import("./Rodape"));
@@ -104,9 +106,13 @@ interface LayoutClienteProps {
 }
 
 const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
+  const { currentTheme } = useTheme();
+  
   return (
-    <Container>
-      <Flex $direction="column" style={{ minHeight: '100vh' }}>
+    <>
+      <GlobalStyles theme={currentTheme} />
+      <Container>
+        <Flex $direction="column" style={{ minHeight: '100vh' }}>
         <Header />
 
         <main style={{ flex: 1 }}>
@@ -124,6 +130,7 @@ const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
         </Suspense>
       </Flex>
     </Container>
+    </>
   );
 };
 

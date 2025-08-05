@@ -7,7 +7,6 @@ import ProvedorSessao from "./ProvedorSessao";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
-import { GlobalStyles } from '../styles/GlobalStyles';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -51,7 +50,6 @@ export default function RootLayout({
           <ErrorBoundary>
             <ProvedorSessao>
               <ThemeProvider>
-                <GlobalStyles />
                 <LayoutCliente>
                   {children}
                 </LayoutCliente>
