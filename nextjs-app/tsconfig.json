@@ -1,16 +1,12 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
     "noImplicitAny": true,
-    "strictNullChecks": true,
+    // ...já existe 'strictNullChecks' acima, removido para evitar duplicidade
     "strictFunctionTypes": true,
     "noEmit": true,
     "incremental": true,
@@ -29,7 +25,8 @@
     "baseUrl": "./",
     "paths": {
       "@/*": ["./*"],
-      "@/auth": ["auth.ts"]
+      "@/auth": ["auth.ts"],
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
     }
   },
   "include": [
@@ -39,10 +36,5 @@
     "**/*.ts",
     "**/*.tsx"
   ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "build",
-    "dist"
-  ]
+  "exclude": ["node_modules", ".next", "build", "dist"]
 }

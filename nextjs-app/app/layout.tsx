@@ -1,8 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-import "../styles/App.css";
-import "../styles/index.css";
+// Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
 import { ProvedorTema } from "./theme/ContextoTema";
