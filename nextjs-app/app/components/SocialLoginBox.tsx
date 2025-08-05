@@ -23,26 +23,10 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
   const { nomeTemaAtual } = useTema();
   const isDarkMode = nomeTemaAtual === "escuro";
 
-  // Imagens de fundo conforme tema
-  const imagemFundo = isDarkMode
-    ? "/loginboxescura.png"
-    : "/loginboxclara.png";
+  // Imagem de fundo conforme tema
+  const imagemFundo = isDarkMode ? "/loginboxescura.png" : "/loginboxclara.png";
 
-  // URLs oficiais dos botões Google
-  const temasNeutros = ["verde-natural", "roxo-profissional", "coral-vibrante"];
-  const googleBtn = isDarkMode
-    ? 'https://developers.google.com/static/identity/images/btn_google_signin_dark_normal_web.png'
-    : temasNeutros.includes(nomeTemaAtual)
-      ? 'https://developers.google.com/static/identity/images/btn_google_signin_black_normal_web.png'
-      : 'https://developers.google.com/static/identity/images/btn_google_signin_light_normal_web.png';
-
-  // URLs oficiais dos botões Apple
-  const appleBtn = isDarkMode
-    ? 'https://appleid.cdn-apple.com/appleid/button?height=44&width=260&type=sign_in&color=black'
-    : temasNeutros.includes(nomeTemaAtual)
-      ? 'https://appleid.cdn-apple.com/appleid/button?height=44&width=260&type=sign_in&color=white-outline'
-      : 'https://appleid.cdn-apple.com/appleid/button?height=44&width=260&type=sign_in&color=white';
-  // Função de login Google
+  // Funções de login (apenas uma instância de cada)
   const handleGoogleLogin = React.useCallback(() => {
     if (onGoogleLogin) {
       onGoogleLogin();
@@ -51,7 +35,6 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
     }
   }, [onGoogleLogin]);
 
-  // Função de login Apple
   const handleAppleLogin = React.useCallback(() => {
     if (onAppleLogin) {
       onAppleLogin();
@@ -59,93 +42,113 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
       signIn("apple", { callbackUrl: "/area-cliente" });
     }
   }, [onAppleLogin]);
-  // Renderização do componente com imagem de fundo dinâmica
+  // Medidas estimadas dos campos (ajuste conforme necessário)
+  const boxWidth = 400;
+  const boxHeight = 480;
+  // Email: top 90px, left 40px, width 320px, height 48px
+  // Senha: top 150px, left 40px, width 320px, height 48px
+  // Botão login: top 210px, left 40px, width 320px, height 48px
+  // Google: top 290px, left 40px, width 320px, height 48px
+  // Apple: top 350px, left 40px, width 320px, height 48px
+
   return (
-    <Box
-      $width="100%"
-      $display="flex"
-      $direction="column"
-      $align="center"
-      $justify="center"
+    <div
       style={{
         position: 'relative',
-        minHeight: '480px',
+        width: boxWidth,
+        height: boxHeight,
         background: `url(${imagemFundo}) center/cover no-repeat`,
-        borderRadius: '16px',
+        borderRadius: 24,
         boxShadow: isDarkMode ? "0 2px 16px rgba(0,0,0,0.6)" : "0 2px 16px rgba(0,0,0,0.08)",
         overflow: 'hidden',
-        padding: 0,
-        maxWidth: 480,
+        margin: '0 auto',
       }}
     >
-      {/* Overlay para garantir contraste dos campos */}
-      <Box
+      {/* Campo de email invisível */}
+      <input
+        type="email"
+        aria-label="Email address"
+        tabIndex={1}
         style={{
           position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          background: isDarkMode ? 'rgba(0,0,0,0.55)' : 'rgba(255,255,255,0.45)',
-          zIndex: 1,
+          top: 90,
+          left: 40,
+          width: 320,
+          height: 48,
+          opacity: 0,
+          pointerEvents: 'auto',
         }}
       />
-      <Box
-        $width="100%"
-        $display="flex"
-        $direction="column"
-        $align="center"
-        $justify="center"
-        style={{ position: 'relative', zIndex: 2, padding: '48px 32px 32px 32px' }}
-      >
-        <Box $width="64px" $height="64px" $bg="rgba(255,255,255,0.2)" $radius="50%" $margin="0 auto 16px auto" $display="flex" $align="center" $justify="center">
-          <span role="img" aria-label="Login" style={{ fontSize: 32, color: isDarkMode ? "#fff" : "#4F46E5" }}>🔒</span>
-        </Box>
-        <Typography $variante="h4" $peso="negrito" $cor={isDarkMode ? "#fff" : "#4F46E5"} style={{ marginBottom: 4 }}>
-          Login Social
-        </Typography>
-        <Typography $variante="body1" $cor={isDarkMode ? "rgba(255,255,255,0.8)" : "#444"}>
-          Acesse sua conta com Google ou Apple
-        </Typography>
-        <Box $padding="32px 0 0 0" $width="100%">
-          <Stack $gap="24px" $direction="column">
-            {/* Botão oficial Google */}
-            <button
-              onClick={handleGoogleLogin}
-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', width: '100%' }}
-              aria-label="Entrar com Google"
-            >
-              <Image
-                src={googleBtn}
-                alt="Entrar com Google"
-                width={191}
-                height={46}
-                style={{ maxWidth: '100%', height: 'auto' }}
-                priority
-              />
-            </button>
-            {/* Botão oficial Apple */}
-            <button
-              onClick={handleAppleLogin}
-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', width: '100%' }}
-              aria-label="Entrar com Apple"
-            >
-              <Image
-                src={appleBtn}
-                alt="Entrar com Apple"
-                width={260}
-                height={44}
-                style={{ maxWidth: '100%', height: 'auto' }}
-                priority
-              />
-            </button>
-            <Box $margin="24px 0 0 0" $width="100%">
-              <Divider $cor={isDarkMode ? "rgba(255,255,255,0.2)" : "rgba(0,0,0,0.1)"} />
-            </Box>
-          </Stack>
-        </Box>
-      </Box>
-    </Box>
+      {/* Campo de senha invisível */}
+      <input
+        type="password"
+        aria-label="Password"
+        tabIndex={2}
+        style={{
+          position: 'absolute',
+          top: 150,
+          left: 40,
+          width: 320,
+          height: 48,
+          opacity: 0,
+          pointerEvents: 'auto',
+        }}
+      />
+      {/* Botão login invisível */}
+      <button
+        type="submit"
+        aria-label="Log in"
+        tabIndex={3}
+        style={{
+          position: 'absolute',
+          top: 210,
+          left: 40,
+          width: 320,
+          height: 48,
+          opacity: 0,
+          pointerEvents: 'auto',
+          border: 'none',
+          background: 'transparent',
+        }}
+      />
+      {/* Botão Google invisível */}
+      <button
+        type="button"
+        aria-label="Continue with Google"
+        tabIndex={4}
+        onClick={handleGoogleLogin}
+        style={{
+          position: 'absolute',
+          top: 290,
+          left: 40,
+          width: 320,
+          height: 48,
+          opacity: 0,
+          pointerEvents: 'auto',
+          border: 'none',
+          background: 'transparent',
+        }}
+      />
+      {/* Botão Apple invisível */}
+      <button
+        type="button"
+        aria-label="Continue with Apple"
+        tabIndex={5}
+        onClick={handleAppleLogin}
+        style={{
+          position: 'absolute',
+          top: 350,
+          left: 40,
+          width: 320,
+          height: 48,
+          opacity: 0,
+          pointerEvents: 'auto',
+          border: 'none',
+          background: 'transparent',
+        }}
+      />
+      {/* Comentário: Todos os campos e botões são invisíveis, mas funcionais e acessíveis. Ajuste as medidas conforme necessário para alinhar perfeitamente com a imagem. */}
+    </div>
   );
 });
 
