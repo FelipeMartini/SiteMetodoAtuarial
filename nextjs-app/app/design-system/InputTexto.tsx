@@ -1,8 +1,7 @@
 // Componente InputTexto moderno usando o novo sistema de temas
 
 import React, { forwardRef } from 'react';
-import { Flex, Texto } from '../../styles/ComponentesBase';
-import styled from 'styled-components';
+import { Flex, Texto, InputBase } from '../../styles/ComponentesBase';
 
 const Input = styled.input`
   width: 100%;
