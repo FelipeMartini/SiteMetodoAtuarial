@@ -1,441 +1,341 @@
 /**
- * Componentes base modernos para o design system
- * Compatível com o novo sistema de 5 temas
+ * Componentes Base para o Design System
+ * Unificação de componentes estilizados com tema
  */
 import styled from 'styled-components';
 
-// Container base responsivo
-export const Container = styled.div`
-  width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 ${props => props.theme.espacamentos.md};
-
-  @media (max-width: 768px) {
-    padding: 0 ${props => props.theme.espacamentos.sm};
-  }
-`;
-
-// Flex container com propriedades configuráveis
-export const Flex = styled.div<{
-  $direcao?: 'row' | 'column';
-  $alinhar?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
-  $justificar?: 'flex-start' | 'center' | 'flex-end' | 'space-between' | 'space-around' | 'space-evenly';
-  $gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  $wrap?: boolean;
-}>`
-  display: flex;
-  flex-direction: ${props => props.$direcao || 'row'};
-  align-items: ${props => props.$alinhar || 'stretch'};
-  justify-content: ${props => props.$justificar || 'flex-start'};
-  gap: ${props => props.$gap ? props.theme.espacamentos[props.$gap] : '0'};
-  flex-wrap: ${props => props.$wrap ? 'wrap' : 'nowrap'};
-`;
-
-// Texto com variantes tipográficas
-export const Texto = styled.p<{
-  $variante?: 'corpo' | 'legenda' | 'titulo' | 'subtitulo';
-  $cor?: 'primario' | 'secundario' | 'terciario';
-  $peso?: 'normal' | 'medio' | 'negrito';
-  $alinhamento?: 'esquerda' | 'centro' | 'direita';
-}>`
-  margin: 0;
-  font-family: ${props => props.theme.tipografia.fontes.principal};
-  color: ${props => {
-    switch (props.$cor) {
-      case 'primario': return props.theme.cores.texto;
-      case 'secundario': return props.theme.cores.textoSecundario;
-      case 'terciario': return props.theme.cores.textoTerciario;
-      default: return props.theme.cores.texto;
-    }
-  }};
-  font-weight: ${props => {
-    switch (props.$peso) {
-      case 'normal': return props.theme.tipografia.pesos.normal;
-      case 'medio': return props.theme.tipografia.pesos.medio;
-      case 'negrito': return props.theme.tipografia.pesos.negrito;
-      default: return props.theme.tipografia.pesos.normal;
-    }
-  }};
-  text-align: ${props => {
-    switch (props.$alinhamento) {
-      case 'esquerda': return 'left';
-      case 'centro': return 'center';
-      case 'direita': return 'right';
-      default: return 'left';
-    }
-  }};
-  font-size: ${props => {
-    switch (props.$variante) {
-      case 'corpo': return props.theme.tipografia.tamanhos.base;
-      case 'legenda': return props.theme.tipografia.tamanhos.sm;
-      case 'titulo': return props.theme.tipografia.tamanhos['2xl'];
-      case 'subtitulo': return props.theme.tipografia.tamanhos.lg;
-      default: return props.theme.tipografia.tamanhos.base;
-    }
-  }};
-  line-height: ${props => props.theme.tipografia.alturas.normal};
-`;
-
-// Typography para textos com variantes
-export const Typography = styled(Texto) <{
-  $variante?: 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption';
-  $peso?: 'normal' | 'medio' | 'negrito';
-  $cor?: string;
-  $align?: 'esquerda' | 'centro' | 'direita';
-}>`
-  font-size: ${props => {
-    switch (props.$variante) {
-      case 'h1': return props.theme.tipografia.tamanhos['5xl'];
-      case 'h2': return props.theme.tipografia.tamanhos['4xl'];
-      case 'h3': return props.theme.tipografia.tamanhos['3xl'];
-      case 'h4': return props.theme.tipografia.tamanhos['2xl'];
-      case 'h5': return props.theme.tipografia.tamanhos.xl;
-      case 'h6': return props.theme.tipografia.tamanhos.lg;
-      case 'body2': return props.theme.tipografia.tamanhos.sm;
-      case 'caption': return props.theme.tipografia.tamanhos.xs;
-      default: return props.theme.tipografia.tamanhos.base;
-    }
-  }};
-  font-weight: ${props => {
-    switch (props.$peso) {
-      case 'medio': return props.theme.tipografia.pesos.medio;
-      case 'negrito': return props.theme.tipografia.pesos.negrito;
-      default: return props.theme.tipografia.pesos.normal;
-    }
-  }};
-  color: ${props => props.$cor || props.theme.cores.texto};
-  text-align: ${props => {
-    switch (props.$align) {
-      case 'centro': return 'center';
-      case 'direita': return 'right';
-      default: return 'left';
-    }
-  }};
-`;
-
-// Box genérico para layout flexível
-export const Box = styled.div<{
-  $padding?: string;
-  $margin?: string;
-  $bg?: string;
-  $radius?: string;
-  $shadow?: string;
-  $display?: string;
-  $align?: string;
-  $justify?: string;
-  $direction?: string;
-  $width?: string;
-  $height?: string;
-}>`
-  display: ${props => props.$display || 'block'};
-  padding: ${props => props.$padding || '0'};
-  margin: ${props => props.$margin || '0'};
-  background: ${props => props.$bg || 'transparent'};
-  border-radius: ${props => props.$radius || '0'};
-  box-shadow: ${props => props.$shadow || 'none'};
-  align-items: ${props => props.$align || 'stretch'};
-  justify-content: ${props => props.$justify || 'flex-start'};
-  flex-direction: ${props => props.$direction || 'row'};
-  width: ${props => props.$width || 'auto'};
-  height: ${props => props.$height || 'auto'};
-`;
-
-// Paper para containers elevados
-export const Paper = styled(Box) <{ $elevacao?: number }>`
-  background: ${props => props.theme.cores.superficie};
-  border-radius: ${props => props.theme.bordas.raios.lg};
-  box-shadow: ${props => {
-    switch (props.$elevacao) {
-      case 0: return props.theme.sombras.sm;
-      case 1: return props.theme.sombras.md;
-      case 2: return props.theme.sombras.lg;
-      default: return props.theme.sombras.sm;
-    }
-  }};
-`;
-
-// Avatar para imagens de perfil
-export const Avatar = styled.img<{
-  $size?: number;
-  $radius?: string;
-  $border?: string;
-}>`
-  width: ${props => props.$size || 48}px;
-  height: ${props => props.$size || 48}px;
-  border-radius: ${props => props.$radius || '50%'};
-  border: ${props => props.$border || 'none'};
-  object-fit: cover;
-`;
-
-// Stack para layout vertical/horizontal com espaçamento
-export const Stack = styled.div<{
-  $direction?: 'row' | 'column';
-  $gap?: string;
-  $align?: string;
-  $justify?: string;
-}>`
-  display: flex;
-  flex-direction: ${props => props.$direction || 'column'};
-  gap: ${props => props.$gap || props.theme.espacamentos.md};
-  align-items: ${props => props.$align || 'stretch'};
-  justify-content: ${props => props.$justify || 'flex-start'};
-`;
-
-// Divider para separação visual
-export const Divider = styled.hr<{
-  $cor?: string;
-  $espessura?: string;
-  $margin?: string;
-}>`
-  border: none;
-  border-top: ${props => props.$espessura || '1px'} solid ${props => props.$cor || props.theme.cores.borda};
-  margin: ${props => props.$margin || `${props.theme.espacamentos.md} 0`};
-`;
-
-// Seção para organizar layout
-export const Secao = styled.section<{
-  $padding?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  $fundo?: 'primario' | 'secundario' | 'transparente';
-}>`
-  width: 100%;
-  padding: ${props => {
-    const padding = props.$padding || 'lg';
-    return `${props.theme.espacamentos[padding]} 0`;
-  }};
-  background: ${props => {
-    switch (props.$fundo) {
-      case 'primario': return props.theme.cores.fundo;
-      case 'secundario': return props.theme.cores.fundoSecundario;
-      case 'transparente': return 'transparent';
-      default: return props.theme.cores.fundo;
-    }
-  }};
-`;
-
-// Card base para conteúdo
-export const Card = styled.div<{
-  $padding?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
-  $elevacao?: boolean;
-}>`
-  background: ${props => props.theme.cores.superficie};
-  border: 1px solid ${props => props.theme.cores.borda};
-  border-radius: ${props => props.theme.bordas.raios.lg};
-  padding: ${props => {
-    const padding = props.$padding || 'lg';
-    return props.theme.espacamentos[padding];
-  }};
-  box-shadow: ${props => props.$elevacao ? props.theme.sombras.md : props.theme.sombras.sm};
-  transition: all ${props => props.theme.animacoes.transicoes.normal} ${props => props.theme.animacoes.curvas.easeOut};
-
-  &:hover {
-    box-shadow: ${props => props.$elevacao ? props.theme.sombras.lg : props.theme.sombras.md};
-    border-color: ${props => props.theme.cores.bordaHover};
-  }
-`;
-
-// Input base para formulários
-export const Input = styled.input<{
-  $erro?: boolean;
-  $tamanho?: 'sm' | 'md' | 'lg';
-}>`
-  width: 100%;
-  font-family: ${props => props.theme.tipografia.fontes.principal};
-  font-size: ${props => {
-    switch (props.$tamanho) {
-      case 'sm': return props.theme.tipografia.tamanhos.sm;
-      case 'md': return props.theme.tipografia.tamanhos.base;
-      case 'lg': return props.theme.tipografia.tamanhos.lg;
-      default: return props.theme.tipografia.tamanhos.base;
-    }
-  }};
-  padding: ${props => {
-    switch (props.$tamanho) {
-      case 'sm': return `${props.theme.espacamentos.xs} ${props.theme.espacamentos.sm}`;
-      case 'md': return `${props.theme.espacamentos.sm} ${props.theme.espacamentos.md}`;
-      case 'lg': return `${props.theme.espacamentos.md} ${props.theme.espacamentos.lg}`;
-      default: return `${props.theme.espacamentos.sm} ${props.theme.espacamentos.md}`;
-    }
-  }};
-  background: ${props => props.theme.cores.superficie};
-  color: ${props => props.theme.cores.texto};
-  border: 1px solid ${props => props.$erro ? props.theme.cores.erro : props.theme.cores.borda};
-  border-radius: ${props => props.theme.bordas.raios.md};
-  transition: all ${props => props.theme.animacoes.transicoes.rapida};
-
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.cores.bordaFoco};
-    box-shadow: 0 0 0 3px ${props => props.theme.cores.bordaFoco}25;
-  }
-
-  &::placeholder {
-    color: ${props => props.theme.cores.textoTerciario};
-  }
-
-  &:disabled {
-    background: ${props => props.theme.cores.fundoTerciario};
-    color: ${props => props.theme.cores.textoTerciario};
-    cursor: not-allowed;
-  }
-`;
-
-// Botão base com variantes
+// Botão base que pode ser estendido
 export const BotaoBase = styled.button<{
-  $variante?: 'primary' | 'secondary' | 'ghost' | 'danger';
-  $tamanho?: 'sm' | 'md' | 'lg';
-  $larguraCompleta?: boolean;
-  $carregando?: boolean;
+  $variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  $size?: 'sm' | 'md' | 'lg';
+  $fullWidth?: boolean;
 }>`
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: ${props => props.theme.espacamentos.xs};
-  width: ${props => props.$larguraCompleta ? '100%' : 'auto'};
-  border: none;
-  border-radius: ${props => props.theme.bordas.raios.md};
-  font-family: ${props => props.theme.tipografia.fontes.principal};
-  font-weight: ${props => props.theme.tipografia.pesos.medio};
+  gap: ${({ theme }) => theme.spacing?.xs || '0.5rem'};
+  
+  font-family: ${({ theme }) => theme.typography?.fontFamily || 'inherit'};
+  font-weight: ${({ theme }) => theme.typography?.fontWeight?.medium || '500'};
   text-decoration: none;
-  cursor: ${props => props.$carregando ? 'wait' : 'pointer'};
-  transition: all ${props => props.theme.animacoes.transicoes.rapida};
-  position: relative;
-  overflow: hidden;
-
+  text-align: center;
+  white-space: nowrap;
+  
+  border: 1px solid transparent;
+  border-radius: ${({ theme }) => theme.borderRadius?.md || '0.375rem'};
+  transition: all ${({ theme }) => theme.transitions?.fast || '0.15s ease'};
+  
+  cursor: pointer;
+  user-select: none;
+  
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  
   /* Tamanhos */
-  ${props => {
-    switch (props.$tamanho) {
+  ${({ $size }) => {
+    switch ($size) {
       case 'sm':
         return `
-          padding: ${props.theme.espacamentos.xs} ${props.theme.espacamentos.sm};
-          font-size: ${props.theme.tipografia.tamanhos.sm};
-          min-height: 32px;
-        `;
-      case 'md':
-        return `
-          padding: ${props.theme.espacamentos.sm} ${props.theme.espacamentos.md};
-          font-size: ${props.theme.tipografia.tamanhos.base};
-          min-height: 40px;
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
         `;
       case 'lg':
         return `
-          padding: ${props.theme.espacamentos.md} ${props.theme.espacamentos.lg};
-          font-size: ${props.theme.tipografia.tamanhos.lg};
-          min-height: 48px;
+          padding: 0.75rem 1.5rem;
+          font-size: 1.125rem;
+          line-height: 1.75rem;
         `;
       default:
         return `
-          padding: ${props.theme.espacamentos.sm} ${props.theme.espacamentos.md};
-          font-size: ${props.theme.tipografia.tamanhos.base};
-          min-height: 40px;
+          padding: 0.625rem 1rem;
+          font-size: 1rem;
+          line-height: 1.5rem;
         `;
     }
   }}
-
+  
+  /* Largura total */
+  ${({ $fullWidth }) => $fullWidth && 'width: 100%;'}
+  
   /* Variantes */
-  ${props => {
-    switch (props.$variante) {
-      case 'primary':
-        return `
-          background: ${props.theme.cores.primario};
-          color: ${props.theme.cores.textoInvertido};
-          border: 1px solid ${props.theme.cores.primario};
-
-          &:hover:not(:disabled) {
-            background: ${props.theme.cores.primariaHover};
-            border-color: ${props.theme.cores.primariaHover};
-            transform: translateY(-1px);
-            box-shadow: ${props.theme.sombras.md};
-          }
-        `;
+  ${({ $variant = 'primary', theme }) => {
+    switch ($variant) {
       case 'secondary':
         return `
-          background: ${props.theme.cores.secundario};
-          color: ${props.theme.cores.textoInvertido};
-          border: 1px solid ${props.theme.cores.secundario};
-
+          background: ${theme.colors?.secondary || '#6b7280'};
+          color: ${theme.colors?.onSecondary || '#ffffff'};
+          border-color: ${theme.colors?.secondary || '#6b7280'};
+          
           &:hover:not(:disabled) {
-            background: ${props.theme.cores.secundariaHover};
-            border-color: ${props.theme.cores.secundariaHover};
-            transform: translateY(-1px);
-            box-shadow: ${props.theme.sombras.md};
+            background: ${theme.colors?.secondaryHover || '#4b5563'};
+            border-color: ${theme.colors?.secondaryHover || '#4b5563'};
+          }
+        `;
+      case 'outline':
+        return `
+          background: transparent;
+          color: ${theme.colors?.primary || '#3b82f6'};
+          border-color: ${theme.colors?.border || '#d1d5db'};
+          
+          &:hover:not(:disabled) {
+            background: ${theme.colors?.primary || '#3b82f6'};
+            color: ${theme.colors?.onPrimary || '#ffffff'};
+            border-color: ${theme.colors?.primary || '#3b82f6'};
           }
         `;
       case 'ghost':
-        // Estilo aprimorado para menu no tema escuro
         return `
-          background: ${props.theme.cores.fundoSecundario}; // cinza escuro para contraste
-          color: ${props.theme.cores.textoSecundario}; // texto claro
-          border: 1px solid ${props.theme.cores.borda}; // borda sutil
-
+          background: transparent;
+          color: ${theme.colors?.text || '#111827'};
+          border-color: transparent;
+          
           &:hover:not(:disabled) {
-            background: ${props.theme.cores.superficieElevada}; // cinza mais claro no hover
-            color: ${props.theme.cores.texto}; // texto principal no hover
-            border-color: ${props.theme.cores.bordaHover};
+            background: ${theme.colors?.surface || '#f9fafb'};
           }
         `;
-      case 'danger':
+      default: // primary
         return `
-          background: ${props.theme.cores.erro};
-          color: ${props.theme.cores.textoInvertido};
-          border: 1px solid ${props.theme.cores.erro};
-
+          background: ${theme.colors?.primary || '#3b82f6'};
+          color: ${theme.colors?.onPrimary || '#ffffff'};
+          border-color: ${theme.colors?.primary || '#3b82f6'};
+          
           &:hover:not(:disabled) {
-            background: ${props.theme.cores.erro}dd;
-            transform: translateY(-1px);
-            box-shadow: ${props.theme.sombras.md};
-          }
-        `;
-      default:
-        return `
-          background: ${props.theme.cores.primario};
-          color: ${props.theme.cores.textoInvertido};
-          border: 1px solid ${props.theme.cores.primario};
-
-          &:hover:not(:disabled) {
-            background: ${props.theme.cores.primariaHover};
-            border-color: ${props.theme.cores.primariaHover};
-            transform: translateY(-1px);
-            box-shadow: ${props.theme.sombras.md};
+            background: ${theme.colors?.primaryHover || '#2563eb'};
+            border-color: ${theme.colors?.primaryHover || '#2563eb'};
           }
         `;
     }
   }}
+`;
 
-  &:active:not(:disabled) {
-    transform: translateY(0);
-  }
-
-  &:focus-visible {
-    outline: 2px solid ${props => props.theme.cores.bordaFoco};
-    outline-offset: 2px;
-  }
-
-  &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-    transform: none !important;
-    box-shadow: none !important;
-  }
-
-  /* Estado de carregamento */
-  ${props => props.$carregando && `
-    color: transparent;
-    
-    &::after {
-      content: '';
-      position: absolute;
-      width: 16px;
-      height: 16px;
-      border: 2px solid transparent;
-      border-top: 2px solid currentColor;
-      border-radius: 50%;
-      animation: spin 1s linear infinite;
+// Container base para cards
+export const CardBase = styled.div<{
+  $padding?: 'sm' | 'md' | 'lg';
+  $shadow?: boolean;
+}>`
+  background: ${({ theme }) => theme.colors?.surface || '#ffffff'};
+  border: 1px solid ${({ theme }) => theme.colors?.border || '#e5e7eb'};
+  border-radius: ${({ theme }) => theme.borderRadius?.lg || '0.5rem'};
+  
+  ${({ $shadow, theme }) => $shadow && `box-shadow: ${theme.shadows?.sm || '0 1px 2px 0 rgb(0 0 0 / 0.05)'};`}
+  
+  ${({ $padding }) => {
+    switch ($padding) {
+      case 'sm':
+        return 'padding: 1rem;';
+      case 'lg':
+        return 'padding: 2rem;';
+      default:
+        return 'padding: 1.5rem;';
     }
-    
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
+  }}
+`;
+
+// Input base
+export const InputBase = styled.input<{
+  $hasError?: boolean;
+  $size?: 'sm' | 'md' | 'lg';
+}>`
+  width: 100%;
+  font-family: ${({ theme }) => theme.typography?.fontFamily || 'inherit'};
+  background: ${({ theme }) => theme.colors?.surface || '#ffffff'};
+  color: ${({ theme }) => theme.colors?.text || '#111827'};
+  
+  border: 1px solid ${({ theme, $hasError }) => 
+    $hasError 
+      ? theme.colors?.error || '#ef4444'
+      : theme.colors?.border || '#d1d5db'
+  };
+  border-radius: ${({ theme }) => theme.borderRadius?.md || '0.375rem'};
+  
+  transition: all ${({ theme }) => theme.transitions?.fast || '0.15s ease'};
+  
+  &:focus {
+    outline: none;
+    border-color: ${({ theme, $hasError }) => 
+      $hasError 
+        ? theme.colors?.error || '#ef4444'
+        : theme.colors?.borderFocus || '#3b82f6'
+    };
+    box-shadow: 0 0 0 3px ${({ theme, $hasError }) => 
+      $hasError 
+        ? (theme.colors?.error || '#ef4444') + '20'
+        : (theme.colors?.borderFocus || '#3b82f6') + '20'
+    };
+  }
+  
+  &:disabled {
+    background: ${({ theme }) => theme.colors?.backgroundSecondary || '#f3f4f6'};
+    cursor: not-allowed;
+  }
+  
+  ${({ $size }) => {
+    switch ($size) {
+      case 'sm':
+        return `
+          padding: 0.5rem 0.75rem;
+          font-size: 0.875rem;
+          line-height: 1.25rem;
+        `;
+      case 'lg':
+        return `
+          padding: 0.875rem 1rem;
+          font-size: 1.125rem;
+          line-height: 1.75rem;
+        `;
+      default:
+        return `
+          padding: 0.625rem 0.875rem;
+          font-size: 1rem;
+          line-height: 1.5rem;
+        `;
+    }
+  }}
+`;
+
+// Label base
+export const LabelBase = styled.label<{
+  $required?: boolean;
+}>`
+  display: block;
+  font-family: ${({ theme }) => theme.typography?.fontFamily || 'inherit'};
+  font-size: ${({ theme }) => theme.typography?.fontSize?.sm || '0.875rem'};
+  font-weight: ${({ theme }) => theme.typography?.fontWeight?.medium || '500'};
+  color: ${({ theme }) => theme.colors?.textSecondary || '#374151'};
+  margin-bottom: ${({ theme }) => theme.spacing?.xs || '0.5rem'};
+  
+  ${({ $required }) => $required && `
+    &::after {
+      content: ' *';
+      color: #ef4444;
     }
   `}
+`;
+
+// Container flexível
+export const FlexContainer = styled.div<{
+  $direction?: 'row' | 'column';
+  $gap?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  $align?: 'start' | 'center' | 'end' | 'stretch';
+  $justify?: 'start' | 'center' | 'end' | 'between' | 'around';
+}>`
+  display: flex;
+  flex-direction: ${({ $direction = 'row' }) => $direction};
+  align-items: ${({ $align }) => {
+    switch ($align) {
+      case 'start': return 'flex-start';
+      case 'end': return 'flex-end';
+      case 'stretch': return 'stretch';
+      default: return 'center';
+    }
+  }};
+  justify-content: ${({ $justify }) => {
+    switch ($justify) {
+      case 'start': return 'flex-start';
+      case 'end': return 'flex-end';
+      case 'between': return 'space-between';
+      case 'around': return 'space-around';
+      default: return 'center';
+    }
+  }};
+  
+  ${({ $gap, theme }) => {
+    const spacing = theme.spacing || {
+      xs: '0.5rem',
+      sm: '0.75rem',
+      md: '1rem',
+      lg: '1.5rem',
+      xl: '2rem',
+    };
+    return $gap ? `gap: ${spacing[$gap]};` : '';
+  }}
+`;
+
+// Typography components
+export const Heading = styled.h1<{
+  $level?: 1 | 2 | 3 | 4 | 5 | 6;
+  $color?: 'primary' | 'secondary' | 'text' | 'textSecondary';
+}>`
+  font-family: ${({ theme }) => theme.typography?.fontFamily || 'inherit'};
+  font-weight: ${({ theme }) => theme.typography?.fontWeight?.bold || '700'};
+  line-height: 1.2;
+  margin: 0;
+  
+  color: ${({ $color = 'text', theme }) => {
+    switch ($color) {
+      case 'primary': return theme.colors?.primary || '#3b82f6';
+      case 'secondary': return theme.colors?.secondary || '#6b7280';
+      case 'textSecondary': return theme.colors?.textSecondary || '#6b7280';
+      default: return theme.colors?.text || '#111827';
+    }
+  }};
+  
+  ${({ $level = 1, theme }) => {
+    const sizes = theme.typography?.fontSize || {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+      '2xl': '1.5rem',
+      '3xl': '1.875rem',
+      '4xl': '2.25rem',
+    };
+    
+    switch ($level) {
+      case 1: return `font-size: ${sizes['4xl'] || '2.25rem'};`;
+      case 2: return `font-size: ${sizes['3xl'] || '1.875rem'};`;
+      case 3: return `font-size: ${sizes['2xl'] || '1.5rem'};`;
+      case 4: return `font-size: ${sizes.xl || '1.25rem'};`;
+      case 5: return `font-size: ${sizes.lg || '1.125rem'};`;
+      case 6: return `font-size: ${sizes.base || '1rem'};`;
+      default: return `font-size: ${sizes['3xl'] || '1.875rem'};`;
+    }
+  }}
+`;
+
+// Text component
+export const Text = styled.p<{
+  $size?: 'xs' | 'sm' | 'base' | 'lg' | 'xl';
+  $color?: 'text' | 'textSecondary' | 'primary' | 'secondary' | 'success' | 'warning' | 'error';
+  $weight?: 'normal' | 'medium' | 'semibold' | 'bold';
+}>`
+  font-family: ${({ theme }) => theme.typography?.fontFamily || 'inherit'};
+  margin: 0;
+  
+  ${({ $size = 'base', theme }) => {
+    const sizes = theme.typography?.fontSize || {
+      xs: '0.75rem',
+      sm: '0.875rem',
+      base: '1rem',
+      lg: '1.125rem',
+      xl: '1.25rem',
+    };
+    return `font-size: ${sizes[$size] || '1rem'};`;
+  }}
+  
+  ${({ $weight = 'normal', theme }) => {
+    const weights = theme.typography?.fontWeight || {
+      normal: '400',
+      medium: '500',
+      semibold: '600',
+      bold: '700',
+    };
+    return `font-weight: ${weights[$weight] || '400'};`;
+  }}
+  
+  color: ${({ $color = 'text', theme }) => {
+    switch ($color) {
+      case 'textSecondary': return theme.colors?.textSecondary || '#6b7280';
+      case 'primary': return theme.colors?.primary || '#3b82f6';
+      case 'secondary': return theme.colors?.secondary || '#6b7280';
+      case 'success': return theme.colors?.success || '#10b981';
+      case 'warning': return theme.colors?.warning || '#f59e0b';
+      case 'error': return theme.colors?.error || '#ef4444';
+      default: return theme.colors?.text || '#111827';
+    }
+  }};
 `;

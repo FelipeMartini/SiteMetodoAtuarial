@@ -4,9 +4,9 @@
 import React, { ReactNode, Suspense } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Container, Flex, Texto, Secao } from "./theme/ComponentesBase";
+import { Container, Flex, Texto, Secao } from '../styles/ComponentesBase';
 import { Botao } from "./design-system/Botao";
-import { SeletorTemaModerno } from "./components/SeletorTemaModerno";
+import ThemeToggle from "./components/ThemeToggle";
 
 // Lazy loading do Rodape para otimizar o carregamento
 const Rodape = React.lazy(() => import("./Rodape"));
@@ -25,14 +25,14 @@ function Header() {
     }}>
       <Container>
         <Flex
-          $justificar="space-between"
-          $alinhar="center"
+          $justify="space-between"
+          $align="center"
           style={{ padding: '1rem 0' }}
         >
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <Texto $variante="titulo" $peso="negrito">
-              Logo
+            <Texto $variante="h3" $peso="negrito">
+              Método Atuarial
             </Texto>
           </Link>
 
@@ -90,7 +90,7 @@ function Header() {
               </Link>
             )}
 
-            <SeletorTemaModerno />
+            <ThemeToggle />
           </Flex>
         </Flex>
       </Container>

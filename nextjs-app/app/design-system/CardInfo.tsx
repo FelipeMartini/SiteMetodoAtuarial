@@ -1,7 +1,7 @@
 // Componente CardInfo moderno usando o novo sistema de temas
 
 import React from 'react';
-import { Card, Texto, Flex } from '../theme/ComponentesBase';
+import { Card, Flex, Texto } from '../../styles/ComponentesBase';
 
 interface CardInfoProps {
   titulo: string;

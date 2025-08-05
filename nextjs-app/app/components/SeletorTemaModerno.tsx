@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useUtilsTema } from '../theme/ContextoTema';
+import { useTema } from '../contexts/ThemeContext';
 import { NomesTema } from '../theme/temas';
 import { Botao } from '../design-system/Botao';
 
@@ -25,9 +25,9 @@ const MenuDropdown = styled.div<{ $aberto: boolean }>`
   right: 0;
   z-index: 1000;
   min-width: 200px;
-  background: ${props => props.theme.cores.superficie};
-  border: 1px solid ${props => props.theme.cores.borda};
-  border-radius: ${props => props.theme.bordas.raios.md};
+  background: ${props => props.theme.colors.surface};
+  border: 1px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borders.raios.md};
   box-shadow: ${props => props.theme.sombras.lg};
   padding: 0.5rem;
   margin-top: 0.25rem;
@@ -43,21 +43,21 @@ const ItemTema = styled.button<{ $ativo: boolean }>`
   align-items: center;
   gap: 0.75rem;
   padding: 0.75rem;
-  background: ${props => props.$ativo ? props.theme.cores.fundoSecundario : 'transparent'};
-  color: ${props => props.theme.cores.texto};
+  background: ${props => props.$ativo ? props.theme.colors.backgroundSecondary : 'transparent'};
+  color: ${props => props.theme.colors.text};
   border: none;
-  border-radius: ${props => props.theme.bordas.raios.sm};
+  border-radius: ${props => props.theme.borders.raios.sm};
   cursor: pointer;
   font-size: ${props => props.theme.tipografia.tamanhos.sm};
   font-family: ${props => props.theme.tipografia.fontes.principal};
   transition: all ${props => props.theme.animacoes.transicoes.rapida};
 
   &:hover {
-    background: ${props => props.theme.cores.fundoSecundario};
+    background: ${props => props.theme.colors.backgroundSecondary};
   }
 
   &:focus {
-    outline: 2px solid ${props => props.theme.cores.bordaFoco};
+    outline: 2px solid ${props => props.theme.colors.borderFoco};
     outline-offset: 1px;
   }
 `;
@@ -81,7 +81,7 @@ const NomeTema = styled.span`
 
 const DescricaoTema = styled.span<{ $cor: string }>`
   font-size: ${props => props.theme.tipografia.tamanhos.xs};
-  color: ${props => props.theme.cores.textoSecundario};
+  color: ${props => props.theme.colors.textSecondary};
   
   &::before {
     content: '';
@@ -119,7 +119,7 @@ const descricoesPersonalizadas = {
 } as const;
 
 export function SeletorTemaModerno() {
-  const { temaAtual, nomeTemaAtual, selecionarTema, temasDisponiveis } = useUtilsTema();
+  const { temaAtual, nomeTemaAtual, selecionarTema, temasDisponiveis } = useTema();
   const [menuAberto, setMenuAberto] = useState(false);
 
   const alternarMenu = () => {
@@ -168,7 +168,7 @@ export function SeletorTemaModerno() {
               <IconeTema aria-hidden="true">{tema.icone}</IconeTema>
               <InfoTema>
                 <NomeTema>{tema.displayName}</NomeTema>
-                <DescricaoTema $cor={tema.cores.primario}>
+                <DescricaoTema $cor={tema.cores.primary}>
                   {descricoesPersonalizadas[tema.nome]}
                 </DescricaoTema>
               </InfoTema>

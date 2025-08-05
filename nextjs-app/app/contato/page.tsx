@@ -7,8 +7,8 @@ import { InputTexto, Botao } from '../design-system';
 import styled from 'styled-components';
 
 const ContatoContainer = styled.main`
-  background: ${({ theme }) => theme.cores.fundo};
-  color: ${({ theme }) => theme.cores.texto};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
   min-height: 100vh;
   padding: 32px;
   display: flex;
@@ -20,13 +20,13 @@ const ContatoContainer = styled.main`
 const Titulo = styled.h1`
   text-align: center;
   margin-bottom: 8px;
-  color: ${({ theme }) => theme.cores.primario};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const Descricao = styled.p`
   text-align: center;
   max-width: 500px;
-  color: ${({ theme }) => theme.cores.textoSecundario};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 
 const FormContainer = styled.form`
@@ -41,9 +41,9 @@ const FormContainer = styled.form`
 const TextArea = styled.textarea`
   padding: 8px;
   border-radius: 4px;
-  border: 1px solid ${({ theme }) => theme.cores.borda};
-  background: ${({ theme }) => theme.cores.superficie};
-  color: ${({ theme }) => theme.cores.texto};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.text};
   min-height: 80px;
   font-family: inherit;
   font-size: 16px;
@@ -51,13 +51,13 @@ const TextArea = styled.textarea`
 
   &:focus {
     outline: none;
-    border-color: ${({ theme }) => theme.cores.primario};
+    border-color: ${({ theme }) => theme.colors.primary};
   }
 `;
 
 const Label = styled.label`
   font-weight: 500;
-  color: ${({ theme }) => theme.cores.texto};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 export default function ContatoOrcamento() {

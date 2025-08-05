@@ -16,7 +16,7 @@ import styled from "styled-components";
 // Estilização do menu lateral e links para alternância de tema
 const AsideMenu = styled.aside`
   width: 220px;
-  background: ${({ theme }) => theme.cores.superficie};
+  background: ${({ theme }) => theme.colors.surface};
   border-radius: 12px;
   box-shadow: 0 2px 8px #0001;
   padding: 24px;
@@ -31,16 +31,16 @@ const NavMenu = styled.nav`
 const TituloMenu = styled.strong`
   margin-bottom: 12px;
   font-size: 18px;
-  color: ${({ theme }) => theme.cores.secundario};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 const LinkMenu = styled(Link)`
-  color: ${({ theme }) => theme.cores.texto};
+  color: ${({ theme }) => theme.colors.text};
   font-weight: 500;
   text-decoration: none;
   font-size: 1rem;
   transition: color 0.2s;
   &:hover {
-    color: ${({ theme }) => theme.cores.secundario};
+    color: ${({ theme }) => theme.colors.primary};
     text-decoration: underline;
   }
 `;

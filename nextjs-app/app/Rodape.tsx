@@ -1,6 +1,5 @@
 /**
- * Componente Rodape modernizado usando styled-components  border-top: 1px solid ${({ theme }) => theme.cores.borda};
-  color: ${({ theme }) => theme.cores.textoSecundario};
+ * Componente Rodape modernizado usando styled-components
  * Apresenta informações institucionais, links úteis, redes sociais e créditos.
  */
 "use client";
@@ -8,10 +7,11 @@ import React from 'react';
 import styled from "styled-components";
 
 const RodapeContainer = styled.footer`
-  background: ${({ theme }) => theme.cores.superficie};
-  color: ${({ theme }) => theme.cores.textoSecundario};
+  background: ${({ theme }) => theme.colors.surface};
+  color: ${({ theme }) => theme.colors.textSecondary};
   padding: 32px 16px;
   margin-top: auto;
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
 `;
 
 const RodapeContent = styled.div`
@@ -24,7 +24,7 @@ const RodapeContent = styled.div`
 
 const RodapeSection = styled.section`
   h3 {
-    color: ${({ theme }) => theme.cores.primario};
+    color: ${({ theme }) => theme.colors.primary};
     margin-bottom: 16px;
     font-size: 1.2rem;
     font-weight: 600;
@@ -41,12 +41,12 @@ const RodapeSection = styled.section`
   }
   
   a {
-    color: ${({ theme }) => theme.cores.textoSecundario};
+    color: ${({ theme }) => theme.colors.textSecondary};
     text-decoration: none;
     transition: color 0.3s ease;
     
     &:hover {
-      color: ${({ theme }) => theme.cores.primario};
+      color: ${({ theme }) => theme.colors.primary};
     }
   }
 `;
@@ -61,8 +61,8 @@ const Copyright = styled.div`
   text-align: center;
   padding-top: 24px;
   margin-top: 24px;
-  border-top: 1px solid ${({ theme }) => theme.cores.borda};
-  color: ${({ theme }) => theme.cores.textoSecundario};
+  border-top: 1px solid ${({ theme }) => theme.colors.border};
+  color: ${({ theme }) => theme.colors.textSecondary};
   font-size: 0.9rem;
 `;
 

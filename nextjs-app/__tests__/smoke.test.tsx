@@ -2,7 +2,7 @@
 import React from 'react';
 import { render } from '@testing-library/react';
 import Home from '../app/page';
-import { ProvedorTema } from '../app/theme/ContextoTema';
+import { ThemeProvider } from '../app/contexts/ThemeContext';
 
 describe('Smoke Test', () => {
   it('deve renderizar a página inicial sem erros', () => {

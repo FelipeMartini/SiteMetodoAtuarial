@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import styled from 'styled-components';
-import { useTema } from '../theme/ContextoTema';
+import { useTheme } from '../contexts/ThemeContext';
 
 // Container principal com imagem de fundo
 const Container = styled.div`

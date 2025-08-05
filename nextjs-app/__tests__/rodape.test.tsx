@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render } from '@testing-library/react';
-import { ProvedorTema } from '../app/theme/ContextoTema';
+import { ThemeProvider } from '../app/contexts/ThemeContext';
 import Rodape from '../app/Rodape';
 
 describe('Rodape', () => {

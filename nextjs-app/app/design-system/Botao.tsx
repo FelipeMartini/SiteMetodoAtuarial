@@ -1,13 +1,23 @@
 // Componente Botao moderno usando o novo sistema de temas
 
 import React from 'react';
-import { BotaoBase } from '../theme/ComponentesBase';
+import { Container } from '../../styles/ComponentesBase';
+import styled from 'styled-components';
+
+const BotaoBase = styled.button`
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+`;
 
 interface BotaoProps {
   children: React.ReactNode;
   onClick?: () => void;
   type?: 'button' | 'submit' | 'reset';
-  variant?: 'primary' | 'secondary' | 'ghost' | 'danger';
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
   size?: 'sm' | 'md' | 'lg';
   fullWidth?: boolean;
   loading?: boolean;
@@ -30,10 +40,9 @@ export const Botao: React.FC<BotaoProps> = ({
     <BotaoBase
       type={type}
       onClick={onClick}
-      $variante={variant}
-      $tamanho={size}
-      $larguraCompleta={fullWidth}
-      $carregando={loading}
+      $variant={variant}
+      $size={size}
+      $fullWidth={fullWidth}
       disabled={disabled || loading}
       className={className}
     >

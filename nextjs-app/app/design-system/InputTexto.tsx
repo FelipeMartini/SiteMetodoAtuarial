@@ -1,9 +1,16 @@
 // Componente InputTexto moderno usando o novo sistema de temas
 
 import React, { forwardRef } from 'react';
-import { Input } from '../theme/ComponentesBase';
-import { Texto } from '../theme/ComponentesBase';
-import { Flex } from '../theme/ComponentesBase';
+import { Flex, Texto } from '../../styles/ComponentesBase';
+import styled from 'styled-components';
+
+const Input = styled.input`
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+`;
 
 interface InputTextoProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;

@@ -2,7 +2,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import SocialLoginBox from '../app/components/SocialLoginBox';
 import { signIn } from 'next-auth/react';
-import { ProvedorTema } from '../app/theme/ContextoTema';
+import { ThemeProvider } from '../app/contexts/ThemeContext';
 
 jest.mock('next-auth/react', () => ({
   signIn: jest.fn(),

@@ -20,8 +20,8 @@ const Container = styled.section`
   display: flex;
   flex-direction: column;
   gap: 32px;
-  background: ${({ theme }) => theme.cores.fundo};
-  color: ${({ theme }) => theme.cores.texto};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Titulo = styled.h1`
@@ -29,7 +29,7 @@ const Titulo = styled.h1`
   font-weight: 700;
   margin-bottom: 24px;
   text-align: center;
-  color: ${({ theme }) => theme.cores.primario};
+  color: ${({ theme }) => theme.colors.primary};
   text-shadow: 0 2px 8px ${({ theme }) => theme.sombras.md};
 `;
 
@@ -37,7 +37,7 @@ const Texto = styled.p`
   font-size: 1.2rem;
   margin-bottom: 32px;
   text-align: center;
-  color: ${({ theme }) => theme.cores.texto};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Destaques = styled.div`
@@ -55,12 +55,12 @@ const BlocoDestaque = styled.div`
 const ValorDestaque = styled.div`
   font-size: 2.2rem;
   font-weight: 700;  
-  color: ${({ theme }) => theme.cores.primario};
+  color: ${({ theme }) => theme.colors.primary};
 `;
 
 const TextoDestaque = styled.div`
   font-size: 1rem;
-  color: ${({ theme }) => theme.cores.textoSecundario};
+  color: ${({ theme }) => theme.colors.textSecondary};
 `;
 const Box = styled.div`
   display: flex;
@@ -93,7 +93,7 @@ const Sobre: React.FC = React.memo(function Sobre() {
             <TextoDestaque>Satisfação do cliente</TextoDestaque>
           </BlocoDestaque>
         </Destaques>
-        {/* Comentário: Todos os blocos e textos usam styled-components e alternância de tema. */}
+        {/* Comentário: Todos os blocos e texts usam styled-components e alternância de tema. */}
         <Box>
           {/* Imagem otimizada com quality e blur */}
           <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da equipe Método Atuarial" />

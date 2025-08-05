@@ -3,10 +3,10 @@
 // Página inicial moderna com novo sistema de temas
 import React from 'react';
 import Link from 'next/link';
-import { Container, Flex, Texto, Secao, Card } from './theme/ComponentesBase';
+import { Container, Flex, Texto, Secao, Card } from '../styles/ComponentesBase';
 import { Botao } from './design-system/Botao';
 import { CardInfo } from './design-system/CardInfo';
-import { useUtilsTema } from './theme/hooks';
+import { useTema } from './contexts/ThemeContext';
 
 const services = [
   {
@@ -27,7 +27,7 @@ const services = [
 ];
 
 export default function Home() {
-  const { ehModoEscuro } = useUtilsTema();
+  const { ehModoEscuro } = useTema();
 
   return (
     <Container>

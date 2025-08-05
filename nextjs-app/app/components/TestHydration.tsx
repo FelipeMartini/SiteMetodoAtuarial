@@ -3,41 +3,41 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useUtilsTema } from '../theme/ContextoTema';
+import { useTema } from '../contexts/ThemeContext';
 
 // Styled component para testar
 const TesteContainer = styled.div`
   padding: ${props => props.theme.espacamentos.lg};
-  background: ${props => props.theme.cores.fundoSecundario};
-  border: 2px solid ${props => props.theme.cores.primario};
+  background: ${props => props.theme.colors.backgroundSecondary};
+  border: 2px solid ${props => props.theme.colors.primary};
   border-radius: ${props => props.theme.bordas.raios.lg};
   margin: ${props => props.theme.espacamentos.md} 0;
   transition: all ${props => props.theme.animacoes.transicoes.normal};
 
   &:hover {
-    background: ${props => props.theme.cores.superficie};
+    background: ${props => props.theme.colors.surface};
     transform: translateY(-2px);
     box-shadow: ${props => props.theme.sombras.lg};
   }
 `;
 
 const TituleTeste = styled.h3`
-  color: ${props => props.theme.cores.primario};
+  color: ${props => props.theme.colors.primary};
   font-size: ${props => props.theme.tipografia.tamanhos.xl};
   font-weight: ${props => props.theme.tipografia.pesos.negrito};
   margin-bottom: ${props => props.theme.espacamentos.sm};
 `;
 
 const TextoTeste = styled.p`
-  color: ${props => props.theme.cores.textoSecundario};
+  color: ${props => props.theme.colors.textSecondary};
   font-size: ${props => props.theme.tipografia.tamanhos.base};
   line-height: ${props => props.theme.tipografia.alturas.relaxed};
   margin-bottom: ${props => props.theme.espacamentos.md};
 `;
 
 const BotaoTeste = styled.button`
-  background: ${props => props.theme.cores.primario};
-  color: ${props => props.theme.cores.textoInvertido};
+  background: ${props => props.theme.colors.primary};
+  color: ${props => props.theme.colors.textInverted};
   border: none;
   border-radius: ${props => props.theme.bordas.raios.md};
   padding: ${props => props.theme.espacamentos.sm} ${props => props.theme.espacamentos.md};
@@ -47,7 +47,7 @@ const BotaoTeste = styled.button`
   transition: all ${props => props.theme.animacoes.transicoes.rapida};
 
   &:hover {
-    background: ${props => props.theme.cores.primariaHover};
+    background: ${props => props.theme.colors.primaryHover};
     transform: translateY(-1px);
   }
 
@@ -56,7 +56,7 @@ const BotaoTeste = styled.button`
   }
 `;
 
-const StatusIndicator = styled.div<{ $status: 'loading' | 'success' | 'error' }>`
+const StatusIndicator = styled.div<{ $status: 'loading' | 'success' | 'errorr' }>`
   display: inline-block;
   padding: ${props => props.theme.espacamentos.xs} ${props => props.theme.espacamentos.sm};
   border-radius: ${props => props.theme.bordas.raios.full};
@@ -65,11 +65,11 @@ const StatusIndicator = styled.div<{ $status: 'loading' | 'success' | 'error' }>
   ${props => {
     switch (props.$status) {
       case 'loading':
-        return `background: ${props.theme.cores.avisoFundo}; color: ${props.theme.cores.aviso}; border: 1px solid ${props.theme.cores.aviso};`;
+        return `background: ${props.theme.colors.warningBackground}; color: ${props.theme.colors.warning}; border: 1px solid ${props.theme.colors.warning};`;
       case 'success':
-        return `background: ${props.theme.cores.sucessoFundo}; color: ${props.theme.cores.sucesso}; border: 1px solid ${props.theme.cores.sucesso};`;
-      case 'error':
-        return `background: ${props.theme.cores.erroFundo}; color: ${props.theme.cores.erro}; border: 1px solid ${props.theme.cores.erro};`;
+        return `background: ${props.theme.colors.successBackground}; color: ${props.theme.colors.success}; border: 1px solid ${props.theme.colors.success};`;
+      case 'errorr':
+        return `background: ${props.theme.colors.errorrBackground}; color: ${props.theme.colors.error}; border: 1px solid ${props.theme.colors.error};`;
       default:
         return '';
     }
@@ -77,7 +77,7 @@ const StatusIndicator = styled.div<{ $status: 'loading' | 'success' | 'error' }>
 `;
 
 export default function TestHydration() {
-  const { temaAtual, alternarTema, isHydrated } = useUtilsTema();
+  const { temaAtual, alternarTema, isHydrated } = useTema();
   const [renderTime, setRenderTime] = useState<string>('');
   const [clickCount, setClickCount] = useState(0);
 
@@ -92,7 +92,7 @@ export default function TestHydration() {
 
   const getHydrationStatus = () => {
     if (!isHydrated) return 'loading';
-    return renderTime ? 'success' : 'error';
+    return renderTime ? 'success' : 'errorr';
   };
 
   const getStatusText = () => {
@@ -102,7 +102,7 @@ export default function TestHydration() {
         return '⏳ Carregando...';
       case 'success':
         return '✅ Hydrated';
-      case 'error':
+      case 'errorr':
         return '❌ Erro';
       default:
         return '';
@@ -114,7 +114,7 @@ export default function TestHydration() {
       <TituleTeste>🧪 Teste de Hydration - Styled Components</TituleTeste>
       <TextoTeste>
         Este componente testa se o styled-components está funcionando corretamente
-        no Next.js 15 com Server Side Rendering e sem erros de hydration.
+        no Next.js 15 com Server Side Rendering e sem errors de hydration.
       </TextoTeste>
       <div style={{ marginBottom: '1rem' }}>
         <strong>Status do Hydration:</strong>{' '}
@@ -141,7 +141,7 @@ export default function TestHydration() {
         <br />
         2. Recarregue a página (F5)
         <br />
-        3. Verifique se não há erros de hydration no console
+        3. Verifique se não há errors de hydration no console
         <br />
         4. Observe se os estilos carregam instantaneamente (sem flicker)
         <br />

@@ -4,9 +4,10 @@ import "./globals.css";
 // Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
-import { ProvedorTema } from "./theme/ContextoTema";
+import { ThemeProvider } from "./contexts/ThemeContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
+import { GlobalStyles } from '../styles/GlobalStyles';
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -49,11 +50,12 @@ export default function RootLayout({
         <StyledComponentsRegistry>
           <ErrorBoundary>
             <ProvedorSessao>
-              <ProvedorTema>
+              <ThemeProvider>
+                <GlobalStyles />
                 <LayoutCliente>
                   {children}
                 </LayoutCliente>
-              </ProvedorTema>
+              </ThemeProvider>
             </ProvedorSessao>
           </ErrorBoundary>
         </StyledComponentsRegistry>
