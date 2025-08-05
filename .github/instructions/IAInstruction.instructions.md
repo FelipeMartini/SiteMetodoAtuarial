@@ -19,3 +19,31 @@ Forneça contexto do projeto e diretrizes de codificação que a IA deve seguir 
 - Sempre que for necessário atualizar uma dependência, verifique se a nova versão é compatível com o projeto e se não há problemas conhecidos. Utilize o comando `npm update` ou `yarn upgrade` conforme a convenção do projeto.
 - Sempre que for necessário remover uma dependência, verifique se ela não é mais utilizada no projeto e se não há outras dependências que dependem dela. Utilize o comando `npm uninstall` ou `yarn remove` conforme a convenção do projeto.
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
