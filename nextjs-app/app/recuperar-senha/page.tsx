@@ -1,184 +1,362 @@
 /**
- * Página de Recuperação de Senha
+ * Página de Recuperação de Senha - Modernizada
+ * Sistema completo de recuperação de senha com interface responsiva
  */
 'use client';
 
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-import { useTheme } from '../contexts/ThemeContext';
-import { Card, Flex, Texto } from '../../styles/ComponentesBase';
+import { useTema } from '../contexts/ThemeContext';
+import Link from 'next/link';
+import { Botao } from '../design-system';
 
-const CardBase = styled(Card)`
-  background: white;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-`;
-
-const InputBase = styled.input`
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
-const BotaoBase = styled.button`
-  width: 100%;
-  padding: 0.75rem;
-  background: #4F46E5;
-  color: white;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-`;
-
-const Heading = styled(Texto).attrs({ $variante: 'h3' })``;
-const Text = styled(Texto)``;
-const FlexContainer = styled(Flex)``;
-import ThemeToggle from '../components/ThemeToggle';
-
-const PageContainer = styled.div`
+// Container principal da página
+const PaginaContainer = styled.div`
   min-height: 100vh;
-  background: ${({ theme }) => theme.colors.background};
+  background: ${props => props.theme.colors.background};
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${({ theme }) => theme.spacing.lg};
+  padding: ${props => props.theme.spacing.lg};
 `;
 
-const RecoveryCard = styled(CardBase)`
+// Card principal
+const RecoveryCard = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
+  background: ${props => props.theme.colors.surface};
+  border-radius: ${props => props.theme.borderRadius.lg};
+  box-shadow: ${props => props.theme.shadows.lg};
+  padding: ${props => props.theme.spacing.xl};
   text-align: center;
 `;
 
-const Form = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.md};
-  margin-top: ${({ theme }) => theme.spacing.lg};
+// Título principal
+const Titulo = styled.h1`
+  font-size: ${props => props.theme.typography.fontSize.xxl};
+  font-weight: ${props => props.theme.typography.fontWeight.bold};
+  color: ${props => props.theme.colors.text};
+  margin-bottom: ${props => props.theme.spacing.md};
 `;
 
-const BackLink = styled.button`
-  background: none;
-  border: none;
-  color: ${({ theme }) => theme.colors.primary};
-  cursor: pointer;
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-  text-decoration: underline;
-  margin-top: ${({ theme }) => theme.spacing.md};
+// Ícone de email
+const EmailIcon = styled.div`
+  width: 4rem;
+  height: 4rem;
+  background: ${props => props.theme.colors.primary}20;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto ${props => props.theme.spacing.lg} auto;
 
-  &:hover {
-    color: ${({ theme }) => theme.colors.primaryHover};
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: ${props => props.theme.colors.primary};
   }
 `;
 
-const RecuperarSenha: React.FC = () => {
+// Descrição
+const Descricao = styled.p`
+  font-size: ${props => props.theme.typography.fontSize.base};
+  color: ${props => props.theme.colors.textSecondary};
+  line-height: 1.6;
+  margin-bottom: ${props => props.theme.spacing.xl};
+`;
+
+// Formulário
+const Formulario = styled.form`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.lg};
+  margin-bottom: ${props => props.theme.spacing.lg};
+`;
+
+// Grupo de campo
+const CampoGrupo = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.sm};
+  text-align: left;
+`;
+
+// Label do campo
+const CampoLabel = styled.label`
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  font-weight: ${props => props.theme.typography.fontWeight.medium};
+  color: ${props => props.theme.colors.text};
+`;
+
+// Input do campo
+const CampoInput = styled.input`
+  padding: ${props => props.theme.spacing.md};
+  font-size: ${props => props.theme.typography.fontSize.base};
+  border: 2px solid ${props => props.theme.colors.border};
+  border-radius: ${props => props.theme.borderRadius.md};
+  background: ${props => props.theme.colors.background};
+  color: ${props => props.theme.colors.text};
+  transition: all ${props => props.theme.transitions.fast};
+
+  &:focus {
+    outline: none;
+    border-color: ${props => props.theme.colors.primary};
+    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}20;
+  }
+
+  &::placeholder {
+    color: ${props => props.theme.colors.textSecondary};
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+`;
+
+// Mensagem de status
+const Mensagem = styled.div<{ tipo: 'erro' | 'sucesso' | 'info' }>`
+  padding: ${props => props.theme.spacing.md};
+  border-radius: ${props => props.theme.borderRadius.md};
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  margin-bottom: ${props => props.theme.spacing.md};
+  
+  ${props => {
+    switch (props.tipo) {
+      case 'erro':
+        return `
+          background-color: #ff000015;
+          color: #cc0000;
+          border: 1px solid #ff000030;
+        `;
+      case 'sucesso':
+        return `
+          background-color: #00aa0015;
+          color: #008800;
+          border: 1px solid #00aa0030;
+        `;
+      case 'info':
+        return `
+          background-color: ${props.theme.colors.primary}15;
+          color: ${props.theme.colors.primary};
+          border: 1px solid ${props.theme.colors.primary}30;
+        `;
+    }
+  }}
+`;
+
+// Container de ações
+const AcoesContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: ${props => props.theme.spacing.md};
+  margin-top: ${props => props.theme.spacing.lg};
+`;
+
+// Link de volta
+const LinkVoltar = styled(Link)`
+  color: ${props => props.theme.colors.textSecondary};
+  font-size: ${props => props.theme.typography.fontSize.sm};
+  text-decoration: none;
+  transition: color ${props => props.theme.transitions.fast};
+
+  &:hover {
+    color: ${props => props.theme.colors.primary};
+    text-decoration: underline;
+  }
+`;
+
+// Container para estado de sucesso
+const SucessoContainer = styled.div`
+  text-align: center;
+`;
+
+const IconeSucesso = styled.div`
+  width: 4rem;
+  height: 4rem;
+  background: #00aa0020;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto ${props => props.theme.spacing.lg} auto;
+
+  svg {
+    width: 2rem;
+    height: 2rem;
+    color: #00aa00;
+  }
+`;
+
+// Ícone de email SVG
+const EmailIconSVG = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+  </svg>
+);
+
+// Ícone de sucesso SVG
+const SucessoIconSVG = () => (
+  <svg viewBox="0 0 24 24" fill="currentColor">
+    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+  </svg>
+);
+
+export default function RecuperarSenhaPage() {
   const router = useRouter();
-  const { currentTheme } = useTheme();
+  const { currentTheme } = useTema();
   const [email, setEmail] = useState('');
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
-  const [sent, setSent] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [mensagem, setMensagem] = useState<{ texto: string; tipo: 'erro' | 'sucesso' | 'info' } | null>(null);
+  const [emailEnviado, setEmailEnviado] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+    
     if (!email) {
-      setMessage('Por favor, digite seu email');
+      setMensagem({
+        texto: 'Por favor, digite seu email',
+        tipo: 'erro'
+      });
       return;
     }
 
-    setLoading(true);
-    setMessage('');
+    setIsLoading(true);
+    setMensagem(null);
 
     try {
       const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json' 
+        },
         body: JSON.stringify({ email }),
       });
 
+      const data = await response.json();
+
       if (response.ok) {
-        setSent(true);
-        setMessage('Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.');
+        setEmailEnviado(true);
+        setMensagem({
+          texto: 'Instruções de recuperação enviadas! Verifique sua caixa de email e spam.',
+          tipo: 'sucesso'
+        });
       } else {
-        const error = await response.json();
-        setMessage(error.message || 'Erro ao enviar email de recuperação');
+        setMensagem({
+          texto: data.message || 'Erro ao enviar email de recuperação. Tente novamente.',
+          tipo: 'erro'
+        });
       }
     } catch (error) {
-      setMessage('Erro ao processar solicitação. Tente novamente.');
+      setMensagem({
+        texto: 'Erro de conexão. Verifique sua internet e tente novamente.',
+        tipo: 'erro'
+      });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
   };
 
+  const handleTentarNovamente = () => {
+    setEmailEnviado(false);
+    setEmail('');
+    setMensagem(null);
+  };
+
   return (
-    <PageContainer>
-      <RecoveryCard $padding="lg" $shadow>
-        <FlexContainer justify="flex-end" direction="row">
-          <ThemeToggle />
-        </FlexContainer>
-
-        <Heading level={2} color="primary">
-          Recuperar Senha
-        </Heading>
-
-        {!sent ? (
+    <PaginaContainer>
+      <RecoveryCard>
+        {!emailEnviado ? (
           <>
-            <Text color="textSecondary" style={{ marginTop: currentTheme.spacing.md }}>
-              Digite seu email para receber instruções de recuperação de senha
-            </Text>
+            {/* Estado inicial - formulário */}
+            <EmailIcon>
+              <EmailIconSVG />
+            </EmailIcon>
+            
+            <Titulo>Recuperar Senha</Titulo>
+            
+            <Descricao>
+              Digite seu endereço de email e enviaremos instruções para redefinir sua senha.
+            </Descricao>
 
-            <Form onSubmit={handleSubmit}>
-              <InputBase
-                type="email"
-                placeholder="Digite seu email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                disabled={loading}
-                required
-              />
+            {mensagem && (
+              <Mensagem tipo={mensagem.tipo}>
+                {mensagem.texto}
+              </Mensagem>
+            )}
 
-              <BotaoBase
-                type="submit"
-                $variant="primary"
-                $size="lg"
-                $fullWidth
-                disabled={loading}
+            <Formulario onSubmit={handleSubmit}>
+              <CampoGrupo>
+                <CampoLabel htmlFor="email">Endereço de email</CampoLabel>
+                <CampoInput
+                  id="email"
+                  name="email"
+                  type="email"
+                  placeholder="Digite seu email cadastrado"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  disabled={isLoading}
+                  required
+                />
+              </CampoGrupo>
+
+              <Botao
+                tipo="submit"
+                variante="primario"
+                isLoading={isLoading}
+                disabled={isLoading || !email}
               >
-                {loading ? 'Enviando...' : 'Enviar Instruções'}
-              </BotaoBase>
-            </Form>
+                {isLoading ? 'Enviando...' : 'Enviar Instruções'}
+              </Botao>
+            </Formulario>
           </>
         ) : (
           <>
-            <Text color="success" style={{ marginTop: currentTheme.spacing.md }}>
-              ✓ Instruções enviadas com sucesso!
-            </Text>
-            <Text color="textSecondary" size="sm" style={{ marginTop: currentTheme.spacing.sm }}>
-              Verifique sua caixa de email e spam
-            </Text>
+            {/* Estado de sucesso */}
+            <SucessoContainer>
+              <IconeSucesso>
+                <SucessoIconSVG />
+              </IconeSucesso>
+              
+              <Titulo>Email Enviado!</Titulo>
+              
+              <Descricao>
+                Enviamos instruções de recuperação para <strong>{email}</strong>.
+                <br />
+                Verifique sua caixa de entrada e a pasta de spam.
+              </Descricao>
+
+              {mensagem && mensagem.tipo === 'sucesso' && (
+                <Mensagem tipo="info">
+                  O link de recuperação expira em 1 hora por segurança.
+                </Mensagem>
+              )}
+
+              <AcoesContainer>
+                <Botao
+                  tipo="button"
+                  variante="primario"
+                  onClick={handleTentarNovamente}
+                >
+                  Enviar para outro email
+                </Botao>
+              </AcoesContainer>
+            </SucessoContainer>
           </>
         )}
 
-        {message && (
-          <Text
-            color={message.includes('sucesso') || message.includes('receberá') ? 'success' : 'error'}
-            $size="sm"
-            style={{ marginTop: currentTheme.spacing.sm }}
-          >
-            {message}
-          </Text>
-        )}
-
-        <BackLink onClick={() => router.push('/login')}>
-          ← Voltar para o login
-        </BackLink>
+        {/* Links de navegação */}
+        <AcoesContainer>
+          <LinkVoltar href="/login">
+            ← Voltar para o login
+          </LinkVoltar>
+          
+          <LinkVoltar href="/criar-conta">
+            Não tem uma conta? Criar conta
+          </LinkVoltar>
+        </AcoesContainer>
       </RecoveryCard>
-    </PageContainer>
+    </PaginaContainer>
   );
-};
-
-export default RecuperarSenha;
+}
