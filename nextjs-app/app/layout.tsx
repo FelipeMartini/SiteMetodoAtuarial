@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
 // Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
@@ -8,13 +8,13 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const roboto = Roboto({
+  variable: "--font-roboto",
   subsets: ["latin"],
 });
 
@@ -44,7 +44,7 @@ export default function RootLayout({
   // Comentário: a ordem dos providers foi mantida para não alterar a lógica do app
   // Se precisar adicionar outros providers, coloque dentro do StyledComponentsRegistry
   return (
-    <html lang="pt-BR" className={`${geistSans.variable} ${geistMono.variable}`}>
+    <html lang="pt-BR" className={`${inter.variable} ${roboto.variable}`}>
       <body>
         <StyledComponentsRegistry>
           <ErrorBoundary>
