@@ -35,10 +35,10 @@ export default function Home() {
       <Secao $padding="lg">
         <Flex $direction="column" $align="center" $gap="xl" style={{ textAlign: 'center' }}>
           <div>
-            <Texto $variante="titulo" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
+            <Texto $variante="h1" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
               Método Atuarial
             </Texto>
-            <Texto $variante="subtitulo" $cor="secundario" style={{ maxWidth: '600px' }}>
+            <Texto $variante="h2" $cor="#666666" style={{ maxWidth: '600px' }}>
               Consultoria especializada em soluções atuariais, oferecendo excelência técnica
               e inovação para o mercado de previdência e seguros.
             </Texto>
@@ -61,7 +61,7 @@ export default function Home() {
 
       {/* Services Section */}
       <Secao $padding="lg">
-        <Texto $variante="titulo" $alinhamento="centro" style={{ marginBottom: '3rem' }}>
+        <Texto $variante="h2" $align="center" style={{ marginBottom: '3rem' }}>
           Nossos Serviços
         </Texto>
 
@@ -87,9 +87,9 @@ export default function Home() {
 
       {/* CTA Section */}
       <Secao $padding="lg">
-        <Card $elevacao style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
-          <Flex $direcao="column" $alinhar="center" $gap="lg">
-            <Texto $variante="subtitulo" $peso="medio">
+        <Card $shadow style={{ textAlign: 'center', maxWidth: '800px', margin: '0 auto' }}>
+          <Flex $direction="column" $align="center" $gap="lg">
+            <Texto $variante="h3" $peso="normal">
               Pronto para transformar seu negócio?
             </Texto>
             <Texto $cor="secundario">
@@ -107,8 +107,8 @@ export default function Home() {
 
       {/* Theme Demo */}
       <Secao $padding="sm">
-        <Card $elevacao style={{ textAlign: 'center' }}>
-          <Texto $variante="legenda" $cor="terciario">
+        <Card $shadow style={{ textAlign: 'center' }}>
+          <Texto $variante="caption" $cor="#888888">
             Tema atual: {isDarkMode ? 'Escuro 🌙' : 'Claro ☀️'}
           </Texto>
         </Card>
