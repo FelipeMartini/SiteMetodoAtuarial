@@ -51,10 +51,9 @@ export async function POST(request: NextRequest) {
     });
 
     // Remove a senha da resposta do objeto antes de retornar
-    const userWithoutPassword = { ...user };
-    if ('password' in userWithoutPassword) {
-      delete userWithoutPassword.password;
-    }
+    const userWithoutPassword = { ...user } as Omit<typeof user, 'password'>;
+    // @ts-expect-error Removendo propriedade 'password' do objeto para evitar retorno sensível
+    delete userWithoutPassword.password;
 
     return NextResponse.json(
       {

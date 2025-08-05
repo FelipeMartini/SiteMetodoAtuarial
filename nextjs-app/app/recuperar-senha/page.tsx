@@ -251,7 +251,7 @@ export default function RecuperarSenhaPage() {
       setMensagem({
         texto: 'Erro de conexão. Verifique sua internet e tente novamente.',
         tipo: 'erro'
-      }); // erro capturado mas não utilizado
+      }); // erro capturado
     } finally {
       setIsLoading(false);
     }
