@@ -302,9 +302,9 @@ export default function RecuperarSenhaPage() {
               </CampoGrupo>
 
               <Botao
-                tipo="submit"
-                variante="primario"
-                isLoading={isLoading}
+                type="submit"
+                variant="primary"
+                loading={isLoading}
                 disabled={isLoading || !email}
               >
                 {isLoading ? 'Enviando...' : 'Enviar Instruções'}
@@ -335,8 +335,8 @@ export default function RecuperarSenhaPage() {
 
               <AcoesContainer>
                 <Botao
-                  tipo="button"
-                  variante="primario"
+                  type="button"
+                  variant="primary"
                   onClick={handleTentarNovamente}
                 >
                   Enviar para outro email

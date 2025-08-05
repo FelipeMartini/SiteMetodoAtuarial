@@ -75,7 +75,7 @@ const StatusIndicator = styled.div<{ $status: 'success' | 'errorr' }>`
 
 export default function TestHydration() {
   // Hook do tema e estados locais
-  const { toggleTheme } = useTema();
+  const { currentTheme, toggleTheme } = useTema();
   const [renderTime, setRenderTime] = useState<string>('');
   const [clickCount, setClickCount] = useState(0);
 

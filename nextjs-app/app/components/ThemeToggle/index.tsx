@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTheme } from '../../theme/ContextoTema';
+import { useTema } from '../contexts/ThemeContext';
 import {
   ThemeToggleContainer,
   ThemeLabel,
@@ -13,7 +13,7 @@ import {
 } from './ThemeToggle.styled';
 
 export const ThemeToggle: React.FC = () => {
-  const { themeName, setTheme } = useTheme();
+  const { currentTheme, mudarTema } = useTema();
 
   const themeButtons = [
     { name: 'light' as const, Component: LightThemeButton, label: 'Light' },
@@ -29,8 +29,8 @@ export const ThemeToggle: React.FC = () => {
       {themeButtons.map(({ name, Component, label }) => (
         <Component
           key={name}
-          $isActive={themeName === name}
-          onClick={() => setTheme(name)}
+          $isActive={currentTheme.name === name}
+          onClick={() => mudarTema(name)}
           title={`Mudar para tema ${label}`}
           aria-label={`Mudar para tema ${label}`}
         />
