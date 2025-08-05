@@ -33,10 +33,10 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
   return (
     <Flex $direction="column" $gap="xs" className={className}>
       {label && (
-        <Texto as="label" htmlFor={inputId} $variante="legenda" $peso="medio">
+        <Texto as="label" htmlFor={inputId} $variante="caption" $peso="normal">
           {label}
           {obrigatorio && (
-            <Texto as="span" $cor="terciario" style={{ marginLeft: '4px' }}>
+            <Texto as="span" $cor="#ff0000" style={{ marginLeft: '4px' }}>
               *
             </Texto>
           )}
@@ -57,8 +57,8 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
       {erro && (
         <Texto
           id={`${inputId}-erro`}
-          $variante="legenda"
-          $cor="terciario"
+          $variante="caption"
+          $cor="#ef4444"
           style={{ color: 'var(--cor-erro, #ef4444)' }}
           role="alert"
         >
@@ -69,8 +69,8 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
       {ajuda && !erro && (
         <Texto
           id={`${inputId}-ajuda`}
-          $variante="legenda"
-          $cor="terciario"
+          $variante="caption"
+          $cor="#666666"
         >
           {ajuda}
         </Texto>
