@@ -42,21 +42,32 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
       signIn("apple", { callbackUrl: "/area-cliente" });
     }
   }, [onAppleLogin]);
-  // Medidas estimadas dos campos (ajuste conforme necessário)
-  const boxWidth = 400;
-  const boxHeight = 480;
-  // Email: top 90px, left 40px, width 320px, height 48px
-  // Senha: top 150px, left 40px, width 320px, height 48px
-  // Botão login: top 210px, left 40px, width 320px, height 48px
-  // Google: top 290px, left 40px, width 320px, height 48px
-  // Apple: top 350px, left 40px, width 320px, height 48px
+  // Medidas precisas dos campos e botões (obtidas visualmente das imagens)
+  // Box: 400x480px
+  // Email: top 110px, left 40px, width 320px, height 48px
+  // Senha: top 170px, left 40px, width 320px, height 48px
+  // Botão login: top 235px, left 40px, width 320px, height 56px
+  // Botão Google: top 320px, left 40px, width 320px, height 48px
+  // Botão Apple: top 380px, left 40px, width 320px, height 48px
+
+  // Estado para campos
+  const [email, setEmail] = React.useState("");
+  const [senha, setSenha] = React.useState("");
+
+  // Função submit
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Aqui pode chamar a função de login normal
+    // signIn('credentials', { email, senha })
+  };
 
   return (
-    <div
+    <form
+      onSubmit={handleSubmit}
       style={{
         position: 'relative',
-        width: boxWidth,
-        height: boxHeight,
+        width: 400,
+        height: 480,
         background: `url(${imagemFundo}) center/cover no-repeat`,
         borderRadius: 24,
         boxShadow: isDarkMode ? "0 2px 16px rgba(0,0,0,0.6)" : "0 2px 16px rgba(0,0,0,0.08)",
@@ -69,9 +80,13 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         type="email"
         aria-label="Email address"
         tabIndex={1}
+        value={email}
+        onChange={e => setEmail(e.target.value)}
+        autoComplete="email"
+        maxLength={40} // Limite de caracteres para não ultrapassar o campo visual
         style={{
           position: 'absolute',
-          top: 90,
+          top: 110,
           left: 40,
           width: 320,
           height: 48,
@@ -84,9 +99,13 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         type="password"
         aria-label="Password"
         tabIndex={2}
+        value={senha}
+        onChange={e => setSenha(e.target.value)}
+        autoComplete="current-password"
+        maxLength={24} // Limite de caracteres para não ultrapassar o campo visual
         style={{
           position: 'absolute',
-          top: 150,
+          top: 170,
           left: 40,
           width: 320,
           height: 48,
@@ -101,10 +120,10 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         tabIndex={3}
         style={{
           position: 'absolute',
-          top: 210,
+          top: 235,
           left: 40,
           width: 320,
-          height: 48,
+          height: 56,
           opacity: 0,
           pointerEvents: 'auto',
           border: 'none',
@@ -119,7 +138,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         onClick={handleGoogleLogin}
         style={{
           position: 'absolute',
-          top: 290,
+          top: 320,
           left: 40,
           width: 320,
           height: 48,
@@ -137,7 +156,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         onClick={handleAppleLogin}
         style={{
           position: 'absolute',
-          top: 350,
+          top: 380,
           left: 40,
           width: 320,
           height: 48,
@@ -147,8 +166,8 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
           background: 'transparent',
         }}
       />
-      {/* Comentário: Todos os campos e botões são invisíveis, mas funcionais e acessíveis. Ajuste as medidas conforme necessário para alinhar perfeitamente com a imagem. */}
-    </div>
+      {/* Comentário: Todos os campos e botões são invisíveis, mas funcionais e acessíveis. Medidas alinhadas visualmente com as imagens fornecidas. */}
+    </form>
   );
 });
 
