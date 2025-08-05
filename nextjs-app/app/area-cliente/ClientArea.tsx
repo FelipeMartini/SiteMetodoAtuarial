@@ -240,7 +240,12 @@ const ClientArea: React.FC = () => {
         setMessage('Erro ao carregar usuários');
       }
     } catch (error) {
+      // Exibe mensagem genérica ao usuário
       setMessage('Erro ao carregar usuários');
+      // Log detalhado para desenvolvedores (não exibe detalhes sensíveis ao usuário)
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao carregar usuários:', error);
+      }
     } finally {
       setLoading(false);
     }
@@ -278,11 +283,16 @@ const ClientArea: React.FC = () => {
           isActive: true,
         });
       } else {
-        const error = await response.json();
-        setMessage(error.message || 'Erro ao atualizar dados');
+        const errorResponse = await response.json();
+        setMessage(errorResponse.message || 'Erro ao atualizar dados');
       }
     } catch (error) {
+      // Exibe mensagem genérica ao usuário
       setMessage('Erro ao atualizar dados');
+      // Log detalhado para desenvolvedores
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao atualizar dados:', error);
+      }
     } finally {
       setLoading(false);
     }
@@ -314,7 +324,12 @@ const ClientArea: React.FC = () => {
         setMessage('Erro ao excluir usuário');
       }
     } catch (error) {
+      // Exibe mensagem genérica ao usuário
       setMessage('Erro ao excluir usuário');
+      // Log detalhado para desenvolvedores
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao excluir usuário:', error);
+      }
     } finally {
       setLoading(false);
     }
