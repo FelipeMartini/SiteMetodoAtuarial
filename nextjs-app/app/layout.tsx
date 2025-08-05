@@ -7,6 +7,7 @@ import ProvedorSessao from "./ProvedorSessao";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
+import ReduxProvider from '@/lib/store/provider';
 
 // Removido uso de next/font/google por instabilidade de rede
 
@@ -39,15 +40,17 @@ export default function RootLayout({
     <html lang="pt-BR" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
       <body>
         <StyledComponentsRegistry>
-          <ErrorBoundary>
-            <ProvedorSessao>
-              <ThemeProvider>
-                <LayoutCliente>
-                  {children}
-                </LayoutCliente>
-              </ThemeProvider>
-            </ProvedorSessao>
-          </ErrorBoundary>
+          <ReduxProvider>
+            <ErrorBoundary>
+              <ProvedorSessao>
+                <ThemeProvider>
+                  <LayoutCliente>
+                    {children}
+                  </LayoutCliente>
+                </ThemeProvider>
+              </ProvedorSessao>
+            </ErrorBoundary>
+          </ReduxProvider>
         </StyledComponentsRegistry>
       </body>
     </html>

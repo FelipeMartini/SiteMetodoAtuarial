@@ -1,127 +1,411 @@
 /**
- * Página de Recuperação de Senha - Modernizada
- * Sistema completo de recuperação de senha com interface responsiva
+ * Página de Recuperação de Senha - Sistema Avançado
+ * Interface moderna com validação e feedback completo
  */
 'use client';
-import Link from 'next/link';
 
 import React, { useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-// import { useTema } from '../contexts/ThemeContext'; // Removido para evitar warning
-import { Botao } from '../design-system';
+import { motion } from 'framer-motion';
+import { ArrowLeftIcon } from '@heroicons/react/24/outline';
+import { ErrorBoundary } from '../components/ErrorBoundary';
 
-// Container principal da página
-const PaginaContainer = styled.div`
+// Tipos para o formulário
+interface RecoveryFormData {
+  email: string;
+}
+
+// Styled Components
+const PageContainer = styled.div`
   min-height: 100vh;
-  background: ${props => props.theme.colors.background};
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: ${props => props.theme.spacing.lg};
+  padding: 20px;
 `;
 
-// Card principal
-const RecoveryCard = styled.div`
+const RecoveryCard = styled(motion.div)`
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+  padding: 40px;
   width: 100%;
-  max-width: 450px;
-  background: ${props => props.theme.colors.surface};
-  border-radius: ${props => props.theme.borderRadius.lg};
-  box-shadow: ${props => props.theme.shadows.lg};
-  padding: ${props => props.theme.spacing.xl};
+  max-width: 420px;
+  position: relative;
+`;
+
+const BackButton = styled.button`
+  display: flex;
+  align-items: center;
+  background: none;
+  border: none;
+  color: #6b7280;
+  cursor: pointer;
+  margin-bottom: 24px;
+  font-size: 14px;
+  
+  &:hover {
+    color: #4f46e5;
+  }
+  
+  svg {
+    margin-right: 8px;
+  }
+`;
+
+const Title = styled.h1`
+  font-size: 28px;
+  font-weight: 700;
+  color: #1f2937;
   text-align: center;
+  margin-bottom: 8px;
+`;
+
+const Subtitle = styled.p`
+  color: #6b7280;
+  text-align: center;
+  margin-bottom: 32px;
+  font-size: 14px;
+  line-height: 1.5;
+`;
+
+const FormGroup = styled.div`
+  margin-bottom: 24px;
+`;
+
+const Label = styled.label`
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+  color: #374151;
+  font-size: 14px;
+`;
+
+const Input = styled.input<{ $hasError?: boolean }>`
+  width: 100%;
+  padding: 12px 16px;
+  border: 2px solid ${props => props.$hasError ? '#ef4444' : '#e5e7eb'};
+  border-radius: 8px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background: white;
+  color: #000;
+  
+  &:focus {
+    outline: none;
+    border-color: ${props => props.$hasError ? '#ef4444' : '#4f46e5'};
+    box-shadow: 0 0 0 3px ${props => props.$hasError ? 'rgba(239, 68, 68, 0.1)' : 'rgba(79, 70, 229, 0.1)'};
+  }
+  
+  &::placeholder {
+    color: #9ca3af;
+  }
+`;
+
+const SubmitButton = styled(motion.button) <{ $loading?: boolean }>`
+  width: 100%;
+  padding: 14px;
+  background: #4f46e5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: ${props => props.$loading ? 'not-allowed' : 'pointer'};
+  opacity: ${props => props.$loading ? 0.7 : 1};
+  transition: all 0.2s ease;
+  margin-bottom: 24px;
+  
+  &:hover:not(:disabled) {
+    background: #4338ca;
+    transform: translateY(-1px);
+  }
+  
+  &:active {
+    transform: translateY(0);
+  }
+`;
+
+const ErrorMessage = styled(motion.div)`
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  color: #dc2626;
+  padding: 12px 16px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  
+  &::before {
+    content: '⚠️';
+    margin-right: 8px;
+  }
+`;
+
+const FieldError = styled.div`
+  color: #ef4444;
+  font-size: 12px;
+  margin-top: 4px;
+`;
+
+const LoginLink = styled.a`
+  display: block;
+  text-align: center;
+  color: #4f46e5;
+  text-decoration: none;
+  font-size: 14px;
+  
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+const SuccessContainer = styled.div`
+  text-align: center;
+  
+  .icon {
+    font-size: 48px;
+    margin-bottom: 24px;
+  }
+`;
+
+export default function RecuperarSenhaPage() {
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [success, setSuccess] = useState(false);
+  const router = useRouter();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<RecoveryFormData>();
+
+  const onSubmit = async (data: RecoveryFormData) => {
+    setLoading(true);
+    setError('');
+
+    try {
+      const response = await fetch('/api/auth/forgot-password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (response.ok && result.success) {
+        setSuccess(true);
+      } else {
+        setError(result.error || 'Erro ao enviar email de recuperação');
+      }
+    } catch (err) {
+      setError('Erro de conexão. Tente novamente.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const goBack = () => {
+    router.push('/login');
+  };
+
+  if (success) {
+    return (
+      <ErrorBoundary>
+        <PageContainer>
+          <RecoveryCard
+            initial={{ y: 20, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            <SuccessContainer>
+              <div className="icon">📧</div>
+              <Title>Email enviado!</Title>
+              <Subtitle>
+                Enviamos instruções para recuperação de senha para seu email.
+                Verifique sua caixa de entrada e siga as instruções.
+              </Subtitle>
+              <LoginLink href="/login">
+                Voltar para o login
+              </LoginLink>
+            </SuccessContainer>
+          </RecoveryCard>
+        </PageContainer>
+      </ErrorBoundary>
+    );
+  }
+
+  return (
+    <ErrorBoundary>
+      <PageContainer>
+        <RecoveryCard
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
+          <BackButton onClick={goBack}>
+            <ArrowLeftIcon width={16} height={16} />
+            Voltar para login
+          </BackButton>
+
+          <Title>Recuperar senha</Title>
+          <Subtitle>
+            Digite seu email e enviaremos instruções para criar uma nova senha.
+          </Subtitle>
+
+          {error && (
+            <ErrorMessage
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              {error}
+            </ErrorMessage>
+          )}
+
+          <form onSubmit={handleSubmit(onSubmit)}>
+            <FormGroup>
+              <Label htmlFor="email">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="seu@email.com"
+                autoComplete="email"
+                $hasError={!!errors.email}
+                {...register('email', {
+                  required: 'Email é obrigatório',
+                  pattern: {
+                    value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+                    message: 'Formato de email inválido',
+                  },
+                })}
+              />
+              {errors.email && (
+                <FieldError>{errors.email.message}</FieldError>
+              )}
+            </FormGroup>
+
+            <SubmitButton
+              type="submit"
+              $loading={loading}
+              disabled={loading}
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              {loading ? 'Enviando...' : 'Enviar instruções'}
+            </SubmitButton>
+          </form>
+
+          <LoginLink href="/login">
+            Lembrou da senha? Faça login
+          </LoginLink>
+        </RecoveryCard>
+      </PageContainer>
+    </ErrorBoundary>
+  );
+}
+text - align: center;
 `;
 
 // Título principal
 const Titulo = styled.h1`
-  font-size: ${props => props.theme.typography.fontSize.xxl};
-  font-weight: ${props => props.theme.typography.fontWeight.bold};
-  color: ${props => props.theme.colors.text};
-  margin-bottom: ${props => props.theme.spacing.md};
+font - size: ${ props => props.theme.typography.fontSize.xxl };
+font - weight: ${ props => props.theme.typography.fontWeight.bold };
+color: ${ props => props.theme.colors.text };
+margin - bottom: ${ props => props.theme.spacing.md };
 `;
 
 // Ícone de email
 const EmailIcon = styled.div`
-  width: 4rem;
-  height: 4rem;
-  background: ${props => props.theme.colors.primary}20;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto ${props => props.theme.spacing.lg} auto;
+width: 4rem;
+height: 4rem;
+background: ${ props => props.theme.colors.primary } 20;
+border - radius: 50 %;
+display: flex;
+align - items: center;
+justify - content: center;
+margin: 0 auto ${ props => props.theme.spacing.lg } auto;
 
   svg {
-    width: 2rem;
-    height: 2rem;
-    color: ${props => props.theme.colors.primary};
-  }
+  width: 2rem;
+  height: 2rem;
+  color: ${ props => props.theme.colors.primary };
+}
 `;
 
 // Descrição
 const Descricao = styled.p`
-  font-size: ${props => props.theme.typography.fontSize.base};
-  color: ${props => props.theme.colors.textSecondary};
-  line-height: 1.6;
-  margin-bottom: ${props => props.theme.spacing.xl};
+font - size: ${ props => props.theme.typography.fontSize.base };
+color: ${ props => props.theme.colors.textSecondary };
+line - height: 1.6;
+margin - bottom: ${ props => props.theme.spacing.xl };
 `;
 
 // Formulário
 const Formulario = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.lg};
-  margin-bottom: ${props => props.theme.spacing.lg};
+display: flex;
+flex - direction: column;
+gap: ${ props => props.theme.spacing.lg };
+margin - bottom: ${ props => props.theme.spacing.lg };
 `;
 
 // Grupo de campo
 const CampoGrupo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.sm};
-  text-align: left;
+display: flex;
+flex - direction: column;
+gap: ${ props => props.theme.spacing.sm };
+text - align: left;
 `;
 
 // Label do campo
 const CampoLabel = styled.label`
-  font-size: ${props => props.theme.typography.fontSize.sm};
-  font-weight: ${props => props.theme.typography.fontWeight.medium};
-  color: ${props => props.theme.colors.text};
+font - size: ${ props => props.theme.typography.fontSize.sm };
+font - weight: ${ props => props.theme.typography.fontWeight.medium };
+color: ${ props => props.theme.colors.text };
 `;
 
 // Input do campo
 const CampoInput = styled.input`
-  padding: ${props => props.theme.spacing.md};
-  font-size: ${props => props.theme.typography.fontSize.base};
-  border: 2px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadius.md};
-  background: ${props => props.theme.colors.background};
-  color: ${props => props.theme.colors.text};
-  transition: all ${props => props.theme.transitions.fast};
+padding: ${ props => props.theme.spacing.md };
+font - size: ${ props => props.theme.typography.fontSize.base };
+border: 2px solid ${ props => props.theme.colors.border };
+border - radius: ${ props => props.theme.borderRadius.md };
+background: ${ props => props.theme.colors.background };
+color: ${ props => props.theme.colors.text };
+transition: all ${ props => props.theme.transitions.fast };
 
   &:focus {
-    outline: none;
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}20;
-  }
+  outline: none;
+  border - color: ${ props => props.theme.colors.primary };
+  box - shadow: 0 0 0 3px ${ props => props.theme.colors.primary } 20;
+}
 
   &::placeholder {
-    color: ${props => props.theme.colors.textSecondary};
-  }
+  color: ${ props => props.theme.colors.textSecondary };
+}
 
   &:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
+  opacity: 0.6;
+  cursor: not - allowed;
+}
 `;
 
 // Mensagem de status
 const Mensagem = styled.div<{ tipo: 'erro' | 'sucesso' | 'info' }>`
-  padding: ${props => props.theme.spacing.md};
-  border-radius: ${props => props.theme.borderRadius.md};
-  font-size: ${props => props.theme.typography.fontSize.sm};
-  margin-bottom: ${props => props.theme.spacing.md};
+padding: ${ props => props.theme.spacing.md };
+border - radius: ${ props => props.theme.borderRadius.md };
+font - size: ${ props => props.theme.typography.fontSize.sm };
+margin - bottom: ${ props => props.theme.spacing.md };
   
-  ${props => {
+  ${
+  props => {
     switch (props.tipo) {
       case 'erro':
         return `
@@ -142,50 +426,51 @@ const Mensagem = styled.div<{ tipo: 'erro' | 'sucesso' | 'info' }>`
           border: 1px solid ${props.theme.colors.primary}30;
         `;
     }
-  }}
+  }
+}
 `;
 
 // Container de ações
 const AcoesContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.md};
-  margin-top: ${props => props.theme.spacing.lg};
+display: flex;
+flex - direction: column;
+gap: ${ props => props.theme.spacing.md };
+margin - top: ${ props => props.theme.spacing.lg };
 `;
 
 // Link de volta
 const LinkVoltar = styled(Link)`
-  color: ${props => props.theme.colors.textSecondary};
-  font-size: ${props => props.theme.typography.fontSize.sm};
-  text-decoration: none;
-  transition: color ${props => props.theme.transitions.fast};
+color: ${ props => props.theme.colors.textSecondary };
+font - size: ${ props => props.theme.typography.fontSize.sm };
+text - decoration: none;
+transition: color ${ props => props.theme.transitions.fast };
 
   &:hover {
-    color: ${props => props.theme.colors.primary};
-    text-decoration: underline;
-  }
+  color: ${ props => props.theme.colors.primary };
+  text - decoration: underline;
+}
 `;
 
 // Container para estado de sucesso
 const SucessoContainer = styled.div`
-  text-align: center;
+text - align: center;
 `;
 
 const IconeSucesso = styled.div`
-  width: 4rem;
-  height: 4rem;
-  background: #00aa0020;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto ${props => props.theme.spacing.lg} auto;
+width: 4rem;
+height: 4rem;
+background: #00aa0020;
+border - radius: 50 %;
+display: flex;
+align - items: center;
+justify - content: center;
+margin: 0 auto ${ props => props.theme.spacing.lg } auto;
 
   svg {
-    width: 2rem;
-    height: 2rem;
-    color: #00aa00;
-  }
+  width: 2rem;
+  height: 2rem;
+  color: #00aa00;
+}
 `;
 
 // Ícone de email SVG

@@ -23,10 +23,13 @@ model User {
   accessLevel   Int       @default(1) // Sistema de níveis: 1=Normal, 2=Premium, 3=Manager, 4=Admin, 5=SuperAdmin
   isActive      Boolean   @default(true)
   lastLogin     DateTime?
+  loginAttempts Int       @default(0) // Controle de tentativas de login
+  lockedUntil   DateTime? // Bloqueio temporário por tentativas excessivas
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   accounts      Account[]
   sessions      Session[]
+  activities    Activity[] // Registro de atividades do usuário
 }
 
 model Account {
@@ -61,6 +64,21 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+// Modelo para registro de atividades do usuário
+model Activity {
+  id        String   @id @default(cuid())
+  userId    String
+  action    String   // Tipo de ação: login, logout, profile_update, etc.
+  details   String?  // Detalhes adicionais da ação
+  ipAddress String?  // Endereço IP do usuário
+  userAgent String?  // User Agent do navegador
+  createdAt DateTime @default(now())
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([action])
 }
 
 // Comentário: Este schema cobre o fluxo padrão de autenticação do Auth.js/NextAuth com Prisma. Adapte conforme necessidade.

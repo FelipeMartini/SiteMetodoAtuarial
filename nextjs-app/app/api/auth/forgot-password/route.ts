@@ -1,46 +1,105 @@
 /**
- * API para recuperação de senha
+ * API para recuperação de senha - Sistema Avançado
+ * Implementa validação, segurança e logging completo
  */
 import { NextRequest, NextResponse } from 'next/server';
+import { z } from 'zod';
 import { db } from '../../../../lib/prisma';
 import crypto from 'crypto';
 
-export async function POST(request: NextRequest) {
-  try {
-    const { email } = await request.json();
+// Schema de validação
+const forgotPasswordSchema = z.object({
+  email: z.string().email('Email inválido'),
+});
 
-    if (!email) {
-      return NextResponse.json({ message: 'Email é obrigatório' }, { status: 400 });
+// Interface para response padronizado
+interface ForgotPasswordResponse {
+  success: boolean;
+  message: string;
+  error?: string;
+}
+
+export async function POST(request: NextRequest): Promise<NextResponse<ForgotPasswordResponse>> {
+  try {
+    const body = await request.json();
+
+    // Validar dados de entrada
+    const validationResult = forgotPasswordSchema.safeParse(body);
+
+    if (!validationResult.success) {
+      return NextResponse.json({
+        success: false,
+        message: 'Dados inválidos',
+        error: validationResult.error.issues[0].message,
+      }, { status: 400 });
     }
 
-    // Verificar se o usuário existe
+    const { email } = validationResult.data;
+
+    // Buscar usuário no banco de dados
     const user = await db.user.findUnique({
-      where: { email }
+      where: { email },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        isActive: true,
+      },
     });
 
     // Por segurança, sempre retornamos sucesso mesmo se o email não existir
-    if (!user) {
+    // Isso evita que atacantes descubram emails válidos
+    if (!user || !user.isActive) {
       return NextResponse.json({
-        message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.'
+        success: true,
+        message: 'Se o email existir em nossa base, você receberá instruções para recuperação.',
       });
     }
 
-    // Gerar token de recuperação
+    // Gerar token seguro para reset
     const resetToken = crypto.randomBytes(32).toString('hex');
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hora
 
-    // Salvar token no banco (você pode criar uma tabela específica para isso)
-    // Por agora, vamos simular o processo
+    // TODO: Implementar tabela de tokens de recuperação no schema
+    // await db.passwordResetToken.create({
+    //   data: {
+    //     userId: user.id,
+    //     token: resetToken,
+    //     expiresAt: resetTokenExpiry,
+    //   },
+    // });
 
-    // Aqui você implementaria o envio de email
-    // Por exemplo, usando Nodemailer, SendGrid, etc.
-    console.log('Token de recuperação para', email, ':', resetToken);
-    console.log('Link de recuperação: /redefinir-senha?token=' + resetToken);
+    // Simular envio de email (substituir por serviço real)
+    const resetUrl = `${process.env.NEXTAUTH_URL}/resetar-senha?token=${resetToken}`;
+
+    // Log para desenvolvimento
+    console.log(`📧 Email de recuperação seria enviado para: ${email}`);
+    console.log(`🔗 Link de recuperação: ${resetUrl}`);
+    console.log(`⏰ Token expira em: ${resetTokenExpiry.toISOString()}`);
+
+    // TODO: Implementar envio de email real
+    // Exemplo com um serviço como SendGrid, Resend, ou similar:
+    /*
+    await sendPasswordResetEmail({
+      to: email,
+      resetUrl,
+      userName: user.name || 'Usuário',
+      expiresAt: resetTokenExpiry,
+    });
+    */
 
     return NextResponse.json({
-      message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.'
+      success: true,
+      message: 'Se o email existir em nossa base, você receberá instruções para recuperação.',
     });
+
   } catch (error) {
-    console.error('Erro na recuperação de senha:', error);
-    return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 });
+    console.error('❌ Erro na recuperação de senha:', error);
+
+    return NextResponse.json({
+      success: false,
+      message: 'Erro interno do servidor',
+      error: 'Erro inesperado. Tente novamente.',
+    }, { status: 500 });
   }
 }

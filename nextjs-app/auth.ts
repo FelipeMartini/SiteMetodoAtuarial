@@ -56,6 +56,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientSecret: process.env.AUTH_TWITTER_SECRET || "",
     }),
     CredentialsProvider({
+      id: "credentials",
       name: "credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -66,29 +67,33 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // Valida as credenciais
           const { email, password } = signInSchema.parse(credentials);
 
-          // Busca o usuário no banco de dados
-          const user = await prisma.user.findUnique({
-            where: { email }
+          // Faz uma requisição para nossa API interna
+          const response = await fetch(`${process.env.NEXTAUTH_URL}/api/auth/login`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ email, password }),
           });
 
-          if (!user || !user.password) {
+          if (!response.ok) {
             return null;
           }
 
-          // Verifica a senha
-          const isValidPassword = await bcryptjs.compare(password, user.password);
+          const data = await response.json();
 
-          if (!isValidPassword) {
+          if (!data.success || !data.user) {
             return null;
           }
 
-          // Retorna o objeto do usuário (sem a senha)
+          // Retorna o objeto do usuário para a sessão
           return {
-            id: user.id,
-            email: user.email,
-            name: user.name,
-            image: user.image,
-            accessLevel: user.accessLevel,
+            id: data.user.id,
+            email: data.user.email,
+            name: data.user.name,
+            image: data.user.image || null,
+            accessLevel: data.user.accessLevel,
+            isActive: data.user.isActive,
           };
         } catch (error) {
           console.error("Erro de autorização:", error);
