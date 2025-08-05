@@ -291,17 +291,11 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
       setIsLoading(providerKey);
       setError(null);
 
-      const result = await signIn(PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider, {
+      // Usar redirect: true para garantir redirecionamento automático após login
+      await signIn(PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider, {
         callbackUrl: '/area-cliente',
-        redirect: false,
+        redirect: true,
       });
-
-      if (result?.error) {
-        console.error(`Erro no login ${providerKey}:`, result.error);
-        setError(`Erro ao conectar com ${PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].label}`);
-      } else if (result?.ok) {
-        onSuccess?.();
-      }
     } catch (error) {
       console.error(`Erro no login ${providerKey}:`, error);
       setError(`Erro inesperado ao conectar com ${PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].label}`);
