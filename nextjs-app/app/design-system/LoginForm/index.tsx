@@ -55,7 +55,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     watch,
   } = useForm<LoginFormData>();
 
-  const password = watch('password');
+  // const password = watch('password'); // Removido para evitar warning
 
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);

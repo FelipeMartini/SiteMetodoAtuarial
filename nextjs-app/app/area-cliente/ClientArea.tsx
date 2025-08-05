@@ -196,7 +196,7 @@ const accessLevels = {
 };
 
 const ClientArea: React.FC = () => {
-  const { data: session, status } = useSession();
+  const { data: session, status } = useSession(); // Removido 'error' do destructuring para evitar warning
   const { currentTheme } = useTheme();
 
   const [users, setUsers] = useState<User[]>([]);

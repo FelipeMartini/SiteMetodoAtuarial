@@ -7,9 +7,6 @@ import {
   ThemeLabel,
   LightThemeButton,
   DarkThemeButton,
-  BlueThemeButton,
-  GreenThemeButton,
-  PurpleThemeButton,
 } from './ThemeToggle.styled';
 
 export const ThemeToggle: React.FC = () => {

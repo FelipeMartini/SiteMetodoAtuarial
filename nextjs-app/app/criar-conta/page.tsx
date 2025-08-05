@@ -154,7 +154,7 @@ const Mensagem = styled.div<{ tipo: 'erro' | 'sucesso' }>`
 `;
 
 export default function CriarContaPage() {
-  const { currentTheme } = useTema();
+  // const { currentTheme } = useTema();
   const [formData, setFormData] = useState({
     nome: '',
     email: '',

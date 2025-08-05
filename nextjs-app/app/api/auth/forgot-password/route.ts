@@ -27,7 +27,6 @@ export async function POST(request: NextRequest) {
 
     // Gerar token de recuperação
     const resetToken = crypto.randomBytes(32).toString('hex');
-    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hora
 
     // Salvar token no banco (você pode criar uma tabela específica para isso)
     // Por agora, vamos simular o processo

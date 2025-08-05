@@ -204,8 +204,8 @@ const SucessoIconSVG = () => (
 );
 
 export default function RecuperarSenhaPage() {
-  const router = useRouter();
-  const { currentTheme } = useTema();
+  // const router = useRouter(); // Removido para evitar warning
+  // const { currentTheme } = useTema(); // Removido para evitar warning
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [mensagem, setMensagem] = useState<{ texto: string; tipo: 'erro' | 'sucesso' | 'info' } | null>(null);
