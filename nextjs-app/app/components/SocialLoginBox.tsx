@@ -11,21 +11,25 @@ import { signIn } from 'next-auth/react';
 import { useTema } from '../contexts/ThemeContext';
 import Link from 'next/link';
 
-// Container principal com fundo alternado por tema
+// Container principal com cor contrastante, borda e sombra
 const LoginContainer = styled.div`
   position: relative;
   width: 100%;
   max-width: 420px;
   min-height: 600px;
-  background-image: url(${props => props.theme.name === 'dark' ? '/loginboxescura.png' : '/loginboxclara.png'});
-  background-size: cover;
-  background-position: center;
-  background-repeat: no-repeat;
-  border-radius: ${props => props.theme.borderRadius.lg};
+  /* Cor contrastante: clara no tema escuro, escura no tema claro */
+  background: ${({ theme }) => theme.name === 'dark'
+    ? theme.colors.surface // cor clara no tema escuro
+    : theme.colors.backgroundSecondary // cor escura no tema claro
+  };
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ theme }) => theme.shadows.lg};
   overflow: hidden;
-  box-shadow: ${props => props.theme.shadows.lg};
-  transition: all ${props => props.theme.transitions.normal};
+  transition: all ${({ theme }) => theme.transitions.normal};
   margin: 0 auto;
+  /* Adiciona contorno sutil para destacar o box */
+  outline: 2px solid ${({ theme }) => theme.colors.primary}20;
 `;
 
 // Overlay para melhor contraste do conteúdo
