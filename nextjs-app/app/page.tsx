@@ -27,13 +27,13 @@ const services = [
 ];
 
 export default function Home() {
-  const { ehModoEscuro } = useTema();
+  const { isDarkMode } = useTema();
 
   return (
     <Container>
       {/* Hero Section */}
       <Secao $padding="lg">
-        <Flex $direcao="column" $alinhar="center" $gap="xl" style={{ textAlign: 'center' }}>
+        <Flex $direction="column" $align="center" $gap="xl" style={{ textAlign: 'center' }}>
           <div>
             <Texto $variante="titulo" style={{ fontSize: '3rem', marginBottom: '1rem' }}>
               Método Atuarial
@@ -109,7 +109,7 @@ export default function Home() {
       <Secao $padding="sm">
         <Card $elevacao style={{ textAlign: 'center' }}>
           <Texto $variante="legenda" $cor="terciario">
-            Tema atual: {ehModoEscuro ? 'Escuro 🌙' : 'Claro ☀️'}
+            Tema atual: {isDarkMode ? 'Escuro 🌙' : 'Claro ☀️'}
           </Texto>
         </Card>
       </Secao>
