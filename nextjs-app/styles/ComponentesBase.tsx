@@ -1,3 +1,11 @@
+// Classe para cor branca no menu em modo escuro
+import { createGlobalStyle } from 'styled-components';
+
+export const MenuTextStyle = createGlobalStyle`
+  .menu-text-dark {
+    color: #fff !important;
+  }
+`;
 // Botão base moderno
 export const BotaoBase = styled.button<{
   $variant?: 'primary' | 'secondary' | 'outline' | 'ghost';

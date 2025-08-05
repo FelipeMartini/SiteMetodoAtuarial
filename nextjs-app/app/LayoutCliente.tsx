@@ -14,9 +14,10 @@ import { useTheme } from './contexts/ThemeContext';
 const Rodape = React.lazy(() => import("./Rodape"));
 
 // Header modernizado
-function Header() {
+function Header({ menuTextClass }: { menuTextClass: string }) {
   const { data: session } = useSession();
-
+  const { currentTheme, isDarkMode } = useTheme();
+  const menuTextColor = isDarkMode ? currentTheme.colors.text : undefined;
   return (
     <header style={{
       borderBottom: '1px solid var(--cor-borda)',
@@ -33,7 +34,7 @@ function Header() {
         >
           {/* Logo */}
           <Link href="/" style={{ textDecoration: 'none' }}>
-            <Texto $variante="h3" $peso="negrito">
+            <Texto $variante="h3" $peso="negrito" $cor={menuTextColor}>
               Método Atuarial
             </Texto>
           </Link>
@@ -43,22 +44,22 @@ function Header() {
             <nav>
               <Flex $gap="0.75rem">
                 <Link href="/" style={{ textDecoration: 'none' }}>
-                  <Botao variant="ghost" size="sm">
+                  <Botao variant="ghost" size="sm" className={menuTextClass}>
                     Início
                   </Botao>
                 </Link>
                 <Link href="/sobre" style={{ textDecoration: 'none' }}>
-                  <Botao variant="ghost" size="sm">
+                  <Botao variant="ghost" size="sm" className={menuTextClass}>
                     Sobre
                   </Botao>
                 </Link>
                 <Link href="/servicos" style={{ textDecoration: 'none' }}>
-                  <Botao variant="ghost" size="sm">
+                  <Botao variant="ghost" size="sm" className={menuTextClass}>
                     Serviços
                   </Botao>
                 </Link>
                 <Link href="/contato" style={{ textDecoration: 'none' }}>
-                  <Botao variant="ghost" size="sm">
+                  <Botao variant="ghost" size="sm" className={menuTextClass}>
                     Contato
                   </Botao>
                 </Link>
@@ -69,16 +70,17 @@ function Header() {
             {session ? (
               <Flex $align="center" $gap="0.75rem">
                 <Link href="/area-cliente" style={{ textDecoration: 'none' }}>
-                  <Botao variant="secondary" size="sm">
+                  <Botao variant="secondary" size="sm" className={menuTextClass}>
                     Área Cliente
                   </Botao>
                 </Link>
-                <Texto $variante="caption" $cor="secondary">
+                <Texto $variante="caption" className={menuTextClass}>
                   Olá, {session.user?.name || session.user?.email}
                 </Texto>
                 <Botao
                   variant="ghost"
                   size="sm"
+                  className={menuTextClass}
                   onClick={() => signOut()}
                 >
                   Sair
@@ -86,7 +88,7 @@ function Header() {
               </Flex>
             ) : (
               <Link href="/login" style={{ textDecoration: 'none' }}>
-                <Botao variant="primary" size="sm">
+                <Botao variant="primary" size="sm" className={menuTextClass}>
                   Entrar
                 </Botao>
               </Link>
@@ -108,12 +110,17 @@ interface LayoutClienteProps {
 const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
   const { currentTheme } = useTheme();
 
+  // Adiciona estilos globais para cor do menu no modo escuro
+  const { MenuTextStyle } = require('../styles/ComponentesBase');
+  const { isDarkMode } = useTheme();
+  const menuTextClass = isDarkMode ? 'menu-text-dark' : '';
   return (
     <>
       <GlobalStyles theme={currentTheme} />
+      <MenuTextStyle />
       <Container>
         <Flex $direction="column" style={{ minHeight: '100vh' }}>
-          <Header />
+          <Header menuTextClass={menuTextClass} />
 
           <main style={{ flex: 1 }}>
             <Secao $padding="lg">
