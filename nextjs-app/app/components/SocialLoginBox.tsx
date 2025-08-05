@@ -53,6 +53,9 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
   // Estado para campos
   const [email, setEmail] = React.useState("");
   const [senha, setSenha] = React.useState("");
+  // Estado para foco dos inputs
+  const [focoEmail, setFocoEmail] = React.useState(false);
+  const [focoSenha, setFocoSenha] = React.useState(false);
 
   // Função submit
   const handleSubmit = (e: React.FormEvent) => {
@@ -75,7 +78,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         margin: '0 auto',
       }}
     >
-      {/* Campo de email invisível */}
+      {/* Campo de email: visível durante foco ou preenchido, invisível caso contrário */}
       <input
         type="email"
         aria-label="Email address"
@@ -84,17 +87,27 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         onChange={e => setEmail(e.target.value)}
         autoComplete="email"
         maxLength={40} // Limite de caracteres para não ultrapassar o campo visual
+        onFocus={() => setFocoEmail(true)}
+        onBlur={() => setFocoEmail(false)}
         style={{
           position: 'absolute',
           top: 110,
           left: 40,
           width: 320,
           height: 48,
-          opacity: 0,
+          opacity: focoEmail || email ? 1 : 0,
           pointerEvents: 'auto',
+          background: 'rgba(255,255,255,0.7)', // fundo levemente translúcido para contraste
+          color: isDarkMode ? '#fff' : '#222', // fonte branca no escuro, preta no claro
+          fontSize: 18,
+          border: '1px solid #ccc',
+          borderRadius: 12,
+          paddingLeft: 16,
+          outline: focoEmail ? '2px solid #1976d2' : 'none',
+          transition: 'opacity 0.2s',
         }}
       />
-      {/* Campo de senha invisível */}
+      {/* Campo de senha: visível durante foco ou preenchido, invisível caso contrário */}
       <input
         type="password"
         aria-label="Password"
@@ -103,14 +116,24 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = React.memo(function Social
         onChange={e => setSenha(e.target.value)}
         autoComplete="current-password"
         maxLength={24} // Limite de caracteres para não ultrapassar o campo visual
+        onFocus={() => setFocoSenha(true)}
+        onBlur={() => setFocoSenha(false)}
         style={{
           position: 'absolute',
           top: 170,
           left: 40,
           width: 320,
           height: 48,
-          opacity: 0,
+          opacity: focoSenha || senha ? 1 : 0,
           pointerEvents: 'auto',
+          background: 'rgba(255,255,255,0.7)',
+          color: isDarkMode ? '#fff' : '#222',
+          fontSize: 18,
+          border: '1px solid #ccc',
+          borderRadius: 12,
+          paddingLeft: 16,
+          outline: focoSenha ? '2px solid #1976d2' : 'none',
+          transition: 'opacity 0.2s',
         }}
       />
       {/* Botão login invisível */}
