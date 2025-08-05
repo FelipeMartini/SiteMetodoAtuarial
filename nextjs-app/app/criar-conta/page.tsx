@@ -313,9 +313,9 @@ export default function CriarContaPage() {
             </CampoGrupo>
 
             <Botao
-              tipo="submit"
-              variante="primario"
-              isLoading={isLoading}
+              type="submit"
+              variant="primary"
+              loading={isLoading}
               disabled={isLoading}
             >
               {isLoading ? 'Criando conta...' : 'Criar conta'}

@@ -11,6 +11,7 @@
 
 // Botões
 export { default as Button } from './Button';
+export { default as Botao } from './Botao';
 
 // Campos de entrada
 export { default as InputField } from './InputField';
