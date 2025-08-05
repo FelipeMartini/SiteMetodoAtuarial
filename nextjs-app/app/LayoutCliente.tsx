@@ -107,29 +107,29 @@ interface LayoutClienteProps {
 
 const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
   const { currentTheme } = useTheme();
-  
+
   return (
     <>
       <GlobalStyles theme={currentTheme} />
       <Container>
         <Flex $direction="column" style={{ minHeight: '100vh' }}>
-        <Header />
+          <Header />
 
-        <main style={{ flex: 1 }}>
-          <Secao $padding="lg">
-            {children}
-          </Secao>
-        </main>
+          <main style={{ flex: 1 }}>
+            <Secao $padding="lg">
+              {children}
+            </Secao>
+          </main>
 
-        <Suspense fallback={
-          <Flex $justify="center" $align="center" style={{ padding: '2rem' }}>
-            <Texto $cor="secundario">Carregando rodapé...</Texto>
-          </Flex>
-        }>
-          <Rodape />
-        </Suspense>
-      </Flex>
-    </Container>
+          <Suspense fallback={
+            <Flex $justify="center" $align="center" style={{ padding: '2rem' }}>
+              <Texto $cor="secundario">Carregando rodapé...</Texto>
+            </Flex>
+          }>
+            <Rodape />
+          </Suspense>
+        </Flex>
+      </Container>
     </>
   );
 };
