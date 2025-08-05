@@ -4,7 +4,7 @@
 import React, { ReactNode, Suspense } from "react";
 import Link from "next/link";
 import { useSession, signOut } from "next-auth/react";
-import { Container, Flex, Texto, Secao } from '../styles/ComponentesBase';
+import { Container, Flex, Texto, Secao, MenuTextStyle } from '../styles/ComponentesBase';
 import { Botao } from "./design-system/Botao";
 import ThemeToggle from "./components/ThemeToggle";
 import { GlobalStyles } from '../styles/GlobalStyles';
@@ -111,7 +111,6 @@ const LayoutCliente: React.FC<LayoutClienteProps> = ({ children }) => {
   const { currentTheme } = useTheme();
 
   // Adiciona estilos globais para cor do menu no modo escuro
-  const { MenuTextStyle } = require('../styles/ComponentesBase');
   const { isDarkMode } = useTheme();
   const menuTextClass = isDarkMode ? 'menu-text-dark' : '';
   return (
