@@ -3,14 +3,6 @@
 import React, { forwardRef } from 'react';
 import { Flex, Texto, InputBase } from '../../styles/ComponentesBase';
 
-const Input = styled.input`
-  width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-`;
-
 interface InputTextoProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'> {
   label?: string;
   erro?: string;
