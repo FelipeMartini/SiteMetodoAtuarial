@@ -13,3 +13,19 @@
 | Datas                  | Moment.js         | Day.js, date-fns           | Use Day.js              |
 | Gráficos               | Chart.js          | Recharts, Victory          | Recharts recomendado    |
 | Utilitários            | Lodash            | lodash-es, Ramda           | lodash-es               |
+
+
+
+{
+  "zustand": "^4.5.0",
+  "react-query": "^5.0.0",
+  "shadcn/ui": "latest",
+  "tailwindcss": "^3.3.0",
+  "prettier": "^3.0.0",
+  "dotenv": "^16.0.0",
+  "@testing-library/react": "^14.0.0"
+}
+
+
+
+
