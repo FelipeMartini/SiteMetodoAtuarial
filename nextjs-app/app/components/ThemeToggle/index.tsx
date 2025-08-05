@@ -13,14 +13,11 @@ import {
 } from './ThemeToggle.styled';
 
 export const ThemeToggle: React.FC = () => {
-  const { currentTheme, mudarTema } = useTema();
+  const { currentTheme, setTheme } = useTema();
 
   const themeButtons = [
     { name: 'light' as const, Component: LightThemeButton, label: 'Light' },
     { name: 'dark' as const, Component: DarkThemeButton, label: 'Dark' },
-    { name: 'blue' as const, Component: BlueThemeButton, label: 'Blue' },
-    { name: 'green' as const, Component: GreenThemeButton, label: 'Green' },
-    { name: 'purple' as const, Component: PurpleThemeButton, label: 'Purple' },
   ];
 
   return (
@@ -30,7 +27,7 @@ export const ThemeToggle: React.FC = () => {
         <Component
           key={name}
           $isActive={currentTheme.name === name}
-          onClick={() => mudarTema(name)}
+          onClick={() => setTheme(name)}
           title={`Mudar para tema ${label}`}
           aria-label={`Mudar para tema ${label}`}
         />

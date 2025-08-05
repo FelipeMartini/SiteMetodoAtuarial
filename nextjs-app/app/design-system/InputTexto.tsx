@@ -31,7 +31,7 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
   const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
 
   return (
-    <Flex $direcao="column" $gap="xs" className={className}>
+    <Flex $direction="column" $gap="xs" className={className}>
       {label && (
         <Texto as="label" htmlFor={inputId} $variante="legenda" $peso="medio">
           {label}

@@ -27,7 +27,7 @@ export const CardInfo: React.FC<CardInfoProps> = ({
 
   return (
     <Card
-      $elevacao={elevacao > 1}
+      $shadow={elevacao > 1}
       onClick={onClick}
       className={className}
       style={{
@@ -42,19 +42,19 @@ export const CardInfo: React.FC<CardInfoProps> = ({
         }
       } : undefined}
     >
-      <Flex $direcao="column" $gap="md">
+      <Flex $direction="column" $gap="md">
         {icone && (
-          <Flex $justificar="center" $alinhar="center" style={{ marginBottom: '8px' }}>
+          <Flex $justify="center" $align="center" style={{ marginBottom: '8px' }}>
             {icone}
           </Flex>
         )}
 
-        <Texto $variante="subtitulo" $peso="medio" $alinhamento="centro">
+        <Texto $variante="h3" $peso="negrito" $align="centro">
           {titulo}
         </Texto>
 
         {descricao && (
-          <Texto $variante="corpo" $cor="secundario" $alinhamento="centro">
+          <Texto $variante="body2" $cor="secundario" $align="centro">
             {descricao}
           </Texto>
         )}

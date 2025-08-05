@@ -192,14 +192,14 @@ const IconeSucesso = styled.div`
 // Ícone de email SVG
 const EmailIconSVG = () => (
   <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z" />
   </svg>
 );
 
 // Ícone de sucesso SVG
 const SucessoIconSVG = () => (
   <svg viewBox="0 0 24 24" fill="currentColor">
-    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
   </svg>
 );
 
@@ -213,7 +213,7 @@ export default function RecuperarSenhaPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       setMensagem({
         texto: 'Por favor, digite seu email',
@@ -228,8 +228,8 @@ export default function RecuperarSenhaPage() {
     try {
       const response = await fetch('/api/auth/forgot-password', {
         method: 'POST',
-        headers: { 
-          'Content-Type': 'application/json' 
+        headers: {
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({ email }),
       });
@@ -273,9 +273,9 @@ export default function RecuperarSenhaPage() {
             <EmailIcon>
               <EmailIconSVG />
             </EmailIcon>
-            
+
             <Titulo>Recuperar Senha</Titulo>
-            
+
             <Descricao>
               Digite seu endereço de email e enviaremos instruções para redefinir sua senha.
             </Descricao>
@@ -318,9 +318,9 @@ export default function RecuperarSenhaPage() {
               <IconeSucesso>
                 <SucessoIconSVG />
               </IconeSucesso>
-              
+
               <Titulo>Email Enviado!</Titulo>
-              
+
               <Descricao>
                 Enviamos instruções de recuperação para <strong>{email}</strong>.
                 <br />
@@ -351,7 +351,7 @@ export default function RecuperarSenhaPage() {
           <LinkVoltar href="/login">
             ← Voltar para o login
           </LinkVoltar>
-          
+
           <LinkVoltar href="/criar-conta">
             Não tem uma conta? Criar conta
           </LinkVoltar>

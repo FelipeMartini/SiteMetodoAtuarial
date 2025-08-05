@@ -73,7 +73,7 @@ export default function ContatoOrcamento() {
           <InputField label="Serviço desejado" id="orcamento-servico" required />
           <Label htmlFor="orcamento-detalhes">Detalhes do orçamento</Label>
           <TextArea id="orcamento-detalhes" required />
-          <Button $variant="primary" type="submit">Enviar</Button>
+          <Button variant="primary" type="submit">Enviar</Button>
         </FormContainer>
       </ContatoContainer>
     </ErrorBoundary>

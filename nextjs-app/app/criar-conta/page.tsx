@@ -332,7 +332,7 @@ export default function CriarContaPage() {
           <Divisor>
             <span>ou crie usando</span>
           </Divisor>
-          <SocialLoginBox 
+          <SocialLoginBox
             onSuccess={handleSocialSuccess}
             showTitle={false}
           />
