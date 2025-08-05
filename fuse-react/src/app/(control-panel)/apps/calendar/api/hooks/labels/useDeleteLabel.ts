@@ -1,0 +1,20 @@
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { calendarApi } from '../../services/calendarApiService';
+import { labelsQueryKey } from './useLabels';
+import { useSnackbar } from 'notistack';
+export const useDeleteLabel = () => {
+	const queryClient = useQueryClient();
+	const { enqueueSnackbar } = useSnackbar();
+
+	return useMutation({
+		mutationFn: calendarApi.deleteLabel,
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: labelsQueryKey });
+		},
+		onError: () => {
+			enqueueSnackbar('Error deleting label!', {
+				variant: 'error'
+			});
+		}
+	});
+};

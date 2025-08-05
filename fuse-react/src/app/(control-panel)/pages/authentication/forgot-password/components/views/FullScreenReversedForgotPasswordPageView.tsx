@@ -1,0 +1,25 @@
+import Paper from '@mui/material/Paper';
+import ForgotPasswordPageMessageSection from '../ui/ForgotPasswordPageMessageSection';
+import ForgotPasswordPageForm from '../forms/ForgotPasswordPageForm';
+import ForgotPasswordPageTitle from '../ui/ForgotPasswordPageTitle';
+
+/**
+ * The full screen reversed forgot password page.
+ */
+function FullScreenReversedForgotPasswordPageView() {
+	return (
+		<div className="flex min-w-0 flex-auto flex-col items-center sm:flex-row sm:justify-center md:items-start md:justify-start">
+			<ForgotPasswordPageMessageSection />
+
+			<Paper className="h-full w-full px-4 py-8 sm:h-auto sm:w-auto sm:rounded-xl sm:p-12 sm:shadow-sm md:flex md:h-full md:rounded-none md:p-16 md:pt-24 md:shadow-none ltr:border-l-1 rtl:border-r-1">
+				<div className="mx-auto w-full max-w-80 sm:mx-0 sm:w-80">
+					<ForgotPasswordPageTitle />
+
+					<ForgotPasswordPageForm />
+				</div>
+			</Paper>
+		</div>
+	);
+}
+
+export default FullScreenReversedForgotPasswordPageView;

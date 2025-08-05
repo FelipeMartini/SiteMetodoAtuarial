@@ -1,0 +1,66 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@auth/*": [
+        "./src/@auth/*"
+      ],
+      "@i18n": [
+        "./src/@i18n/index"
+      ],
+      "@i18n/*": [
+        "./src/@i18n/*"
+      ],
+      "@fuse/*": ["./src/@fuse/*"],
+      "@history*": [
+        "./src/@history"
+      ],
+      "@mock-utils/*": [
+        "./src/@mock-utils/*"
+      ],
+      "@schema": [
+        "./src/@schema"
+      ],
+    "@/*": [
+      "./src/*"
+    ]
+    },
+    "declaration": true,
+    "target": "esnext",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "es2020",
+      "scripthost"
+    ],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "noFallthroughCasesInSwitch": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    "jsx": "preserve",
+    "incremental": true
+  },
+  "exclude": [
+    "src/app/(public)/documentation/components/views/material-ui-components/**/*",
+    "src/app/(public)/documentation/components/ui/material-ui-components/**/*",
+    "node_modules"
+  ],
+  "include": [
+    "./src/**/*.ts",
+    "./src/**/*.tsx",
+    "./src/global.d.ts",
+    "tailwind.config.ts",
+    "vite.config.mts",
+    "vite-env.d.ts"
+  ]
+}
