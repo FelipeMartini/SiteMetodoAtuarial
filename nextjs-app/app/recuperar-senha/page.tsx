@@ -6,9 +6,7 @@
 import Link from 'next/link';
 
 import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import styled from 'styled-components';
-// import { useRouter } from 'next/navigation'; // Removido para evitar warning
 // import { useTema } from '../contexts/ThemeContext'; // Removido para evitar warning
 import { Botao } from '../design-system';
 
@@ -253,9 +251,7 @@ export default function RecuperarSenhaPage() {
       setMensagem({
         texto: 'Erro de conexão. Verifique sua internet e tente novamente.',
         tipo: 'erro'
-      });
-      // 'error' capturado mas não utilizado
-      // error não utilizado, apenas para capturar exceção
+      }); // erro capturado mas não utilizado
     } finally {
       setIsLoading(false);
     }

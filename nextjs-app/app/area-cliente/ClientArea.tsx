@@ -240,9 +240,7 @@ const ClientArea: React.FC = () => {
         setMessage('Erro ao carregar usuários');
       }
     } catch (error) {
-      setMessage('Erro ao carregar usuários');
-      // 'error' capturado mas não utilizado
-      // error não utilizado, apenas para capturar exceção
+      setMessage('Erro ao carregar usuários'); // erro capturado mas não utilizado
     } finally {
       setLoading(false);
     }
@@ -284,9 +282,7 @@ const ClientArea: React.FC = () => {
         setMessage(error.message || 'Erro ao atualizar dados');
       }
     } catch (error) {
-      setMessage('Erro ao atualizar dados');
-      // 'error' capturado mas não utilizado
-      // error não utilizado, apenas para capturar exceção
+      setMessage('Erro ao atualizar dados'); // erro capturado mas não utilizado
     } finally {
       setLoading(false);
     }
@@ -318,9 +314,7 @@ const ClientArea: React.FC = () => {
         setMessage('Erro ao excluir usuário');
       }
     } catch (error) {
-      setMessage('Erro ao excluir usuário');
-      // 'error' capturado mas não utilizado
-      // error não utilizado, apenas para capturar exceção
+      setMessage('Erro ao excluir usuário'); // erro capturado mas não utilizado
     } finally {
       setLoading(false);
     }
