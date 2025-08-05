@@ -67,9 +67,9 @@ describe('SocialLoginBox', () => {
 
   it('deve exibir campos e botões de login sobre a imagem', () => {
     render(
-      <TemaProvider temaInicial="claro">
+      <ProvedorTema>
         <SocialLoginBox />
-      </TemaProvider>
+      </ProvedorTema>
     );
     expect(screen.getByText(/login social/i)).toBeInTheDocument();
     expect(screen.getByAltText(/google/i)).toBeInTheDocument();
