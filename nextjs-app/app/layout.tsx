@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Inter, Roboto } from "next/font/google";
+// Usando fonte local temporária para evitar erro de build
 import "./globals.css";
 // Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
@@ -8,15 +8,7 @@ import { ThemeProvider } from "./contexts/ThemeContext";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
 
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
-
-const roboto = Roboto({
-  variable: "--font-roboto",
-  subsets: ["latin"],
-});
+// Removido uso de next/font/google por instabilidade de rede
 
 export const metadata: Metadata = {
   title: "Método Atuarial - Consultoria Especializada em Previdência",
@@ -44,7 +36,7 @@ export default function RootLayout({
   // Comentário: a ordem dos providers foi mantida para não alterar a lógica do app
   // Se precisar adicionar outros providers, coloque dentro do StyledComponentsRegistry
   return (
-    <html lang="pt-BR" className={`${inter.variable} ${roboto.variable}`}>
+    <html lang="pt-BR" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
       <body>
         <StyledComponentsRegistry>
           <ErrorBoundary>

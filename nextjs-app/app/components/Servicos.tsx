@@ -5,6 +5,9 @@
 import React from 'react';
 import styled from 'styled-components';
 
+// Componente funcional moderno, sem dependências herdadas
+// Garantindo compatibilidade com React 19 e styled-components >=6.1.18
+
 const Main = styled.main`
   padding: 2rem;
   max-width: 1200px;
