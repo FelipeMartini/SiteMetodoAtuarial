@@ -248,10 +248,15 @@ export default function RecuperarSenhaPage() {
         });
       }
     } catch (error) {
+      // Exibe mensagem genérica ao usuário
       setMensagem({
         texto: 'Erro de conexão. Verifique sua internet e tente novamente.',
         tipo: 'erro'
       });
+      // Log detalhado para desenvolvedores
+      if (process.env.NODE_ENV === 'development') {
+        console.error('Erro ao enviar email de recuperação:', error);
+      }
     } finally {
       setIsLoading(false);
     }
