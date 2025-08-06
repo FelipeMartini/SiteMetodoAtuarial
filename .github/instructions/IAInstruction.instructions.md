@@ -1,24 +1,51 @@
 ---
 applyTo: '**'
 ---
-Forneça contexto do projeto e diretrizes de codificação que a IA deve seguir ao gerar código, responder perguntas ou revisar alterações.
 
-# Instruções adicionais para o assistente:
-  - Sempre deixe o use cliente na primeira linha dos arquivos que ele necessitar e remova duplicidades caso exista.
-  - Sempre responda ao usuário em português do Brasil.
-  - Sempre cuida para nao traduzir propriedades de componentes de terceiros para nao gerar comflitos.
-  - Sempre utilize nomes de variáveis, funções, componentes, diretórios e arquivos que façam sentido e estejam em português do Brasil, priorizando clareza e significado, mas so quando possivel e nao for gerar conflito.
-  - Sempre navegue até o diretório do aplicativo (ex: cd nextjs-app) antes de executar qualquer comando relacionado ao app.
-  - Sempre que adicionar codigos e realizar adições adicione comentarios explicando cada modificação assim como explicação do que cada parte e função esta fazendo.
-- Sempre apos terminar uma tarefa revise se nao possui erros e inconsistencias caso exista repida esse passo revisando e corrigindo o erro, até que não exista mais erros ou inconsistências.
-- Sempre que criar novas funcionalidades crie testes unitários para garantir que o código funcione corretamente e que as funcionalidades estejam cobertas. Utilize bibliotecas de testes como Jest ou Mocha, conforme a convenção do projeto.
-- Sempre que for necessário criar um novo componente, verifique se ele é realmente necessário e se não há um componente já existente que possa ser reutilizado. Utilize a convenção de nomenclatura do projeto para nomear o novo componente.
-- Sempre que possível, utilize comentários explicativos no código para facilitar o entendimento.
-- Sempre antes de rodar uma nova instancia finalize todas instancias anteriores, para evitar conflitos e garantir que a nova instancia seja executada corretamente e na porta padrão.
-- Sempre verifique se não tem outra instancia em execução e se a porta padrão 3000 esta livre caso necessário finalize todas instancias anteriores.
-- Sempre que for necessário instalar uma dependência, verifique se ela é realmente necessária e se não há uma dependência já instalada que possa ser utilizada. Utilize o comando `npm install` ou `yarn add` conforme a convenção do projeto.
-- Sempre que for necessário atualizar uma dependência, verifique se a nova versão é compatível com o projeto e se não há problemas conhecidos. Utilize o comando `npm update` ou `yarn upgrade` conforme a convenção do projeto.
-- Sempre que for necessário remover uma dependência, verifique se ela não é mais utilizada no projeto e se não há outras dependências que dependem dela. Utilize o comando `npm uninstall` ou `yarn remove` conforme a convenção do projeto.
+
+# Instruções para Assistente de IA – Projeto Next.js
+
+## Princípios Gerais
+- Sempre responda em português do Brasil.
+- Priorize clareza, concisão e contexto real do projeto.
+- Consulte sempre a documentação oficial do Next.js, React e bibliotecas utilizadas.
+
+## Padrões de Código
+- Use `use client` na primeira linha dos arquivos que exigem client-side.
+- Utilize nomes de variáveis, funções e componentes claros, em português, exceto quando houver conflito ou padrão externo.
+- Não traduza propriedades ou nomes de componentes de terceiros.
+- Siga a estrutura de pastas e convenções do projeto.
+- Comente o código apenas quando necessário para entendimento ou contexto.
+
+## Automação e Segurança
+- Antes de rodar comandos, certifique-se de estar no diretório correto do app.
+- Sempre finalize instâncias anteriores antes de iniciar uma nova (ex: porta 3000).
+- Nunca faça commit ou push automático sem autorização explícita.
+
+## Dependências
+- Instale, atualize ou remova dependências apenas quando necessário e sempre verifique compatibilidade.
+- Use `npm` ou `yarn` conforme a convenção do projeto.
+
+## Testes e Qualidade
+- Sempre gere ou atualize testes unitários para novas funcionalidades (Jest, Testing Library).
+- Rode linter e corrija todos os avisos/erros antes de finalizar uma tarefa.
+- Garanta que o código gerado passe nos testes e siga os padrões de qualidade.
+
+## Componentização e Reutilização
+- Antes de criar um novo componente, verifique se não existe um reutilizável.
+- Siga as melhores práticas de acessibilidade e composição.
+
+## Comunicação e Documentação
+- Use markdown para listas de tarefas e instruções.
+- Explique cada modificação de forma sucinta, apenas quando necessário.
+- Gere documentação automática quando possível.
+
+## Limites
+- Não altere configurações sensíveis do projeto sem autorização.
+- Não execute ações destrutivas sem confirmação.
+
+---
+Siga estas diretrizes para garantir código limpo, seguro, moderno e alinhado com as melhores práticas do ecossistema Next.js.
 
 
 
