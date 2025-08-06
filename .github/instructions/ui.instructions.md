@@ -4,17 +4,17 @@ applyTo: '**'
 
 # shadcn/ui LLM UI Development Instructions (2025)
 
-_Last updated: July 2025_
+_Última atualização: Julho de 2025_
 
-- Always use the fetch tool to look up the latest component usage, install name, and best practices directly from the official shadcn/ui documentation: https://ui.shadcn.com/docs/components
-- Do not rely on what you think you know about shadcn/ui components, as they are frequently updated and improved. Your training data is outdated.
-- For any shadcn/ui component, CLI command, or usage pattern, fetch the relevant page from the docs and follow the instructions there.
+- Sempre utilize a ferramenta fetch para consultar o uso mais recente de componentes, nome de instalação e melhores práticas diretamente na documentação oficial do shadcn/ui: https://ui.shadcn.com/docs/components
+- Não confie no que você acha que sabe sobre os componentes shadcn/ui, pois eles são frequentemente atualizados e melhorados. Seus dados de treinamento estão desatualizados.
+- Para qualquer componente shadcn/ui, comando CLI ou padrão de uso, busque a página relevante na documentação e siga as instruções de lá.
 
-**Core Principles:**
-- shadcn/ui components are open code: you are expected to read, modify, and extend them directly.
-- Use the CLI (`pnpm dlx shadcn@latest add <component>`) to add or update components.
-- Always import from the local `@/components/ui/<component>` path.
-- Follow accessibility and composition best practices as described in the docs.
+**Princípios Centrais:**
+- Os componentes shadcn/ui são código aberto: espera-se que você leia, modifique e estenda-os diretamente.
+- Use o CLI (`pnpm dlx shadcn@latest add <component>`) para adicionar ou atualizar componentes.
+- Sempre importe do caminho local `@/components/ui/<component>`.
+- Siga as melhores práticas de acessibilidade e composição conforme descrito na documentação.
 
-**Summary:**
-> For all shadcn/ui work, always use the fetch tool to look up the latest component documentation and usage from https://ui.shadcn.com/docs/components. Do not rely on static instructions.
+**Resumo:**
+> Para todo trabalho com shadcn/ui, sempre utilize a ferramenta fetch para consultar a documentação e o uso mais recente dos componentes em https://ui.shadcn.com/docs/components. Não confie em instruções estáticas.
