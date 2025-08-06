@@ -8,9 +8,10 @@ import bcryptjs from 'bcryptjs';
  * Endpoint para definir/atualizar senha do usuário logado (social ou tradicional)
  * Só permite definir senha se o usuário estiver autenticado
  */
+export async function POST(request: NextRequest) {
   try {
     // Recupera sessão do Auth.js puro via cookie
-    const sessionToken = req.cookies.get('authjs.session-token')?.value;
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
     if (!sessionToken) {
       return NextResponse.json({ error: 'Usuário não autenticado.' }, { status: 401 });
     }
@@ -24,7 +25,7 @@ import bcryptjs from 'bcryptjs';
     if (!usuario || !usuario.email) {
       return NextResponse.json({ error: 'Usuário não autenticado.' }, { status: 401 });
     }
-    const { senha } = await req.json();
+    const { senha } = await request.json();
     if (!senha || senha.length < 6) {
       return NextResponse.json({ error: 'Senha inválida.' }, { status: 400 });
     }
