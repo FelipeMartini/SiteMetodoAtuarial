@@ -8,6 +8,7 @@ import MenuLateralClienteWrapper from "./MenuLateralClienteWrapper";
 import Image from "next/image";
 import { ErrorBoundary } from "../components/ErrorBoundary";
 import { useTema } from "../contexts/ThemeContext";
+import { Skeleton } from "../components/ui/skeleton";
 
 /**
  * Componente client-side para exibir o menu lateral e perfil do cliente.
@@ -49,23 +50,36 @@ export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: st
               gap: 16,
             }}
           >
-            {usuario?.image ? (
-              <Image
-                src={usuario.image}
-                alt="Foto do usuário"
-                width={120}
-                height={120}
-                style={{ borderRadius: "50%", border: `3px solid ${cores.primary}` }}
-                loading="lazy"
-                quality={85}
-              />
-            ) : null}
-            <div style={{ color: cores.textSecondary }}>
-              <strong style={{ color: cores.primary }}>Nome:</strong> {usuario?.name || "Não informado"}
-            </div>
-            <div style={{ color: cores.textSecondary }}>
-              <strong style={{ color: cores.primary }}>Email:</strong> {usuario?.email || "Não informado"}
-            </div>
+            {/* Exibe Skeleton enquanto dados do usuário não estão disponíveis */}
+            {!usuario ? (
+              <>
+                <Skeleton className="h-[120px] w-[120px] rounded-full mb-2" />
+                <Skeleton className="h-[20px] w-[160px] mb-2" />
+                <Skeleton className="h-[20px] w-[200px]" />
+              </>
+            ) : (
+              <>
+                {usuario.image ? (
+                  <Image
+                    src={usuario.image}
+                    alt="Foto do usuário"
+                    width={120}
+                    height={120}
+                    style={{ borderRadius: "50%", border: `3px solid ${cores.primary}` }}
+                    loading="lazy"
+                    quality={85}
+                  />
+                ) : (
+                  <Skeleton className="h-[120px] w-[120px] rounded-full mb-2" />
+                )}
+                <div style={{ color: cores.textSecondary }}>
+                  <strong style={{ color: cores.primary }}>Nome:</strong> {usuario.name || <Skeleton className="h-[20px] w-[160px] inline-block align-middle" />}
+                </div>
+                <div style={{ color: cores.textSecondary }}>
+                  <strong style={{ color: cores.primary }}>Email:</strong> {usuario.email || <Skeleton className="h-[20px] w-[200px] inline-block align-middle" />}
+                </div>
+              </>
+            )}
           </div>
         </main>
       </div>

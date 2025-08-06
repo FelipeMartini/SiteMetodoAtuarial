@@ -2,6 +2,7 @@
 // CardInfo moderno usando styled-components, Tailwind e shadcn/ui, com suporte ao tema
 import React from 'react';
 import styled, { DefaultTheme } from 'styled-components';
+import { Skeleton } from '../components/ui/skeleton';
 
 // Estilização do card usando styled-components e integração com tema
 const CardStyled = styled.div<{ $shadow?: boolean; theme: DefaultTheme }>`
@@ -46,6 +47,7 @@ interface CardInfoProps {
   className?: string;
 }
 
+
 export const CardInfo: React.FC<CardInfoProps> = ({
   titulo,
   descricao,
@@ -56,6 +58,16 @@ export const CardInfo: React.FC<CardInfoProps> = ({
   className,
 }) => {
   const isClickable = !!onClick;
+  // Exibe Skeletons se props principais não estiverem disponíveis
+  if (!titulo && !descricao && !conteudo) {
+    return (
+      <CardStyled $shadow={elevacao > 1} className={className}>
+        <Skeleton className="h-[24px] w-[120px] mb-2" />
+        <Skeleton className="h-[16px] w-[180px] mb-2" />
+        <Skeleton className="h-[32px] w-full" />
+      </CardStyled>
+    );
+  }
   return (
     <CardStyled
       $shadow={elevacao > 1}

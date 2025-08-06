@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSessaoAuth } from "../../hooks/useSessaoAuth";
+import { Skeleton } from "../components/ui/skeleton";
 
 // Componente para upload de foto de perfil do usuário
 const FotoPerfilUploader: React.FC = () => {
@@ -52,7 +53,12 @@ const FotoPerfilUploader: React.FC = () => {
     <div style={{ marginBottom: 24 }}>
       <label style={{ fontWeight: 600 }}>Foto de Perfil:</label>
       <input type="file" accept="image/*" onChange={handleFileChange} disabled={loading} />
-      {preview && (
+      {/* Exibe Skeleton enquanto preview está carregando */}
+      {loading ? (
+        <div style={{ margin: "12px 0" }}>
+          <Skeleton className="h-[120px] w-[120px] rounded-full" />
+        </div>
+      ) : preview ? (
         <div style={{ margin: "12px 0" }}>
           <Image
             src={preview}
@@ -63,7 +69,7 @@ const FotoPerfilUploader: React.FC = () => {
             unoptimized
           />
         </div>
-      )}
+      ) : null}
       <button onClick={handleUpload} disabled={loading || !foto} style={{ marginTop: 8 }}>
         {loading ? "Enviando..." : "Salvar Foto"}
       </button>

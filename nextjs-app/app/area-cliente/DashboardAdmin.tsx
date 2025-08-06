@@ -3,6 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CheckboxCustom from "./CheckboxCustom";
 import Image from "next/image";
+import { Skeleton } from "../components/ui/skeleton";
 
 interface Usuario {
   id: string;
@@ -47,7 +48,42 @@ const DashboardAdmin: React.FC = () => {
     }
   };
 
-  if (loading) return <div>Carregando usuários...</div>;
+  if (loading) {
+    // Exibe Skeletons para tabela de usuários enquanto carrega
+    return (
+      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
+        <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Manutenção de Usuários</h2>
+        <table style={{ width: "100%", borderCollapse: "collapse" }}>
+          <thead>
+            <tr style={{ background: "#f3f4f6" }}>
+              <th>Foto</th>
+              <th>Nome</th>
+              <th>Email</th>
+              <th>Nível</th>
+              <th>Ativo</th>
+              <th>Último Login</th>
+              <th>Data de Criação</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody>
+            {[...Array(5)].map((_, idx) => (
+              <tr key={idx} style={{ borderBottom: "1px solid #eee" }}>
+                <td><Skeleton className="h-[40px] w-[40px] rounded-full" /></td>
+                <td><Skeleton className="h-[20px] w-[100px]" /></td>
+                <td><Skeleton className="h-[20px] w-[160px]" /></td>
+                <td><Skeleton className="h-[20px] w-[40px]" /></td>
+                <td><Skeleton className="h-[20px] w-[60px]" /></td>
+                <td><Skeleton className="h-[20px] w-[120px]" /></td>
+                <td><Skeleton className="h-[20px] w-[120px]" /></td>
+                <td><Skeleton className="h-[32px] w-[100px]" /></td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    );
+  }
 
   return (
     <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
