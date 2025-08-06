@@ -1,43 +1,63 @@
 // use cliente
 // Teste automatizado para login social e tratamento de erro OAuthAccountNotLinked
+
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import SocialLoginBox from '@core/components/SocialLoginBox';
+import * as useSessaoAuthModule from '@/hooks/useSessaoAuth';
 import { ThemeProvider } from '@core/theme/ContextoTema';
+import type { useSessaoAuth } from '@/hooks/useSessaoAuth';
 
 
-beforeEach(() => {
 
-  // Mock do hook, mas login não é chamado para social (apenas para credentials)
-  jest.mock('../hooks/useSessaoAuth', () => ({
-    useSessaoAuth: () => ({
-      login: jest.fn(),
-      status: 'unauthenticated',
-    }),
-  }));
 
-  describe('SocialLoginBox - Fluxo de login social', () => {
-    it('redireciona para rota de login social ao clicar no botão Google', async () => {
-      // Mock window.location.href
-      const originalLocation = window.location;
-      // @ts-ignore
-      delete window.location;
-      window.location = { href: '' } as any;
+describe('SocialLoginBox - Fluxo de login social', () => {
+  let originalFetch: typeof fetch;
 
-      render(
-        <ThemeProvider>
-          <SocialLoginBox />
-        </ThemeProvider>
-      );
-      const googleBtn = screen.getByRole('button', { name: /google/i });
-      fireEvent.click(googleBtn);
-      expect(window.location.href).toContain('/api/auth/signin/google');
 
-      // Restaura window.location
-      // Restaura window.location de forma segura
-      // @ts-ignore
-      window.location = originalLocation;
-    });
+  beforeAll(() => {
+    // Mock global fetch para evitar erro de URLs relativas
+    originalFetch = global.fetch;
+    global.fetch = jest.fn(() => Promise.resolve({
+      ok: true,
+      status: 200,
+      statusText: 'OK',
+      headers: new Headers(),
+      redirected: false,
+      type: 'basic',
+      url: '',
+      clone: () => ({} as Response),
+      body: null,
+      bodyUsed: false,
+      arrayBuffer: async () => new ArrayBuffer(0),
+      blob: async () => new Blob(),
+      formData: async () => new FormData(),
+      json: async () => ({}),
+      text: async () => '',
+    } as Response)) as unknown as typeof fetch;
   });
+
+  afterAll(() => {
+    global.fetch = originalFetch;
+  });
+
+  it('aciona login do Google ao clicar no botão', async () => {
+    const loginMock = jest.fn();
+    jest.spyOn(useSessaoAuthModule, 'useSessaoAuth').mockReturnValue({
+      login: loginMock,
+      status: 'unauthenticated',
+    } as unknown as ReturnType<typeof useSessaoAuth>);
+    render(
+      <ThemeProvider>
+        <SocialLoginBox />
+      </ThemeProvider>
+    );
+    const googleBtn = screen.getByRole('button', { name: /google/i });
+    await act(async () => {
+      fireEvent.click(googleBtn);
+    });
+    expect(loginMock).toHaveBeenCalledWith('google');
+  });
+});
 
 

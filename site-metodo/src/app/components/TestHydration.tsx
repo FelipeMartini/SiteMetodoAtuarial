@@ -3,7 +3,7 @@
 
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { useTema } from '../contexts/ThemeContext';
+import { useTema } from '@core/theme/ContextoTema';
 
 // Styled component para testar
 const TesteContainer = styled.div`

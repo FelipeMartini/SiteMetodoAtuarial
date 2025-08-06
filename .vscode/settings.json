@@ -1,7 +1,8 @@
 {
+  // Caminho padrão do terminal integrado ao abrir na pasta site-metodo
   // Configurações de performance para projetos Next.js
-  "terminal.integrated.cwd": "${workspaceFolder}/site-metodo",
-  "files.exclude": {
+  "terminal.integrated.cwd": "${workspaceFolder}/site-metodo", // Define o diretório inicial do terminal integrado
+  "files.exclude": { // Oculta arquivos/pastas do explorador de arquivos
     "**/node_modules": true,
     "**/.next": true,
     "**/build": true,
@@ -9,68 +10,69 @@
     "**/.git": true,
     "**/coverage": true
   },
-  "files.watcherExclude": {
+  "files.watcherExclude": { // Exclui arquivos/pastas do watcher de arquivos (melhora performance)
     "**/node_modules/**": true,
     "**/.next/**": true,
     "**/build/**": true,
     "**/dist/**": true
   },
-  "search.exclude": {
+  "search.exclude": { // Exclui arquivos/pastas dos resultados de busca
     "**/node_modules": true,
     "**/.next": true,
     "**/build": true,
     "**/dist": true
   },
-  "editor.minimap.enabled": false,
-  "breadcrumbs.enabled": false,
-  "typescript.suggest.autoImports": false,
-  "chat.tools.autoApprove": true,
-  "chat.agent.maxRequests": 100,
-  "chat.agent.requestTimeout": 30000,
-  "chat.agent.maxResponseTokens": 1000,
-  "chat.agent.maxRetries": 3,
-  "chat.agent.retryDelay": 1000,
-  "chat.agent.enable": true,
-  "chat.agent.model": "gpt-4",
-  "chat.agent.temperature": 0.7,
-  "chat.agent.topP": 0.9,
-  "chat.agent.presencePenalty": 0.0,
-  "chat.agent.frequencyPenalty": 0.0,
-  "chat.agent.stopSequences": [
+  "workbench.editor.revealIfOpen": false, // Não foca automaticamente o editor se o arquivo já estiver aberto
+  "workbench.editor.enablePreviewFromQuickOpen": false, // Não abre arquivos em modo preview ao usar Quick Open
+  "editor.minimap.enabled": false, // Desativa o minimapa lateral do editor
+  "breadcrumbs.enabled": false, // Desativa a navegação por breadcrumbs
+  "typescript.suggest.autoImports": false, // Desativa sugestões automáticas de importação no TypeScript
+  "chat.tools.autoApprove": true, // Aprova automaticamente sugestões de ferramentas no chat
+  "chat.agent.maxRequests": 100, // Limite máximo de requisições simultâneas do agente de chat
+  "chat.agent.requestTimeout": 30000, // Tempo limite (ms) para cada requisição do agente
+  "chat.agent.maxResponseTokens": 1000, // Máximo de tokens na resposta do agente
+  "chat.agent.maxRetries": 3, // Número máximo de tentativas em caso de falha
+  "chat.agent.retryDelay": 1000, // Tempo de espera (ms) entre tentativas
+  "chat.agent.enable": true, // Habilita o agente de chat
+  "chat.agent.model": "gpt-4.1", // Modelo de IA utilizado pelo agente de chat
+  "chat.agent.temperature": 0.7, // Temperatura do modelo (criatividade)
+  "chat.agent.topP": 0.9, // Parâmetro top-p para amostragem do modelo
+  "chat.agent.presencePenalty": 0.0, // Penalidade de presença (repetição de tópicos)
+  "chat.agent.frequencyPenalty": 0.0, // Penalidade de frequência (repetição de palavras)
+  "chat.agent.stopSequences": [ // Sequências que interrompem a resposta do agente
     "\n",
     "###"
   ],
-  "chat.agent.systemMessage": "You are a helpful assistant for Next.js development.",
-  "chat.agent.userMessage": "How can I assist you with your Next.js project today?",
-  "chat.agent.assistantMessage": "Sure, I can help with that. What do you need assistance with in your Next.js project?",
-  "chat.agent.enableCodeExecution": true,
-  "chat.agent.codeExecutionTimeout": 5000,
-  "chat.agent.codeExecutionMaxRetries": 2,
-  "chat.agent.codeExecutionRetryDelay": 1000,
-  "chat.agent.enableFileAccess": true,
-  "chat.agent.fileAccessTimeout": 5000,
-  "chat.agent.fileAccessMaxRetries": 2,
-  "chat.agent.fileAccessRetryDelay": 1000,
-  "chat.agent.enableFileEditing": true,
-  "chat.agent.fileEditingTimeout": 5000,
-  "chat.agent.fileEditingMaxRetries": 2,
-  "chat.agent.fileEditingRetryDelay": 1000,
-  "chat.agent.enableFileCreation": true,
-  "chat.agent.fileCreationTimeout": 5000,
-  "chat.agent.fileCreationMaxRetries": 2,
-  "chat.agent.fileCreationRetryDelay": 1000,
-  "chat.agent.enableFileDeletion": true,
-  "chat.agent.fileDeletionTimeout": 5000,
-  "chat.agent.fileDeletionMaxRetries": 2,
-  "chat.agent.fileDeletionRetryDelay": 1000,
-  "chat.agent.enableFileRenaming": true,
-  "chat.agent.fileRenamingTimeout": 5000,
-  "chat.agent.fileRenamingMaxRetries": 2,
-  "chat.agent.fileRenamingRetryDelay": 1000,
-  "chat.agent.enableFileListing": true,
-  "chat.agent.fileListingTimeout": 5000,
-  "chat.agent.fileListingMaxRetries": 2,
-  "chat.agent.fileListingRetryDelay": 1000,
-  "chat.agent.enableFileSearching": true,
-  "typescript.disableAutomaticTypeAcquisition": true
+
+  "chat.agent.assistantMessage": "Sure, I can help with that. What do you need assistance with in your Next.js project?", // Mensagem padrão do assistente
+  "chat.agent.enableCodeExecution": true, // Permite execução de código pelo agente
+  "chat.agent.codeExecutionTimeout": 5000, // Tempo limite (ms) para execução de código
+  "chat.agent.codeExecutionMaxRetries": 2, // Máximo de tentativas para execução de código
+  "chat.agent.codeExecutionRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de execução de código
+  "chat.agent.enableFileAccess": true, // Permite acesso a arquivos pelo agente
+  "chat.agent.fileAccessTimeout": 5000, // Tempo limite (ms) para acesso a arquivos
+  "chat.agent.fileAccessMaxRetries": 2, // Máximo de tentativas para acesso a arquivos
+  "chat.agent.fileAccessRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de acesso a arquivos
+  "chat.agent.enableFileEditing": true, // Permite edição de arquivos pelo agente
+  "chat.agent.fileEditingTimeout": 5000, // Tempo limite (ms) para edição de arquivos
+  "chat.agent.fileEditingMaxRetries": 2, // Máximo de tentativas para edição de arquivos
+  "chat.agent.fileEditingRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de edição de arquivos
+  "chat.agent.enableFileCreation": true, // Permite criação de arquivos pelo agente
+  "chat.agent.fileCreationTimeout": 5000, // Tempo limite (ms) para criação de arquivos
+  "chat.agent.fileCreationMaxRetries": 2, // Máximo de tentativas para criação de arquivos
+  "chat.agent.fileCreationRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de criação de arquivos
+  "chat.agent.enableFileDeletion": true, // Permite deleção de arquivos pelo agente
+  "chat.agent.fileDeletionTimeout": 5000, // Tempo limite (ms) para deleção de arquivos
+  "chat.agent.fileDeletionMaxRetries": 2, // Máximo de tentativas para deleção de arquivos
+  "chat.agent.fileDeletionRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de deleção de arquivos
+  "chat.agent.enableFileRenaming": true, // Permite renomear arquivos pelo agente
+  "chat.agent.fileRenamingTimeout": 5000, // Tempo limite (ms) para renomear arquivos
+  "chat.agent.fileRenamingMaxRetries": 2, // Máximo de tentativas para renomear arquivos
+  "chat.agent.fileRenamingRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de renomear arquivos
+  "chat.agent.enableFileListing": true, // Permite listar arquivos pelo agente
+  "chat.agent.fileListingTimeout": 5000, // Tempo limite (ms) para listar arquivos
+  "chat.agent.fileListingMaxRetries": 2, // Máximo de tentativas para listar arquivos
+  "chat.agent.fileListingRetryDelay": 1000, // Tempo de espera (ms) entre tentativas de listar arquivos
+  "chat.agent.enableFileSearching": true, // Permite busca de arquivos pelo agente
+  "typescript.disableAutomaticTypeAcquisition": true // Desativa aquisição automática de tipos do TypeScript
 }

@@ -9,7 +9,7 @@ export const metadata = {
     siteName: 'Método Atuarial',
     images: [
       {
-        url: '/office-2.png',
+        url: '/loginboxescura.png', // Corrigido para imagem existente em site-metodo/public
         width: 1200,
         height: 630,
         alt: 'Contato Método Atuarial',

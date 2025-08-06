@@ -9,7 +9,7 @@ export const metadata = {
     siteName: 'Método Atuarial',
     images: [
       {
-        url: '/office-team.png',
+        url: '/office-team.png', // Caminho já está correto, pois a imagem existe em site-metodo/public
         width: 1200,
         height: 630,
         alt: 'Equipe Método Atuarial',

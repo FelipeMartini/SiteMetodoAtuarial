@@ -5,18 +5,18 @@ import { render, screen } from '@testing-library/react';
 import PageDashboardAdmin from '../app/area-cliente/dashboard-admin/page';
 
 // Função utilitária para renderizar a página protegida com sessão customizada
-jest.mock('../hooks/useSessaoAuth', () => ({
-  useSessaoAuth: () => ({
-    usuario: { accessLevel: 5 },
+import * as useSessaoAuthModule from '../hooks/useSessaoAuth';
+import { useSessaoAuth } from '../hooks/useSessaoAuth';
+
+
+function renderWithSession(accessLevel: number | undefined) {
+  jest.spyOn(useSessaoAuthModule, 'useSessaoAuth').mockReturnValue({
+    usuario: accessLevel !== undefined ? { accessLevel } : undefined,
     status: 'authenticated',
     login: jest.fn(),
     logout: jest.fn(),
     fetchSessao: jest.fn(),
-  }),
-}));
-
-function renderWithSession(accessLevel: number | undefined) {
-  // Simula o contexto de sessão
+  } as ReturnType<typeof useSessaoAuth>);
   return render(<PageDashboardAdmin />);
 }
 

@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 // Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
-import { ThemeProvider } from "./contexts/ThemeContext";
+import { ThemeProvider } from '@core/theme/ContextoTema';
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import StyledComponentsRegistry from './StyledComponentsRegistry';
 

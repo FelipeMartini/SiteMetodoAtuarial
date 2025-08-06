@@ -3,7 +3,7 @@
 
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import { ThemeProvider } from '../app/contexts/ThemeContext';
+import { ThemeProvider } from '@core/theme/ContextoTema';
 import TestHydration from '../app/components/TestHydration';
 
 describe('TestHydration', () => {
