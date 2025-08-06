@@ -74,7 +74,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({
           setTimeout(() => {
             router.push(redirectTo);
           }, 1000);
-        } catch (err) {
+        } catch {
           setError('Email ou senha inválidos. Tente novamente.');
         }
       } else {

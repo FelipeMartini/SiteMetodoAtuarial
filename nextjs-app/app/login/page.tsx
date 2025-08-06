@@ -38,8 +38,12 @@ const LoginPage: React.FC = () => {
     setLoading(true);
     try {
       await login('credentials', { email, password: senha });
-    } catch (err: any) {
-      setErro(err?.message || 'Credenciais inválidas.');
+    } catch (err) {
+      if (err instanceof Error) {
+        setErro(err.message);
+      } else {
+        setErro('Credenciais inválidas.');
+      }
     } finally {
       setLoading(false);
     }

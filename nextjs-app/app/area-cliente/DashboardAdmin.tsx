@@ -32,7 +32,7 @@ const DashboardAdmin: React.FC = () => {
   }, []);
 
   // Atualiza dados do usuário
-  const handleUpdate = async (id: string, campo: keyof Usuario, valor: any) => {
+  const handleUpdate = async (id: string, campo: keyof Usuario, valor: string | number | boolean) => {
     setMensagem(null);
     const res = await fetch(`/api/usuario/editar`, {
       method: "POST",

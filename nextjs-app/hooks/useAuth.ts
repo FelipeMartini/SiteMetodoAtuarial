@@ -1,25 +1,43 @@
 'use client';
 
-import { useSession } from 'next-auth/react';
+
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
+
 
 export const useAuth = (redirectTo?: string) => {
-  const { data: session, status } = useSession();
+  const [session, setSession] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
   useEffect(() => {
-    if (status === 'loading') return; // Still loading
+    const fetchSession = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/sessao');
+        if (res.ok) {
+          const data = await res.json();
+          setSession(data?.user || null);
+        } else {
+          setSession(null);
+        }
+      } catch {
+        setSession(null);
+      }
+      setIsLoading(false);
+    };
+    fetchSession();
+  }, []);
 
-    if (!session && redirectTo) {
+  useEffect(() => {
+    if (!isLoading && !session && redirectTo) {
       router.push(redirectTo);
     }
-  }, [session, status, router, redirectTo]);
+  }, [session, isLoading, router, redirectTo]);
 
   return {
     session,
-    status,
-    isLoading: status === 'loading',
+    isLoading,
     isAuthenticated: !!session,
   };
 };
