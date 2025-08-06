@@ -1,0 +1,126 @@
+535055e|2025-08-06|aaaa
+2cef9d8|2025-08-06|jjj
+6a31251|2025-08-06|,,,,
+c44c7f7|2025-08-06|aaaaa
+91f4413|2025-08-06|aaaa
+c731ba8|2025-08-06|aaaa
+b11e0c8|2025-08-06|lll
+dbc53ff|2025-08-06|fff
+8f32713|2025-08-06|hhhh
+faacac6|2025-08-06|\ffffffff
+26a2cb8|2025-08-06|jjjj
+1fe26dc|2025-08-06|llll
+29fde11|2025-08-06|aaa
+d9d9798|2025-08-06|aaa
+8081753|2025-08-06|jjjj
+472689a|2025-08-06|llll
+3e386cf|2025-08-06|kkkk
+38a8fd3|2025-08-06|lll
+e6c3252|2025-08-06|lll
+a9c85a4|2025-08-06|kk
+94fb2b7|2025-08-06|jjj
+16afb7c|2025-08-06|...
+3a094d6|2025-08-06|muitas mudanças
+292e3ae|2025-08-05|ll
+d9f71be|2025-08-05|adaptar
+ce5ea82|2025-08-05|add fuse react
+f3cf5e9|2025-08-05|U|LTIMO BOM
+e623a6a|2025-08-05|...
+ce7e325|2025-08-05|compilando
+40ab4e3|2025-08-05|aaaa
+5b9687c|2025-08-05|aa
+5db3dd6|2025-08-05|aaaaa
+bb65f30|2025-08-05|aaa
+63192f3|2025-08-05|ljljlj
+7b47f33|2025-08-05|aa
+59722c1|2025-08-05|aaa
+660e6a3|2025-08-05|aaa
+06bce0f|2025-08-05|bbbb
+70cc34f|2025-08-05|aaaa
+a6865f2|2025-08-05|aaa
+67387a2|2025-08-05|aaa
+b49b8d2|2025-08-05|aaa
+bcb1909|2025-08-05|aaa
+ff417e0|2025-08-05|AAAA
+ee7c41a|2025-08-05|✨ Refatoração completa do LayoutCliente.tsx: - Modernização do layout cliente com sistema de temas dinâmico via ThemeContext e GlobalStyles. - Navegação principal responsiva e acessível, integração total com Auth.js v5. - Correção de propriedades styled-components (, , , , , ). - Área de usuário integrada com sessão, login/logout, e navegação para área do cliente. - Rodapé com lazy loading para otimização de performance. - Build 100% funcional, sem erros de compilação ou TypeScript. - Pronto para produção e novas features.
+58a7e51|2025-08-05|AAA
+a282107|2025-08-05|SSSS
+7485255|2025-08-05|AAAA
+ca9d208|2025-08-05|AAA
+e5bf6d6|2025-08-05|KKKK
+6514c97|2025-08-05|....
+7dd8c70|2025-08-05|.....
+3c8ba91|2025-08-05|NNNN
+1940810|2025-08-05|AAAAAAAAA
+8989fe2|2025-08-05|MMMMMMMM
+dbf1c8a|2025-08-05|..
+3330115|2025-08-05|...
+bac9109|2025-08-05|....
+836fc97|2025-08-05|...
+fbb9549|2025-08-05|..
+09402df|2025-08-05|...
+ddf2af7|2025-08-05|...
+9aa0282|2025-08-05|....
+662e489|2025-08-05|....
+3703c75|2025-08-05|......
+22e1bbd|2025-08-05|..
+fe77d1e|2025-08-05|....
+2b50e2a|2025-08-05|ver que que eh isso
+9e3bc85|2025-08-05|.........
+b90439b|2025-08-05|Implementação completa e revisão final do sistema:
+f9edb46|2025-08-04|Ajuste do SocialLoginBox: inputs de email e senha agora aparecem durante digitação ou foco, com fonte visível e fundo translúcido, mantendo alinhamento exato com a arte. Limitação de caracteres nos campos para não ultrapassar o espaço visual. Botões invisíveis para login social e login normal posicionados conforme imagem. Comentários explicativos adicionados.
+2371b23|2025-08-04|....
+8c541c0|2025-08-04|.....
+7fc21f1|2025-08-04|kkk
+507c677|2025-08-04|,,
+07b5b82|2025-08-04|ddd
+d8a72a0|2025-08-04|...
+279d6c0|2025-08-04|removido mui
+c80a219|2025-08-04|bom linux
+2e1eca6|2025-08-04|...
+fcec5aa|2025-08-04|versao ok BOA FELIPE
+855db8c|2025-08-04|teste se site carrega
+2cefd3d|2025-08-04|..
+fd90ee8|2025-08-04|agora os menu do tema escuro aparecem
+3492d40|2025-08-04|erro de hidratation resolvido
+6a4c6c4|2025-08-04|....
+27aa03d|2025-08-03|...
+747f657|2025-08-03|fix
+a96e999|2025-08-03|kkkk
+9601223|2025-08-03|...
+96c39fc|2025-08-03|aa
+8e3a6d3|2025-08-03|çç
+a6231c5|2025-08-03|Limpeza geral: removidos arquivos duplicados e com 'Novo/Nova' no nome, todos estavam vazios ou desnecessários. Padronização total do projeto. Pronto para manutenção e evolução.
+d3bbb33|2025-08-03|Correção completa: sistema de 5 temas, tipagem, styled-components, props, build, erros TS, integração total. Todos os componentes e páginas ajustados para o novo padrão de tema, propriedades e tipagem. Build validado, servidor rodando, zero erros críticos. Warnings apenas de variáveis não usadas. Pronto para produção.
+98c0ec1|2025-08-03|BOM FELIPE
+84a2d0b|2025-08-03|...
+aed39b9|2025-08-03|Modernização completa do projeto Next.js:
+d3bdd9b|2025-08-03|Refatoração e otimização completa do projeto Next.js
+61a0a37|2025-08-03|feat: Otimização completa do projeto Next.js
+661e3e3|2025-08-03|feat: Otimização completa do projeto Next.js\n\n- Imports do Material-UI otimizados para tree-shaking\n- Memoização e lazy loading em componentes críticos\n- Imagens otimizadas (quality, blur, lazy)\n- Estrutura de pastas e temas padronizada\n- Testes automatizados e cobertura validada\n- Responsividade e acessibilidade reforçadas (aria-label, role)\n- Documentação e comentários explicativos em todo o código
+802b726|2025-08-03|..
+29e3c56|2025-08-03|Refatoração completa: correção de erros de JSX, importações, ErrorBoundary, diretiva 'use client', testes Jest, padronização de páginas e design system. Todas as páginas principais agora seguem as melhores práticas, estão protegidas por ErrorBoundary, e os testes automatizados estão passando. Continuação do plano de otimização e arquitetura.
+ff0ffe4|2025-08-03|Correção final dos testes automatizados, ajuste de sintaxe, data-testid no menu lateral e fluxo de redirecionamento protegido. Ambiente 100% funcional e testável.
+95d8cdc|2025-08-02|..
+4ad0a1a|2025-08-02|Ajustes finais: layout de login sem imagens personalizadas, melhorias de configuração e arquivos auxiliares.
+721c345|2025-08-02|Atualização do .gitignore: removendo .next, node_modules, .env.local e coverage do versionamento. Melhores práticas Next.js.
+b8da55d|2025-08-02|aa
+fd56874|2025-08-02|VERSÃO FINAL BOA: Configuração de testes com SWC/Jest para Next.js moderno. TODOS OS TESTES PASSANDO. ESTA É UMA VERSÃO BOA E ESTÁVEL.
+f19fd9f|2025-08-02|Bom Teste Felipe11
+3ef10b5|2025-08-02|Limpeza, correção de dependências, ajustes finais no layout e estrutura para substituição das imagens institucionais.
+5561ea1|2025-08-02|Limpeza de duplicidades: 'use client' e imports organizados em todas as páginas. ESLint sem avisos. Padrão Next.js garantido.
+a51d129|2025-08-02|Ajuste nos testes automatizados das páginas Contato e Orçamento para validação correta de múltiplos elementos com o mesmo texto. Todos os testes passaram e cobertura total garantida. Projeto pronto para expansão e novas funcionalidades.
+4253c31|2025-08-02|Cobertura de testes automatizados expandida: correções em testes de textos duplicados, validação de cor do tema, ajustes em queries institucionais e garantia de sucesso em todos os testes. Projeto pronto para expansão e novas páginas.
+1974991|2025-08-02|Implementação de multi temas com alternância entre tema escuro e claro, persistência em cookies, renomeação de variáveis para escuro, revisão visual dos temas, e inclusão de termos técnicos no dicionário do cSpell.
+2e321a1|2025-08-02|Bom Teste Felipe9
+a50950e|2025-08-02|...
+7215d79|2025-08-02|..
+bd8ab58|2025-08-02|..
+db27cf5|2025-08-02|tema escuro
+164324c|2025-08-02|novo commit
+7cea04d|2025-08-02|Bom Teste Felipes43
+99ba4cd|2025-08-02|Teste Felipes3
+381cc71|2025-08-02|Teste Felipes
+18d7434|2025-08-02|Remoção de arquivos duplicados do diretório pages, padronização para App Router, correção de conflitos e dependências, comentários explicativos adicionados
+8658ccf|2025-08-01|Remoção de resíduos, migração completa para App Router, layout SPA, correção de navegação e estrutura profissional
+697fcac|2025-08-01|Projeto inicial: SiteMetodoAtuarial
