@@ -11,6 +11,7 @@ export async function GET() {
   // Gera um state seguro para CSRF
   const state = randomBytes(16).toString('hex');
   // Monta a URL de autorização usando redirect_uri correto
+  // prompt: 'select_account' permite trocar de conta, mas NÃO força consentimento toda vez
   const url =
     'https://accounts.google.com/o/oauth2/v2/auth?' +
     new URLSearchParams({
@@ -20,7 +21,7 @@ export async function GET() {
       scope,
       state,
       access_type: 'offline',
-      prompt: 'consent',
+      prompt: 'select_account',
     }).toString();
   // Seta o state em cookie httpOnly para validação posterior no callback
   const response = NextResponse.redirect(url);
