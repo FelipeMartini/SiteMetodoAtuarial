@@ -2,13 +2,15 @@
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }));
-// Mock global para useSessaoAuth
+const mockLogin = jest.fn(() => Promise.resolve({ ok: true }));
+const mockLogout = jest.fn(() => Promise.resolve());
+const mockStatus = 'authenticated';
 jest.mock('../hooks/useSessaoAuth', () => ({
   useSessaoAuth: () => ({
     usuario: { id: '1', email: 'teste@teste.com', accessLevel: 5 },
-    status: 'authenticated',
-    login: jest.fn(() => Promise.resolve({ ok: true })),
-    logout: jest.fn(),
+    status: mockStatus,
+    login: mockLogin,
+    logout: mockLogout,
     fetchSessao: jest.fn(),
   }),
 }));
@@ -25,7 +27,6 @@ import '@testing-library/jest-dom';
 import { ThemeProvider } from '../app/contexts/ThemeContext';
 import LoginPage from '../app/login/page';
 import { useRouter } from 'next/navigation';
-import * as nextAuth from 'next-auth/react';
 
 describe('Fluxos de autenticação', () => {
   beforeEach(() => {
@@ -50,7 +51,7 @@ describe('Fluxos de autenticação', () => {
       fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
       await waitFor(() => {
-        expect(nextAuth.signIn).toHaveBeenCalledWith('credentials', expect.objectContaining({
+        expect(mockLogin).toHaveBeenCalledWith('credentials', expect.objectContaining({
           email: 'cliente@teste.com',
           password: '123456',
           redirect: false,
@@ -88,11 +89,11 @@ describe('Fluxos de autenticação', () => {
       (nextAuth.signOut as jest.Mock).mockImplementation(() => Promise.resolve());
 
       // Simula botão de logout em algum componente
-      const LogoutButton = () => <button onClick={() => nextAuth.signOut({ callbackUrl: '/login' })}>Sair</button>;
+      const LogoutButton = () => <button onClick={() => mockLogout({ callbackUrl: '/login' })}>Sair</button>;
       render(<LogoutButton />);
       fireEvent.click(screen.getByText(/sair/i));
       await waitFor(() => {
-        expect(nextAuth.signOut).toHaveBeenCalledWith({ callbackUrl: '/login' });
+        expect(mockLogout).toHaveBeenCalledWith({ callbackUrl: '/login' });
       });
     });
   });

@@ -9,9 +9,10 @@ import { useRouter } from 'next/navigation';
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }));
+const mockLogin = jest.fn();
 jest.mock('../hooks/useSessaoAuth', () => ({
   useSessaoAuth: () => ({
-    login: jest.fn(),
+    login: mockLogin,
     status: 'unauthenticated',
   }),
 }));
@@ -20,9 +21,8 @@ describe('Login social isolado', () => {
   beforeEach(() => {
     jest.clearAllMocks();
   });
-  it('aciona signIn do Google ao clicar no botão social', async () => {
+  it('aciona login do Google ao clicar no botão social', async () => {
     (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() });
-    (nextAuth.useSession as jest.Mock).mockReturnValue({ data: null, status: 'unauthenticated' });
     render(
       <ThemeProvider>
         <React.Suspense fallback={<div data-testid="suspense-fallback" />}>
@@ -33,7 +33,7 @@ describe('Login social isolado', () => {
     const googleBtn = await screen.findByRole('button', { name: /google/i });
     fireEvent.click(googleBtn);
     await waitFor(() => {
-      expect(nextAuth.signIn).toHaveBeenCalledWith('google', expect.any(Object));
+      expect(mockLogin).toHaveBeenCalledWith('google', expect.any(Object));
     });
   });
 });

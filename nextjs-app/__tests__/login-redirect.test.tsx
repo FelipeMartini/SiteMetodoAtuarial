@@ -9,9 +9,10 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
+const mockLogin = jest.fn(() => Promise.resolve({ ok: true }));
 jest.mock('../hooks/useSessaoAuth', () => ({
   useSessaoAuth: () => ({
-    login: jest.fn(),
+    login: mockLogin,
     status: 'unauthenticated',
   }),
 }));
@@ -36,16 +37,6 @@ describe('Fluxo de login e redirecionamento', () => {
     };
     let session: SessaoMock = { data: null, status: 'unauthenticated' };
     (nextAuth.useSession as jest.Mock).mockImplementation(() => session);
-    (nextAuth.signIn as jest.Mock).mockImplementation(() => {
-      session = {
-        data: {
-          user: { email: 'teste@cliente.com' },
-          expires: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
-        },
-        status: 'authenticated',
-      };
-      return Promise.resolve({ ok: true });
-    });
 
     // Wrapper para forçar re-render ao mudar o estado de sessão
     const Wrapper = () => {
@@ -69,7 +60,7 @@ describe('Fluxo de login e redirecionamento', () => {
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));
 
     await waitFor(() => {
-      expect(nextAuth.signIn).toHaveBeenCalledWith('credentials', expect.objectContaining({
+      expect(mockLogin).toHaveBeenCalledWith('credentials', expect.objectContaining({
         email: 'teste@cliente.com',
         password: '123456',
         redirect: false,
