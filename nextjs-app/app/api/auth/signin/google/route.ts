@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 // Redireciona para o Google OAuth2
-export async function GET(request: NextRequest) {
+export async function GET() {
   const clientId = process.env.AUTH_GOOGLE_ID;
   const redirectUri = process.env.NEXT_PUBLIC_URL + '/api/auth/callback/google';
   const scope = 'openid email profile';
