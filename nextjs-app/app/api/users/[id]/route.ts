@@ -2,7 +2,6 @@
  * API para gerenciamento de usuário específico - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '../../../../auth';
 import { db } from '../../../../lib/prisma';
 import bcrypt from 'bcryptjs';
 
@@ -12,17 +11,18 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
-
-    const currentUser = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { accessLevel: true }
-    });
-
+    // Busca sessão pelo token
+    const sessao = await db.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ message: 'Sessão inválida' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const currentUser = await db.user.findUnique({ where: { id: sessao.userId }, select: { accessLevel: true } });
     if (!currentUser || currentUser.accessLevel < 4) {
       return NextResponse.json({ message: 'Acesso negado - Apenas administradores' }, { status: 403 });
     }
@@ -105,25 +105,24 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
-
-    const currentUser = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { accessLevel: true }
-    });
-
+    // Busca sessão pelo token
+    const sessao = await db.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ message: 'Sessão inválida' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const currentUser = await db.user.findUnique({ where: { id: sessao.userId }, select: { accessLevel: true } });
     if (!currentUser || currentUser.accessLevel < 4) {
       return NextResponse.json({ message: 'Acesso negado - Apenas administradores' }, { status: 403 });
     }
-
     const userId = params.id;
-
     // Não permitir que o usuário exclua a si mesmo
-    if (userId === session.user.id) {
+    if (userId === sessao.userId) {
       return NextResponse.json({ message: 'Não é possível excluir sua própria conta' }, { status: 400 });
     }
 
