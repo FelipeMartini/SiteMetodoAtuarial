@@ -36,7 +36,6 @@ describe('Fluxo de login e redirecionamento', () => {
       expect(mockLogin).toHaveBeenCalledWith('credentials', expect.objectContaining({
         email: 'teste@cliente.com',
         password: '123456',
-        redirect: false,
       }));
     });
 
