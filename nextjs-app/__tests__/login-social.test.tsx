@@ -33,7 +33,7 @@ describe('Login social isolado', () => {
     const googleBtn = await screen.findByRole('button', { name: /google/i });
     fireEvent.click(googleBtn);
     await waitFor(() => {
-      expect(mockLogin).toHaveBeenCalledWith('google', expect.any(Object));
+      expect(mockLogin).toHaveBeenCalledWith('google');
     });
   });
 });

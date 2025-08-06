@@ -3,6 +3,7 @@ import { render, screen, fireEvent, act } from '@testing-library/react';
 import SocialLoginBox from '../app/components/SocialLoginBox';
 import { ThemeProvider } from '../app/contexts/ThemeContext';
 
+
 const mockLogin = jest.fn();
 jest.mock('../hooks/useSessaoAuth', () => ({
   useSessaoAuth: () => ({
@@ -10,6 +11,10 @@ jest.mock('../hooks/useSessaoAuth', () => ({
     status: 'unauthenticated',
   }),
 }));
+
+beforeEach(() => {
+  mockLogin.mockClear();
+});
 
 
 describe('SocialLoginBox', () => {
@@ -24,30 +29,30 @@ describe('SocialLoginBox', () => {
     expect(screen.getByRole('button', { name: /apple/i })).toBeInTheDocument();
   });
 
-  it('aciona login do Google ao clicar no botão', () => {
+  it('aciona login do Google ao clicar no botão', async () => {
     render(
       <ThemeProvider>
         <SocialLoginBox />
       </ThemeProvider>
     );
     const googleBtn = screen.getByRole('button', { name: /google/i });
-    act(() => {
+    await act(async () => {
       fireEvent.click(googleBtn);
     });
-    expect(mockLogin).toHaveBeenCalledWith('google', expect.any(Object));
+    expect(mockLogin).toHaveBeenCalledWith('google');
   });
 
-  it('aciona login da Apple ao clicar no botão', () => {
+  it('aciona login da Apple ao clicar no botão', async () => {
     render(
       <ThemeProvider>
         <SocialLoginBox />
       </ThemeProvider>
     );
     const appleBtn = screen.getByRole('button', { name: /apple/i });
-    act(() => {
+    await act(async () => {
       fireEvent.click(appleBtn);
     });
-    expect(mockLogin).toHaveBeenCalledWith('apple', expect.any(Object));
+    expect(mockLogin).toHaveBeenCalledWith('apple');
   });
 
 

@@ -23,38 +23,11 @@ describe('Fluxo de login e redirecionamento', () => {
     const push = jest.fn();
     (useRouter as jest.Mock).mockReturnValue({ push });
 
-    // Mock de sessão compatível com o tipo NextAuth
-    type SessaoMock = {
-      data: {
-        user: {
-          name?: string;
-          email?: string;
-          image?: string;
-        };
-        expires: string;
-      } | null;
-      status: 'authenticated' | 'unauthenticated' | 'loading';
-    };
-    let session: SessaoMock = { data: null, status: 'unauthenticated' };
-    (nextAuth.useSession as jest.Mock).mockImplementation(() => session);
-
-    // Wrapper para forçar re-render ao mudar o estado de sessão
-    const Wrapper = () => {
-      const [_, setRerender] = React.useState(0);
-      React.useEffect(() => {
-        if (session.status === 'authenticated') {
-          setRerender(r => r + 1);
-        }
-      }, [session.status]);
-      return (
-        <ThemeProvider>
-          <LoginPage />
-        </ThemeProvider>
-      );
-    };
-
-    render(<Wrapper />);
-
+    render(
+      <ThemeProvider>
+        <LoginPage />
+      </ThemeProvider>
+    );
     fireEvent.change(screen.getByLabelText(/email/i), { target: { value: 'teste@cliente.com' } });
     fireEvent.change(screen.getByLabelText(/senha/i), { target: { value: '123456' } });
     fireEvent.click(screen.getByRole('button', { name: /entrar/i }));

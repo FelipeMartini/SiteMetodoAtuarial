@@ -38,8 +38,8 @@ describe('Fluxos de autenticação', () => {
     it('login tradicional com sucesso redireciona para área do cliente', async () => {
       const push = jest.fn();
       (useRouter as jest.Mock).mockReturnValue({ push });
-      (nextAuth.useSession as jest.Mock).mockReturnValue({ data: null, status: 'unauthenticated' });
-      (nextAuth.signIn as jest.Mock).mockImplementation(() => Promise.resolve({ ok: true }));
+      // O status já é controlado pelo mockStatus, não é necessário mockar useSession diretamente
+      mockLogin.mockImplementation(() => Promise.resolve({ ok: true }));
 
       render(
         <ThemeProvider>
@@ -60,8 +60,8 @@ describe('Fluxos de autenticação', () => {
     });
     it('login tradicional com erro exibe mensagem de erro', async () => {
       (useRouter as jest.Mock).mockReturnValue({ push: jest.fn() });
-      (nextAuth.useSession as jest.Mock).mockReturnValue({ data: null, status: 'unauthenticated' });
-      (nextAuth.signIn as jest.Mock).mockImplementation(() => Promise.resolve({ ok: false, error: 'Credenciais inválidas' }));
+      // O status já é controlado pelo mockStatus, não é necessário mockar useSession diretamente
+      mockLogin.mockImplementation(() => Promise.resolve({ ok: false, error: 'Credenciais inválidas' }));
 
       render(
         <ThemeProvider>
@@ -85,11 +85,12 @@ describe('Fluxos de autenticação', () => {
     it('logout limpa sessão e redireciona para login', async () => {
       const push = jest.fn();
       (useRouter as jest.Mock).mockReturnValue({ push });
-      (nextAuth.useSession as jest.Mock).mockReturnValue({ data: { user: { email: 'cliente@teste.com' } }, status: 'authenticated' });
-      (nextAuth.signOut as jest.Mock).mockImplementation(() => Promise.resolve());
+      // O status já é controlado pelo mockStatus, não é necessário mockar useSession diretamente
+      mockLogout.mockImplementation(() => Promise.resolve());
 
       // Simula botão de logout em algum componente
-      const LogoutButton = () => <button onClick={() => mockLogout({ callbackUrl: '/login' })}>Sair</button>;
+      // Ajuste: mockLogout não espera argumentos
+      const LogoutButton = () => <button onClick={() => mockLogout()}>Sair</button>;
       render(<LogoutButton />);
       fireEvent.click(screen.getByText(/sair/i));
       await waitFor(() => {
@@ -131,7 +132,7 @@ describe('Fluxos de autenticação', () => {
     it('usuário autenticado acessa área do cliente', async () => {
       const push = jest.fn();
       (useRouter as jest.Mock).mockReturnValue({ push });
-      (nextAuth.useSession as jest.Mock).mockReturnValue({ data: { user: { email: 'cliente@teste.com' } }, status: 'authenticated' });
+      // O status já é controlado pelo mockStatus, não é necessário mockar useSession diretamente
       // Simula página da área do cliente
       const AreaCliente = () => <div>Bem-vindo à área do cliente</div>;
       render(<AreaCliente />);
