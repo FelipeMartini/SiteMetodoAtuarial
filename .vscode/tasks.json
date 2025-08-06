@@ -6,32 +6,48 @@
       "label": "Instalar dependências",
       "command": "npm install",
       "group": "build",
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
       "label": "Atualizar dependências",
       "command": "npm update",
       "group": "build",
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
       "label": "Lint",
       "command": "npm run lint",
       "group": "test",
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
       "label": "Build Next.js",
       "command": "npm run build",
       "group": "build",
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
@@ -39,8 +55,12 @@
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
       "group": "build",
       "isBackground": true,
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
@@ -48,8 +68,12 @@
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
       "group": "build",
       "isBackground": true,
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
@@ -57,7 +81,9 @@
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
       "group": "build",
       "problemMatcher": [],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
@@ -65,7 +91,9 @@
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
       "group": "build",
       "problemMatcher": [],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
@@ -73,15 +101,21 @@
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
       "group": "build",
       "problemMatcher": [],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     },
     {
       "type": "shell",
       "label": "Cobertura de Testes",
       "command": "npx jest --coverage",
       "group": "test",
-      "problemMatcher": ["$tsc"],
-      "options": { "cwd": "${workspaceFolder}/nextjs-app" }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
     }
   ]
 }

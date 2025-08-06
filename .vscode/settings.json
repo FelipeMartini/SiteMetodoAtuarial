@@ -1,6 +1,6 @@
 {
   // Configurações de performance para projetos Next.js
-  "terminal.integrated.cwd": "${workspaceFolder}/nextjs-app",
+  "terminal.integrated.cwd": "${workspaceFolder}/site-metodo",
   "files.exclude": {
     "**/node_modules": true,
     "**/.next": true,
@@ -36,7 +36,10 @@
   "chat.agent.topP": 0.9,
   "chat.agent.presencePenalty": 0.0,
   "chat.agent.frequencyPenalty": 0.0,
-  "chat.agent.stopSequences": ["\n", "###"],
+  "chat.agent.stopSequences": [
+    "\n",
+    "###"
+  ],
   "chat.agent.systemMessage": "You are a helpful assistant for Next.js development.",
   "chat.agent.userMessage": "How can I assist you with your Next.js project today?",
   "chat.agent.assistantMessage": "Sure, I can help with that. What do you need assistance with in your Next.js project?",
@@ -69,8 +72,5 @@
   "chat.agent.fileListingMaxRetries": 2,
   "chat.agent.fileListingRetryDelay": 1000,
   "chat.agent.enableFileSearching": true,
-
   "typescript.disableAutomaticTypeAcquisition": true
-
-
 }
