@@ -2,17 +2,26 @@
  * API para gerenciamento do perfil do usuário logado - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '../../../../auth';
 import { db } from '../../../../lib/prisma';
 import bcrypt from 'bcryptjs';
 
 // PATCH - Atualizar perfil do usuário logado
 export async function PATCH(request: NextRequest) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
+    }
+    // Busca sessão pelo token
+    const sessao = await db.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ message: 'Sessão inválida' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const usuarioLogado = await db.user.findUnique({ where: { id: sessao.userId } });
+    if (!usuarioLogado) {
+      return NextResponse.json({ message: 'Usuário não encontrado' }, { status: 404 });
     }
 
     const body = await request.json();
@@ -27,7 +36,7 @@ export async function PATCH(request: NextRequest) {
     const emailInUse = await db.user.findFirst({
       where: {
         email,
-        NOT: { id: session.user.id }
+        NOT: { id: usuarioLogado.id }
       }
     });
 
@@ -49,7 +58,7 @@ export async function PATCH(request: NextRequest) {
 
     // Atualizar usuário
     const updatedUser = await db.user.update({
-      where: { id: session.user.id },
+      where: { id: usuarioLogado.id },
       data: updateData,
       select: {
         id: true,

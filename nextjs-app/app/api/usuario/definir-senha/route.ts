@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-
-import { auth } from '@/auth';
+// ...
 import { prisma } from '@/prisma/client';
 import bcryptjs from 'bcryptjs';
 
@@ -9,10 +8,20 @@ import bcryptjs from 'bcryptjs';
  * Endpoint para definir/atualizar senha do usuário logado (social ou tradicional)
  * Só permite definir senha se o usuário estiver autenticado
  */
-export async function POST(req: NextRequest) {
   try {
-    const session = await auth();
-    if (!session?.user?.email) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = req.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
+      return NextResponse.json({ error: 'Usuário não autenticado.' }, { status: 401 });
+    }
+    // Busca sessão pelo token
+    const sessao = await prisma.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ error: 'Sessão inválida.' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const usuario = await prisma.user.findUnique({ where: { id: sessao.userId } });
+    if (!usuario || !usuario.email) {
       return NextResponse.json({ error: 'Usuário não autenticado.' }, { status: 401 });
     }
     const { senha } = await req.json();
@@ -21,7 +30,7 @@ export async function POST(req: NextRequest) {
     }
     const hash = await bcryptjs.hash(senha, 10);
     await prisma.user.update({
-      where: { email: session.user.email },
+      where: { email: usuario.email },
       data: { password: hash },
     });
     return NextResponse.json({ ok: true });
