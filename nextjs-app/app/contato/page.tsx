@@ -1,5 +1,3 @@
-
-// Página unificada de Contato e Orçamento
 "use client";
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';

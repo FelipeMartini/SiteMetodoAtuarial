@@ -1,6 +1,7 @@
 import Image from 'next/image';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
+import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 
 // Container principal com imagem de fundo
 const Container = styled.div`
@@ -70,10 +71,13 @@ export default function LoginBoxVisual() {
   let imgSrc = '/loginboxclara.png';
   if (themeName === 'dark') imgSrc = '/loginboxescura.png';
 
-  // Funções dos botões
+  // Hook de autenticação unificado (Auth.js puro)
+  const { login } = useSessaoAuth();
+
+  // Função de login tradicional (a ser implementada conforme fluxo do Auth.js)
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Adicione aqui a lógica de login
+    // Adicione aqui a lógica de login tradicional usando login('credentials', credenciais)
   };
 
   return (
@@ -86,8 +90,9 @@ export default function LoginBoxVisual() {
         <InputSenha type="password" name="senha" autoComplete="current-password" tabIndex={2} />
         <ButtonLogin type="submit" tabIndex={3} />
       </form>
-      <ButtonGoogle type="button" tabIndex={4} onClick={() => window.location.href = '/api/auth/signin/google'} />
-      <ButtonApple type="button" tabIndex={5} onClick={() => window.location.href = '/api/auth/signin/apple'} />
+      {/* Botões de login social usando Auth.js puro */}
+      <ButtonGoogle type="button" tabIndex={4} onClick={() => login('google')} />
+      <ButtonApple type="button" tabIndex={5} onClick={() => login('apple')} />
     </Container>
   );
 }

@@ -6,7 +6,16 @@
 
 import React, { useState } from 'react';
 import { useServerInsertedHTML } from 'next/navigation';
-import { ServerStyleSheet, StyleSheetManager } from 'styled-components';
+import { ServerStyleSheet, StyleSheetManager, createGlobalStyle } from 'styled-components';
+// Estilos globais migrados do globals.css
+export const GlobalStyle = createGlobalStyle`
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    background: #fafafa;
+  }
+`;
 
 export default function StyledComponentsRegistry({ children }: { children: React.ReactNode }) {
   // Cria uma instância do ServerStyleSheet para coletar estilos SSR
@@ -22,7 +31,14 @@ export default function StyledComponentsRegistry({ children }: { children: React
   if (typeof window !== 'undefined') return <>{children}</>;
 
   // No servidor, usa StyleSheetManager para coletar estilos
-  return <StyleSheetManager sheet={sheet.instance}>{children}</StyleSheetManager>;
+  return (
+    <StyleSheetManager sheet={sheet.instance}>
+      <>
+        <GlobalStyle />
+        {children}
+      </>
+    </StyleSheetManager>
+  );
 }
 
 // Explicação:

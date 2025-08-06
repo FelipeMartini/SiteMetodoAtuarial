@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { signIn, getSession } from 'next-auth/react';
+import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import {
@@ -57,6 +57,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
   // const password = watch('password'); // Removido para evitar warning
 
+  const { login } = useSessaoAuth();
+
+  // Função de submit para login tradicional e registro
   const onSubmit = async (data: LoginFormData) => {
     setIsLoading(true);
     setError(null);
@@ -64,21 +67,15 @@ export const LoginForm: React.FC<LoginFormProps> = ({
 
     try {
       if (mode === 'login') {
-        const result = await signIn('credentials', {
-          email: data.email,
-          password: data.password,
-          redirect: false,
-        });
-
-        if (result?.error) {
-          setError('Email ou senha inválidos. Tente novamente.');
-        } else if (result?.ok) {
+        // Login tradicional usando Auth.js puro
+        try {
+          await login('credentials', { email: data.email, password: data.password });
           setSuccess('Login realizado com sucesso! Redirecionando...');
-          // Atualiza a sessão e redireciona
-          await getSession();
           setTimeout(() => {
             router.push(redirectTo);
           }, 1000);
+        } catch (err) {
+          setError('Email ou senha inválidos. Tente novamente.');
         }
       } else {
         // Modo de registro
@@ -113,10 +110,11 @@ export const LoginForm: React.FC<LoginFormProps> = ({
     }
   };
 
+  // Função de login social usando Auth.js puro
   const handleSocialLogin = async (provider: string) => {
     setError(null);
     try {
-      await signIn(provider, { callbackUrl: redirectTo });
+      await login(provider);
     } catch (err) {
       setError(`Falha ao entrar com ${provider}. Tente novamente.`);
       console.error('Erro de login social:', err);

@@ -2,28 +2,27 @@
  * API para gerenciamento de usuários - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { auth } from '../../../auth';
 import { db } from '../../../lib/prisma';
 import bcrypt from 'bcryptjs';
 
 // GET - Listar todos os usuários (apenas para admins)
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
-
-    const currentUser = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { accessLevel: true }
-    });
-
+    // Busca sessão pelo token
+    const sessao = await db.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ message: 'Sessão inválida' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const currentUser = await db.user.findUnique({ where: { id: sessao.userId }, select: { accessLevel: true } });
     if (!currentUser || currentUser.accessLevel < 4) {
       return NextResponse.json({ message: 'Acesso negado - Apenas administradores' }, { status: 403 });
     }
-
     const users = await db.user.findMany({
       select: {
         id: true,
@@ -38,7 +37,6 @@ export async function GET() {
       },
       orderBy: { createdAt: 'desc' }
     });
-
     return NextResponse.json(users);
   } catch (error) {
     console.error('Erro ao buscar usuários:', error);
@@ -49,21 +47,21 @@ export async function GET() {
 // POST - Criar novo usuário (apenas para admins)
 export async function POST(request: NextRequest) {
   try {
-    const session = await auth();
-
-    if (!session?.user) {
+    // Recupera sessão do Auth.js puro via cookie
+    const sessionToken = request.cookies.get('authjs.session-token')?.value;
+    if (!sessionToken) {
       return NextResponse.json({ message: 'Não autorizado' }, { status: 401 });
     }
-
-    const currentUser = await db.user.findUnique({
-      where: { id: session.user.id },
-      select: { accessLevel: true }
-    });
-
+    // Busca sessão pelo token
+    const sessao = await db.session.findUnique({ where: { sessionToken } });
+    if (!sessao) {
+      return NextResponse.json({ message: 'Sessão inválida' }, { status: 401 });
+    }
+    // Busca usuário logado pela sessão
+    const currentUser = await db.user.findUnique({ where: { id: sessao.userId }, select: { accessLevel: true } });
     if (!currentUser || currentUser.accessLevel < 4) {
       return NextResponse.json({ message: 'Acesso negado - Apenas administradores' }, { status: 403 });
     }
-
     const body = await request.json();
     const { name, email, accessLevel, isActive, password } = body;
 

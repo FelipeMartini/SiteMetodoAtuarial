@@ -47,6 +47,9 @@ export async function POST(request: NextRequest) {
         name,
         email,
         password: hashedPassword,
+        accessLevel: 1, // Sempre nível 1 por padrão
+        isActive: true,
+        lastLogin: new Date(),
       },
     });
 

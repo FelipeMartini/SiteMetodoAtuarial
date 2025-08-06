@@ -1,13 +1,15 @@
-// Tipagem customizada para sessão do Auth.js (NextAuth)
-import { DefaultSession } from "next-auth";
 
-declare module "next-auth" {
-  interface Session {
-    id?: string;
-    picture?: string;
-    email?: string;
-    // Adicione outros campos personalizados conforme necessário
-  }
+
+
+// Tipagem customizada para sessão do Auth.js puro
+export interface SessaoAuth {
+  id?: string;
+  picture?: string;
+  email?: string;
+  accessLevel?: number;
+  isActive?: boolean;
+  name?: string | null;
+  image?: string | null;
 }
 
 // Comentário: Este arquivo estende a tipagem da sessão do Auth.js para permitir campos extras como id, picture e email.

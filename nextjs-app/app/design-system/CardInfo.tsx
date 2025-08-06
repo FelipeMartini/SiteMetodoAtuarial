@@ -1,8 +1,41 @@
-// Componente CardInfo moderno usando o novo sistema de temas
 
+// CardInfo moderno usando styled-components, Tailwind e shadcn/ui, com suporte ao tema
 import React from 'react';
-import { Card, Flex, Texto } from '../../styles/ComponentesBase';
+import styled, { DefaultTheme } from 'styled-components';
 
+// Estilização do card usando styled-components e integração com tema
+const CardStyled = styled.div<{ $shadow?: boolean; theme: DefaultTheme }>`
+  background: ${({ theme }) => theme.colors.surface};
+  border-radius: ${({ theme }) => theme.borderRadius.lg};
+  border: 1px solid ${({ theme }) => theme.colors.border};
+  box-shadow: ${({ $shadow, theme }) => $shadow ? theme.shadows.sm : 'none'};
+  padding: 1.5rem;
+  transition: box-shadow 0.2s;
+`;
+
+const Titulo = styled.h3`
+  color: ${({ theme }) => theme.colors.text};
+  font-size: ${({ theme }) => theme.typography.fontSize.lg};
+  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
+  text-align: center;
+`;
+
+const Descricao = styled.p`
+  color: ${({ theme }) => theme.colors.textSecondary};
+  font-size: ${({ theme }) => theme.typography.fontSize.base};
+  text-align: center;
+`;
+
+const Conteudo = styled.div`
+  margin-top: 1rem;
+`;
+
+/**
+ * Componente CardInfo
+ * Modernizado para usar styled-components, Tailwind e shadcn/ui
+ * Suporte ao tema claro/escuro via ThemeProvider
+ * Comentários explicativos em cada parte
+ */
 interface CardInfoProps {
   titulo: string;
   descricao?: string;
@@ -10,7 +43,6 @@ interface CardInfoProps {
   icone?: React.ReactNode;
   onClick?: () => void;
   elevacao?: 1 | 2 | 3;
-  hover?: boolean;
   className?: string;
 }
 
@@ -24,15 +56,12 @@ export const CardInfo: React.FC<CardInfoProps> = ({
   className,
 }) => {
   const isClickable = !!onClick;
-
   return (
-    <Card
+    <CardStyled
       $shadow={elevacao > 1}
       onClick={onClick}
       className={className}
-      style={{
-        cursor: isClickable ? 'pointer' : 'default',
-      }}
+      style={{ cursor: isClickable ? 'pointer' : 'default' }}
       role={isClickable ? 'button' : undefined}
       tabIndex={isClickable ? 0 : undefined}
       onKeyDown={isClickable ? (e) => {
@@ -42,30 +71,15 @@ export const CardInfo: React.FC<CardInfoProps> = ({
         }
       } : undefined}
     >
-      <Flex $direction="column" $gap="md">
-        {icone && (
-          <Flex $justify="center" $align="center" style={{ marginBottom: '8px' }}>
-            {icone}
-          </Flex>
-        )}
-
-        <Texto $variante="h3" $peso="negrito" $align="centro">
-          {titulo}
-        </Texto>
-
-        {descricao && (
-          <Texto $variante="body2" $cor="secundario" $align="centro">
-            {descricao}
-          </Texto>
-        )}
-
-        {conteudo && (
-          <div>
-            {conteudo}
-          </div>
-        )}
-      </Flex>
-    </Card>
+      {icone && (
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', marginBottom: '8px' }}>
+          {icone}
+        </div>
+      )}
+      <Titulo>{titulo}</Titulo>
+      {descricao && <Descricao>{descricao}</Descricao>}
+      {conteudo && <Conteudo>{conteudo}</Conteudo>}
+    </CardStyled>
   );
 };
 

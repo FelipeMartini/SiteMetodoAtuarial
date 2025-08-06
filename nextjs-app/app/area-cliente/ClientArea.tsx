@@ -5,7 +5,7 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useSession } from 'next-auth/react';
+import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import styled from 'styled-components';
 import { useTheme } from '../contexts/ThemeContext';
 import ThemeToggle from '../components/ThemeToggle';
@@ -196,7 +196,8 @@ const accessLevels = {
 };
 
 const ClientArea: React.FC = () => {
-  const { data: session, status } = useSession(); // Removido 'error' do destructuring para evitar warning
+  // Hook de autenticação unificado (Auth.js puro)
+  const { usuario: session, status } = useSessaoAuth();
   const { currentTheme } = useTheme();
 
   const [users, setUsers] = useState<User[]>([]);
@@ -210,18 +211,19 @@ const ClientArea: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
 
-  const userAccessLevel = (session?.user as { accessLevel?: number })?.accessLevel || 1;
+  // Ajuste para tipagem do Auth.js puro
+  const userAccessLevel = session?.accessLevel || 1;
   const isAdmin = userAccessLevel >= 4;
 
   // Carrega dados do usuário atual ou lista de usuários (se admin)
   useEffect(() => {
-    if (session?.user) {
+    if (session) {
       if (isAdmin) {
         fetchAllUsers();
       } else {
         setFormData({
-          name: session.user.name || '',
-          email: session.user.email || '',
+          name: session.name || '',
+          email: session.email || '',
           accessLevel: userAccessLevel,
           isActive: true,
         });
@@ -499,7 +501,7 @@ const ClientArea: React.FC = () => {
                         >
                           Editar
                         </Button>
-                        {user.id !== session.user?.id && (
+                        {user.id !== session?.id && (
                           <Button
                             $variant="danger"
                             onClick={() => handleDeleteUser(user.id)}

@@ -73,7 +73,11 @@ const StatusIndicator = styled.div<{ $status: 'success' | 'errorr' }>`
   }}
 `;
 
-export default function TestHydration() {
+interface TestHydrationProps {
+  dataRenderizacao?: Date;
+}
+
+export default function TestHydration({ dataRenderizacao }: TestHydrationProps) {
   // Hook do tema e estados locais
   const { currentTheme, toggleTheme } = useTema();
   const [renderTime, setRenderTime] = useState<string>('');
@@ -81,8 +85,9 @@ export default function TestHydration() {
 
   // Marca o horário de renderização para testar hydration
   useEffect(() => {
-    setRenderTime(new Date().toLocaleTimeString());
-  }, []);
+    const data = dataRenderizacao || new Date();
+    setRenderTime(data.toLocaleTimeString());
+  }, [dataRenderizacao]);
 
   // Alterna o tema e conta cliques
   const handleTemaClick = () => {

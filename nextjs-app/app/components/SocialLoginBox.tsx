@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { signIn } from 'next-auth/react';
+import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { useTema } from '../contexts/ThemeContext';
 import Link from 'next/link';
 
@@ -287,17 +287,15 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
 
-  // Função para lidar com login social
+  // Hook de autenticação unificado (Auth.js puro)
+  const { login } = useSessaoAuth();
+
+  // Função para lidar com login social usando Auth.js puro
   const handleSocialLogin = async (providerKey: string) => {
     try {
       setIsLoading(providerKey);
       setError(null);
-
-      // Usar redirect: true para garantir redirecionamento automático após login
-      await signIn(PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider, {
-        callbackUrl: '/area-cliente',
-        redirect: true,
-      });
+      await login(PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider);
     } catch (error) {
       console.error(`Erro no login ${providerKey}:`, error);
       setError(`Erro inesperado ao conectar com ${PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].label}`);

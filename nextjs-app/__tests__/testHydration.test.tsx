@@ -7,20 +7,23 @@ import { ThemeProvider } from '../app/contexts/ThemeContext';
 import TestHydration from '../app/components/TestHydration';
 
 describe('TestHydration', () => {
-  it('deve renderizar o componente e exibir status de hydration', () => {
-    const { getByText } = render(
+  it('deve renderizar o componente, exibir status de hydration e bater snapshot', () => {
+    // Mock da data para garantir snapshot estável
+    const fixedTimestamp = new Date('2025-08-05T12:00:00').getTime();
+    jest.spyOn(Date, 'now').mockReturnValue(fixedTimestamp);
+    const dataFixa = new Date('2025-08-05T12:00:00');
+    const { getByText, getAllByText, asFragment } = render(
       <ThemeProvider>
-        <TestHydration />
+        <TestHydration dataRenderizacao={dataFixa} />
       </ThemeProvider>
     );
-    // Verifica se o título aparece
     expect(getByText(/Teste de Hydration/i)).toBeInTheDocument();
-    // Verifica se o status aparece
-    expect(getByText(/Hydrated|Erro/i)).toBeInTheDocument();
-    // Verifica se o campo de renderização aparece
+    const hydratedElements = getAllByText(/Hydrated|Erro/i);
+    expect(hydratedElements.length).toBeGreaterThan(0);
     expect(getByText(/Renderizado em:/i)).toBeInTheDocument();
-    // Verifica se o campo de cliques aparece
     expect(getByText(/Cliques no botão:/i)).toBeInTheDocument();
+    expect(asFragment()).toMatchSnapshot();
+    jest.restoreAllMocks();
   });
 
   it('deve alternar o tema ao clicar no botão', () => {
@@ -31,7 +34,6 @@ describe('TestHydration', () => {
     );
     const botao = getByText(/Alternar Tema/i);
     fireEvent.click(botao);
-    // Após o clique, o contador de cliques deve ser incrementado
     expect(botao.textContent).toMatch(/1 cliques?/i);
   });
 });

@@ -1,12 +1,15 @@
-/**
- * Página de Serviços - Exemplo de componente React exportado como default
- * Corrige erro: The default export is not a React Component
- */
+"use client";
 
-'use client';
 
-import Servicos from '../components/Servicos';
+// Lazy loading do componente de Serviços para otimizar performance
+import React, { Suspense } from 'react';
+const Servicos = React.lazy(() => import('../components/Servicos'));
 
 export default function Page() {
-  return <Servicos />;
+  // Suspense exibe fallback enquanto o componente é carregado
+  return (
+    <Suspense fallback={<div>Carregando serviços...</div>}>
+      <Servicos />
+    </Suspense>
+  );
 }

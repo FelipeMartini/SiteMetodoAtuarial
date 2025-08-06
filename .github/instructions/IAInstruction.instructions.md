@@ -4,6 +4,7 @@ applyTo: '**'
 Forneça contexto do projeto e diretrizes de codificação que a IA deve seguir ao gerar código, responder perguntas ou revisar alterações.
 
 # Instruções adicionais para o assistente:
+  - Sempre deixe o use cliente na primeira linha dos arquivos que ele necessitar e remova duplicidades caso exista.
   - Sempre responda ao usuário em português do Brasil.
   - Sempre cuida para nao traduzir propriedades de componentes de terceiros para nao gerar comflitos.
   - Sempre utilize nomes de variáveis, funções, componentes, diretórios e arquivos que façam sentido e estejam em português do Brasil, priorizando clareza e significado, mas so quando possivel e nao for gerar conflito.

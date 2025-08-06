@@ -1,12 +1,12 @@
 'use client';
 
 import React from 'react';
-import { useSession } from 'next-auth/react';
+import { useSessaoAuth } from '../../hooks/useSessaoAuth';
 import { redirect } from 'next/navigation';
 import AreaClienteConteudo from './AreaClienteConteudo';
 
 export default function AreaClientePage() {
-  const { data: session, status } = useSession();
+  const { usuario, status } = useSessaoAuth();
 
   if (status === 'loading') {
     return (
@@ -22,9 +22,9 @@ export default function AreaClientePage() {
     );
   }
 
-  if (!session) {
+  if (!usuario) {
     redirect('/login');
   }
 
-  return <AreaClienteConteudo usuario={session.user} />;
+  return <AreaClienteConteudo usuario={usuario} />;
 }

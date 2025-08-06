@@ -1,6 +1,7 @@
 "use client";
 // A diretiva 'use client' deve ser sempre a primeira linha do arquivo para garantir que o componente seja client-side
 import React from "react";
+import { useSessaoAuth } from "../../hooks/useSessaoAuth";
 // Diretiva para garantir que o componente seja client-side
 /**
  * Componente MenuLateralCliente
@@ -47,29 +48,22 @@ const LinkMenu = styled(Link)`
 
 
 
-/**
- * Componente MenuLateralCliente
- * Menu lateral exclusivo para área do cliente, exibido apenas para usuários autenticados.
- * Os itens podem ser personalizados conforme necessidade do projeto.
- */
 export default function MenuLateralCliente() {
+  const { usuario } = useSessaoAuth();
+  const nivel = usuario?.accessLevel;
   return (
     <AsideMenu data-testid="menu-lateral">
       <NavMenu>
-        {/* Título do menu lateral */}
         <TituloMenu>Menu do Cliente</TituloMenu>
-        {/* Link para perfil do cliente */}
         <LinkMenu href="/area-cliente">Perfil</LinkMenu>
-        {/* Link para serviços */}
         <LinkMenu href="/servicos">Serviços</LinkMenu>
-        {/* Link para contato/orçamento */}
         <LinkMenu href="/contato">Contato / Orçamento</LinkMenu>
-        {/* Link para documentos do cliente */}
         <LinkMenu href="#">Meus Documentos</LinkMenu>
-        {/* Link para solicitações do cliente */}
         <LinkMenu href="#">Solicitações</LinkMenu>
-        {/* Link para sair (logout) - pode ser implementado posteriormente */}
-        {/* <LinkMenu href="/logout">Sair</LinkMenu> */}
+        {/* Exibe link administrativo apenas para nível 5 */}
+        {nivel === 5 && (
+          <LinkMenu href="/area-cliente/dashboard-admin">Dashboard Administrativo</LinkMenu>
+        )}
       </NavMenu>
     </AsideMenu>
   );

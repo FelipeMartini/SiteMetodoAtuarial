@@ -1,13 +1,7 @@
-// Modelo padrão para autenticação com Auth.js (NextAuth) e Prisma
-// Inclui User, Account, Session e VerificationToken
-// Você pode expandir conforme necessidade do projeto
-
 generator client {
   provider = "prisma-client-js"
 }
 
-// Para desenvolvimento local, utilizamos SQLite por simplicidade.
-// Para migrar para PostgreSQL no futuro, basta alterar o provider para "postgresql" e ajustar a DATABASE_URL no .env.
 datasource db {
   provider = "sqlite"
   url      = env("DATABASE_URL")
@@ -19,8 +13,8 @@ model User {
   email         String?   @unique
   emailVerified DateTime?
   image         String?
-  password      String?   // Para autenticação por credenciais
-  accessLevel   Int       @default(1) // Sistema de níveis: 1=Normal, 2=Premium, 3=Manager, 4=Admin, 5=SuperAdmin
+  password      String?
+  accessLevel   Int       @default(1)
   isActive      Boolean   @default(true)
   lastLogin     DateTime?
   createdAt     DateTime  @default(now())
@@ -62,5 +56,3 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
-
-// Comentário: Este schema cobre o fluxo padrão de autenticação do Auth.js/NextAuth com Prisma. Adapte conforme necessidade.

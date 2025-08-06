@@ -199,6 +199,11 @@ export const Container = styled.div`
   max-width: 1200px;
   margin: 0 auto;
   padding: 0 1rem;
+  width: 100%;
+  /* Responsividade: padding menor em telas pequenas */
+  @media (max-width: 600px) {
+    padding: 0 0.5rem;
+  }
 `;
 
 export const Flex = styled.div<{
@@ -214,6 +219,11 @@ export const Flex = styled.div<{
   justify-content: ${props => props.$justify || 'flex-start'};
   gap: ${props => props.$gap || '0'};
   flex-wrap: ${props => props.$wrap ? 'wrap' : 'nowrap'};
+  /* Responsividade: coluna em telas pequenas */
+  @media (max-width: 800px) {
+    flex-direction: column !important;
+    gap: 1rem;
+  }
 `;
 
 export const Texto = styled.div<{
@@ -259,6 +269,10 @@ export const Secao = styled.section<{
   padding: ${props => props.$padding || '2rem 0'};
   margin: ${props => props.$margin || '0'};
   background: ${props => props.$bg || 'transparent'};
+  /* Responsividade: padding menor em telas pequenas */
+  @media (max-width: 600px) {
+    padding: 1rem 0;
+  }
 `;
 
 export const Card = styled.div<{
@@ -271,4 +285,9 @@ export const Card = styled.div<{
   border-radius: ${props => props.$radius || '8px'};
   background: ${props => props.$bg || '#ffffff'};
   box-shadow: ${props => props.$shadow ? '0 2px 8px rgba(0,0,0,0.1)' : 'none'};
+  /* Responsividade: padding menor e largura total em telas pequenas */
+  @media (max-width: 600px) {
+    padding: 1rem;
+    width: 100%;
+  }
 `;

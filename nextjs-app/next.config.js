@@ -37,6 +37,13 @@ const nextConfig = {
       },
     ],
   },
+  // Permite requisições cross-origin em desenvolvimento para evitar warning
+  allowedDevOrigins: [
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    // Adicione outros IPs usados no dev, ex: sua rede local
+    'http://10.0.0.69:3000'
+  ],
 };
 
 // Exporta a configuração otimizada para styled-components

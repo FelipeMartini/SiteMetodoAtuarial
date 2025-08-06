@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 // Usando fonte local temporária para evitar erro de build
-import "./globals.css";
+// import "./globals.css"; // Migrado para styled-components/Tailwind
 // Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";

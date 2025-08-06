@@ -1,3 +1,4 @@
+// Este arquivo foi removido para eliminar referências a next-auth e provedores antigos.
 // Configuração universal Auth.js (NextAuth v5+)
 // Este arquivo exporta métodos universais para autenticação em todo o app
 // Recomenda-se manter na raiz do projeto para facilitar importações

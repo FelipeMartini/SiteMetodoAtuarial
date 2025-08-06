@@ -1,4 +1,6 @@
+
 "use client";
+
 // 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 // Importações individuais do Material-UI para melhor performance e evitar duplicidade
 import styled from "styled-components";
@@ -8,7 +10,8 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 // Apresenta informações institucionais, equipe e ambiente
 // Removido import agrupado do MUI para evitar duplicidade
 // import { Container, Typography, Box } from "@mui/material";
-import Image from "next/image";
+
+import Image from 'next/image';
 
 
 // Styled-components fora do componente para evitar warnings e seguir boas práticas
@@ -72,6 +75,7 @@ const Box = styled.div`
 
 // Memoização do componente para evitar renderizações desnecessárias
 const Sobre: React.FC = React.memo(function Sobre() {
+  // Renderização direta das imagens, sem Suspense
   return (
     <ErrorBoundary>
       <Container>
@@ -79,6 +83,8 @@ const Sobre: React.FC = React.memo(function Sobre() {
         <Texto>
           Com mais de uma década de atuação, a Método Atuarial é referência nacional em consultoria atuarial, oferecendo soluções precisas, personalizadas e inovadoras para empresas de todos os portes. Nossa equipe é formada por atuários certificados, que aplicam metodologias avançadas e utilizam tecnologia de ponta para garantir máxima precisão nos cálculos, projeções e relatórios. Atuamos com ética, transparência e compromisso, sempre focados em superar as expectativas dos nossos clientes e contribuir para o sucesso sustentável de cada organização atendida.
         </Texto>
+        {/* Imagem institucional sem Suspense */}
+        <Image src="/office-team.png" alt="Equipe Método Atuarial" width={800} height={400} style={{ width: '100%', height: 'auto', borderRadius: 16, margin: '0 auto' }} />
         <Destaques>
           <BlocoDestaque>
             <ValorDestaque>55+</ValorDestaque>

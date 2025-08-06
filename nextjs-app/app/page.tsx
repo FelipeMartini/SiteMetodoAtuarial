@@ -79,7 +79,7 @@ export default function Home() {
               descricao={service.descricao}
               icone={<span style={{ fontSize: '3rem' }}>{service.icone}</span>}
               elevacao={2}
-              hover={true}
+            // hover removido pois não existe mais na tipagem
             />
           ))}
         </div>
