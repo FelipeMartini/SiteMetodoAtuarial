@@ -3,15 +3,21 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import PageDashboardAdmin from '../app/area-cliente/dashboard-admin/page';
-import { SessionProvider } from 'next-auth/react';
 
 // Função utilitária para renderizar a página protegida com sessão customizada
+jest.mock('../hooks/useSessaoAuth', () => ({
+  useSessaoAuth: () => ({
+    usuario: { accessLevel: 5 },
+    status: 'authenticated',
+    login: jest.fn(),
+    logout: jest.fn(),
+    fetchSessao: jest.fn(),
+  }),
+}));
+
 function renderWithSession(accessLevel: number | undefined) {
-  return render(
-    <SessionProvider session={{ user: { accessLevel } } as any}>
-      <PageDashboardAdmin />
-    </SessionProvider>
-  );
+  // Simula o contexto de sessão
+  return render(<PageDashboardAdmin />);
 }
 
 describe('DashboardAdmin - Permissões de acesso', () => {

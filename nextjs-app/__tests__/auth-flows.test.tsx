@@ -1,12 +1,16 @@
-// Mocks globais para next/navigation e next-auth/react
+// Mock global para next/navigation
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }));
-jest.mock('next-auth/react', () => ({
-  ...jest.requireActual('next-auth/react'),
-  signIn: jest.fn(),
-  signOut: jest.fn(),
-  useSession: jest.fn(),
+// Mock global para useSessaoAuth
+jest.mock('../hooks/useSessaoAuth', () => ({
+  useSessaoAuth: () => ({
+    usuario: { id: '1', email: 'teste@teste.com', accessLevel: 5 },
+    status: 'authenticated',
+    login: jest.fn(() => Promise.resolve({ ok: true })),
+    logout: jest.fn(),
+    fetchSessao: jest.fn(),
+  }),
 }));
 
 // Mock global do SocialLoginBox para todos os testes exceto login social

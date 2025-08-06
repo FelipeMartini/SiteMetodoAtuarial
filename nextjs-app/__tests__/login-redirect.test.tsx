@@ -4,16 +4,16 @@ import '@testing-library/jest-dom';
 import LoginPage from '../app/login/page';
 import { ThemeProvider } from '../app/contexts/ThemeContext';
 import { useRouter } from 'next/navigation';
-import * as nextAuth from 'next-auth/react';
 
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-jest.mock('next-auth/react', () => ({
-  ...jest.requireActual('next-auth/react'),
-  signIn: jest.fn(),
-  useSession: jest.fn(),
+jest.mock('../hooks/useSessaoAuth', () => ({
+  useSessaoAuth: () => ({
+    login: jest.fn(),
+    status: 'unauthenticated',
+  }),
 }));
 
 

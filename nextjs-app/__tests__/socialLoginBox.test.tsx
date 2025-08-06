@@ -1,11 +1,13 @@
 import React from 'react';
 import { render, screen, fireEvent, act } from '@testing-library/react';
 import SocialLoginBox from '../app/components/SocialLoginBox';
-import { signIn } from 'next-auth/react';
 import { ThemeProvider } from '../app/contexts/ThemeContext';
 
-jest.mock('next-auth/react', () => ({
-  signIn: jest.fn(),
+jest.mock('../hooks/useSessaoAuth', () => ({
+  useSessaoAuth: () => ({
+    login: jest.fn(),
+    status: 'unauthenticated',
+  }),
 }));
 
 
