@@ -43,9 +43,12 @@ export async function POST(req: NextRequest) {
   const buffer = Buffer.from(await file.arrayBuffer());
   await fs.writeFile(filePath, buffer);
 
-  // Atualiza usuário no banco
+  // Garante que o email não é nulo
+  if (!usuario.email) {
+    return NextResponse.json({ error: 'Email do usuário não encontrado.' }, { status: 400 });
+  }
   await db.user.update({
-    where: { email: token.email },
+    where: { email: usuario.email },
     data: { image: `/uploads/${fileName}` },
   });
 
