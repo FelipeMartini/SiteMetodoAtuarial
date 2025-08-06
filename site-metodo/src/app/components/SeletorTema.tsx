@@ -3,7 +3,7 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useTema } from '../contexts/ThemeContext';
+import { useTema } from '@core/theme/ContextoTema';
 import { ThemeName, availableThemes } from '../../styles/themes';
 import { Botao } from '../design-system/Botao';
 
