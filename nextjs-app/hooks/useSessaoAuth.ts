@@ -33,7 +33,13 @@ export function useSessaoAuth() {
 
   // Login social ou tradicional
   const login = useCallback(async (provider: string, credenciais?: any) => {
-    let url = '/api/auth/signin/' + provider;
+    if (provider !== 'credentials') {
+      // Para login social, redireciona para o fluxo OAuth2
+      window.location.href = `/api/auth/signin/${provider}`;
+      // Retorna uma Promise pendente para evitar erro se alguém usar await login('google')
+      return new Promise(() => { });
+    }
+    let url = '/api/auth/signin/credentials';
     let options: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' } };
     if (credenciais) options.body = JSON.stringify(credenciais);
     const res = await fetch(url, options);

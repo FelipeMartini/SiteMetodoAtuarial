@@ -7,7 +7,7 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSessaoAuth } from '@/hooks/useSessaoAuth';
+// import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { useTema } from '../contexts/ThemeContext';
 import Link from 'next/link';
 
@@ -144,19 +144,17 @@ const SocialIcon = styled.div`
 `;
 
 // Spinner de loading animado
-const LoadingSpinner = styled.div`
-  width: 1.2rem;
-  height: 1.2rem;
-  border: 2px solid ${props => props.theme.colors.textSecondary}40;
-  border-top: 2px solid ${props => props.theme.colors.primary};
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+const LoadingSpinner = () => (
+  <div style={{
+    width: '1.2rem',
+    height: '1.2rem',
+    border: '2px solid #8882',
+    borderTop: '2px solid #0070f3',
+    borderRadius: '50%',
+    animation: 'spin 1s linear infinite'
+  }} />
+);
 
-  @keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-  }
-`;
 
 // Seção de divisor melhorada
 const Divider = styled.div`
@@ -283,29 +281,30 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
   showTitle = true,
   providers = ['google', 'apple', 'github', 'twitter', 'microsoft']
 }) => {
+  // Adiciona keyframes globalmente apenas no cliente para evitar erro SSR
+  // Isso garante que a animação só é registrada no browser, evitando ReferenceError em SSR.
+  React.useEffect(() => {
+    const style = document.createElement('style');
+    style.innerHTML = `@keyframes spin {0%{transform:rotate(0deg);}100%{transform:rotate(360deg);}}`;
+    document.head.appendChild(style);
+    return () => {
+      document.head.removeChild(style);
+    };
+  }, []);
   const { currentTheme } = useTema();
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // Hook de autenticação unificado (Auth.js puro)
-  const { login } = useSessaoAuth();
-
-  // Função para lidar com login social usando Auth.js puro
-  const handleSocialLogin = async (providerKey: string) => {
-    try {
+  // Função para login social: exibe loading e faz redirect
+  const handleSocialLogin = (providerKey: string) => {
+    setError(null);
+    if (providerKey === 'google' || providerKey === 'apple' || providerKey === 'github' || providerKey === 'twitter' || providerKey === 'microsoft') {
       setIsLoading(providerKey);
-      setError(null);
-      await login(PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider);
-    } catch (error) {
-      console.error(`Erro no login ${providerKey}:`, error);
-      setError(`Erro inesperado ao conectar com ${PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].label}`);
-    } finally {
-      setIsLoading(null);
-      // Remove erro após 5 segundos
-      if (error) {
-        setTimeout(() => setError(null), 5000);
-      }
+      setTimeout(() => {
+        window.location.href = `/api/auth/signin/${PROVIDER_CONFIG[providerKey as keyof typeof PROVIDER_CONFIG].provider}`;
+      }, 100);
+      return;
     }
+    // ...
   };
 
   return (
@@ -338,7 +337,6 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           {providers.map((providerKey) => {
             const config = PROVIDER_CONFIG[providerKey];
             const IconComponent = config.icon;
-
             return (
               <SocialButton
                 key={providerKey}

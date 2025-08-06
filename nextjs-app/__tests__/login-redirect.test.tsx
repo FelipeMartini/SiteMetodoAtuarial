@@ -9,13 +9,21 @@ jest.mock('next/navigation', () => ({
   useRouter: jest.fn(),
 }));
 
-const mockLogin = jest.fn(() => Promise.resolve({ ok: true }));
+
+
+
+globalThis.mockStatus = 'unauthenticated';
+const mockLogin = jest.fn(() => {
+  globalThis.mockStatus = 'authenticated';
+  return Promise.resolve({ ok: true });
+});
 jest.mock('../hooks/useSessaoAuth', () => ({
   useSessaoAuth: () => ({
     login: mockLogin,
-    status: 'unauthenticated',
+    get status() { return globalThis.mockStatus; },
   }),
 }));
+afterEach(() => { globalThis.mockStatus = 'unauthenticated'; });
 
 
 describe('Fluxo de login e redirecionamento', () => {

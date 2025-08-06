@@ -10,7 +10,7 @@ import { randomBytes } from 'crypto';
  */
 // No App Router, params deve ser acessado de forma assíncrona
 export async function POST(request: NextRequest, context: { params: { provider: string } }) {
-  const { provider } = context.params;
+  const { provider } = await context.params;
   if (provider === 'credentials') {
     // Login tradicional
     try {
@@ -52,8 +52,8 @@ export async function POST(request: NextRequest, context: { params: { provider: 
       return NextResponse.json({ error: 'Erro interno ao autenticar.' }, { status: 500 });
     }
   } else {
-    // Login social: não implementado
-    return NextResponse.json({ error: 'Login social não implementado.' }, { status: 400 });
+    // Login social: não suportado via POST, apenas via redirect GET
+    return NextResponse.json({ error: 'Método não permitido para login social. Use o fluxo de redirect.' }, { status: 405 });
   }
 }
 

@@ -7,6 +7,12 @@ export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
   const error = searchParams.get('error');
+  const state = searchParams.get('state');
+  // Valida o parâmetro state para proteção CSRF
+  const stateCookie = request.cookies.get('authjs.oauth-state')?.value;
+  if (!state || !stateCookie || state !== stateCookie) {
+    return NextResponse.redirect('/login?error=invalid_state');
+  }
   if (error) {
     return NextResponse.redirect('/login?error=oauth_error');
   }
@@ -14,6 +20,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.redirect('/login?error=missing_code');
   }
   // Troca code por token
+  // Troca o code por token usando redirect_uri igual ao usado na autorização
   const tokenRes = await fetch('https://oauth2.googleapis.com/token', {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -21,7 +28,7 @@ export async function GET(request: NextRequest) {
       code,
       client_id: process.env.AUTH_GOOGLE_ID!,
       client_secret: process.env.AUTH_GOOGLE_SECRET!,
-      redirect_uri: process.env.NEXT_PUBLIC_URL + '/api/auth/callback/google',
+      redirect_uri: process.env.NEXTAUTH_URL + '/api/auth/callback/google',
       grant_type: 'authorization_code',
     }),
   });
@@ -59,8 +66,8 @@ export async function GET(request: NextRequest) {
       expires: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     },
   });
-  // Seta cookie e redireciona
-  const response = NextResponse.redirect('/area-cliente');
+  // Seta cookie e redireciona para URL absoluta (Next.js exige URL absoluta em API/middleware)
+  const response = NextResponse.redirect(process.env.NEXTAUTH_URL + '/area-cliente');
   response.cookies.set('authjs.session-token', sessionToken, {
     httpOnly: true,
     path: '/',

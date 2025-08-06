@@ -6,35 +6,38 @@ import SocialLoginBox from '../app/components/SocialLoginBox';
 import { ThemeProvider } from '../app/contexts/ThemeContext';
 
 
-const mockLogin = jest.fn(() => Promise.resolve({ error: 'OAuthAccountNotLinked' }));
-jest.mock('../hooks/useSessaoAuth', () => ({
-  useSessaoAuth: () => ({
-    login: mockLogin,
-    status: 'unauthenticated',
-  }),
-}));
-
 beforeEach(() => {
-  mockLogin.mockClear();
-});
 
-describe('SocialLoginBox - Fluxo de login social', () => {
-  it('aciona login do Google e trata erro OAuthAccountNotLinked', async () => {
-    render(
-      <ThemeProvider>
-        <SocialLoginBox />
-      </ThemeProvider>
-    );
-    const googleBtn = screen.getByRole('button', { name: /google/i });
-    await act(async () => {
+  // Mock do hook, mas login não é chamado para social (apenas para credentials)
+  jest.mock('../hooks/useSessaoAuth', () => ({
+    useSessaoAuth: () => ({
+      login: jest.fn(),
+      status: 'unauthenticated',
+    }),
+  }));
+
+  describe('SocialLoginBox - Fluxo de login social', () => {
+    it('redireciona para rota de login social ao clicar no botão Google', async () => {
+      // Mock window.location.href
+      const originalLocation = window.location;
+      // @ts-ignore
+      delete window.location;
+      window.location = { href: '' } as any;
+
+      render(
+        <ThemeProvider>
+          <SocialLoginBox />
+        </ThemeProvider>
+      );
+      const googleBtn = screen.getByRole('button', { name: /google/i });
       fireEvent.click(googleBtn);
-    });
-    expect(mockLogin).toHaveBeenCalledWith('google');
-    // O erro deve ser exibido na tela (mensagem exibida pelo componente)
-    // O erro deve ser exibido na tela (mensagem exibida pelo componente)
-    // Tenta encontrar o texto de erro exibido pelo componente
-    expect(screen.getByText('Erro inesperado ao conectar com Entrar com Google')).toBeInTheDocument();
-  });
-});
+      expect(window.location.href).toContain('/api/auth/signin/google');
 
-// Comentário: Este teste cobre o fluxo de login social e garante que o erro OAuthAccountNotLinked seja tratado e exibido corretamente para o usuário.
+      // Restaura window.location
+      // Restaura window.location de forma segura
+      // @ts-ignore
+      window.location = originalLocation;
+    });
+  });
+
+

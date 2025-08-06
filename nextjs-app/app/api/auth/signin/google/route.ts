@@ -1,11 +1,16 @@
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
+import { randomBytes } from 'crypto';
 
-// Redireciona para o Google OAuth2
+
+// Rota que inicia o fluxo OAuth2 do Google, redirecionando o usuário para consentimento
 export async function GET() {
+  // Sempre utilize NEXTAUTH_URL para garantir compatibilidade com Auth.js e Google Cloud Console
   const clientId = process.env.AUTH_GOOGLE_ID;
-  const redirectUri = process.env.NEXT_PUBLIC_URL + '/api/auth/callback/google';
+  const redirectUri = process.env.NEXTAUTH_URL + '/api/auth/callback/google';
   const scope = 'openid email profile';
-  const state = Math.random().toString(36).substring(2); // Para CSRF, ideal usar algo mais robusto
+  // Gera um state seguro para CSRF
+  const state = randomBytes(16).toString('hex');
+  // Monta a URL de autorização usando redirect_uri correto
   const url =
     'https://accounts.google.com/o/oauth2/v2/auth?' +
     new URLSearchParams({
@@ -17,7 +22,16 @@ export async function GET() {
       access_type: 'offline',
       prompt: 'consent',
     }).toString();
-  return NextResponse.redirect(url);
+  // Seta o state em cookie httpOnly para validação posterior no callback
+  const response = NextResponse.redirect(url);
+  response.cookies.set('authjs.oauth-state', state, {
+    httpOnly: true,
+    path: '/',
+    maxAge: 10 * 60, // 10 minutos
+    sameSite: 'lax',
+    secure: process.env.NODE_ENV === 'production',
+  });
+  return response;
 }
 
-// Comentário: Esta rota inicia o fluxo OAuth2 do Google, redirecionando o usuário para consentimento.
+// Comentário: Gera state seguro, salva em cookie httpOnly e redireciona para o Google.
