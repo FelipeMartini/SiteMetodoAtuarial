@@ -2,6 +2,7 @@
 
 // Layout cliente moderno usando o novo sistema de temas
 import React, { ReactNode, Suspense } from "react";
+import { useRouter } from 'next/navigation';
 import Link from "next/link";
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { Container, Flex, Texto, Secao } from '../styles/ComponentesBase';
@@ -17,9 +18,15 @@ const Rodape = React.lazy(() => import("./Rodape"));
 function Header() {
   // Hook de autenticação unificado (Auth.js puro)
   const { usuario: session, logout } = useSessaoAuth();
+  const router = useRouter();
   const { isDarkMode } = useTheme();
   // Define cor do texto do menu conforme tema
   const menuTextColor = isDarkMode ? 'onPrimary' : 'primary';
+  // Função de logout que também redireciona para a home
+  const handleLogout = async () => {
+    await logout();
+    router.push('/');
+  };
   return (
     <header style={{
       borderBottom: '1px solid var(--cor-borda)',
@@ -82,7 +89,7 @@ function Header() {
                 <Botao
                   variant="ghost"
                   size="sm"
-                  onClick={logout}
+                  onClick={handleLogout}
                 >
                   Sair
                 </Botao>
