@@ -32,9 +32,8 @@ describe('SocialLoginBox - Fluxo de login social', () => {
     expect(mockLogin).toHaveBeenCalledWith('google');
     // O erro deve ser exibido na tela (mensagem exibida pelo componente)
     // O erro deve ser exibido na tela (mensagem exibida pelo componente)
-    expect(screen.getByText((content) =>
-      /erro inesperado ao conectar com/i.test(content)
-    )).toBeInTheDocument();
+    // Tenta encontrar o texto de erro exibido pelo componente
+    expect(screen.getByText('Erro inesperado ao conectar com Entrar com Google')).toBeInTheDocument();
   });
 });
 

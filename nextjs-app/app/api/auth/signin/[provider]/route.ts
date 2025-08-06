@@ -47,7 +47,7 @@ export async function POST(request: NextRequest, { params }: { params: { provide
         secure: process.env.NODE_ENV === 'production',
       });
       return response;
-    } catch (error) {
+    } catch {
       return NextResponse.json({ error: 'Erro interno ao autenticar.' }, { status: 500 });
     }
   } else {

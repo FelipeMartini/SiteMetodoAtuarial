@@ -37,7 +37,14 @@ export function useSessaoAuth() {
     let options: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' } };
     if (credenciais) options.body = JSON.stringify(credenciais);
     const res = await fetch(url, options);
-    if (!res.ok) throw new Error('Erro ao logar');
+    if (!res.ok) {
+      let msg = 'Erro ao logar';
+      try {
+        const data = await res.json();
+        if (data?.error) msg = data.error;
+      } catch { }
+      throw new Error(msg);
+    }
     await fetchSessao();
     return res;
   }, [fetchSessao]);
