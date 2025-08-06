@@ -76,16 +76,14 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
       )}
       <InputStyled
         ref={ref}
-        // useId garante id estável entre SSR e CSR, evitando mismatch de hidratação
-        const reactId= useId();
-      const inputId = id || `input-${reactId}`;
-      $hasError={!!erro}
-      {...props}
-      aria-invalid={!!erro}
-      aria-label={label}
-      role="textbox"
-      aria-describedby={erro ? `${inputId}-erro` : ajuda ? `${inputId}-ajuda` : undefined}
-      style={props.style ? { ...props.style, outline: 'none', boxShadow: '0 0 0 2px #2563eb' } : { outline: 'none', boxShadow: '0 0 0 2px #2563eb' }}
+        id={inputId}
+        $hasError={!!erro}
+        {...props}
+        aria-invalid={!!erro}
+        aria-label={label}
+        role="textbox"
+        aria-describedby={erro ? `${inputId}-erro` : ajuda ? `${inputId}-ajuda` : undefined}
+        style={props.style ? { ...props.style, outline: 'none', boxShadow: '0 0 0 2px #2563eb' } : { outline: 'none', boxShadow: '0 0 0 2px #2563eb' }}
       />
       {erro && (
         <ErroStyled id={`${inputId}-erro`} role="alert">{erro}</ErroStyled>
