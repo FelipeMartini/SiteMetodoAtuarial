@@ -5,8 +5,8 @@ module.exports = {
   moduleNameMapper: {
     // Mapeia imports de estilos para evitar erro
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
-    // Mapeia o alias @/ para o diretório raiz do app, conforme tsconfig.json
-    "^@/(.*)$": "<rootDir>/$1",
+    // Mapeia o alias @/ para src, conforme tsconfig.json
+    "^@/(.*)$": "<rootDir>/src/$1",
     // Mapeia o alias @core para src/@core
     "^@core/(.*)$": "<rootDir>/src/@core/$1",
   },

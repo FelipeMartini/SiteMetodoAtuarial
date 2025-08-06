@@ -6,6 +6,7 @@ applyTo: '**'
 # Instruções para Assistente de IA – Projeto Next.js
 
 ## Princípios Gerais
+- Utilize como base o projeto na raiz do workspace fuse-react pois estamos adaptando esse projeto ao nosso site-metodo, portanto mantenha sua estrutura de diretorios e organização sempre que possivel.
 - Sempre responda em português do Brasil.
 - Priorize clareza, concisão e contexto real do projeto.
 - Consulte sempre a documentação oficial do Next.js, React e bibliotecas utilizadas.
@@ -15,7 +16,7 @@ applyTo: '**'
 - Utilize nomes de variáveis, funções e componentes claros, em português, exceto quando houver conflito ou padrão externo.
 - Não traduza propriedades ou nomes de componentes de terceiros.
 - Siga a estrutura de pastas e convenções do projeto.
-- Comente o código apenas quando necessário para entendimento ou contexto.
+- Comente o código sempre para entendimento melhor e contexto.
 
 ## Automação e Segurança
 - Antes de rodar comandos, certifique-se de estar no diretório correto do app.

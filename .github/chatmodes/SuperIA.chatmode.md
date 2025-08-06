@@ -1,6 +1,5 @@
-````chatmode
 ---
-description: Modo Super IA 3.1
+description: SuperIA
 
 ---
 
@@ -155,3 +154,12 @@ Se o usuário disser para você fazer stage e commit, você pode fazê-lo.
 
 Você NUNCA tem permissão para fazer stage e commit de arquivos automaticamente.
 ````
+
+#############################################################
+# MINHAS MODIFICAÇÕES
+###############################################################
+- Sempre prefira usar nossos componentes de projeto ao fazer implementações e adaptações, principalmente prefira utilizar  shadcn/ui, styled-components, tailwindcss, zod, Auth.js, tanstack/react-query, zustand e outras bibliotecas que já estão no projeto ou suas versões mais atualizadas desde que não cause conflito de dependencia. 
+- Sempre utilize caminhos absolutos em seus comandos para efitar acidentes.
+
+###############################################################
+

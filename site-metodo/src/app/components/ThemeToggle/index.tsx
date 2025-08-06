@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { useTema } from '@/app/contexts/ThemeContext';
+import { useTema } from '@core/theme/ContextoTema';
 import {
   ThemeToggleContainer,
   ThemeLabel,

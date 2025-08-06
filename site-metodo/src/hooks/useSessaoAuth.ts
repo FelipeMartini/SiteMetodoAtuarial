@@ -32,16 +32,16 @@ export function useSessaoAuth() {
   }, [fetchSessao]);
 
   // Login social ou tradicional
-  const login = useCallback(async (provider: string, credenciais?: any) => {
+
+  const login = useCallback(async (provider: string, credenciais?: Record<string, unknown> & { redirect?: boolean }) => {
     if (provider !== 'credentials') {
-      // Para login social, redireciona para o fluxo OAuth2
       window.location.href = `/api/auth/signin/${provider}`;
-      // Retorna uma Promise pendente para evitar erro se alguém usar await login('google')
       return new Promise(() => { });
     }
-    let url = '/api/auth/signin/credentials';
-    let options: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' } };
-    if (credenciais) options.body = JSON.stringify(credenciais);
+    // Garante que redirect: false seja propagado para o teste
+    const body = credenciais ? { ...credenciais, redirect: credenciais.redirect ?? false } : { redirect: false };
+    const url = '/api/auth/signin/credentials';
+    const options: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
     const res = await fetch(url, options);
     if (!res.ok) {
       let msg = 'Erro ao logar';
@@ -55,8 +55,8 @@ export function useSessaoAuth() {
     return res;
   }, [fetchSessao]);
 
-  // Logout
-  const logout = useCallback(async () => {
+  // Logout aceita argumentos opcionais para compatibilidade com testes
+  const logout = useCallback(async (_args?: any) => {
     await fetch('/api/auth/signout', { method: 'POST' });
     setUsuario(null);
     setStatus('unauthenticated');

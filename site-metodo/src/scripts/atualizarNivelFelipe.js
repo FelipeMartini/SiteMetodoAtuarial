@@ -1,7 +1,8 @@
 // Script para atualizar o nível de acesso do usuário 'felipemartinii@gmail.com' para 5
 // Execute com: node scripts/atualizarNivelFelipe.js
 
-const { PrismaClient } = require('@prisma/client');
+
+import { PrismaClient } from '@prisma/client';
 const prisma = new PrismaClient();
 
 async function atualizarNivel() {
