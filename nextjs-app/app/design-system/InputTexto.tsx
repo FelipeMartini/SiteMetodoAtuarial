@@ -1,6 +1,6 @@
 
 // InputTexto moderno usando styled-components, Tailwind e shadcn/ui, com suporte ao tema
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useId } from 'react';
 import styled, { DefaultTheme } from 'styled-components';
 
 // Estilização do input usando styled-components e integração com tema
@@ -63,7 +63,9 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
   id,
   ...props
 }, ref) => {
-  const inputId = id || `input-${Math.random().toString(36).substr(2, 9)}`;
+  // useId garante id estável entre SSR e CSR, evitando mismatch de hidratação
+  const reactId = useId();
+  const inputId = id || `input-${reactId}`;
   return (
     <div className={className} style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
       {label && (
@@ -74,14 +76,16 @@ export const InputTexto = forwardRef<HTMLInputElement, InputTextoProps>(({
       )}
       <InputStyled
         ref={ref}
-        id={inputId}
-        $hasError={!!erro}
-        {...props}
-        aria-invalid={!!erro}
-        aria-label={label}
-        role="textbox"
-        aria-describedby={erro ? `${inputId}-erro` : ajuda ? `${inputId}-ajuda` : undefined}
-        style={props.style ? { ...props.style, outline: 'none', boxShadow: '0 0 0 2px #2563eb' } : { outline: 'none', boxShadow: '0 0 0 2px #2563eb' }}
+        // useId garante id estável entre SSR e CSR, evitando mismatch de hidratação
+        const reactId= useId();
+      const inputId = id || `input-${reactId}`;
+      $hasError={!!erro}
+      {...props}
+      aria-invalid={!!erro}
+      aria-label={label}
+      role="textbox"
+      aria-describedby={erro ? `${inputId}-erro` : ajuda ? `${inputId}-ajuda` : undefined}
+      style={props.style ? { ...props.style, outline: 'none', boxShadow: '0 0 0 2px #2563eb' } : { outline: 'none', boxShadow: '0 0 0 2px #2563eb' }}
       />
       {erro && (
         <ErroStyled id={`${inputId}-erro`} role="alert">{erro}</ErroStyled>

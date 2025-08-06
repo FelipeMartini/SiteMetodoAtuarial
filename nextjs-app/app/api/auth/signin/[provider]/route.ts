@@ -8,8 +8,9 @@ import { randomBytes } from 'crypto';
  * POST /api/auth/signin/[provider]
  * provider: 'credentials' (tradicional) ou nome do provedor social
  */
-export async function POST(request: NextRequest, { params }: { params: { provider: string } }) {
-  const { provider } = params;
+// No App Router, params deve ser acessado de forma assíncrona
+export async function POST(request: NextRequest, context: { params: { provider: string } }) {
+  const { provider } = context.params;
   if (provider === 'credentials') {
     // Login tradicional
     try {
