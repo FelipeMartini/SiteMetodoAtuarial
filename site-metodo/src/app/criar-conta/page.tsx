@@ -4,7 +4,7 @@
  */
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Link from 'next/link';
 import SocialLoginBox from '@/components/SocialLoginBox';
 import { Input } from '@/components/ui/input';

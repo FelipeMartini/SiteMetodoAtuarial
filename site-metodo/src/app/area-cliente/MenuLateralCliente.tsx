@@ -2,7 +2,7 @@
 // A diretiva 'use client' deve ser sempre a primeira linha do arquivo para garantir que o componente seja client-side
 import React from "react";
 import { useSessaoAuth } from "../../hooks/useSessaoAuth";
-import { Skeleton } from "../components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 // Diretiva para garantir que o componente seja client-side
 /**
  * Componente MenuLateralCliente

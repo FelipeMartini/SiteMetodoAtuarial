@@ -23,7 +23,7 @@ const formFieldVariants = cva(
 )
 
 export interface FormFieldProps
-  extends Omit<InputProps, 'id'>,
+  extends Omit<InputProps, 'id' | 'variant'>,
   VariantProps<typeof formFieldVariants> {
   id: string
   label: string

@@ -5,9 +5,9 @@
 import React from "react";
 import MenuLateralClienteWrapper from "./MenuLateralClienteWrapper";
 import Image from "next/image";
-import { ErrorBoundary } from "../components/ErrorBoundary";
-import { Skeleton } from "../components/ui/skeleton";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Skeleton } from "@/components/ui/skeleton";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * Componente client-side para exibir o menu lateral e perfil do cliente.

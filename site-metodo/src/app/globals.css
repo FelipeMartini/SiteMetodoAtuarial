@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 @layer base {
   :root {
@@ -115,12 +113,18 @@
 }
 
 @layer base {
+
+  /* Removido @apply border-border; pois não é suportado neste contexto */
   * {
-    @apply border-border;
+    border-color: hsl(var(--border));
   }
 
   body {
-    @apply bg-background text-foreground font-sans antialiased;
+    background-color: hsl(var(--background));
+    color: hsl(var(--foreground));
+    font-family: var(--font-sans, sans-serif);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
 
@@ -179,17 +183,30 @@
 
   /* Button variants customizados */
   .btn-gradient {
-    @apply bg-gradient-to-r from-primary to-primary/80 text-primary-foreground hover:from-primary/90 hover:to-primary/70 transition-all duration-300;
+    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
+    color: hsl(var(--primary-foreground));
+    transition: all 0.3s;
+  }
+
+  .btn-gradient:hover {
+    background-image: linear-gradient(to right, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.7));
   }
 
   /* Card variants */
   .card-hover {
-    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1;
+    transition: all 0.3s;
+  }
+
+  .card-hover:hover {
+    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    transform: translateY(-4px);
   }
 
   /* Input focused */
-  .input-focused {
-    @apply focus:ring-2 focus:ring-primary/20 focus:border-primary transition-all duration-200;
+  .input-focused:focus {
+    outline: 2px solid hsl(var(--primary) / 0.2);
+    border-color: hsl(var(--primary));
+    transition: all 0.2s;
   }
 }
 
@@ -197,7 +214,11 @@
 
   /* Text gradients */
   .text-gradient {
-    @apply bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent;
+    background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.7));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    color: transparent;
   }
 
   /* Animation utilities */
