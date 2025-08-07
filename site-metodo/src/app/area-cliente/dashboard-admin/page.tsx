@@ -2,8 +2,8 @@
 
 
 import React from "react";
-import DashboardAdmin from "../DashboardAdmin";
-import { useSessaoAuth } from "../../../hooks/useSessaoAuth";
+import DashboardAdmin from "@/app/area-cliente/DashboardAdmin";
+import { useSessaoAuth } from "@/hooks/useSessaoAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 
 

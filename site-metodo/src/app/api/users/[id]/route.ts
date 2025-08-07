@@ -2,7 +2,7 @@
  * API para gerenciamento de usuário específico - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../../lib/prisma';
+import { db } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 // PUT - Atualizar usuário específico (apenas para admins)

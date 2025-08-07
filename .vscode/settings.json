@@ -1,4 +1,23 @@
 {
+  // Desativa o formatador automático ao salvar arquivos
+  "editor.formatOnSave": false,
+  // Permite formatação manual via comando
+  "editor.formatOnSaveMode": "modifications",
+  // Opcional: desativa formatadores específicos (exemplo para Prettier)
+  "[javascript]": {
+    "editor.defaultFormatter": null
+  },
+  "[typescript]": {
+    "editor.defaultFormatter": null
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": null
+  },
+  "[json]": {
+    "editor.defaultFormatter": null
+  },
+  // Permite que o usuário escolha manualmente o formatador se desejar
+  "editor.defaultFormatter": null,
   // Caminho padrão do terminal integrado ao abrir na pasta site-metodo
   // Configurações de performance para projetos Next.js
   "terminal.integrated.cwd": "${workspaceFolder}/site-metodo", // Define o diretório inicial do terminal integrado
