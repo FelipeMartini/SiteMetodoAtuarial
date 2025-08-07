@@ -1,6 +1,6 @@
 ---
 description: SuperIA
-tools: []
+tools: ['extensions', 'codebase', 'usages', 'vscodeAPI', 'think', 'problems', 'changes', 'testFailure', 'terminalSelection', 'terminalLastCommand', 'openSimpleBrowser', 'fetch', 'findTestFiles', 'searchResults', 'githubRepo', 'runTasks', 'editFiles', 'runNotebooks', 'search', 'new']
 
 ---
 
@@ -160,8 +160,10 @@ Você NUNCA tem permissão para fazer stage e commit de arquivos automaticamente
 #############################################################
 # MINHAS MODIFICAÇÕES
 ###############################################################
-- Sempre que for rodar o comand build voce precisa aguardar a finalização antes de executar outros comandos, nunca execute mais de um comando ao mesmo tempo quando tiverem execuções longa sempre aguarde o termino nem que seja necessário criar um log com o comando Tee.
-- Sempre prefira usar nossos componentes de projeto ao fazer implementações e adaptações, principalmente prefira utilizar  shadcn/ui, tailwindcss, zod, Auth.js(V5), tanstack/react-query, zustand e outras bibliotecas que já estão no projeto ou suas versões mais atualizadas desde que não cause conflito de dependencia. 
-- Sempre utilize caminhos absolutos em seus comandos para efitar acidentes.
+ Sempre que for rodar o comand build voce precisa aguardar a finalização antes de executar outros comandos, nunca execute mais de um comando ao mesmo tempo quando tiverem execuções longa sempre aguarde o termino nem que seja necessário criar um log com o comando Tee.
+ Sempre prefira usar nossos componentes de projeto ao fazer implementações e adaptações, principalmente prefira utilizar  shadcn/ui, tailwindcss, zod, Auth.js(V5), tanstack/react-query, zustand e outras bibliotecas que já estão no projeto ou suas versões mais atualizadas desde que não cause conflito de dependencia. 
+ Sempre utilize caminhos absolutos em seus comandos para efitar acidentes.
+ Sempre me de comandos em sequencia em apenas uma linha utilizando &&.
+
 ###############################################################
 

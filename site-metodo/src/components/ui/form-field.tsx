@@ -1,6 +1,7 @@
 "use client"
 
-import React from "react"
+import * as React from "react"
+/// <reference types="react/next" />
 import { cn } from "@/lib/utils"
 import { Input, type InputProps } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -28,7 +29,8 @@ export interface FormFieldProps
   id: string
   label: string
   description?: string
-  error?: string
+  error?: boolean
+  errorMessage?: string
   required?: boolean
   icon?: React.ReactNode
   className?: string
@@ -39,64 +41,70 @@ export interface FormFieldProps
  * Com validação visual e diferentes variants
  */
 const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
-  ({
-    className,
-    variant,
-    id,
-    label,
-    description,
-    error,
-    required,
-    icon,
-    ...inputProps
-  }, ref) => {
-    const hasError = !!error
+  (
+    (
+      {
+        className,
+        variant,
+        id,
+        label,
+        description,
+        error = false,
+        errorMessage,
+        required,
+        icon,
+        ...inputProps
+      }: FormFieldProps,
+      ref: React.ForwardedRef<HTMLInputElement>
+  ) => {
+      const hasError = !!error
 
-    return (
-      <div className={cn(formFieldVariants({ variant }), className)}>
-        {/* Label */}
-        <Label
-          htmlFor={id}
-          className={cn(
-            "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
-            hasError && "text-destructive",
-            required && "after:content-['*'] after:ml-0.5 after:text-destructive"
-          )}
-        >
-          {label}
-        </Label>
-
-        {/* Input com ícone opcional */}
-        <div className="relative">
-          {icon && (
-            <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
-              {icon}
-            </div>
-          )}
-          <Input
-            id={id}
-            ref={ref}
-            error={hasError}
+      return (
+        <div className={cn(formFieldVariants({ variant }), className)}>
+          {/* Label */}
+          <Label
+            htmlFor={id}
             className={cn(
-              icon && "pl-10",
-              hasError && "focus-visible:ring-destructive/20"
+              "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+              hasError && "text-destructive",
+              required && "after:content-['*'] after:ml-0.5 after:text-destructive"
             )}
-            {...inputProps}
-          />
-        </div>
+          >
+            {label}
+          </Label>
 
-        {/* Description ou Error */}
-        {(description || error) && (
-          <p className={cn(
-            "text-xs leading-relaxed",
-            hasError ? "text-destructive" : "text-muted-foreground"
-          )}>
-            {error || description}
-          </p>
-        )}
-      </div>
-    )
-  }
+          {/* Input com ícone opcional */}
+          <div className="relative">
+            {icon && (
+              <div className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground">
+                {icon}
+              </div>
+            )}
+            <Input
+              id={id}
+              ref={ref}
+              error={hasError}
+              className={cn(
+                icon && "pl-10",
+                hasError && "focus-visible:ring-destructive/20"
+              )}
+              {...inputProps}
+            />
+          </div>
+
+          {/* Description ou Error */}
+          {(description || errorMessage) && (
+            <p className={cn(
+              "text-xs leading-relaxed",
+              hasError ? "text-destructive" : "text-muted-foreground"
+            )}>
+              {errorMessage || description}
+            </p>
+          )}
+        </div>
+      )
+    }
+  )
 )
 FormField.displayName = "FormField"
 

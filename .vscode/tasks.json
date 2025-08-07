@@ -27,24 +27,40 @@
     },
     {
       "type": "shell",
-      "label": "Lint",
+      "label": "Lint Absoluto",
       "command": "npm run lint",
       "group": "test",
-      "problemMatcher": [
-        "$tsc"
-      ],
+      "problemMatcher": ["$tsc"],
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       }
     },
     {
       "type": "shell",
-      "label": "Build Next.js",
+      "label": "Build Next.js Absoluto",
       "command": "npm run build",
       "group": "build",
-      "problemMatcher": [
-        "$tsc"
-      ],
+      "problemMatcher": ["$tsc"],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Type Check Absoluto",
+      "command": "npm run type-check",
+      "group": "test",
+      "problemMatcher": ["$tsc"],
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      }
+    },
+    {
+      "type": "shell",
+      "label": "Prisma Generate Absoluto",
+      "command": "npm run prisma:generate",
+      "group": "build",
+      "problemMatcher": [],
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       }
