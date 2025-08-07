@@ -1,10 +1,10 @@
 
 import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
 import type { Metadata } from "next";
-import LayoutCliente from "./LayoutCliente";
+import LayoutCliente from "@/app/LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
 import { ThemeProvider } from '@/components/theme-provider';
-import { ErrorBoundary } from "./components/ErrorBoundary";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Removido uso de next/font/google por instabilidade de rede
 

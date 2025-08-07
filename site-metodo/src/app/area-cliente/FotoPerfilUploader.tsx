@@ -3,7 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { useSessaoAuth } from "../../hooks/useSessaoAuth";
-import { Skeleton } from "../components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 // Componente para upload de foto de perfil do usuário
 const FotoPerfilUploader: React.FC = () => {

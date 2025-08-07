@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { useRouter } from 'next/navigation';
-import { ErrorBoundary } from '../components/ErrorBoundary';
+import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';

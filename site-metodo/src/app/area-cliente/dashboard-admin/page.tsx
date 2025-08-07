@@ -4,7 +4,7 @@
 import React from "react";
 import DashboardAdmin from "../DashboardAdmin";
 import { useSessaoAuth } from "../../../hooks/useSessaoAuth";
-import { Skeleton } from "../../components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 
 const PageDashboardAdmin: React.FC = () => {

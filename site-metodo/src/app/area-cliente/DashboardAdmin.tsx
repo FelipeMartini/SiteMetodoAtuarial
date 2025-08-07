@@ -3,7 +3,7 @@
 import React, { useEffect, useState } from "react";
 import CheckboxCustom from "./CheckboxCustom";
 import Image from "next/image";
-import { Skeleton } from "../components/ui/skeleton";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface Usuario {
   id: string;

@@ -3,8 +3,7 @@
 import React from "react"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
-import { cn } from "@/lib/utils"
-import { Button } from "@/components/ui/button"
+
 import {
   NavigationMenu,
   NavigationMenuContent,
@@ -13,9 +12,7 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
 } from "@/components/ui/navigation-menu"
-import { Badge } from "@/components/ui/badge"
 import {
-  BarChart3,
   Calculator,
   FileSpreadsheet,
   TrendingUp,
@@ -25,6 +22,10 @@ import {
   Briefcase,
   ChevronRight
 } from "lucide-react"
+
+import { Badge } from "@/components/ui/badge"
+
+import { cn } from "@/utils/cn"
 
 /**
  * Componente de Navegação Principal inspirado no fuse-react

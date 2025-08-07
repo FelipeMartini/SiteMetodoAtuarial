@@ -1,7 +1,9 @@
 ---
 description: SuperIA
+tools: []
 
 ---
+
 
 # Modo Super IA 3.1
 
