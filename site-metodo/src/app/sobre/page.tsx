@@ -2,14 +2,13 @@
 
 import React from 'react';
 import Image from 'next/image';
-import { ErrorBoundary } from '@/components/ErrorBoundary';
+// import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function SobrePage() {
   return (
-    <ErrorBoundary>
-      <div className="min-h-screen bg-background">
-        <div className="container mx-auto px-4 py-16">
+    <div className="min-h-screen bg-background">
+      <div className="container mx-auto px-4 py-16">
           {/* Hero Section */}
           <div className="text-center mb-16">
             <h1 className="text-4xl md:text-5xl font-bold text-foreground mb-6">
@@ -131,11 +130,6 @@ export default function SobrePage() {
                         if (next) next.style.display = 'flex';
                       }}
                     />
-                    <div
-                      className="hidden w-full h-full items-center justify-center text-muted-foreground"
-                    >
-                      🏢 Escritório {num}
-                    </div>
                   </div>
                 </Card>
               ))}
@@ -159,8 +153,7 @@ export default function SobrePage() {
               </a>
             </CardContent>
           </Card>
-        </div>
       </div>
-    </ErrorBoundary>
+    </div>
   );
 }

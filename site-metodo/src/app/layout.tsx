@@ -4,7 +4,7 @@ import type { Metadata } from "next";
 import LayoutCliente from "@/app/LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
 import { ThemeProvider } from '@/components/theme-provider';
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+// import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Removido uso de next/font/google por instabilidade de rede
 
@@ -33,13 +33,11 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <ErrorBoundary>
-            <ProvedorSessao>
-              <LayoutCliente>
-                {children}
-              </LayoutCliente>
-            </ProvedorSessao>
-          </ErrorBoundary>
+          <ProvedorSessao>
+            <LayoutCliente>
+              {children}
+            </LayoutCliente>
+          </ProvedorSessao>
         </ThemeProvider>
       </body>
     </html>
