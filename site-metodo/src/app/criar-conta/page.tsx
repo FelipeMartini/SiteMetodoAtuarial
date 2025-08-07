@@ -5,257 +5,82 @@
 'use client';
 
 import React, { useState } from 'react';
-import styled from 'styled-components';
 import Link from 'next/link';
-// import { useTema } from '../contexts/ThemeContext'; // Removido para evitar warning
-import SocialLoginBox from '@core/components/SocialLoginBox';
-import { Botao } from '../design-system';
+import SocialLoginBox from '@/components/SocialLoginBox';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Button } from '@/components/ui/button';
 
-// Container principal da página
-const PaginaContainer = styled.div`
-  min-height: 100vh;
-  background: ${props => props.theme.colors.background};
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: ${props => props.theme.spacing.lg};
-`;
-
-// Container do conteúdo
-const ConteudoContainer = styled.div`
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: ${props => props.theme.spacing.xl};
-  max-width: 1000px;
-  width: 100%;
-  align-items: center;
-
-  @media (max-width: 768px) {
-    grid-template-columns: 1fr;
-    gap: ${props => props.theme.spacing.lg};
-  }
-`;
-
-// Seção do formulário
-const FormularioSecao = styled.div`
-  background: ${props => props.theme.colors.surface};
-  padding: ${props => props.theme.spacing.xl};
-  border-radius: ${props => props.theme.borderRadius.lg};
-  box-shadow: ${props => props.theme.shadows.md};
-`;
-
-// Título da página
-const Titulo = styled.h1`
-  font-size: ${props => props.theme.typography.fontSize.xxl};
-  font-weight: ${props => props.theme.typography.fontWeight.bold};
-  color: ${props => props.theme.colors.text};
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.md};
-`;
-
-// Subtítulo
-const Subtitulo = styled.p`
-  font-size: ${props => props.theme.typography.fontSize.base};
-  color: ${props => props.theme.colors.textSecondary};
-  text-align: center;
-  margin-bottom: ${props => props.theme.spacing.xl};
-  line-height: 1.6;
-`;
-
-// Formulário
-const Formulario = styled.form`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.lg};
-`;
-
-// Grupo de campo
-const CampoGrupo = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${props => props.theme.spacing.sm};
-`;
-
-// Label do campo
-const CampoLabel = styled.label`
-  font-size: ${props => props.theme.typography.fontSize.sm};
-  font-weight: ${props => props.theme.typography.fontWeight.medium};
-  color: ${props => props.theme.colors.text};
-`;
-
-// Input do campo
-const CampoInput = styled.input`
-  padding: ${props => props.theme.spacing.md};
-  font-size: ${props => props.theme.typography.fontSize.base};
-  border: 2px solid ${props => props.theme.colors.border};
-  border-radius: ${props => props.theme.borderRadius.md};
-  background: ${props => props.theme.colors.background};
-  color: ${props => props.theme.colors.text};
-  transition: all ${props => props.theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 3px ${props => props.theme.colors.primary}20;
-  }
-
-  &::placeholder {
-    color: ${props => props.theme.colors.textSecondary};
-  }
-`;
-
-// Divisor
-const Divisor = styled.div`
-  display: flex;
-  align-items: center;
-  gap: ${props => props.theme.spacing.md};
-  margin: ${props => props.theme.spacing.lg} 0;
-
-  &::before,
-  &::after {
-    content: '';
-    flex: 1;
-    height: 1px;
-    background: ${props => props.theme.colors.border};
-  }
-
-  span {
-    color: ${props => props.theme.colors.textSecondary};
-    font-size: ${props => props.theme.typography.fontSize.sm};
-    font-weight: ${props => props.theme.typography.fontWeight.medium};
-  }
-`;
-
-// Link para login
-const LinkLogin = styled.div`
-  text-align: center;
-  margin-top: ${props => props.theme.spacing.lg};
-  
-  a {
-    color: ${props => props.theme.colors.primary};
-    text-decoration: none;
-    font-weight: ${props => props.theme.typography.fontWeight.medium};
-
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-`;
-
-// Mensagem de erro/sucesso
-const Mensagem = styled.div<{ tipo: 'erro' | 'sucesso' }>`
-  padding: ${props => props.theme.spacing.md};
-  border-radius: ${props => props.theme.borderRadius.md};
-  font-size: ${props => props.theme.typography.fontSize.sm};
-  text-align: center;
-  background-color: ${props => props.tipo === 'erro' ? '#ff000020' : '#00ff0020'};
-  color: ${props => props.tipo === 'erro' ? '#ff0000' : '#00aa00'};
-  border: 1px solid ${props => props.tipo === 'erro' ? '#ff000040' : '#00aa0040'};
-`;
 
 export default function CriarContaPage() {
-  // const { currentTheme } = useTema();
-  const [formData, setFormData] = useState({
+  const [formData, setFormData] = React.useState({
     nome: '',
     email: '',
     senha: '',
     confirmarSenha: ''
   });
-  const [isLoading, setIsLoading] = useState(false);
-  const [mensagem, setMensagem] = useState<{ texto: string; tipo: 'erro' | 'sucesso' } | null>(null);
+  const [isLoading, setIsLoading] = React.useState(false);
+  const [mensagem, setMensagem] = React.useState<{ texto: string; tipo: 'erro' | 'sucesso' } | null>(null);
 
-  // Atualiza dados do formulário
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
-    setFormData(prev => ({
-      ...prev,
-      [name]: value
-    }));
+    setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Submete o formulário
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
     setMensagem(null);
-
     try {
-      // Validações básicas
       if (!formData.nome || !formData.email || !formData.senha || !formData.confirmarSenha) {
         throw new Error('Todos os campos são obrigatórios');
       }
-
       if (formData.senha !== formData.confirmarSenha) {
         throw new Error('As senhas não coincidem');
       }
-
       if (formData.senha.length < 6) {
         throw new Error('A senha deve ter pelo menos 6 caracteres');
       }
-
-      // Enviar dados para API de registro
       const response = await fetch('/api/auth/register', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
+        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           name: formData.nome,
           email: formData.email,
           password: formData.senha,
         }),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         throw new Error(data.message || 'Erro ao criar conta');
       }
-
-      setMensagem({
-        texto: 'Conta criada com sucesso! Você pode fazer login agora.',
-        tipo: 'sucesso'
-      });
-
-      // Limpar formulário
-      setFormData({
-        nome: '',
-        email: '',
-        senha: '',
-        confirmarSenha: ''
-      });
-
+      setMensagem({ texto: 'Conta criada com sucesso! Você pode fazer login agora.', tipo: 'sucesso' });
+      setFormData({ nome: '', email: '', senha: '', confirmarSenha: '' });
     } catch (error) {
-      setMensagem({
-        texto: error instanceof Error ? error.message : 'Erro inesperado',
-        tipo: 'erro'
-      });
+      setMensagem({ texto: error instanceof Error ? error.message : 'Erro inesperado', tipo: 'erro' });
     } finally {
       setIsLoading(false);
     }
   };
 
-
   return (
-    <PaginaContainer>
-      <ConteudoContainer>
+    <div className="min-h-screen bg-background flex items-center justify-center py-8 px-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl w-full items-center">
         {/* Seção do formulário */}
-        <FormularioSecao>
-          <Titulo>Criar Conta</Titulo>
-          <Subtitulo>
+        <div className="bg-card text-card-foreground p-8 rounded-lg border border-border shadow-md">
+          <h1 className="text-3xl font-bold text-center mb-2">Criar Conta</h1>
+          <p className="text-base text-muted-foreground text-center mb-8 leading-relaxed">
             Preencha os dados abaixo para criar sua conta ou use uma das opções de login social
-          </Subtitulo>
-
+          </p>
           {mensagem && (
-            <Mensagem tipo={mensagem.tipo}>
+            <div className={`text-sm text-center mb-4 rounded p-2 ${mensagem.tipo === 'erro' ? 'bg-red-100 text-red-700 border border-red-300' : 'bg-green-100 text-green-700 border border-green-300'}`}>
               {mensagem.texto}
-            </Mensagem>
+            </div>
           )}
-
-          <Formulario onSubmit={handleSubmit}>
-            <CampoGrupo>
-              <CampoLabel htmlFor="nome">Nome completo</CampoLabel>
-              <CampoInput
+          <form onSubmit={handleSubmit} className="flex flex-col gap-6">
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="nome">Nome completo</Label>
+              <Input
                 id="nome"
                 name="nome"
                 type="text"
@@ -264,11 +89,10 @@ export default function CriarContaPage() {
                 onChange={handleInputChange}
                 required
               />
-            </CampoGrupo>
-
-            <CampoGrupo>
-              <CampoLabel htmlFor="email">Email</CampoLabel>
-              <CampoInput
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="email">Email</Label>
+              <Input
                 id="email"
                 name="email"
                 type="email"
@@ -277,11 +101,10 @@ export default function CriarContaPage() {
                 onChange={handleInputChange}
                 required
               />
-            </CampoGrupo>
-
-            <CampoGrupo>
-              <CampoLabel htmlFor="senha">Senha</CampoLabel>
-              <CampoInput
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="senha">Senha</Label>
+              <Input
                 id="senha"
                 name="senha"
                 type="password"
@@ -291,11 +114,10 @@ export default function CriarContaPage() {
                 required
                 minLength={6}
               />
-            </CampoGrupo>
-
-            <CampoGrupo>
-              <CampoLabel htmlFor="confirmarSenha">Confirmar senha</CampoLabel>
-              <CampoInput
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label htmlFor="confirmarSenha">Confirmar senha</Label>
+              <Input
                 id="confirmarSenha"
                 name="confirmarSenha"
                 type="password"
@@ -305,33 +127,26 @@ export default function CriarContaPage() {
                 required
                 minLength={6}
               />
-            </CampoGrupo>
-
-            <Botao
-              type="submit"
-              variant="primary"
-              loading={isLoading}
-              disabled={isLoading}
-            >
+            </div>
+            <Button type="submit" className="w-full mt-2" disabled={isLoading}>
               {isLoading ? 'Criando conta...' : 'Criar conta'}
-            </Botao>
-          </Formulario>
-
-          <LinkLogin>
-            Já tem uma conta? <Link href="/login">Faça login</Link>
-          </LinkLogin>
-        </FormularioSecao>
-
+            </Button>
+          </form>
+          <div className="text-center mt-6">
+            Já tem uma conta?{' '}
+            <Link href="/login" className="text-primary underline hover:text-primary/90">Faça login</Link>
+          </div>
+        </div>
         {/* Seção do login social */}
         <div>
-          <Divisor>
-            <span>ou crie usando</span>
-          </Divisor>
-          <SocialLoginBox
-            showTitle={false}
-          />
+          <div className="flex items-center gap-4 my-8">
+            <div className="flex-1 h-px bg-border" />
+            <span className="text-muted-foreground text-sm">ou crie usando</span>
+            <div className="flex-1 h-px bg-border" />
+          </div>
+          <SocialLoginBox showTitle={false} />
         </div>
-      </ConteudoContainer>
-    </PaginaContainer>
+      </div>
+    </div>
   );
 }

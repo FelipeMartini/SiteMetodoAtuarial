@@ -1,14 +1,14 @@
-/**
- * Área do Cliente - Sistema de Gerenciamento de Usuários
- * Inclui funcionalidades diferentes baseadas no nível de acesso
- */
 'use client';
 
 import React, { useState, useEffect } from 'react';
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
-import styled from 'styled-components';
-import { useTheme } from '@core/theme/ContextoTema';
-import ThemeToggle from '../components/ThemeToggle';
+import { ThemeToggle } from '@/components/theme/ThemeToggle';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Badge } from '@/components/ui/badge';
+import { Separator } from '@/components/ui/separator';
 
 // Interfaces
 interface User {
@@ -22,316 +22,27 @@ interface User {
   updatedAt: Date;
 }
 
-interface UserFormData {
-  name: string;
-  email: string;
-  accessLevel: number;
-  isActive: boolean;
-  newPassword?: string;
-}
-
-// Styled Components
-const ClientAreaContainer = styled.div`
-  min-height: 100vh;
-  background: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
-  padding: ${({ theme }) => theme.spacing.lg};
-`;
-
-const Header = styled.header`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: ${({ theme }) => theme.spacing.xl};
-  padding-bottom: ${({ theme }) => theme.spacing.lg};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-const Title = styled.h1`
-  font-size: ${({ theme }) => theme.typography.fontSize['3xl']};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.bold};
-  color: ${({ theme }) => theme.colors.primary};
-  margin: 0;
-`;
-
-const Card = styled.div`
-  background: ${({ theme }) => theme.colors.surface};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.lg};
-  padding: ${({ theme }) => theme.spacing.xl};
-  margin-bottom: ${({ theme }) => theme.spacing.lg};
-  box-shadow: ${({ theme }) => theme.shadows.sm};
-`;
-
-const SectionTitle = styled.h2`
-  font-size: ${({ theme }) => theme.typography.fontSize.xl};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.text};
-  margin: 0 0 ${({ theme }) => theme.spacing.lg} 0;
-`;
-
-const Form = styled.form`
-  display: grid;
-  gap: ${({ theme }) => theme.spacing.md};
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-`;
-
-const FormGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: ${({ theme }) => theme.spacing.xs};
-`;
-
-const Label = styled.label`
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  color: ${({ theme }) => theme.colors.textSecondary};
-  font-size: ${({ theme }) => theme.typography.fontSize.sm};
-`;
-
-const Input = styled.input`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.text};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  transition: all ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.borderFocus};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.borderFocus}40;
-  }
-`;
-
-const Select = styled.select`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.md};
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  background: ${({ theme }) => theme.colors.surface};
-  color: ${({ theme }) => theme.colors.text};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  transition: all ${({ theme }) => theme.transitions.fast};
-
-  &:focus {
-    outline: none;
-    border-color: ${({ theme }) => theme.colors.borderFocus};
-    box-shadow: 0 0 0 3px ${({ theme }) => theme.colors.borderFocus}40;
-  }
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' | 'danger' }>`
-  padding: ${({ theme }) => theme.spacing.sm} ${({ theme }) => theme.spacing.lg};
-  border: none;
-  border-radius: ${({ theme }) => theme.borderRadius.md};
-  font-family: ${({ theme }) => theme.typography.fontFamily};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  cursor: pointer;
-  transition: all ${({ theme }) => theme.transitions.fast};
-  
-  ${({ $variant = 'primary', theme }) => {
-    switch ($variant) {
-      case 'danger':
-        return `
-          background: ${theme.colors.error};
-          color: ${theme.colors.onError};
-          &:hover { background: ${theme.colors.errorHover}; }
-        `;
-      case 'secondary':
-        return `
-          background: ${theme.colors.secondary};
-          color: ${theme.colors.onSecondary};
-          &:hover { background: ${theme.colors.secondaryHover}; }
-        `;
-      default:
-        return `
-          background: ${theme.colors.primary};
-          color: ${theme.colors.onPrimary};
-          &:hover { background: ${theme.colors.primaryHover}; }
-        `;
-    }
-  }}
-`;
-
-const Table = styled.table`
-  width: 100%;
-  border-collapse: collapse;
-  margin-top: ${({ theme }) => theme.spacing.md};
-`;
-
-const Th = styled.th`
-  text-align: left;
-  padding: ${({ theme }) => theme.spacing.sm};
-  border-bottom: 2px solid ${({ theme }) => theme.colors.border};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.semibold};
-  color: ${({ theme }) => theme.colors.textSecondary};
-`;
-
-const Td = styled.td`
-  padding: ${({ theme }) => theme.spacing.sm};
-  border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-`;
-
-const AccessLevelBadge = styled.span<{ $level: number }>`
-  padding: ${({ theme }) => theme.spacing.xs} ${({ theme }) => theme.spacing.sm};
-  border-radius: ${({ theme }) => theme.borderRadius.full};
-  font-size: ${({ theme }) => theme.typography.fontSize.xs};
-  font-weight: ${({ theme }) => theme.typography.fontWeight.medium};
-  
-  ${({ $level, theme }) => {
-    if ($level >= 4) return `background: ${theme.colors.error}; color: ${theme.colors.onError};`;
-    if ($level >= 3) return `background: ${theme.colors.warning}; color: ${theme.colors.text};`;
-    if ($level >= 2) return `background: ${theme.colors.info}; color: ${theme.colors.onPrimary};`;
-    return `background: ${theme.colors.success}; color: ${theme.colors.onError};`;
-  }}
-`;
-
-// Mapeamento de níveis de acesso
-const accessLevels = {
-  1: 'Usuário Normal',
-  2: 'Premium',
-  3: 'Manager',
-  4: 'Admin',
-  5: 'Super Admin'
-};
-
-const ClientArea: React.FC = () => {
-  // Hook de autenticação unificado (Auth.js puro)
+export default function ClientArea() {
   const { usuario: session, status } = useSessaoAuth();
-  const { currentTheme } = useTheme();
-
   const [users, setUsers] = useState<User[]>([]);
-  const [editingUser, setEditingUser] = useState<User | null>(null);
-  const [formData, setFormData] = useState<UserFormData>({
-    name: '',
-    email: '',
-    accessLevel: 1,
-    isActive: true,
-  });
-  const [loading, setLoading] = useState(false);
-  const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(true);
 
-  // Ajuste para tipagem do Auth.js puro
-  const userAccessLevel = session?.accessLevel || 1;
-  const isAdmin = userAccessLevel >= 4;
-
-  // Carrega dados do usuário atual ou lista de usuários (se admin)
   useEffect(() => {
-    if (session) {
-      if (isAdmin) {
-        fetchAllUsers();
-      } else {
-        setFormData({
-          name: session.name || '',
-          email: session.email || '',
-          accessLevel: userAccessLevel,
-          isActive: true,
-        });
-      }
+    if (status === 'authenticated' && session) {
+      loadUsers();
     }
-  }, [session, isAdmin, userAccessLevel]);
+  }, [status, session]);
 
-  const fetchAllUsers = async () => {
+  const loadUsers = async () => {
     try {
       setLoading(true);
-      const response = await fetch('/api/users');
+      const response = await fetch('/api/admin/users');
       if (response.ok) {
         const data = await response.json();
         setUsers(data);
-      } else {
-        setMessage('Erro ao carregar usuários');
       }
     } catch (error) {
-      // Exibe mensagem genérica ao usuário
-      setMessage('Erro ao carregar usuários');
-      // Log detalhado para desenvolvedores (não exibe detalhes sensíveis ao usuário)
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Erro ao carregar usuários:', error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setLoading(true);
-    setMessage('');
-
-    try {
-      const endpoint = editingUser
-        ? `/api/users/${editingUser.id}`
-        : '/api/users/profile';
-
-      const method = editingUser ? 'PUT' : 'PATCH';
-
-      const response = await fetch(endpoint, {
-        method,
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        setMessage('Dados atualizados com sucesso!');
-        if (isAdmin && editingUser) {
-          fetchAllUsers();
-          setEditingUser(null);
-        }
-        // Reset form
-        setFormData({
-          name: '',
-          email: '',
-          accessLevel: 1,
-          isActive: true,
-        });
-      } else {
-        const errorResponse = await response.json();
-        setMessage(errorResponse.message || 'Erro ao atualizar dados');
-      }
-    } catch (error) {
-      // Exibe mensagem genérica ao usuário
-      setMessage('Erro ao atualizar dados');
-      // Log detalhado para desenvolvedores
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Erro ao atualizar dados:', error);
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleEditUser = (user: User) => {
-    setEditingUser(user);
-    setFormData({
-      name: user.name || '',
-      email: user.email || '',
-      accessLevel: user.accessLevel,
-      isActive: user.isActive,
-    });
-  };
-
-  const handleDeleteUser = async (userId: string) => {
-    if (!confirm('Tem certeza que deseja excluir este usuário?')) return;
-
-    try {
-      setLoading(true);
-      const response = await fetch(`/api/users/${userId}`, {
-        method: 'DELETE',
-      });
-
-      if (response.ok) {
-        setMessage('Usuário excluído com sucesso!');
-        fetchAllUsers();
-      } else {
-        setMessage('Erro ao excluir usuário');
-      }
-    } catch (error) {
-      // Exibe mensagem genérica ao usuário
-      setMessage('Erro ao excluir usuário');
-      // Log detalhado para desenvolvedores
-      if (process.env.NODE_ENV === 'development') {
-        console.error('Erro ao excluir usuário:', error);
-      }
+      console.error('Erro ao carregar usuários:', error);
     } finally {
       setLoading(false);
     }
@@ -339,188 +50,131 @@ const ClientArea: React.FC = () => {
 
   if (status === 'loading') {
     return (
-      <ClientAreaContainer>
-        <p>Carregando...</p>
-      </ClientAreaContainer>
+      <div className="flex items-center justify-center min-h-screen">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
     );
   }
 
-  if (!session) {
+  if (status === 'unauthenticated' || !session) {
     return (
-      <ClientAreaContainer>
-        <p>Acesso negado. Faça login para continuar.</p>
-      </ClientAreaContainer>
+      <div className="container mx-auto py-16 px-4">
+        <Card className="max-w-md mx-auto">
+          <CardHeader>
+            <CardTitle>Acesso Negado</CardTitle>
+            <CardDescription>
+              Você precisa estar logado para acessar esta área.
+            </CardDescription>
+          </CardHeader>
+        </Card>
+      </div>
     );
   }
 
   return (
-    <ClientAreaContainer>
-      <Header>
-        <Title>
-          {isAdmin ? 'Painel Administrativo' : 'Área do Cliente'}
-        </Title>
-        <ThemeToggle />
-      </Header>
-
-      {message && (
-        <Card>
-          <p style={{ margin: 0, color: message.includes('Erro') ? currentTheme.colors.error : currentTheme.colors.success }}>
-            {message}
+    <div className="container mx-auto py-8 px-4">
+      <div className="flex justify-between items-center mb-8">
+        <div>
+          <h1 className="text-3xl font-bold text-foreground">Área do Cliente</h1>
+          <p className="text-muted-foreground">
+            Bem-vindo, {session.name || session.email}
           </p>
-        </Card>
-      )}
+        </div>
+        <ThemeToggle />
+      </div>
 
-      {/* Formulário de edição de perfil */}
-      <Card>
-        <SectionTitle>
-          {editingUser ? `Editando: ${editingUser.name}` : 'Meu Perfil'}
-        </SectionTitle>
-
-        <Form onSubmit={handleSubmit}>
-          <FormGroup>
-            <Label>Nome</Label>
-            <Input
-              type="text"
-              value={formData.name}
-              onChange={(e) => setFormData(prev => ({ ...prev, name: e.target.value }))}
-              required
-            />
-          </FormGroup>
-
-          <FormGroup>
-            <Label>Email</Label>
-            <Input
-              type="email"
-              value={formData.email}
-              onChange={(e) => setFormData(prev => ({ ...prev, email: e.target.value }))}
-              required
-              disabled={!isAdmin && !editingUser}
-            />
-          </FormGroup>
-
-          {isAdmin && (
-            <>
-              <FormGroup>
-                <Label>Nível de Acesso</Label>
-                <Select
-                  value={formData.accessLevel}
-                  onChange={(e) => setFormData(prev => ({ ...prev, accessLevel: parseInt(e.target.value) }))}
-                >
-                  {Object.entries(accessLevels).map(([level, name]) => (
-                    <option key={level} value={level}>{name}</option>
-                  ))}
-                </Select>
-              </FormGroup>
-
-              <FormGroup>
-                <Label>Status</Label>
-                <Select
-                  value={formData.isActive ? 'true' : 'false'}
-                  onChange={(e) => setFormData(prev => ({ ...prev, isActive: e.target.value === 'true' }))}
-                >
-                  <option value="true">Ativo</option>
-                  <option value="false">Inativo</option>
-                </Select>
-              </FormGroup>
-            </>
-          )}
-
-          <FormGroup>
-            <Label>Nova Senha (opcional)</Label>
-            <Input
-              type="password"
-              value={formData.newPassword || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, newPassword: e.target.value }))}
-              placeholder="Deixe em branco para manter a atual"
-            />
-          </FormGroup>
-
-          <div style={{ gridColumn: '1 / -1', display: 'flex', gap: '1rem' }}>
-            <Button type="submit" disabled={loading}>
-              {loading ? 'Salvando...' : 'Salvar Alterações'}
-            </Button>
-
-            {editingUser && (
-              <Button
-                type="button"
-                $variant="secondary"
-                onClick={() => {
-                  setEditingUser(null);
-                  setFormData({ name: '', email: '', accessLevel: 1, isActive: true });
-                }}
-              >
-                Cancelar
-              </Button>
-            )}
-          </div>
-        </Form>
-      </Card>
-
-      {/* Lista de usuários (apenas para admins) */}
-      {isAdmin && (
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {/* Informações do Usuário */}
         <Card>
-          <SectionTitle>Gerenciar Usuários</SectionTitle>
+          <CardHeader>
+            <CardTitle>Suas Informações</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <div>
+              <Label className="text-sm font-medium">Nome:</Label>
+              <p className="text-sm text-muted-foreground">{session.name || 'Não informado'}</p>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Email:</Label>
+              <p className="text-sm text-muted-foreground">{session.email}</p>
+            </div>
+            <div>
+              <Label className="text-sm font-medium">Nível de Acesso:</Label>
+              <Badge variant="secondary">{session.accessLevel || 1}</Badge>
+            </div>
+          </CardContent>
+        </Card>
 
-          {loading ? (
-            <p>Carregando usuários...</p>
-          ) : (
-            <Table>
-              <thead>
-                <tr>
-                  <Th>Nome</Th>
-                  <Th>Email</Th>
-                  <Th>Nível</Th>
-                  <Th>Status</Th>
-                  <Th>Último Login</Th>
-                  <Th>Ações</Th>
-                </tr>
-              </thead>
-              <tbody>
+        {/* Ações Rápidas */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Ações Rápidas</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-2">
+            <Button variant="outline" className="w-full justify-start">
+              📋 Visualizar Relatórios
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              📊 Dashboard
+            </Button>
+            <Button variant="outline" className="w-full justify-start">
+              ⚙️ Configurações
+            </Button>
+          </CardContent>
+        </Card>
+
+        {/* Estatísticas */}
+        <Card>
+          <CardHeader>
+            <CardTitle>Estatísticas</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-center">
+              <p className="text-2xl font-bold text-primary">{users.length}</p>
+              <p className="text-sm text-muted-foreground">Usuários no Sistema</p>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Lista de Usuários (apenas para admins) */}
+      {session.accessLevel && session.accessLevel >= 9 && (
+        <Card className="mt-6">
+          <CardHeader>
+            <CardTitle>Gerenciar Usuários</CardTitle>
+            <CardDescription>
+              Administração de usuários do sistema
+            </CardDescription>
+          </CardHeader>
+          <CardContent>
+            {loading ? (
+              <div className="flex items-center justify-center py-8">
+                <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-primary"></div>
+                <span className="ml-2">Carregando usuários...</span>
+              </div>
+            ) : (
+              <div className="space-y-4">
                 {users.map((user) => (
-                  <tr key={user.id}>
-                    <Td>{user.name || 'N/A'}</Td>
-                    <Td>{user.email}</Td>
-                    <Td>
-                      <AccessLevelBadge $level={user.accessLevel}>
-                        {accessLevels[user.accessLevel as keyof typeof accessLevels]}
-                      </AccessLevelBadge>
-                    </Td>
-                    <Td>{user.isActive ? 'Ativo' : 'Inativo'}</Td>
-                    <Td>
-                      {user.lastLogin
-                        ? new Date(user.lastLogin).toLocaleDateString('pt-BR')
-                        : 'Nunca'
-                      }
-                    </Td>
-                    <Td>
-                      <div style={{ display: 'flex', gap: '0.5rem' }}>
-                        <Button
-                          $variant="secondary"
-                          onClick={() => handleEditUser(user)}
-                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.875rem' }}
-                        >
-                          Editar
-                        </Button>
-                        {user.id !== session?.id && (
-                          <Button
-                            $variant="danger"
-                            onClick={() => handleDeleteUser(user.id)}
-                            style={{ padding: '0.25rem 0.5rem', fontSize: '0.875rem' }}
-                          >
-                            Excluir
-                          </Button>
-                        )}
-                      </div>
-                    </Td>
-                  </tr>
+                  <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <p className="font-medium">{user.name || 'Sem nome'}</p>
+                      <p className="text-sm text-muted-foreground">{user.email}</p>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Badge variant={user.isActive ? 'default' : 'secondary'}>
+                        {user.isActive ? 'Ativo' : 'Inativo'}
+                      </Badge>
+                      <Badge variant="outline">
+                        Nível {user.accessLevel}
+                      </Badge>
+                    </div>
+                  </div>
                 ))}
-              </tbody>
-            </Table>
-          )}
+              </div>
+            )}
+          </CardContent>
         </Card>
       )}
-    </ClientAreaContainer>
+    </div>
   );
-};
-
-export default ClientArea;
+}

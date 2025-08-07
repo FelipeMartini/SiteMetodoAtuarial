@@ -1,4 +1,3 @@
-
 "use client";
 // Componente client-side para exibir o conteúdo da área do cliente.
 // Recebe os dados do usuário autenticado via props.
@@ -7,81 +6,58 @@ import React from "react";
 import MenuLateralClienteWrapper from "./MenuLateralClienteWrapper";
 import Image from "next/image";
 import { ErrorBoundary } from "../components/ErrorBoundary";
-import { useTema } from '@core/theme/ContextoTema';
 import { Skeleton } from "../components/ui/skeleton";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 
 /**
  * Componente client-side para exibir o menu lateral e perfil do cliente.
- * Alterna cores do box e texto conforme tema selecionado.
+ * Usa Tailwind CSS para temas dark/light
  */
 export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: string | null; email?: string | null; image?: string | null } }) {
-  const { currentTheme } = useTema();
-  const cores = currentTheme.colors;
   return (
     <ErrorBoundary>
-      <div
-        style={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          gap: 24,
-          marginTop: 40,
-        }}
-      >
+      <div className="flex flex-row justify-center items-start gap-6 mt-10">
         <MenuLateralClienteWrapper />
-        <main
-          style={{
-            maxWidth: 400,
-            padding: 24,
-            borderRadius: 12,
-            boxShadow: "0 2px 8px #0002",
-            background: cores.surface,
-            color: cores.text,
-            transition: "background 0.3s, color 0.3s",
-          }}
-        >
-          <h2 style={{ textAlign: "center", color: cores.primary }}>Perfil do Cliente</h2>
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: 16,
-            }}
-          >
-            {/* Exibe Skeleton enquanto dados do usuário não estão disponíveis */}
-            {!usuario ? (
-              <>
-                <Skeleton className="h-[120px] w-[120px] rounded-full mb-2" />
-                <Skeleton className="h-[20px] w-[160px] mb-2" />
-                <Skeleton className="h-[20px] w-[200px]" />
-              </>
-            ) : (
-              <>
-                {usuario.image ? (
-                  <Image
-                    src={usuario.image}
-                    alt="Foto do usuário"
-                    width={120}
-                    height={120}
-                    style={{ borderRadius: "50%", border: `3px solid ${cores.primary}` }}
-                    loading="lazy"
-                    quality={85}
-                  />
-                ) : (
+
+        <Card className="max-w-md">
+          <CardHeader>
+            <CardTitle className="text-center">Perfil do Cliente</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="flex flex-col items-center gap-4">
+              {/* Exibe Skeleton enquanto dados do usuário não estão disponíveis */}
+              {!usuario ? (
+                <>
                   <Skeleton className="h-[120px] w-[120px] rounded-full mb-2" />
-                )}
-                <div style={{ color: cores.textSecondary }}>
-                  <strong style={{ color: cores.primary }}>Nome:</strong> {usuario.name || <Skeleton className="h-[20px] w-[160px] inline-block align-middle" />}
-                </div>
-                <div style={{ color: cores.textSecondary }}>
-                  <strong style={{ color: cores.primary }}>Email:</strong> {usuario.email || <Skeleton className="h-[20px] w-[200px] inline-block align-middle" />}
-                </div>
-              </>
-            )}
-          </div>
-        </main>
+                  <Skeleton className="h-[20px] w-[160px] mb-2" />
+                  <Skeleton className="h-[20px] w-[200px]" />
+                </>
+              ) : (
+                <>
+                  {usuario.image ? (
+                    <Image
+                      src={usuario.image}
+                      alt="Foto do usuário"
+                      width={120}
+                      height={120}
+                      className="rounded-full border-3 border-primary"
+                      loading="lazy"
+                      quality={85}
+                    />
+                  ) : (
+                    <Skeleton className="h-[120px] w-[120px] rounded-full mb-2" />
+                  )}
+                  <div className="text-muted-foreground">
+                    <span className="font-semibold text-primary">Nome:</span> {usuario.name || <Skeleton className="h-[20px] w-[160px] inline-block align-middle" />}
+                  </div>
+                  <div className="text-muted-foreground">
+                    <span className="font-semibold text-primary">Email:</span> {usuario.email || <Skeleton className="h-[20px] w-[200px] inline-block align-middle" />}
+                  </div>
+                </>
+              )}
+            </div>
+          </CardContent>
+        </Card>
       </div>
     </ErrorBoundary>
   );

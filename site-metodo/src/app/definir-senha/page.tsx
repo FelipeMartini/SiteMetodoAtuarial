@@ -1,12 +1,10 @@
-
 "use client";
 
-"use client";
 import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { InputTexto } from '../design-system/InputTexto';
-import { Botao } from '../design-system/Botao';
-import { ThemeProvider } from '@core/theme/ContextoTema';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 /**
  * Página para usuários sociais definirem uma senha para login tradicional
@@ -50,18 +48,55 @@ const DefinirSenhaPage: React.FC = () => {
   };
 
   return (
-    <ThemeProvider>
-      <form onSubmit={handleSubmit} style={{ maxWidth: 400, margin: '40px auto', padding: 24, background: '#fff', borderRadius: 12, boxShadow: '0 2px 8px rgba(0,0,0,0.08)' }}>
-        <h2 style={{ marginBottom: 24 }}>Definir senha</h2>
-        <InputTexto label="Nova senha" type="password" value={senha} onChange={e => setSenha(e.target.value)} required />
-        <InputTexto label="Confirme a senha" type="password" value={confirmacao} onChange={e => setConfirmacao(e.target.value)} required />
-        {erro && <div style={{ color: '#d32f2f', marginTop: 12 }}>{erro}</div>}
-        {sucesso && <div style={{ color: '#388e3c', marginTop: 12 }}>{sucesso}</div>}
-        <div style={{ marginTop: 24, width: '100%' }}>
-          <Botao type="submit">Definir senha</Botao>
-        </div>
-      </form>
-    </ThemeProvider>
+    <div className="min-h-screen bg-background flex flex-col items-center justify-center py-8 px-4">
+      <div className="w-full max-w-md mx-auto">
+        <form
+          onSubmit={handleSubmit}
+          className="bg-card text-card-foreground p-6 rounded-lg border border-border shadow-sm space-y-6"
+        >
+          <h2 className="text-2xl font-bold text-center text-foreground mb-6">
+            Definir senha
+          </h2>
+          <div className="space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="senha">Nova senha</Label>
+              <Input
+                id="senha"
+                type="password"
+                value={senha}
+                onChange={e => setSenha(e.target.value)}
+                required
+                autoComplete="new-password"
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="confirmacao">Confirme a senha</Label>
+              <Input
+                id="confirmacao"
+                type="password"
+                value={confirmacao}
+                onChange={e => setConfirmacao(e.target.value)}
+                required
+                autoComplete="new-password"
+              />
+            </div>
+          </div>
+          {erro && (
+            <div className="text-destructive text-sm mt-3">
+              {erro}
+            </div>
+          )}
+          {sucesso && (
+            <div className="text-success text-sm mt-3">
+              {sucesso}
+            </div>
+          )}
+          <Button type="submit" className="w-full mt-4">
+            Definir senha
+          </Button>
+        </form>
+      </div>
+    </div>
   );
 };
 
