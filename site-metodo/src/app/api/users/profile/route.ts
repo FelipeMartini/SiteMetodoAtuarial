@@ -2,7 +2,7 @@
  * API para gerenciamento do perfil do usuário logado - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../../lib/prisma';
+import { db } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 // PATCH - Atualizar perfil do usuário logado

@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CheckboxCustom from "./CheckboxCustom";
+import CheckboxCustom from "@/app/area-cliente/CheckboxCustom";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
 

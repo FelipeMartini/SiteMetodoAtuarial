@@ -4,7 +4,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import type { SessaoAuth } from '../types/next-auth';
+import type { SessaoAuth } from '@/types/next-auth';
 
 
 export const useAuth = (redirectTo?: string) => {

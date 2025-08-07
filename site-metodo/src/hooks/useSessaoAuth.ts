@@ -1,7 +1,7 @@
 // use cliente
 // Hook universal para autenticação e sessão usando apenas Auth.js puro (fetch nas rotas API)
 import { useState, useEffect, useCallback } from 'react';
-import type { SessaoAuth } from '../types/next-auth';
+import type { SessaoAuth } from '@/types/next-auth';
 
 export function useSessaoAuth() {
   const [usuario, setUsuario] = useState<SessaoAuth | null>(null);

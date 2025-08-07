@@ -1,9 +1,9 @@
 'use client';
 
 import React from 'react';
-import { useSessaoAuth } from '../../hooks/useSessaoAuth';
+import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { redirect } from 'next/navigation';
-import AreaClienteConteudo from './AreaClienteConteudo';
+import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
 
 export default function AreaClientePage() {
   const { usuario, status } = useSessaoAuth();

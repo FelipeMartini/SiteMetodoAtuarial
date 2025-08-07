@@ -3,7 +3,7 @@
 // Recebe os dados do usuário autenticado via props.
 
 import React from "react";
-import MenuLateralClienteWrapper from "./MenuLateralClienteWrapper";
+import MenuLateralClienteWrapper from "@/app/area-cliente/MenuLateralClienteWrapper";
 import Image from "next/image";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { Skeleton } from "@/components/ui/skeleton";

@@ -2,7 +2,7 @@
  * API para gerenciamento de usuários - Versão Completa
  */
 import { NextRequest, NextResponse } from 'next/server';
-import { db } from '../../../lib/prisma';
+import { db } from '@/lib/prisma';
 import bcrypt from 'bcryptjs';
 
 // GET - Listar todos os usuários (apenas para admins)
