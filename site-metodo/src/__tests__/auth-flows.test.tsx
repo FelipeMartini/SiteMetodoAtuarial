@@ -2,7 +2,7 @@
 jest.mock('next/navigation', () => ({
   useRouter: jest.fn(() => ({ push: jest.fn() })),
 }));
-const mockLogin = jest.fn((provider, credenciais) => {
+const mockLogin = jest.fn(() => {
   // Garante que redirect: false sempre está presente, como na implementação real
   return Promise.resolve({ ok: true });
 });
