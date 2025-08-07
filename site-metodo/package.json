@@ -29,7 +29,8 @@
     "tailwindcss": "^4.1.11",
     "ts-jest": "^29.4.0",
     "tw-animate-css": "^1.3.6",
-    "typescript": "5.9.2"
+  "typescript": "5.9.2",
+  "ts-node": "^10.9.2"
   },
   "dependencies": {
     "@auth/core": "^0.40.0",
@@ -69,7 +70,10 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit -p $(pwd)/tsconfig.json",
-    "prisma:generate": "prisma generate --schema=\"$(pwd)/src/prisma/schema.prisma\"",
+  "prisma:generate": "prisma generate --schema=./src/prisma/schema.prisma",
+  "prisma:seed": "ts-node --compiler-options '{\"module\":\"commonjs\"}' ./src/prisma/seeds/seed.ts",
     "analyze": "cross-env ANALYZE=true npm run build"
+    ,
+  "postinstall": "prisma generate --schema=./src/prisma/schema.prisma && prisma db seed --schema=./src/prisma/schema.prisma"
   }
 }
