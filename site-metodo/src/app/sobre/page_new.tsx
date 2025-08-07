@@ -16,7 +16,7 @@ export default function SobrePage() {
               Sobre o Método Atuarial
             </h1>
             <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-              Consultoria especializada em soluções atuariais com excelência técnica 
+              Consultoria especializada em soluções atuariais com excelência técnica
               e inovação para o mercado de previdência e seguros.
             </p>
           </div>
@@ -31,7 +31,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Fornecer soluções atuariais de alta qualidade, contribuindo para 
+                  Fornecer soluções atuariais de alta qualidade, contribuindo para
                   a sustentabilidade e transparência do sistema previdenciário brasileiro.
                 </p>
               </CardContent>
@@ -45,7 +45,7 @@ export default function SobrePage() {
               </CardHeader>
               <CardContent>
                 <p className="text-muted-foreground">
-                  Ser referência nacional em consultoria atuarial, reconhecida pela 
+                  Ser referência nacional em consultoria atuarial, reconhecida pela
                   inovação, precisão técnica e compromisso com nossos clientes.
                 </p>
               </CardContent>
@@ -84,7 +84,7 @@ export default function SobrePage() {
                       Equipe Técnica
                     </h3>
                     <p className="text-muted-foreground">
-                      Profissionais especializados em ciências atuariais com ampla 
+                      Profissionais especializados em ciências atuariais com ampla
                       experiência no mercado previdenciário.
                     </p>
                   </div>
@@ -101,7 +101,7 @@ export default function SobrePage() {
                       Formação Acadêmica
                     </h3>
                     <p className="text-muted-foreground">
-                      Formação sólida em matemática, estatística e economia, 
+                      Formação sólida em matemática, estatística e economia,
                       com especializações em atuária e gestão de riscos.
                     </p>
                   </div>
@@ -130,7 +130,7 @@ export default function SobrePage() {
                         e.currentTarget.nextElementSibling.style.display = 'flex';
                       }}
                     />
-                    <div 
+                    <div
                       className="hidden w-full h-full items-center justify-center text-muted-foreground"
                     >
                       🏢 Escritório {num}

@@ -1,12 +1,10 @@
+
+import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
 import type { Metadata } from "next";
-// Usando fonte local temporária para evitar erro de build
-// import "./globals.css"; // Migrado para styled-components/Tailwind
-// Importa apenas o CSS global principal do app, conforme recomendação oficial do Next.js App Router
 import LayoutCliente from "./LayoutCliente";
 import ProvedorSessao from "./ProvedorSessao";
-import { ThemeProvider } from '@core/theme/ContextoTema';
+import { ThemeProvider } from '@/components/theme-provider';
 import { ErrorBoundary } from "./components/ErrorBoundary";
-import StyledComponentsRegistry from './StyledComponentsRegistry';
 
 // Removido uso de next/font/google por instabilidade de rede
 
@@ -31,24 +29,18 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  // StyledComponentsRegistry garante SSR correto dos estilos do styled-components
-  // Envolvendo todo o conteúdo do layout principal
-  // Comentário: a ordem dos providers foi mantida para não alterar a lógica do app
-  // Se precisar adicionar outros providers, coloque dentro do StyledComponentsRegistry
   return (
-    <html lang="pt-BR" style={{ fontFamily: 'Arial, Helvetica, sans-serif' }}>
+    <html lang="pt-BR" suppressHydrationWarning>
       <body>
-        <StyledComponentsRegistry>
+        <ThemeProvider>
           <ErrorBoundary>
             <ProvedorSessao>
-              <ThemeProvider>
-                <LayoutCliente>
-                  {children}
-                </LayoutCliente>
-              </ThemeProvider>
+              <LayoutCliente>
+                {children}
+              </LayoutCliente>
             </ProvedorSessao>
           </ErrorBoundary>
-        </StyledComponentsRegistry>
+        </ThemeProvider>
       </body>
     </html>
   );

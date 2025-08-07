@@ -1,5 +1,9 @@
 # Ignorar arquivos e pastas de build e cache do Next.js
 .next/
+# Ignorar diretório antigo de app
+nextjs-app/
+# Ignorar diretório antigo de app
+fuse-react/
 # Ignorar variáveis de ambiente locais
 .env.local
 # Ignorar dependências

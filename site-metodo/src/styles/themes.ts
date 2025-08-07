@@ -1,7 +1,7 @@
 /**
  * Sistema de temas moderno para o projeto
  * Baseado no design system da implementação 10
- * Compatível com styled-components e design system reutilizável
+ * Design system reutilizável
  */
 
 export interface Theme {

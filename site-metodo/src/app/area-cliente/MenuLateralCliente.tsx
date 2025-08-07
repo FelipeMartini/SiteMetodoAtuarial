@@ -12,40 +12,7 @@ import { Skeleton } from "../components/ui/skeleton";
 
 // Importação do componente Link do Next.js para navegação interna
 import Link from "next/link";
-import styled from "styled-components";
 
-// Componente estilizado para o menu lateral
-// Estilização do menu lateral e links para alternância de tema
-const AsideMenu = styled.aside`
-  width: 220px;
-  background: ${({ theme }) => theme.colors.surface};
-  border-radius: 12px;
-  box-shadow: 0 2px 8px #0001;
-  padding: 24px;
-  margin-right: 32px;
-  min-height: 320px;
-`;
-const NavMenu = styled.nav`
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-`;
-const TituloMenu = styled.strong`
-  margin-bottom: 12px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.primary};
-`;
-const LinkMenu = styled(Link)`
-  color: ${({ theme }) => theme.colors.text};
-  font-weight: 500;
-  text-decoration: none;
-  font-size: 1rem;
-  transition: color 0.2s;
-  &:hover {
-    color: ${({ theme }) => theme.colors.primary};
-    text-decoration: underline;
-  }
-`;
 
 
 
@@ -55,32 +22,38 @@ export default function MenuLateralCliente() {
   // Exibe Skeleton enquanto dados do usuário não estão disponíveis
   if (!usuario) {
     return (
-      <AsideMenu data-testid="menu-lateral">
-        <NavMenu>
-          <TituloMenu>
+      <aside
+        data-testid="menu-lateral"
+        className="w-[220px] bg-card rounded-xl shadow-md p-6 mr-8 min-h-[320px] border border-border"
+      >
+        <nav className="flex flex-col gap-4">
+          <strong className="mb-3 text-lg text-primary">
             <Skeleton className="h-[24px] w-[140px] mb-2" />
-          </TituloMenu>
+          </strong>
           {[...Array(5)].map((_, idx) => (
             <Skeleton key={idx} className="h-[20px] w-[120px] mb-2" />
           ))}
-        </NavMenu>
-      </AsideMenu>
+        </nav>
+      </aside>
     );
   }
   return (
-    <AsideMenu data-testid="menu-lateral">
-      <NavMenu>
-        <TituloMenu>Menu do Cliente</TituloMenu>
-        <LinkMenu href="/area-cliente">Perfil</LinkMenu>
-        <LinkMenu href="/servicos">Serviços</LinkMenu>
-        <LinkMenu href="/contato">Contato / Orçamento</LinkMenu>
-        <LinkMenu href="#">Meus Documentos</LinkMenu>
-        <LinkMenu href="#">Solicitações</LinkMenu>
+    <aside
+      data-testid="menu-lateral"
+      className="w-[220px] bg-card rounded-xl shadow-md p-6 mr-8 min-h-[320px] border border-border"
+    >
+      <nav className="flex flex-col gap-4">
+        <strong className="mb-3 text-lg text-primary">Menu do Cliente</strong>
+        <Link href="/area-cliente" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Perfil</Link>
+        <Link href="/servicos" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Serviços</Link>
+        <Link href="/contato" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Contato / Orçamento</Link>
+        <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Meus Documentos</Link>
+        <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Solicitações</Link>
         {/* Exibe link administrativo apenas para nível 5 */}
         {nivel === 5 && (
-          <LinkMenu href="/area-cliente/dashboard-admin">Dashboard Administrativo</LinkMenu>
+          <Link href="/area-cliente/dashboard-admin" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Dashboard Administrativo</Link>
         )}
-      </NavMenu>
-    </AsideMenu>
+      </nav>
+    </aside>
   );
 }
