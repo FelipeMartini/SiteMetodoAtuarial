@@ -21,7 +21,7 @@ export function useSessaoAuth() {
         setUsuario(null);
         setStatus('unauthenticated');
       }
-    } catch (e) {
+    } catch {
       setUsuario(null);
       setStatus('unauthenticated');
     }
@@ -56,7 +56,7 @@ export function useSessaoAuth() {
   }, [fetchSessao]);
 
   // Logout aceita argumentos opcionais para compatibilidade com testes
-  const logout = useCallback(async (_args?: any) => {
+  const logout = useCallback(async () => {
     await fetch('/api/auth/signout', { method: 'POST' });
     setUsuario(null);
     setStatus('unauthenticated');

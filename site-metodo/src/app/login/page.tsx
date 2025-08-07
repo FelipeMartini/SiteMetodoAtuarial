@@ -1,13 +1,13 @@
 "use client";
 
-import React, { Suspense, useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { useRouter } from 'next/navigation';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 import { Container, Flex, Texto } from '../../styles/ComponentesBase';
 import InputTexto from '../design-system/InputTexto';
 
-const SocialLoginBox = React.lazy(() => import("@core/components/SocialLoginBox"));
+import SocialLoginBox from "@core/components/SocialLoginBox";
 
 
 // Tela de login com formulário tradicional e login social
@@ -69,7 +69,7 @@ const LoginPage: React.FC = () => {
             </Texto>
 
             {/* Formulário tradicional de login */}
-            <form onSubmit={handleSubmit} style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 16 }}>
+            <form onSubmit={handleSubmit} style={{ marginBottom: 16, display: 'flex', flexDirection: 'column', gap: 16 }}>
               <InputTexto
                 label="Email"
                 type="email"
@@ -105,12 +105,16 @@ const LoginPage: React.FC = () => {
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </button>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 8 }}>
+                <a href="/recuperar-senha" style={{ color: '#4F46E5', textDecoration: 'underline', fontSize: 14 }}>Recuperar senha</a>
+                <a href="/criar-conta" style={{ color: '#4F46E5', textDecoration: 'underline', fontSize: 14 }}>Criar conta</a>
+              </div>
             </form>
 
-            {/* Login social permanece */}
-            <Suspense fallback={<div>Carregando login social...</div>}>
+            {/* Login social visual moderno */}
+            <div style={{ marginTop: 24 }}>
               <SocialLoginBox />
-            </Suspense>
+            </div>
           </div>
         </Flex>
       </Container>
