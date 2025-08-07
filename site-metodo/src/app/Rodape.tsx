@@ -1,10 +1,8 @@
 /**
- * Componente Rodape modernizado usando styled-components
  * Apresenta informações institucionais, links úteis, redes sociais e créditos.
  */
 "use client";
 import React from 'react';
-import styled from "styled-components";
 
 const RodapeContainer = styled.footer`
   background: ${({ theme }) => theme.colors.surface};

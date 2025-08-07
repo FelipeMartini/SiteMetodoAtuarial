@@ -3,7 +3,6 @@
 
 // 'use client' deve ser a primeira linha para evitar warnings do ESLint e garantir funcionamento correto do Next.js
 // Importações individuais do Material-UI para melhor performance e evitar duplicidade
-import styled from "styled-components";
 import React from 'react';
 import { ErrorBoundary } from '../components/ErrorBoundary';
 // Página Sobre - Inspirada no site métodoatuarial.com.br
@@ -14,7 +13,6 @@ import { ErrorBoundary } from '../components/ErrorBoundary';
 import Image from 'next/image';
 
 
-// Styled-components fora do componente para evitar warnings e seguir boas práticas
 const Container = styled.section`
   width: 100%;
   max-width: 1200px;
@@ -99,7 +97,6 @@ const Sobre: React.FC = React.memo(function Sobre() {
             <TextoDestaque>Satisfação do cliente</TextoDestaque>
           </BlocoDestaque>
         </Destaques>
-        {/* Comentário: Todos os blocos e texts usam styled-components e alternância de tema. */}
         <Box>
           {/* Imagem otimizada com quality e blur */}
           <Image src="/office-team.png" alt="Equipe Método Atuarial" width={220} height={147} style={{ borderRadius: 16, objectFit: "cover" }} loading="lazy" quality={85} role="img" aria-label="Foto da equipe Método Atuarial" />

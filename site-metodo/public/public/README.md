@@ -41,7 +41,7 @@ nextjs-app/
 - **Next.js 15**: Framework React para SSR, SSG e rotas modernas.
 - **React 19**: Biblioteca para construção de interfaces reativas e componentes reutilizáveis.
 - **TypeScript**: Tipagem estática para maior segurança e produtividade.
-- **Styled-components/Tailwind CSS**: Estilização moderna, flexível e com suporte a temas.
+**Tailwind CSS**: Estilização moderna, flexível e com suporte a temas.
 - **shadcn/ui**: Componentes de UI acessíveis, modernos e customizáveis.
 - **Prisma ORM**: Mapeamento objeto-relacional para bancos SQL.
 - **Jest + Testing Library**: Testes unitários, integração e snapshots.

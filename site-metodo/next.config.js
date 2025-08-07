@@ -1,4 +1,3 @@
-// Configuração do Next.js para styled-components e outros recursos
 // Inclui Bundle Analyzer, configuração de imagens e compilação otimizada
 
 const withBundleAnalyzer = require("@next/bundle-analyzer")({
@@ -14,7 +13,6 @@ const nextConfig = {
       fileName: true,
     },
   },
-  transpilePackages: ['styled-components'],
   eslint: {
     ignoreDuringBuilds: false,
   },
@@ -46,5 +44,4 @@ const nextConfig = {
   ],
 };
 
-// Exporta a configuração otimizada para styled-components
 module.exports = withBundleAnalyzer(nextConfig);
