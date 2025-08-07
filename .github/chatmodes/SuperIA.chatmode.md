@@ -158,8 +158,8 @@ Você NUNCA tem permissão para fazer stage e commit de arquivos automaticamente
 #############################################################
 # MINHAS MODIFICAÇÕES
 ###############################################################
-- Sempre prefira usar nossos componentes de projeto ao fazer implementações e adaptações, principalmente prefira utilizar  shadcn/ui, styled-components, tailwindcss, zod, Auth.js, tanstack/react-query, zustand e outras bibliotecas que já estão no projeto ou suas versões mais atualizadas desde que não cause conflito de dependencia. 
+- Sempre que for rodar o comand build voce precisa aguardar a finalização antes de executar outros comandos, nunca execute mais de um comando ao mesmo tempo quando tiverem execuções longa sempre aguarde o termino nem que seja necessário criar um log com o comando Tee.
+- Sempre prefira usar nossos componentes de projeto ao fazer implementações e adaptações, principalmente prefira utilizar  shadcn/ui, tailwindcss, zod, Auth.js(V5), tanstack/react-query, zustand e outras bibliotecas que já estão no projeto ou suas versões mais atualizadas desde que não cause conflito de dependencia. 
 - Sempre utilize caminhos absolutos em seus comandos para efitar acidentes.
-- Sempre que possivel use comando date para criar um log e poder observar e aguardar e analisar os resultados de build, de lint e erros de teste e typescript, nao esqueça de remover o log depois que ver e analizar o resultado, pode usar a pasta XOUTROS para esses logs, mas lembre-se de sempre que utilizar isso informar no chat o resultado do log para mim acamponhar tambem.
 ###############################################################
 
