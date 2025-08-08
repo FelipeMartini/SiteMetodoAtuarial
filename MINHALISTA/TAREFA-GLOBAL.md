@@ -60,6 +60,59 @@ export function ModeToggle() {
 
 
 
+
+####################################################################
+
+problema do carregamento rapido e erro do use state
+
+Após pesquisa profunda em fontes oficiais, issues e especialistas, seguem os achados e próximos passos práticos:
+
+1. Diagnóstico Profundo
+Erro useState is not a function no build/prerender: ocorre quando um componente ou hook client-side (que depende de React no browser) é executado no server-side durante o build/prerender. Isso pode ser causado por:
+
+Importação cruzada de hooks/client components em arquivos server.
+Uso de React Query (useQuery, useQueryClient) fora de um provider ou em contexto server.
+SSR não desabilitado corretamente em imports dinâmicos.
+Alguma dependência (ex: TanStack Query) não sendo corretamente isolada do lado do servidor.
+Não há issues abertas no TanStack Query ou Next.js que resolvam esse erro para React 19/Next 15. O padrão recomendado é isolar tudo que usa hooks em componentes client-only e garantir que nada disso seja importado em server components.
+
+2. Teste prático sugerido por especialistas
+Remover temporariamente o uso do React Query/TanStack Query do dashboard-admin para isolar o problema. Se o erro sumir, o problema está na integração do React Query com o SSR/prerender do Next.js.
+
+3. Próximos passos práticos
+A) Remover React Query do DashboardAdmin para teste
+Vou editar o arquivo DashboardAdmin.tsx para:
+
+Remover todos os imports e usos de useQuery, useQueryClient e TanStack Query.
+Substituir por um carregamento simples (ex: useEffect + fetch + useState).
+Manter o restante da lógica para garantir que a página renderize.
+Após isso, rode o build novamente. Se o erro sumir, confirmamos a causa.
+
+B) Se resolver, podemos:
+Reimplementar o carregamento de dados apenas client-side (sem React Query).
+Ou buscar workarounds para usar React Query apenas no client, nunca no server/prerender.
+Vou iniciar a alteração agora.
+
+DashboardAdmin.tsx+32-19
+Removi todo o uso do React Query/TanStack Query do DashboardAdmin.tsx e substituí por um carregamento simples com useEffect + fetch + useState. Agora, o componente não depende mais de providers ou hooks avançados — está 100% client-only.
+
+Próximos passos:
+
+Rode novamente o build (npm run build).
+Se o erro sumir, confirmamos que o problema era a integração do React Query com o SSR/prerender.
+Se o erro persistir, o problema está em outro ponto.
+Se o build passar, podemos reimplementar o carregamento de dados apenas client-side, sem React Query, ou buscar um workaround seguro para uso do React Query apenas no client.
+
+Por favor, rode o build e me envie o resultado.
+
+#################################################################################
+
+
+
+
+
+
+
 entao busque na internet sobre o assunto de como personalizar a pagina not found procure tambem por paginas notfound estilizadas com shadcn e crie uma para nos com componentes modernos e estilizados que voce estilize mas busque por exemplos e desenvolva essa pagina conforme recomenda na web, e utilize entao o como server component sem use cliente, implemente isso segundo nossos temas e personalizaçoes e caracteristicas do nosso projeto de consultoria atuarial
 
 
