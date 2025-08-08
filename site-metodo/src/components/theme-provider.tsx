@@ -17,9 +17,8 @@ export function ThemeProvider({
   return (
     <NextThemesProvider
       attribute="class"
-      defaultTheme="dark"
-      enableSystem={false}
-      themes={["light", "dark"]}
+      defaultTheme="system"
+      enableSystem={true}
       storageKey="metodo-atuarial-theme"
       disableTransitionOnChange
       {...props}

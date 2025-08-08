@@ -1,5 +1,6 @@
 "use client";
 import React from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
 const Rodape: React.FC = React.memo(function Rodape() {
@@ -8,15 +9,15 @@ const Rodape: React.FC = React.memo(function Rodape() {
       <div className="container mx-auto flex flex-wrap justify-between items-start gap-8 py-8">
         <section className="flex-1 min-w-[200px] mb-4">
           <h4 className="text-lg font-semibold mb-4">Institucional</h4>
-          <a href="/sobre" className="block text-primary hover:underline mb-2">Sobre</a>
-          <a href="/servicos" className="block text-primary hover:underline mb-2">Serviços</a>
-          <a href="/contato" className="block text-primary hover:underline">Contato</a>
+          <Link href="/sobre" className="block text-primary hover:underline mb-2">Sobre</Link>
+          <Link href="/servicos" className="block text-primary hover:underline mb-2">Serviços</Link>
+          <Link href="/contato" className="block text-primary hover:underline">Contato</Link>
         </section>
         <section className="flex-1 min-w-[200px] mb-4">
           <h4 className="text-lg font-semibold mb-4">Links Úteis</h4>
-          <a href="/area-cliente" className="block text-primary hover:underline mb-2">Área do Cliente</a>
-          <a href="/criar-conta" className="block text-primary hover:underline mb-2">Criar Conta</a>
-          <a href="/login" className="block text-primary hover:underline">Login</a>
+          <Link href="/area-cliente" className="block text-primary hover:underline mb-2">Área do Cliente</Link>
+          <Link href="/criar-conta" className="block text-primary hover:underline mb-2">Criar Conta</Link>
+          <Link href="/login" className="block text-primary hover:underline">Login</Link>
         </section>
         <section className="flex-1 min-w-[200px] mb-4">
           <h4 className="text-lg font-semibold mb-4">Redes Sociais</h4>
