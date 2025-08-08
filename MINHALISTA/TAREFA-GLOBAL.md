@@ -10,3 +10,56 @@ arrumanos o packege.json reintalamos todas as dependencias e ainda continuamos c
 
 
 
+
+
+
+Bom agora que nosso aplicativo esta rodando novamente e implementamos tailwind e shadcn nosso novo aplicativo fica na pasta site-metodo , nosso aplicativo antigo ainda se encontra na pasta next.js-app e o projeto que estamos usando como referencia para pegar elementos e futuras implementações esta na pasta fuse-react, tenha em mente que temos que pegar elementos de fuse-react adaptarmos e estilizarmos de forma moderna com o shacn o qual voce deve adicionar o componente e estilizar por completo busque na internet exemplos e estilizações modernas para implementar, crie um check list para suas tarefas conforme manda suas instruçoes, releia elas e se atualize, temos uma coisa que eu nao gostei depois de migrarmos é que perdemos o estilo single page aplication agora a pagina inicial eh mais extensa com todos elementos nela mas quando penso em SPA penso que devemos ter um nav bar top com links e nao sair da pagina para recarrregar, temos que ter um componente central onde todas as outras paginas so carregam ail dentro e alteram o DOM apenas sem ter que recarrregar ou sair para outra pagina o sistame de routes e LINK do next, isso precisamos implementar novamente, eu nao sei porque se perdeu esse m enu superior procure nos arquivos do novo projeto site-metodo se o encontra ou algo parecido onde tinhamos os links da area cliente, serviço sobre, contato tudo num menu superiro inclusive o toogle para selecionar o tema, temos que ter em mente que precisamos resgatar ou reestruturar nossos temas claro e escuro e o seletor de tema, isso acho q se perdeu de uma procurada, caso nao econtre nada analise nosso projeto antigo pasta next.js-app e veja como era antes e tente adaptar novamente e tambem use como sua referencia o app do diretorio fuse-react que tmbem tem nav bars elegantes até prefiro que use mais ele como referencia, mas conulte a web tambem com componentes mordernos e estilizaçoes elegantentes e moderna do shadcn nao esqueça de estilizar os componentes adicionados, estude tudo isso a fundo e monte seu plano de açoes e para essas implementaçoes, use https://ui.shadcn.com/docs/dark-mode/next ,, use o seletor de tema "use client"
+
+import * as React from "react"
+import { Moon, Sun } from "lucide-react"
+import { useTheme } from "next-themes"
+
+import { Button } from "@/components/ui/button"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+
+export function ModeToggle() {
+  const { setTheme } = useTheme()
+
+  return (
+    <DropdownMenu>
+      <DropdownMenuTrigger asChild>
+        <Button variant="outline" size="icon">
+          <Sun className="h-[1.2rem] w-[1.2rem] scale-100 rotate-0 transition-all dark:scale-0 dark:-rotate-90" />
+          <Moon className="absolute h-[1.2rem] w-[1.2rem] scale-0 rotate-90 transition-all dark:scale-100 dark:rotate-0" />
+          <span className="sr-only">Toggle theme</span>
+        </Button>
+      </DropdownMenuTrigger>
+      <DropdownMenuContent align="end">
+        <DropdownMenuItem onClick={() => setTheme("light")}>
+          Light
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("dark")}>
+          Dark
+        </DropdownMenuItem>
+        <DropdownMenuItem onClick={() => setTheme("system")}>
+          System
+        </DropdownMenuItem>
+      </DropdownMenuContent>
+    </DropdownMenu>
+  )
+}
+  https://ui.shadcn.com/docs/javascript,  https://ui.shadcn.com/docs/theming , use essas referencias e aprenda https://ui.shadcn.com/docs/cli , e se preciso consulto tambem https://github.com/shadcn-ui/ui para entender como utilizar 
+
+
+
+
+
+
+
+
+
