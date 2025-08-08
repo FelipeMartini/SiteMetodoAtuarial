@@ -1,7 +1,6 @@
 // use cliente
 // Hook universal para autenticação e sessão usando apenas Auth.js puro (fetch nas rotas API)
-import { useQuery, useQueryClient } from '@tanstack/react-query';
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import type { SessaoAuth } from '@/types/next-auth';
 
 async function fetchSessaoApi(): Promise<SessaoAuth | null> {
@@ -12,19 +11,31 @@ async function fetchSessaoApi(): Promise<SessaoAuth | null> {
 }
 
 export function useSessaoAuth() {
-  const queryClient = useQueryClient();
-  const {
-    data: usuario,
-    status: queryStatus,
-    isFetching,
-    refetch: refetchSessao,
-  } = useQuery<SessaoAuth | null>({
-    queryKey: ['sessao-auth'],
-    queryFn: fetchSessaoApi,
-    staleTime: 60 * 1000, // 1 min
-    refetchOnWindowFocus: false,
-    retry: 1,
-  });
+  const [usuario, setUsuario] = useState<SessaoAuth | null>(null);
+  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const [isFetching, setIsFetching] = useState(false);
+
+  const fetchSessao = useCallback(async () => {
+    setIsFetching(true);
+    setStatus('loading');
+    try {
+      const user = await fetchSessaoApi();
+      setUsuario(user);
+      setStatus('success');
+    } catch {
+      setUsuario(null);
+      setStatus('error');
+    } finally {
+      setIsFetching(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchSessao();
+  }, [fetchSessao]);
+
+  // Função para refetch manual
+  const refetchSessao = fetchSessao;
 
   // Login social ou tradicional
   const login = useCallback(async (provider: string, credenciais?: Record<string, unknown> & { redirect?: boolean }) => {
@@ -44,25 +55,23 @@ export function useSessaoAuth() {
       } catch { }
       throw new Error(msg);
     }
-    await queryClient.invalidateQueries({ queryKey: ['sessao-auth'] });
     return res;
-  }, [queryClient]);
+  }, []);
 
   // Logout
   const logout = useCallback(async () => {
     await fetch('/api/auth/signout', { method: 'POST' });
-    await queryClient.invalidateQueries({ queryKey: ['sessao-auth'] });
-  }, [queryClient]);
+  setUsuario(null);
+  setStatus('idle');
+  }, []);
 
   // Status compatível com o hook antigo
-  const status: 'loading' | 'authenticated' | 'unauthenticated' =
-    queryStatus === 'pending' || isFetching
+  const statusCompat: 'loading' | 'authenticated' | 'unauthenticated' =
+    status === 'loading' || isFetching
       ? 'loading'
       : usuario
-      ? 'authenticated'
-      : 'unauthenticated';
+        ? 'authenticated'
+        : 'unauthenticated';
 
-  return { usuario, status, login, logout, fetchSessao: refetchSessao };
+  return { usuario, status: statusCompat, login, logout, fetchSessao: refetchSessao };
 }
-
-// Comentário: Este hook substitui useSession, signIn, signOut do next-auth/react, usando apenas Auth.js puro via REST.

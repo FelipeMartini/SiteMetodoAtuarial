@@ -1,10 +1,10 @@
+
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import CheckboxCustom from "@/app/area-cliente/CheckboxCustom";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Usuario {
   id: string;
@@ -17,24 +17,29 @@ interface Usuario {
   createdAt: string;
 }
 
+
 // Dashboard administrativo para usuários nível 5
-
-const fetchUsuarios = async (): Promise<Usuario[]> => {
-  const res = await fetch("/api/usuario/lista");
-  if (!res.ok) throw new Error('Erro ao buscar usuários');
-  const data = await res.json();
-  return data.usuarios || [];
-};
-
 const DashboardAdmin: React.FC = () => {
-  const queryClient = useQueryClient();
-  const [mensagem, setMensagem] = React.useState<string | null>(null);
-  const { data: usuarios = [], isLoading } = useQuery<Usuario[]>({
-    queryKey: ['usuarios-admin'],
-    queryFn: fetchUsuarios,
-    staleTime: 60 * 1000,
-    refetchOnWindowFocus: false,
-  });
+  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [mensagem, setMensagem] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUsuarios = async () => {
+      setIsLoading(true);
+      try {
+        const res = await fetch("/api/usuario/lista");
+        if (!res.ok) throw new Error('Erro ao buscar usuários');
+        const data = await res.json();
+        setUsuarios(data.usuarios || []);
+      } catch (_e) {
+        setMensagem("Erro ao buscar usuários.");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetchUsuarios();
+  }, []);
 
   // Atualiza dados do usuário
   const handleUpdate = async (id: string, campo: keyof Usuario, valor: string | number | boolean) => {
@@ -46,7 +51,15 @@ const DashboardAdmin: React.FC = () => {
     });
     if (res.ok) {
       setMensagem("Usuário atualizado!");
-      await queryClient.invalidateQueries({ queryKey: ['usuarios-admin'] });
+      // Refaz o fetch dos usuários
+      try {
+        const res = await fetch("/api/usuario/lista");
+        if (!res.ok) throw new Error('Erro ao buscar usuários');
+        const data = await res.json();
+        setUsuarios(data.usuarios || []);
+      } catch (_e) {
+        setMensagem("Erro ao buscar usuários.");
+      }
     } else {
       setMensagem("Erro ao atualizar usuário.");
     }
