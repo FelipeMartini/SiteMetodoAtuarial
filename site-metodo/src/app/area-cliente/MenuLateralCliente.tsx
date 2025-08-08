@@ -44,11 +44,11 @@ export default function MenuLateralCliente() {
     >
       <nav className="flex flex-col gap-4">
         <strong className="mb-3 text-lg text-primary">Menu do Cliente</strong>
-        <Link href="/area-cliente" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Perfil</Link>
-        <Link href="/servicos" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Serviços</Link>
-        <Link href="/contato" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Contato / Orçamento</Link>
-        <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Meus Documentos</Link>
-        <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Solicitações</Link>
+  <Link href="/area-cliente" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Perfil</Link>
+  <Link href="/servicos" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Serviços</Link>
+  <Link href="/contato" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Contato / Orçamento</Link>
+  <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Meus Documentos</Link>
+  <Link href="#" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Solicitações</Link>
         {/* Exibe link administrativo apenas para nível 5 */}
         {nivel === 5 && (
           <Link href="/area-cliente/dashboard-admin" className="text-foreground font-medium text-base hover:text-primary hover:underline transition-colors">Dashboard Administrativo</Link>

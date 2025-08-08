@@ -327,6 +327,20 @@
       "runOptions": {
         "reevaluateOnRerun": true
       }
+    },
+    {
+      "label": "Git Auto Commit & Push",
+      "type": "shell",
+      "command": "chmod +x ${workspaceFolder}/git-auto.sh && ${workspaceFolder}/git-auto.sh \"Minha mensagem de commit\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     }
   ]
 }
