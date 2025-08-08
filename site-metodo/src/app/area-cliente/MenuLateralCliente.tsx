@@ -1,7 +1,7 @@
 "use client";
 // A diretiva 'use client' deve ser sempre a primeira linha do arquivo para garantir que o componente seja client-side
 import React from "react";
-import { useSessaoAuth } from "@/hooks/useSessaoAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 // Diretiva para garantir que o componente seja client-side
 /**
@@ -17,7 +17,7 @@ import Link from "next/link";
 
 
 export default function MenuLateralCliente() {
-  const { data: session } = useSessaoAuth();
+  const { data: session } = useAuth();
   const nivel = session?.user?.accessLevel;
   // Exibe Skeleton enquanto dados do usuário não estão disponíveis
   if (!session?.user) {

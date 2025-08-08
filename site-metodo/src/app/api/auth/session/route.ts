@@ -18,12 +18,14 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(null, { status: 200 });
   }
   // Retorna o objeto Session padrão do Auth.js (https://authjs.dev/reference/core/types#session)
+  // Inclui accessLevel para uso em menus/admin
   return NextResponse.json({
     user: {
       id: session.user.id,
       email: session.user.email,
       name: session.user.name,
       image: session.user.image,
+      accessLevel: session.user.accessLevel,
     },
     expires: session.expires.toISOString(),
   }, { status: 200 });

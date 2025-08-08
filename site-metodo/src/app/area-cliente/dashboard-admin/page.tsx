@@ -3,7 +3,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
-import { useSessaoAuth } from "@/hooks/useSessaoAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
@@ -22,7 +22,7 @@ const DashboardAdmin = dynamic(() => import("@/app/area-cliente/DashboardAdmin")
 });
 
 const PageDashboardAdmin: React.FC = () => {
-  const { data: session, status } = useSessaoAuth();
+  const { data: session, status } = useAuth();
   if (status === "loading") {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
@@ -35,7 +35,19 @@ const PageDashboardAdmin: React.FC = () => {
     );
   }
   if (!session?.user || session.user.accessLevel !== 5) {
-    return <div style={{ color: "red", fontWeight: 600, margin: 32 }}>Acesso restrito: apenas para administradores nível 5.</div>;
+    if (status === "authenticated") {
+      // Usuário autenticado mas não é admin
+      if (typeof window !== "undefined") {
+        window.alert("Acesso restrito: apenas para administradores nível 5.");
+        window.location.href = "/area-cliente";
+      }
+      return null;
+    }
+    // Não autenticado
+    if (typeof window !== "undefined") {
+      window.location.href = "/";
+    }
+    return null;
   }
   return <DashboardAdmin />;
 };
