@@ -2,6 +2,20 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
+      "type": "shell",
+      "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
       "label": "Instalar dependências",
       "type": "shell",
       "command": "npm install",
