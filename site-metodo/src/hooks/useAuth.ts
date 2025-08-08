@@ -4,11 +4,12 @@
 
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import type { SessaoAuth } from '@/types/next-auth';
+
 
 
 export const useAuth = (redirectTo?: string) => {
-  const [session, setSession] = useState<SessaoAuth | null>(null);
+  // Ajuste: SessaoAuth removido, usar SessaoUsuario
+  const [session, setSession] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
 
