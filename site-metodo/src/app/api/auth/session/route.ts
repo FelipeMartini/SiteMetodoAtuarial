@@ -25,6 +25,8 @@ export async function GET(request: NextRequest) {
       name: session.user.name,
       image: session.user.image,
       emailVerified: session.user.emailVerified,
+      accessLevel: session.user.accessLevel,
+      isActive: session.user.isActive,
     },
   }, { status: 200 });
 }
