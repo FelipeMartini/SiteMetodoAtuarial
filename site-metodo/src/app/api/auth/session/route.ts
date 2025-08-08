@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
   // Lê o cookie de sessão
   const sessionToken = request.cookies.get('authjs.session-token')?.value;
   if (!sessionToken) {
-    return NextResponse.json({ user: null }, { status: 200 });
+    return NextResponse.json(null, { status: 200 });
   }
   // Busca a sessão no banco
   const session = await db.session.findUnique({
@@ -15,19 +15,17 @@ export async function GET(request: NextRequest) {
     include: { user: true },
   });
   if (!session || !session.user) {
-    return NextResponse.json({ user: null }, { status: 200 });
+    return NextResponse.json(null, { status: 200 });
   }
-  // Retorna os dados do usuário autenticado
+  // Retorna o objeto Session padrão do Auth.js (https://authjs.dev/reference/core/types#session)
   return NextResponse.json({
     user: {
       id: session.user.id,
       email: session.user.email,
       name: session.user.name,
       image: session.user.image,
-      emailVerified: session.user.emailVerified,
-      accessLevel: session.user.accessLevel,
-      isActive: session.user.isActive,
     },
+    expires: session.expires.toISOString(),
   }, { status: 200 });
 }
 
