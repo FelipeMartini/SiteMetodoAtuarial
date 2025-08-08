@@ -8,7 +8,7 @@ import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
 export default function AreaClientePage() {
   const { usuario, status } = useSessaoAuth();
 
-  if (status === 'loading') {
+  if (status === 'loading' || status === 'idle') {
     return (
       <div style={{
         display: 'flex',
@@ -22,9 +22,11 @@ export default function AreaClientePage() {
     );
   }
 
-  if (!usuario) {
+  if (status === 'unauthenticated') {
     redirect('/login');
+    return null;
   }
 
+  // status === 'authenticated' e usuario existe
   return <AreaClienteConteudo usuario={usuario} />;
 }
