@@ -13,3 +13,4 @@ applyTo: '**'
 - [ ] Testar experiência de login, navegação e carregamento
 
 > Cada etapa será marcada como concluída após implementação e validação.
+
