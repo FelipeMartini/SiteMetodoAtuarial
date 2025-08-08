@@ -448,6 +448,21 @@
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Refatorar Estrutura do Projeto",
+      "type": "shell",
+      "command": "node \"${workspaceFolder}/site-metodo/scripts/refatorar-estrutura.js\"",
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      },
+      "problemMatcher": []
     }
   ]
   ,
