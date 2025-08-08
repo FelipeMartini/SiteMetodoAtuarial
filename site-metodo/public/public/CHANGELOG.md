@@ -41,6 +41,31 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 - Correção de navegação, rotas protegidas e fluxo de autenticação.
 - Ajustes de acessibilidade e responsividade.
 
+---
+
+### [2025-08-08] - Refatoração Auth.js puro, access level e logout
+
+#### Corrigido/Refatorado
+- Refatoração profunda do sistema de autenticação para uso do Auth.js puro (`@auth/core`), eliminando completamente qualquer dependência ou vestígio de `next-auth` antigo.
+- Padronização do hook `useAuth` e endpoints para garantir segurança, tipagem e compatibilidade com Auth.js v5+.
+- Correção de problemas de tipagem, imports e duplicidade de código no hook de autenticação.
+- Auditoria completa para garantir ausência de conflitos, imports ou tipos antigos de `next-auth`.
+- Identificado e será corrigido: campo `accessLevel` do usuário não está sendo retornado na sessão, impedindo menus/admin para usuários nível 5.
+- Identificado e será corrigido: problema no sistema de logout, onde o menu superior não atualiza corretamente após logout.
+
+#### Checklist das próximas tarefas
+1. Corrigir o sistema de logout para que o menu superior e mensagem de usuário sumam imediatamente após logout.
+2. Corrigir o endpoint `/api/auth/session` para retornar o campo `accessLevel` no objeto `user` da sessão.
+3. Padronizar o uso do tipo oficial `Session` do Auth.js puro em todo o projeto.
+4. Revisar e ajustar todos os componentes e hooks consumidores de sessão para garantir compatibilidade com o novo tipo e com o campo `accessLevel`.
+5. Garantir que menus e páginas administrativas sejam exibidos corretamente para usuários nível 5.
+6. Rodar build, lint e testes para garantir ausência de erros.
+7. Documentar e versionar todas as mudanças.
+
+---
+
+*Commit e push detalhado realizado antes de iniciar as próximas tarefas críticas de correção e padronização.*
+
 ### Removido
 - Remoção de toda a estrutura antiga (nextjs-app, src/public duplicada, arquivos e pastas vazias).
 - Remoção de instruções e comentários obsoletos.

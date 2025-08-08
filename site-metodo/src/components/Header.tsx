@@ -3,7 +3,7 @@
 import { ModeToggle } from "@/components/ui/mode-toggle"
 import { MainNavigation } from "@/components/ui/main-navigation"
 import { Button } from "@/components/ui/button"
-import { useSessaoAuth } from '@/hooks/useSessaoAuth'
+import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'
 
@@ -12,12 +12,16 @@ import { useRouter } from 'next/navigation'
  * Baseado nos padrões do fuse-react adaptado para shadcn/ui
  */
 export function Header() {
-  const { data: session, status } = useSessaoAuth();
+  const { data: session, status } = useAuth();
   const router = useRouter();
   // Logout manual: remove cookie e redireciona
   const handleLogout = async () => {
     await fetch('/api/auth/signout', { method: 'POST' });
-    router.push('/');
+    // Aguarda a sessão ser invalidada e força atualização do estado
+    setTimeout(() => {
+      router.push('/');
+      window.location.reload(); // força atualização do menu
+    }, 200);
   };
 
   return (
