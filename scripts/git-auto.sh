@@ -24,25 +24,31 @@ cd "$REPO_ROOT"
 # Se argumento for passado, roda modo automático (sem prompt)
 if [[ $# -ge 1 ]]; then
   MSG="$1"
-  if [[ -z "$MSG" ]]; then
-    printf "${RED}Mensagem de commit não pode ser vazia!${NC}\n"
-    exit 1
+else
+  # Geração automática de mensagem de commit
+  CHANGED_FILES=$(git status --porcelain | awk '{print $2}' | xargs)
+  if [[ -z "$CHANGED_FILES" ]]; then
+    printf "${YELLOW}Nenhuma alteração detectada para commit.${NC}\n"
+    exit 0
   fi
-  printf "${GREEN}Modo automático: versionamento, changelog e push automático${NC}\n"
-  # Gera/atualiza CHANGELOG.md e faz versionamento
-  npx standard-version --commit-all --release-as patch --skip.tag || true
-  # Adiciona tudo (inclui CHANGELOG.md e arquivos fora de site-metodo)
-  git add .
-  # Commit e push
-  if git diff --cached --quiet; then
-    printf "${YELLOW}Nenhuma alteração para commit.${NC}\n"
-  else
-    git commit -m "$MSG"
-    BRANCH=$(git rev-parse --abbrev-ref HEAD)
-    git push origin "$BRANCH"
-    printf "${GREEN}Push realizado com sucesso!${NC}\n"
-  fi
-  exit 0
+  # Resumo inteligente: tipo feat/fix/chore + arquivos alterados
+  MSG="feat: atualizações automáticas em $(echo $CHANGED_FILES | sed 's/ /, /g')"
+fi
+printf "${GREEN}Modo automático: versionamento, changelog e push automático${NC}\n"
+# Gera/atualiza CHANGELOG.md e faz versionamento
+npx standard-version --commit-all --release-as patch --skip.tag || true
+# Adiciona tudo (inclui CHANGELOG.md e arquivos fora de site-metodo)
+git add .
+# Commit e push
+if git diff --cached --quiet; then
+  printf "${YELLOW}Nenhuma alteração para commit.${NC}\n"
+else
+  git commit -m "$MSG"
+  BRANCH=$(git rev-parse --abbrev-ref HEAD)
+  git push origin "$BRANCH"
+  printf "${GREEN}Push realizado com sucesso!${NC}\n"
+fi
+exit 0
 fi
 
 # Modo interativo (padrão)
