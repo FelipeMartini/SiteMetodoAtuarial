@@ -57,6 +57,14 @@ export function Header() {
                   Área Cliente
                 </Button>
               </Link>
+              {/* Exibe Dashboard Admin só para accessLevel 5 */}
+              {session.accessLevel === 5 && (
+                <Link href="/area-cliente/dashboard-admin">
+                  <Button variant="destructive" size="sm">
+                    Dashboard Admin
+                  </Button>
+                </Link>
+              )}
               <span className="hidden md:inline text-sm text-muted-foreground">
                 Olá, {session.name || session.email}
               </span>
