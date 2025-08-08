@@ -1,0 +1,1 @@
+# Lista de comandos pendentes de aprovação (um por linha)

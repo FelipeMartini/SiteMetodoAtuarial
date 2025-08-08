@@ -1,0 +1,3 @@
+# Lista de comandos permitidos (um por linha)
+ls
+pwd

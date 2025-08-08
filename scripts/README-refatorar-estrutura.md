@@ -1,8 +1,39 @@
 # Script de Refatoração Estrutural Segura
 
-Este script automatiza a reorganização da estrutura de pastas e arquivos do projeto `site-metodo`, alinhando ao padrão profissional aprovado e garantindo máxima segurança, logs e possibilidade de retomada.
+Este sistema automatiza a reorganização da estrutura de pastas e arquivos do projeto `site-metodo`, alinhando ao padrão profissional aprovado e garantindo máxima segurança, logs e possibilidade de retomada.
 
-## Como usar
+## Como funciona o auto-restart
+
+- O script principal agora é o `scripts/refatorar-estrutura.sh`, que executa o `refatorar-estrutura.js` em loop.
+- Se faltar uma dependência (ex: `chalk`), o `.js` instala automaticamente e sai com código especial (42).
+- O wrapper `.sh` detecta esse código e reinicia o script automaticamente, sem intervenção do usuário.
+- Isso garante funcionamento perfeito em tasks do VS Code, CI/CD e shells interativos.
+
+## Como rodar
+
+**Via VS Code Task:**
+- Certifique-se de que a task de refatoração aponte para o `scripts/refatorar-estrutura.sh` (e não mais para o `.js` direto).
+
+**Manual:**
+```bash
+chmod +x scripts/refatorar-estrutura.sh
+./scripts/refatorar-estrutura.sh
+```
+
+## Retomada
+- O progresso é salvo em `.migration-status.json`.
+- Se houver erro, corrija e execute novamente: o script retoma do ponto de falha.
+
+## Logs e relatórios
+- Todos os passos são logados com cores.
+- O relatório final é salvo em `relatorio-migracao.txt`.
+
+## Observação
+- Não é mais necessário rodar manualmente após instalar dependências: o wrapper faz tudo automaticamente.
+
+---
+
+## Histórico de uso (fluxo antigo)
 
 1. **Pré-requisitos:**
    - Node.js instalado (versão 16+ recomendada)

@@ -1,0 +1,8 @@
+--- RELATÓRIO DE MIGRAÇÃO ---
+Pastas criadas: src/components/layouts/LayoutCliente, src/components/theme, src/configs, src/contexts, src/components/ui
+Arquivos migrados: LayoutCliente, Header, Rodape, Servicos, SocialLoginBox, ErrorBoundary, ThemeProvider, ThemeToggle, theme-provider, themes.ts
+Configs/contextos de exemplo criados se ausentes
+Imports atualizados em todo o projeto
+Arquivos redundantes removidos
+Ajustes manuais podem ser necessários em casos especiais
+-----------------------------

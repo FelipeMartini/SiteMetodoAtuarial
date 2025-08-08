@@ -17,19 +17,85 @@
 
 const fs = require('fs/promises');
 const path = require('path');
-const chalk = require('chalk');
+let chalk;
+let useAnsi = false;
+const CHALK_PATH = path.join(path.resolve(__dirname, '..'), 'site-metodo', 'node_modules', 'chalk');
 const readline = require('readline');
 
+// Auto-instalação de dependências críticas (chalk)
+async function ensureChalk() {
+  // Previne loop infinito: só tenta instalar 1 vez por execução
+  const tried = process.env.CHALK_INSTALL_TRIED === '1';
+  try {
+    // Tenta require do chalk do node_modules do site-metodo
+    try {
+      const imported = require(CHALK_PATH);
+      chalk = imported.default || imported;
+    } catch {
+      const imported = require('chalk');
+      chalk = imported.default || imported;
+    }
+    useAnsi = false;
+    return;
+  } catch (e) {
+    useAnsi = true;
+    if (tried) {
+      console.log('\x1b[31m[depend-check]\x1b[0m Falha ao instalar/importar "chalk" após tentativa automática. Aborte e verifique se o node_modules/site-metodo está acessível.');
+      process.exit(1);
+    }
+    console.log('\x1b[33m[depend-check]\x1b[0m Pacote "chalk" não encontrado. Instalando automaticamente...');
+    const { execSync } = require('child_process');
+    try {
+      // Instala chalk dentro de site-metodo
+      execSync('chmod +x ./scripts/depend-add.sh && ./scripts/depend-add.sh chalk --save-dev', { stdio: 'inherit', cwd: ROOT });
+      console.log('[depend-check] "chalk" instalado com sucesso em site-metodo. Por favor, aguarde o reinício automático...');
+      // Sair com código especial para wrapper reiniciar, marcando que já tentamos instalar
+      process.env.CHALK_INSTALL_TRIED = '1';
+      // Passa env para o wrapper
+      require('child_process').spawn(process.argv[0], process.argv.slice(1), { stdio: 'inherit', env: { ...process.env, CHALK_INSTALL_TRIED: '1' } });
+      process.exit(42);
+    } catch (err) {
+      console.error('[depend-check] Falha ao instalar "chalk". Instale manualmente com ./scripts/depend-add.sh chalk --save-dev');
+      process.exit(1);
+    }
+  }
+}
+
+(async () => { await ensureChalk(); main(); })();
+
 // Caminho raiz do projeto
-const ROOT = path.resolve(__dirname, '..');
+// Sempre opere dentro de site-metodo, nunca na raiz do workspace
+const ROOT = path.resolve(__dirname, '..', 'site-metodo');
 // Arquivo de status para retomada
 const STATUS_FILE = path.join(ROOT, '.migration-status.json');
 
-// Funções utilitárias de log
-function logInfo(msg) { console.log(chalk.blue('[INFO]'), msg); }
-function logSuccess(msg) { console.log(chalk.green('[OK]'), msg); }
-function logWarn(msg) { console.log(chalk.yellow('[WARN]'), msg); }
-function logError(msg) { console.log(chalk.red('[ERRO]'), msg); }
+
+// Funções utilitárias de log (com fallback ANSI)
+function logInfo(msg) {
+  if (chalk && !useAnsi) console.log(chalk.blue('[INFO]'), msg);
+  else console.log('\x1b[34m[INFO]\x1b[0m', msg);
+}
+function logSuccess(msg) {
+  if (chalk && !useAnsi) console.log(chalk.green('[OK]'), msg);
+  else console.log('\x1b[32m[OK]\x1b[0m', msg);
+}
+function logWarn(msg) {
+  if (chalk && !useAnsi) console.log(chalk.yellow('[WARN]'), msg);
+  else console.log('\x1b[33m[WARN]\x1b[0m', msg);
+}
+function logError(msg) {
+  if (chalk && !useAnsi) console.log(chalk.red('[ERRO]'), msg);
+  else console.log('\x1b[31m[ERRO]\x1b[0m', msg);
+}
+function logStep(msg) {
+  if (chalk && !useAnsi && chalk.yellow && chalk.yellow.bold) {
+    console.log(chalk.yellow.bold('\n========== ' + msg + ' =========='));
+  } else if (chalk && !useAnsi && chalk.yellow) {
+    console.log(chalk.yellow('\n========== ' + msg + ' =========='));
+  } else {
+    console.log('\x1b[1;33m\n========== ' + msg + ' ==========\x1b[0m');
+  }
+}
 
 // Prompt interativo (não usado no fluxo automático, mas disponível)
 async function promptContinue(msg) {
@@ -146,7 +212,7 @@ async function updateAllImports(rootDir, replacements) {
  * Cada etapa é registrada e pode ser retomada em caso de erro
  */
 async function main() {
-  logInfo('Iniciando refatoração estrutural segura do projeto...');
+  logStep('INICIANDO REFATORAÇÃO ESTRUTURAL SEGURA DO PROJETO...');
   const status = await loadStatus();
   let step = status.step || 0;
 
@@ -240,7 +306,6 @@ async function main() {
         const replacements = {
           '@/components/Header': '@/components/layouts/LayoutCliente/Header',
           '@/components/Servicos': '@/components/layouts/LayoutCliente/Servicos',
-          '@/components/SocialLoginBox': '@/components/layouts/LayoutCliente/SocialLoginBox',
           '@/components/ErrorBoundary': '@/components/layouts/LayoutCliente/ErrorBoundary',
           '@/components/theme-provider': '@/components/theme/ThemeProviderCustom',
           '@/components/theme/ThemeProvider': '@/components/theme/ThemeProvider',
@@ -296,22 +361,25 @@ async function main() {
   ];
 
   for (; step < steps.length; step++) {
-    logInfo(`Etapa ${step + 1}/${steps.length}: ${steps[step].name}`);
+    logStep(`INÍCIO DA ETAPA ${step + 1}/${steps.length}: ${steps[step].name}`);
     try {
       await steps[step].run();
       await saveStatus({ step: step + 1 });
+      logStep(`FIM DA ETAPA ${step + 1}: ${steps[step].name}`);
       logSuccess(`Etapa concluída: ${steps[step].name}`);
     } catch (e) {
-      logError(`Erro na etapa: ${steps[step].name}`);
-      logError(e.message);
+      logError(`\n[ERRO FATAL] na etapa: ${steps[step].name}`);
+      logError(e.stack || e.message);
       logWarn('Corrija o erro e execute novamente para retomar desta etapa.');
       process.exit(1);
     }
   }
 
+  logStep('REFATORAÇÃO ESTRUTURAL CONCLUÍDA COM SUCESSO!');
   logSuccess('Refatoração estrutural concluída com sucesso!');
   await fs.unlink(STATUS_FILE).catch(() => {});
 }
+
 
 if (require.main === module) {
   main();
