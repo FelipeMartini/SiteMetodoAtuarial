@@ -51,16 +51,10 @@
     {
       "label": "Limpeza-Geral",
       "type": "shell",
-      "command": "echo 'Iniciando Limpeza-Geral...' && if [ -f prisma.config.js ]; then mv prisma.config.js prisma.config.js.bkp; fi && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && if [ -f prisma.config.js.bkp ]; then mv prisma.config.js.bkp prisma.config.js; fi && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.'",
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      },
+      "command": "echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.'",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      }
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
       "label": "Diagnóstico: Checar ambiente Node/Prisma",
@@ -87,6 +81,14 @@
         "reveal": "always",
         "panel": "dedicated"
       }
+    },
+    {
+      "label": "Prisma Generate Absoluto",
+      "type": "shell",
+      "command": "npx prisma generate --schema=./src/prisma/schema.prisma",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated" }
     },
     {
       "label": "Segurança: npm audit fix",
