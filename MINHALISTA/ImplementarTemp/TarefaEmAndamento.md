@@ -5,18 +5,26 @@ applyTo: '**'
 
 
 
-# Auditoria de cursor-pointer em todos os elementos clicáveis
+# Checklist de Automação de Gerenciamento de Dependências
 
-- [x] Mapear todos os componentes interativos (menus, dropdowns, botões, links, social login, theme selector, área cliente, admin dashboard, etc.)
-- [x] Adicionar cursor-pointer em todos os elementos clicáveis principais
-- [x] Garantir que inputs de texto mantenham cursor-text
-- [x] Garantir cursor-pointer em cards/boxes clicáveis customizados, se existirem
-- [x] Automatizar via utilitário global para garantir consistência futura
-- [x] Remover cursor-pointer direto dos componentes já cobertos pelo utilitário global
-- [x] Testar e validar visualmente em todas as telas
 
-### Observações
-- Utilitário global `cursor-global.css` importado no CSS global
-- Todos os componentes interativos agora seguem padrão de acessibilidade e UX
-- Futuras implementações já estarão cobertas pelo utilitário global
+- [x] Planejar scripts shell reutilizáveis para:
+	- [x] Instalar dependências (npm ci e npm install)
+	- [x] Atualizar dependências (todas, interativo, específicas)
+	- [x] Remover dependências
+	- [x] Checar pacotes desatualizados (npm outdated)
+	- [x] Checar/corrigir vulnerabilidades (npm audit, npm audit fix)
+	- [x] Atualização interativa/filtro (npm-check-updates)
+	- [x] Suporte a prompts/variáveis (nome do pacote, modo interativo, etc)
+- [x] Integrar scripts como tasks no VS Code (tasks.json)
+- [x] Garantir instalação/uso de npm-check-updates (npx ou global)
+- [x] Documentar todos os fluxos no README
+- [x] Testar todos os fluxos e garantir robustez
+- [x] Garantir que tasks sejam seguras, modernas e fáceis de usar
+- [x] Validar integração com CI/CD e ambiente local
+- [x] Auditoria e correção de todos os comandos/scripts/configs para robustez com caminhos contendo espaços
+
+---
+
+> Marque cada item conforme for implementando. Atualize este checklist a cada etapa.
 
