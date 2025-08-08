@@ -3,35 +3,20 @@
 
 import { useEffect, useState } from "react";
 
-// Tipagem local baseada no Auth.js v5+ (https://authjs.dev/reference/core/types#session)
-export type SessionUser = {
-  id?: string;
-  name?: string | null;
-  email?: string | null;
-  image?: string | null;
-  accessLevel?: number;
-};
 
-export type Session = {
-  user?: SessionUser;
-  expires: string;
-};
 
-type AuthStatus = "loading" | "authenticated" | "unauthenticated";
+import type { Session } from "@/types/auth";
 
-interface UseAuthResult {
-  data: Session | null;
-  status: AuthStatus;
-}
+// ...
 
 /**
  * Hook de autenticação seguro, moderno e tipado para Auth.js puro.
  * Busca a sessão do usuário via endpoint seguro e retorna status explícito.
  * Nunca expõe dados sensíveis ao client.
  */
-export function useAuth(): UseAuthResult {
-  const [session, setSession] = useState<Session | null>(null);
-  const [status, setStatus] = useState<AuthStatus>("loading");
+export function useAuth() {
+  const [data, setData] = useState<Session | null>(null);
+  const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
   useEffect(() => {
     let isMounted = true;
@@ -42,20 +27,20 @@ export function useAuth(): UseAuthResult {
         if (res.ok) {
           const data = await res.json();
           if (data && data.user) {
-            setSession(data as Session);
+            setData(data);
             setStatus("authenticated");
           } else {
-            setSession(null);
+            setData(null);
             setStatus("unauthenticated");
           }
         } else {
-          setSession(null);
+          setData(null);
           setStatus("unauthenticated");
         }
       })
       .catch(() => {
         if (isMounted) {
-          setSession(null);
+          setData(null);
           setStatus("unauthenticated");
         }
       });
@@ -64,7 +49,7 @@ export function useAuth(): UseAuthResult {
     };
   }, []);
 
-  return { data: session, status };
+  return { data, status };
 }
 
 
