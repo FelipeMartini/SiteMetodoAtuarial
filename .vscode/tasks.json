@@ -452,9 +452,9 @@
     {
       "label": "Refatorar Estrutura do Projeto",
       "type": "shell",
-      "command": "node \"${workspaceFolder}/site-metodo/scripts/refatorar-estrutura.js\"",
+      "command": "node \"${workspaceFolder}/scripts/refatorar-estrutura.js\"",
       "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
+        "cwd": "${workspaceFolder}"
       },
       "group": "build",
       "presentation": {
