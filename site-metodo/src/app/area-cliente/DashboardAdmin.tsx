@@ -32,7 +32,7 @@ const DashboardAdmin: React.FC = () => {
         if (!res.ok) throw new Error('Erro ao buscar usuários');
         const data = await res.json();
         setUsuarios(data.usuarios || []);
-      } catch (_e) {
+      } catch {
         setMensagem("Erro ao buscar usuários.");
       } finally {
         setIsLoading(false);
@@ -57,7 +57,7 @@ const DashboardAdmin: React.FC = () => {
         if (!res.ok) throw new Error('Erro ao buscar usuários');
         const data = await res.json();
         setUsuarios(data.usuarios || []);
-      } catch (_e) {
+      } catch {
         setMensagem("Erro ao buscar usuários.");
       }
     } else {
