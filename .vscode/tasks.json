@@ -2,136 +2,105 @@
   "version": "2.0.0",
   "tasks": [
     {
-      "type": "shell",
       "label": "Instalar dependências",
+      "type": "shell",
       "command": "npm install",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "build",
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "problemMatcher": ["$tsc"]
     },
     {
-      "type": "shell",
       "label": "Atualizar dependências",
+      "type": "shell",
       "command": "npm update",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "build",
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "problemMatcher": ["$tsc"]
     },
     {
+      "label": "Limpeza-Geral",
       "type": "shell",
+      "command": "echo 'Iniciando Limpeza-Geral...' && if [ -f prisma.config.js ]; then mv prisma.config.js prisma.config.js.bkp; fi && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && if [ -f prisma.config.js.bkp ]; then mv prisma.config.js.bkp prisma.config.js; fi && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.'",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build"
+    },
+    {
       "label": "Lint Absoluto",
+      "type": "shell",
       "command": "npm run lint",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "test",
-      "problemMatcher": ["$tsc"],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "problemMatcher": ["$tsc"]
     },
     {
-      "type": "shell",
-      "label": "Build Next.js Absoluto",
-      "command": "npm run build",
-      "group": "build",
-      "problemMatcher": ["$tsc"],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
-    },
-    {
-      "type": "shell",
       "label": "Type Check Absoluto",
+      "type": "shell",
       "command": "npm run type-check",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "test",
-      "problemMatcher": ["$tsc"],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "problemMatcher": ["$tsc"]
     },
     {
+      "label": "Build Next.js Absoluto",
       "type": "shell",
+      "command": "npm run build",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build",
+      "problemMatcher": ["$tsc"]
+    },
+    {
       "label": "Prisma Generate Absoluto",
+      "type": "shell",
       "command": "npm run prisma:generate",
-      "group": "build",
-      "problemMatcher": [],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build"
     },
     {
-      "type": "shell",
       "label": "Iniciar Next.js",
+      "type": "shell",
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
-      "group": "build",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "isBackground": true,
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "group": "build",
+      "problemMatcher": ["$tsc"]
     },
     {
-      "type": "shell",
       "label": "Reiniciar Next.js",
+      "type": "shell",
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done; npm run dev",
-      "group": "build",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "isBackground": true,
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "group": "build",
+      "problemMatcher": ["$tsc"]
     },
     {
-      "type": "shell",
       "label": "Parar Next.js",
+      "type": "shell",
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
-      "group": "build",
-      "problemMatcher": [],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build"
     },
     {
-      "type": "shell",
       "label": "Finalizar todas as instâncias Node.js",
+      "type": "shell",
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
-      "group": "build",
-      "problemMatcher": [],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build"
     },
     {
-      "type": "shell",
       "label": "Finalizar servidores Next.js (portas 3000-3010)",
+      "type": "shell",
       "command": "for porta in {3000..3010}; do fuser -k $porta/tcp; done",
-      "group": "build",
-      "problemMatcher": [],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "group": "build"
     },
     {
-      "type": "shell",
       "label": "Cobertura de Testes",
+      "type": "shell",
       "command": "npx jest --coverage",
+      "options": { "cwd": "${workspaceFolder}/site-metodo" },
       "group": "test",
-      "problemMatcher": [
-        "$tsc"
-      ],
-      "options": {
-        "cwd": "${workspaceFolder}/site-metodo"
-      }
+      "problemMatcher": ["$tsc"]
     }
   ]
 }

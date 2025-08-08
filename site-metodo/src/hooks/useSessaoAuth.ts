@@ -1,44 +1,37 @@
 // use cliente
 // Hook universal para autenticação e sessão usando apenas Auth.js puro (fetch nas rotas API)
-import { useState, useEffect, useCallback } from 'react';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useCallback } from 'react';
 import type { SessaoAuth } from '@/types/next-auth';
 
+async function fetchSessaoApi(): Promise<SessaoAuth | null> {
+  const res = await fetch('/api/auth/session');
+  if (!res.ok) return null;
+  const data = await res.json();
+  return data?.user || null;
+}
+
 export function useSessaoAuth() {
-  const [usuario, setUsuario] = useState<SessaoAuth | null>(null);
-  const [status, setStatus] = useState<'loading' | 'authenticated' | 'unauthenticated'>('loading');
-
-  // Busca sessão atual via API Auth.js
-  const fetchSessao = useCallback(async () => {
-    setStatus('loading');
-    try {
-      const res = await fetch('/api/auth/session');
-      if (!res.ok) throw new Error('Falha ao buscar sessão');
-      const data = await res.json();
-      if (data?.user) {
-        setUsuario(data.user);
-        setStatus('authenticated');
-      } else {
-        setUsuario(null);
-        setStatus('unauthenticated');
-      }
-    } catch {
-      setUsuario(null);
-      setStatus('unauthenticated');
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchSessao();
-  }, [fetchSessao]);
+  const queryClient = useQueryClient();
+  const {
+    data: usuario,
+    status: queryStatus,
+    isFetching,
+    refetch: refetchSessao,
+  } = useQuery<SessaoAuth | null>({
+    queryKey: ['sessao-auth'],
+    queryFn: fetchSessaoApi,
+    staleTime: 60 * 1000, // 1 min
+    refetchOnWindowFocus: false,
+    retry: 1,
+  });
 
   // Login social ou tradicional
-
   const login = useCallback(async (provider: string, credenciais?: Record<string, unknown> & { redirect?: boolean }) => {
     if (provider !== 'credentials') {
       window.location.href = `/api/auth/signin/${provider}`;
       return new Promise(() => { });
     }
-    // Garante que redirect: false seja propagado para o teste
     const body = credenciais ? { ...credenciais, redirect: credenciais.redirect ?? false } : { redirect: false };
     const url = '/api/auth/signin/credentials';
     const options: RequestInit = { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) };
@@ -51,18 +44,25 @@ export function useSessaoAuth() {
       } catch { }
       throw new Error(msg);
     }
-    await fetchSessao();
+    await queryClient.invalidateQueries({ queryKey: ['sessao-auth'] });
     return res;
-  }, [fetchSessao]);
+  }, [queryClient]);
 
-  // Logout aceita argumentos opcionais para compatibilidade com testes
+  // Logout
   const logout = useCallback(async () => {
     await fetch('/api/auth/signout', { method: 'POST' });
-    setUsuario(null);
-    setStatus('unauthenticated');
-  }, []);
+    await queryClient.invalidateQueries({ queryKey: ['sessao-auth'] });
+  }, [queryClient]);
 
-  return { usuario, status, login, logout, fetchSessao };
+  // Status compatível com o hook antigo
+  const status: 'loading' | 'authenticated' | 'unauthenticated' =
+    queryStatus === 'pending' || isFetching
+      ? 'loading'
+      : usuario
+      ? 'authenticated'
+      : 'unauthenticated';
+
+  return { usuario, status, login, logout, fetchSessao: refetchSessao };
 }
 
 // Comentário: Este hook substitui useSession, signIn, signOut do next-auth/react, usando apenas Auth.js puro via REST.

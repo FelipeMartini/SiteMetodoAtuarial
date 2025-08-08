@@ -1,9 +1,10 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React from "react";
 import CheckboxCustom from "@/app/area-cliente/CheckboxCustom";
 import Image from "next/image";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 
 interface Usuario {
   id: string;
@@ -17,20 +18,23 @@ interface Usuario {
 }
 
 // Dashboard administrativo para usuários nível 5
-const DashboardAdmin: React.FC = () => {
-  const [usuarios, setUsuarios] = useState<Usuario[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [mensagem, setMensagem] = useState<string | null>(null);
 
-  useEffect(() => {
-    // Busca todos usuários
-    fetch("/api/usuario/lista")
-      .then(res => res.json())
-      .then(data => {
-        setUsuarios(data.usuarios || []);
-        setLoading(false);
-      });
-  }, []);
+const fetchUsuarios = async (): Promise<Usuario[]> => {
+  const res = await fetch("/api/usuario/lista");
+  if (!res.ok) throw new Error('Erro ao buscar usuários');
+  const data = await res.json();
+  return data.usuarios || [];
+};
+
+const DashboardAdmin: React.FC = () => {
+  const queryClient = useQueryClient();
+  const [mensagem, setMensagem] = React.useState<string | null>(null);
+  const { data: usuarios = [], isLoading, refetch } = useQuery<Usuario[]>({
+    queryKey: ['usuarios-admin'],
+    queryFn: fetchUsuarios,
+    staleTime: 60 * 1000,
+    refetchOnWindowFocus: false,
+  });
 
   // Atualiza dados do usuário
   const handleUpdate = async (id: string, campo: keyof Usuario, valor: string | number | boolean) => {
@@ -42,13 +46,13 @@ const DashboardAdmin: React.FC = () => {
     });
     if (res.ok) {
       setMensagem("Usuário atualizado!");
-      setUsuarios(us => us.map(u => u.id === id ? { ...u, [campo]: valor } : u));
+      await queryClient.invalidateQueries({ queryKey: ['usuarios-admin'] });
     } else {
       setMensagem("Erro ao atualizar usuário.");
     }
   };
 
-  if (loading) {
+  if (isLoading) {
     // Exibe Skeletons para tabela de usuários enquanto carrega
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>

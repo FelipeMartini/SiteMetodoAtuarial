@@ -40,6 +40,9 @@ export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: st
                     width={120}
                     height={120}
                     className="rounded-full border-4 border-primary/30 shadow-lg mb-2"
+                    placeholder="blur"
+                    blurDataURL="/loginboxclara.png"
+                    loading="lazy"
                   />
                 ) : (
                   <div className="h-[120px] w-[120px] rounded-full bg-muted flex items-center justify-center mb-2">
