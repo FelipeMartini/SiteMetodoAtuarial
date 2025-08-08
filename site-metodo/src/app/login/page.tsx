@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import { useSessaoAuth } from '@/hooks/useSessaoAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 // import { ErrorBoundary } from '@/components/ErrorBoundary';
 import { Input } from '@/components/ui/input';
@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Hook de autenticação unificado (Auth.js puro)
-  const { status } = useSessaoAuth();
+  const { status } = useAuth();
 
   // Hook de navegação do Next.js
   const router = useRouter();
@@ -56,7 +56,7 @@ const LoginPage: React.FC = () => {
         setLoading(false);
         return;
       }
-      // O hook useSessaoAuth irá detectar a autenticação pelo cookie
+  // O hook useAuth irá detectar a autenticação pelo cookie
     } catch {
       setErro('Erro ao tentar autenticar.');
     } finally {
