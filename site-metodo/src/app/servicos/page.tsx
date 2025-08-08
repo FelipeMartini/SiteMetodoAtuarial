@@ -1,15 +1,8 @@
 "use client";
 
-
-// Lazy loading do componente de Serviços para otimizar performance
-import React, { Suspense } from 'react';
-const Servicos = React.lazy(() => import('@/components/Servicos'));
+import dynamic from "next/dynamic";
+const Servicos = dynamic(() => import("@/components/Servicos"), { ssr: false, loading: () => <div>Carregando serviços...</div> });
 
 export default function Page() {
-  // Suspense exibe fallback enquanto o componente é carregado
-  return (
-    <Suspense fallback={<div>Carregando serviços...</div>}>
-      <Servicos />
-    </Suspense>
-  );
+  return <Servicos />;
 }

@@ -60,6 +60,11 @@ export function ModeToggle() {
 
 
 
+entao busque na internet sobre o assunto de como personalizar a pagina not found procure tambem por paginas notfound estilizadas com shadcn e crie uma para nos com componentes modernos e estilizados que voce estilize mas busque por exemplos e desenvolva essa pagina conforme recomenda na web, e utilize entao o como server component sem use cliente, implemente isso segundo nossos temas e personalizaçoes e caracteristicas do nosso projeto de consultoria atuarial
+
+
+
+
 
 
 

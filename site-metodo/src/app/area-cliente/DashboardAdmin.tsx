@@ -29,7 +29,7 @@ const fetchUsuarios = async (): Promise<Usuario[]> => {
 const DashboardAdmin: React.FC = () => {
   const queryClient = useQueryClient();
   const [mensagem, setMensagem] = React.useState<string | null>(null);
-  const { data: usuarios = [], isLoading, refetch } = useQuery<Usuario[]>({
+  const { data: usuarios = [], isLoading } = useQuery<Usuario[]>({
     queryKey: ['usuarios-admin'],
     queryFn: fetchUsuarios,
     staleTime: 60 * 1000,
