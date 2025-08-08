@@ -2,6 +2,78 @@
   "version": "2.0.0",
   "tasks": [
     {
+      "label": "Executar Comando Seguro",
+      "type": "shell",
+      "command": "bash ${workspaceFolder}/scripts/exec-comando.sh",
+      "args": ["${input:comando}"],
+      "problemMatcher": [],
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    // ...demais tasks existentes (copiar todas as tasks do arquivo original para cá, sem duplicidade)...
+    {
+      "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
+      "type": "shell",
+      "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    // ...continue com as demais tasks já existentes...
+  ],
+  "inputs": [
+    {
+      "id": "comando",
+      "type": "promptString",
+      "description": "Digite o comando seguro a executar (ex: ls -la src)",
+      "default": "ls"
+    },
+    {
+      "id": "dependInstallModo",
+      "type": "pickString",
+      "description": "Modo de instalação de dependências",
+      "options": ["ci", "install"],
+      "default": "ci"
+    },
+    {
+      "id": "dependUpdatePacote",
+      "type": "promptString",
+      "description": "Nome do pacote e flags para atualizar (ex: react, tailwindcss, --dev)"
+    },
+    {
+      "id": "dependRemovePacote",
+      "type": "promptString",
+      "description": "Nome do pacote e flags para remover (ex: react, tailwindcss, --no-save)"
+    },
+    {
+      "id": "dependOutdatedFlags",
+      "type": "promptString",
+      "description": "Flags extras para listar desatualizadas (ex: --json, --production)"
+    },
+    {
+      "id": "dependAuditFlags",
+      "type": "promptString",
+      "description": "Flags extras para auditoria (ex: --json, --production)"
+    },
+    {
+      "id": "dependAddPacote",
+      "type": "promptString",
+      "description": "Nome do pacote e flags para adicionar (ex: chalk --save-dev)"
+    }
+  ]
+    {
       "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
       "type": "shell",
       "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\"",
@@ -412,7 +484,7 @@
     {
       "label": "Dependências: Atualizar (específica)",
       "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" ${input:dependUpdatePacote}",
+      "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" ${input:dependUpdatePacote}",
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
@@ -420,23 +492,23 @@
     {
       "label": "Dependências: Remover (específica)",
       "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-remove.sh\" && \"${workspaceFolder}/scripts/depend-remove.sh\" ${input:dependRemovePacote}",
+      "command": "chmod +x \"${workspaceFolder}/scripts/depend-remove.sh\" && \"${workspaceFolder}/scripts/depend-remove.sh\" ${input:dependRemovePacote}",
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
-      "label": "Dependências: Listar desatualizadas",
+      "label": "Dependências: Listar desatualizadas (custom)",
       "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-outdated.sh\" && \"${workspaceFolder}/scripts/depend-outdated.sh\"",
+      "command": "chmod +x \"${workspaceFolder}/scripts/depend-outdated.sh\" && \"${workspaceFolder}/scripts/depend-outdated.sh\" ${input:dependOutdatedFlags}",
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
     },
     {
-      "label": "Dependências: Auditoria de vulnerabilidades",
+      "label": "Dependências: Auditoria de vulnerabilidades (custom)",
       "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\"",
+      "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\" ${input:dependAuditFlags}",
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
@@ -452,7 +524,7 @@
     {
       "label": "Refatorar Estrutura do Projeto",
       "type": "shell",
-      "command": "node \"${workspaceFolder}/scripts/refatorar-estrutura.js\"",
+      "command": "chmod +x \"${workspaceFolder}/scripts/refatorar-estrutura.sh\" && \"${workspaceFolder}/scripts/refatorar-estrutura.sh\"",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -464,6 +536,15 @@
       },
       "problemMatcher": []
     }
+      ,
+      {
+        "label": "Dependências: Adicionar (específica)",
+        "type": "shell",
+        "command": "chmod +x \"${workspaceFolder}/scripts/depend-add.sh\" && \"${workspaceFolder}/scripts/depend-add.sh\" ${input:dependAddPacote}",
+        "options": { "cwd": "${workspaceFolder}" },
+        "group": "build",
+        "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+      }
   ]
   ,
   "inputs": [
@@ -477,12 +558,27 @@
     {
       "id": "dependUpdatePacote",
       "type": "promptString",
-      "description": "Nome do pacote para atualizar (ex: react, tailwindcss)"
+      "description": "Nome do pacote e flags para atualizar (ex: react, tailwindcss, --dev)"
     },
     {
       "id": "dependRemovePacote",
       "type": "promptString",
-      "description": "Nome do pacote para remover (ex: react, tailwindcss)"
+      "description": "Nome do pacote e flags para remover (ex: react, tailwindcss, --no-save)"
+    },
+    {
+      "id": "dependOutdatedFlags",
+      "type": "promptString",
+      "description": "Flags extras para listar desatualizadas (ex: --json, --production)"
+    },
+    {
+      "id": "dependAuditFlags",
+      "type": "promptString",
+      "description": "Flags extras para auditoria (ex: --json, --production)"
+    },
+    {
+      "id": "dependAddPacote",
+      "type": "promptString",
+      "description": "Nome do pacote e flags para adicionar (ex: chalk --save-dev)"
     }
   ]
 }

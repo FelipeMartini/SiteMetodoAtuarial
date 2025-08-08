@@ -1,0 +1,4 @@
+# Lista de comandos bloqueados (um por linha)
+rm
+shutdown
+reboot

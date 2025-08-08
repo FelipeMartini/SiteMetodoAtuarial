@@ -5,6 +5,7 @@ Este projeto possui automação completa para instalar, atualizar, remover, audi
 ## Scripts disponíveis (`/scripts`)
 
 - `depend-install.sh [ci|install]` — Instala dependências (limpa ou padrão)
+- `depend-add.sh <pacote> [flags]` — Adiciona uma dependência específica (ex: chalk --save-dev)
 - `depend-update.sh [all|interactive|<pacote>]` — Atualiza todas, modo interativo ou uma dependência específica
 - `depend-remove.sh <pacote>` — Remove uma dependência
 - `depend-outdated.sh` — Lista dependências desatualizadas
@@ -15,6 +16,7 @@ Este projeto possui automação completa para instalar, atualizar, remover, audi
 Acesse pelo menu de tarefas (Ctrl+Shift+P → "Executar Tarefa") ou pelo painel lateral:
 
 - **Dependências: Instalar (ci/padrão)** — Instala dependências (escolha entre `ci` ou `install`)
+- **Dependências: Adicionar (específica)** — Adiciona uma dependência específica (prompt para nome e flags)
 - **Dependências: Atualizar (todas)** — Atualiza todas as dependências para a última versão
 - **Dependências: Atualizar (interativo)** — Atualização interativa (escolha quais atualizar)
 - **Dependências: Atualizar (específica)** — Atualiza um pacote específico (prompt)
@@ -36,6 +38,9 @@ Acesse pelo menu de tarefas (Ctrl+Shift+P → "Executar Tarefa") ou pelo painel 
 
 # Instalar dependências (padrão)
 ./scripts/depend-install.sh install
+
+# Adicionar dependência específica (ex: chalk --save-dev)
+./scripts/depend-add.sh chalk --save-dev
 
 # Atualizar todas as dependências
 ./scripts/depend-update.sh all
