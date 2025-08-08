@@ -2,12 +2,12 @@
 
 import React, { useEffect } from 'react';
 
-import { useSessaoAuth } from '@/hooks/useSessaoAuth';
+import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
 
 export default function AreaClientePage() {
-  const { data: session, status } = useSessaoAuth();
+  const { data: session, status } = useAuth();
   const router = useRouter();
 
   useEffect(() => {

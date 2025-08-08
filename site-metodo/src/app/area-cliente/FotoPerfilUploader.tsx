@@ -2,12 +2,12 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { useSessaoAuth } from "@/hooks/useSessaoAuth";
+import { useAuth } from "@/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 
 // Componente para upload de foto de perfil do usuário
 const FotoPerfilUploader: React.FC = () => {
-  const { data: session } = useSessaoAuth();
+  const { data: session } = useAuth();
   const usuario = session?.user;
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
