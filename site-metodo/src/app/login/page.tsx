@@ -25,7 +25,7 @@ const LoginPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
 
   // Hook de autenticação unificado (Auth.js puro)
-  const { status, login } = useSessaoAuth();
+  const { status } = useSessaoAuth();
 
   // Hook de navegação do Next.js
   const router = useRouter();
@@ -45,13 +45,20 @@ const LoginPage: React.FC = () => {
     setLoading(true);
 
     try {
-      await login('credentials', { email, password: senha });
-    } catch (err) {
-      if (err instanceof Error) {
-        setErro(err.message);
-      } else {
-        setErro('Credenciais inválidas.');
+      const res = await fetch('/api/auth/signin/credentials', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password: senha })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.ok) {
+        setErro(data.error || 'Credenciais inválidas.');
+        setLoading(false);
+        return;
       }
+      // O hook useSessaoAuth irá detectar a autenticação pelo cookie
+    } catch {
+      setErro('Erro ao tentar autenticar.');
     } finally {
       setLoading(false);
     }

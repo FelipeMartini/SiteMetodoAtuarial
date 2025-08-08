@@ -6,7 +6,7 @@
 'use client';
 
 import React from 'react';
-import { useSessaoAuth } from '@/hooks/useSessaoAuth';
+
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
@@ -21,7 +21,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
   showTitle = true,
   className
 }) => {
-  const { login } = useSessaoAuth();
+
 
   if (!showTitle) {
     return null;
@@ -47,7 +47,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => login('google')}
+          onClick={() => window.location.href = '/api/auth/signin/google'}
           aria-label="Entrar com Google"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -65,7 +65,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => login('apple')}
+          onClick={() => window.location.href = '/api/auth/signin/apple'}
           aria-label="Entrar com Apple"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -80,7 +80,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => login('github')}
+          onClick={() => window.location.href = '/api/auth/signin/github'}
           aria-label="Entrar com GitHub"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -95,7 +95,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => login('twitter')}
+          onClick={() => window.location.href = '/api/auth/signin/twitter'}
           aria-label="Entrar com Twitter"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -110,7 +110,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => login('microsoft')}
+          onClick={() => window.location.href = '/api/auth/signin/microsoft'}
           aria-label="Entrar com Microsoft"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">

@@ -1,12 +1,20 @@
 'use client';
 
-import React from 'react';
+import React, { useEffect } from 'react';
+
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
 
 export default function AreaClientePage() {
-  const { usuario, status } = useSessaoAuth();
+  const { data: session, status } = useSessaoAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (status === 'unauthenticated') {
+      router.replace('/login');
+    }
+  }, [status, router]);
 
   if (status === 'loading') {
     return (
@@ -23,10 +31,9 @@ export default function AreaClientePage() {
   }
 
   if (status === 'unauthenticated') {
-    redirect('/login');
     return null;
   }
 
-  // status === 'authenticated' e usuario existe
-  return <AreaClienteConteudo usuario={usuario} />;
+  // status === 'authenticated' e session existe
+  return <AreaClienteConteudo usuario={session?.user} />;
 }

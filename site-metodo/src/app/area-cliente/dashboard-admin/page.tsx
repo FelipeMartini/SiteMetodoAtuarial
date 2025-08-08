@@ -22,7 +22,7 @@ const DashboardAdmin = dynamic(() => import("@/app/area-cliente/DashboardAdmin")
 });
 
 const PageDashboardAdmin: React.FC = () => {
-  const { usuario, status } = useSessaoAuth();
+  const { data: session, status } = useSessaoAuth();
   if (status === "loading") {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
@@ -34,7 +34,7 @@ const PageDashboardAdmin: React.FC = () => {
       </div>
     );
   }
-  if (!usuario || usuario.accessLevel !== 5) {
+  if (!session?.user || session.user.accessLevel !== 5) {
     return <div style={{ color: "red", fontWeight: 600, margin: 32 }}>Acesso restrito: apenas para administradores nível 5.</div>;
   }
   return <DashboardAdmin />;

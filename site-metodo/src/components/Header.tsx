@@ -12,13 +12,13 @@ import { useRouter } from 'next/navigation'
  * Baseado nos padrões do fuse-react adaptado para shadcn/ui
  */
 export function Header() {
-  const { usuario: session, status, logout } = useSessaoAuth()
-  const router = useRouter()
-
+  const { data: session, status } = useSessaoAuth();
+  const router = useRouter();
+  // Logout manual: remove cookie e redireciona
   const handleLogout = async () => {
-    await logout()
-    router.push('/')
-  }
+    await fetch('/api/auth/signout', { method: 'POST' });
+    router.push('/');
+  };
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -50,7 +50,7 @@ export function Header() {
             <Button variant="ghost" size="sm" disabled>
               ...
             </Button>
-          ) : session ? (
+          ) : session?.user ? (
             <div className="flex items-center gap-3">
               <Link href="/area-cliente">
                 <Button variant="secondary" size="sm">
@@ -58,7 +58,7 @@ export function Header() {
                 </Button>
               </Link>
               {/* Exibe Dashboard Admin só para accessLevel 5 */}
-              {session.accessLevel === 5 && (
+              {session.user.accessLevel === 5 && (
                 <Link href="/area-cliente/dashboard-admin">
                   <Button variant="destructive" size="sm">
                     Dashboard Admin
@@ -66,7 +66,7 @@ export function Header() {
                 </Link>
               )}
               <span className="hidden md:inline text-sm text-muted-foreground">
-                Olá, {session.name || session.email}
+                Olá, {session.user.name || session.user.email}
               </span>
               <Button variant="ghost" size="sm" onClick={handleLogout}>
                 Sair
