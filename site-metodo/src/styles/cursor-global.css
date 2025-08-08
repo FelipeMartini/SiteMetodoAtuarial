@@ -1,0 +1,42 @@
+/*
+  Utilitário global para garantir cursor-pointer em todos elementos clicáveis.
+  Aplica cursor-pointer para:
+    - button, [role=button], [tabindex="0"], a[href], summary, [aria-pressed], [aria-label],
+    - .clickable, .card-clickable, .box-clickable
+  Exceções: input, textarea, select, [contenteditable], [type=text], [type=password], [type=email], [type=search], [type=number], [type=tel], [type=url], [type=date], [type=time], [type=datetime-local], [type=month], [type=week]
+*/
+
+@layer utilities {
+  .cursor-pointer-global,
+  button:not([disabled]),
+  [role="button"],
+  [tabindex="0"],
+  a[href],
+  summary,
+  [aria-pressed],
+  [aria-label],
+  .clickable,
+  .card-clickable,
+  .box-clickable {
+    cursor: pointer !important;
+  }
+  /* Exceções para campos de texto */
+  input,
+  textarea,
+  select,
+  [contenteditable],
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  input[type="search"],
+  input[type="number"],
+  input[type="tel"],
+  input[type="url"],
+  input[type="date"],
+  input[type="time"],
+  input[type="datetime-local"],
+  input[type="month"],
+  input[type="week"] {
+    cursor: text !important;
+  }
+}
