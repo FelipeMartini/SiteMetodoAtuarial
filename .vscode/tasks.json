@@ -331,7 +331,7 @@
     {
       "label": "Git Auto Commit & Push",
       "type": "shell",
-      "command": "chmod +x ${workspaceFolder}/git-auto.sh && ${workspaceFolder}/git-auto.sh \"Minha mensagem de commit\"",
+  "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" \"Minha mensagem de commit\"",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -341,6 +341,119 @@
         "panel": "dedicated",
         "clear": true
       }
+    },
+    {
+      "label": "Commit Convencional (Commitizen)",
+      "type": "shell",
+      "command": "npx git-cz",
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    },
+    {
+      "label": "Changelog/Versionamento/Push Automático",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" \"feat: commit automatizado via task\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
+      "group": "build",
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
+    }
+    ,
+    {
+      "label": "Dependências: Instalar (ci/padrão)",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-install.sh\" && \"${workspaceFolder}/scripts/depend-install.sh\" ${input:dependInstallModo}",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Atualizar (todas)",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" all",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Atualizar (interativo)",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" interactive",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Atualizar (específica)",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" ${input:dependUpdatePacote}",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Remover (específica)",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-remove.sh\" && \"${workspaceFolder}/scripts/depend-remove.sh\" ${input:dependRemovePacote}",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Listar desatualizadas",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-outdated.sh\" && \"${workspaceFolder}/scripts/depend-outdated.sh\"",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Auditoria de vulnerabilidades",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\"",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    },
+    {
+      "label": "Dependências: Corrigir vulnerabilidades",
+      "type": "shell",
+  "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\" fix",
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+    }
+  ]
+  ,
+  "inputs": [
+    {
+      "id": "dependInstallModo",
+      "type": "pickString",
+      "description": "Modo de instalação de dependências",
+      "options": ["ci", "install"],
+      "default": "ci"
+    },
+    {
+      "id": "dependUpdatePacote",
+      "type": "promptString",
+      "description": "Nome do pacote para atualizar (ex: react, tailwindcss)"
+    },
+    {
+      "id": "dependRemovePacote",
+      "type": "promptString",
+      "description": "Nome do pacote para remover (ex: react, tailwindcss)"
     }
   ]
 }
