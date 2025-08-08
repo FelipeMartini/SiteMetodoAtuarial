@@ -8,7 +8,7 @@ import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
 export default function AreaClientePage() {
   const { usuario, status } = useSessaoAuth();
 
-  if (status === 'loading' || status === 'idle') {
+  if (status === 'loading') {
     return (
       <div style={{
         display: 'flex',
