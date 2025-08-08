@@ -2,7 +2,7 @@
 import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
 import type { Metadata } from "next";
 import LayoutCliente from "@/app/LayoutCliente";
-import ProvedorSessao from "./ProvedorSessao";
+// import SessionProvider from "./SessionProvider";
 import { ThemeProvider } from '@/components/theme-provider';
 // import { ReactQueryProvider } from '@/components/ReactQueryProvider';
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -34,11 +34,9 @@ export default function RootLayout({
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
         <ThemeProvider>
-          <ProvedorSessao>
-            <LayoutCliente>
-              {children}
-            </LayoutCliente>
-          </ProvedorSessao>
+          <LayoutCliente>
+            {children}
+          </LayoutCliente>
         </ThemeProvider>
       </body>
     </html>

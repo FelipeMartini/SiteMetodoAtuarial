@@ -7,7 +7,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 // Componente para upload de foto de perfil do usuário
 const FotoPerfilUploader: React.FC = () => {
-  const { usuario } = useSessaoAuth();
+  const { data: session } = useSessaoAuth();
+  const usuario = session?.user;
   const [foto, setFoto] = useState<File | null>(null);
   const [preview, setPreview] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);

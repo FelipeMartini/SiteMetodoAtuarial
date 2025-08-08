@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+
+import * as React from 'react';
+import { useState, useEffect } from 'react';
 import { useSessaoAuth } from '@/hooks/useSessaoAuth';
 import { ThemeToggle } from '@/components/theme/ThemeToggle';
 import { Button } from '@/components/ui/button';
@@ -21,7 +23,7 @@ interface User {
 }
 
 export default function ClientArea() {
-  const { usuario: session, status } = useSessaoAuth();
+  const { data: session, status } = useSessaoAuth();
   const [users, setUsers] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -29,6 +31,7 @@ export default function ClientArea() {
     if (status === 'authenticated' && session) {
       loadUsers();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [status, session]);
 
   const loadUsers = async () => {
@@ -75,7 +78,7 @@ export default function ClientArea() {
         <div>
           <h1 className="text-3xl font-bold text-foreground">Área do Cliente</h1>
           <p className="text-muted-foreground">
-            Bem-vindo, {session.name || session.email}
+            Bem-vindo, {session?.user?.name || session?.user?.email}
           </p>
         </div>
         <ThemeToggle />
@@ -90,15 +93,15 @@ export default function ClientArea() {
           <CardContent className="space-y-2">
             <div>
               <Label className="text-sm font-medium">Nome:</Label>
-              <p className="text-sm text-muted-foreground">{session.name || 'Não informado'}</p>
+              <p className="text-sm text-muted-foreground">{session?.user?.name || 'Não informado'}</p>
             </div>
             <div>
               <Label className="text-sm font-medium">Email:</Label>
-              <p className="text-sm text-muted-foreground">{session.email}</p>
+              <p className="text-sm text-muted-foreground">{session?.user?.email}</p>
             </div>
             <div>
               <Label className="text-sm font-medium">Nível de Acesso:</Label>
-              <Badge variant="secondary">{session.accessLevel || 1}</Badge>
+              <Badge variant="secondary">{session?.user?.accessLevel || 1}</Badge>
             </div>
           </CardContent>
         </Card>
@@ -136,7 +139,7 @@ export default function ClientArea() {
       </div>
 
       {/* Lista de Usuários (apenas para admins) */}
-      {session.accessLevel && session.accessLevel >= 9 && (
+  {session?.user?.accessLevel && session?.user?.accessLevel >= 9 && (
         <Card className="mt-6">
           <CardHeader>
             <CardTitle>Gerenciar Usuários</CardTitle>
@@ -152,7 +155,16 @@ export default function ClientArea() {
               </div>
             ) : (
               <div className="space-y-4">
-                {users.map((user) => (
+                {users.map((user: {
+                  id: string;
+                  name: string | null;
+                  email: string | null;
+                  accessLevel: number;
+                  isActive: boolean;
+                  lastLogin: Date | null;
+                  createdAt: Date;
+                  updatedAt: Date;
+                }) => (
                   <div key={user.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div>
                       <p className="font-medium">{user.name || 'Sem nome'}</p>

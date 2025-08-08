@@ -17,10 +17,10 @@ import Link from "next/link";
 
 
 export default function MenuLateralCliente() {
-  const { usuario } = useSessaoAuth();
-  const nivel = usuario?.accessLevel;
+  const { data: session } = useSessaoAuth();
+  const nivel = session?.user?.accessLevel;
   // Exibe Skeleton enquanto dados do usuário não estão disponíveis
-  if (!usuario) {
+  if (!session?.user) {
     return (
       <aside
         data-testid="menu-lateral"
