@@ -20,8 +20,19 @@ export const useAuth = (redirectTo?: string) => {
         const res = await fetch('/api/sessao');
         if (res.ok) {
           const data = await res.json();
-      // Hook de autenticação seguro e tipado para Auth.js puro
-      import type { Session } from '@auth/core/types';
+
+      // Tipagem local baseada no Auth.js v5+ (https://authjs.dev/reference/core/types#session)
+      type SessionUser = {
+        id?: string;
+        name?: string | null;
+        email?: string | null;
+        image?: string | null;
+      };
+
+      export type Session = {
+        user?: SessionUser;
+        expires: string;
+      };
 
       type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
 
@@ -109,6 +120,4 @@ export const useAuth = (redirectTo?: string) => {
   return { data: session, status };
 }
 
-export const useRequireAuth = (redirectTo: string = '/login') => {
-  return useAuth(redirectTo);
-};
+
