@@ -9,8 +9,8 @@ import { useEffect, useState } from 'react';
 
 export const useAuth = (redirectTo?: string) => {
   // Ajuste: SessaoAuth removido, usar SessaoUsuario
-  const [session, setSession] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [session, setSession] = useState<Session | null>(null);
+  const [status, setStatus] = useState<AuthStatus>('loading');
   const router = useRouter();
 
   useEffect(() => {
@@ -20,30 +20,94 @@ export const useAuth = (redirectTo?: string) => {
         const res = await fetch('/api/sessao');
         if (res.ok) {
           const data = await res.json();
-          setSession(data?.user || null);
-        } else {
-          setSession(null);
-        }
-      } catch {
-        setSession(null);
+      // Hook de autenticação seguro e tipado para Auth.js puro
+      import type { Session } from '@auth/core/types';
+
+      type AuthStatus = 'loading' | 'authenticated' | 'unauthenticated';
+
+      interface UseAuthResult {
+        data: Session | null;
+        status: AuthStatus;
       }
-      setIsLoading(false);
-    };
-    fetchSession();
-  }, []);
+
+      /**
+       * Hook de autenticação seguro, moderno e tipado para Auth.js puro.
+       * Busca a sessão do usuário via endpoint seguro e retorna status explícito.
+       * Nunca expõe dados sensíveis ao client.
+       */
+      export function useAuth(): UseAuthResult {
+        const [session, setSession] = useState<Session | null>(null);
+        const [status, setStatus] = useState<AuthStatus>('loading');
+
+        useEffect(() => {
+          let isMounted = true;
+          setStatus('loading');
+          fetch('/api/auth/session')
+            .then(async (res) => {
+              if (!isMounted) return;
+              if (res.ok) {
+                const data = await res.json();
+                if (data && data.user) {
+                  setSession(data as Session);
+                  setStatus('authenticated');
+                } else {
+                  setSession(null);
+                  setStatus('unauthenticated');
+                }
+              } else {
+                setSession(null);
+                setStatus('unauthenticated');
+              }
+            })
+            .catch(() => {
+              if (isMounted) {
+                setSession(null);
+                setStatus('unauthenticated');
+              }
+            });
+          return () => {
+            isMounted = false;
+          };
+        }, []);
+
+        return { data: session, status };
+      }
+  const [session, setSession] = useState<Session | null>(null);
+  const [status, setStatus] = useState<AuthStatus>('loading');
 
   useEffect(() => {
-    if (!isLoading && !session && redirectTo) {
-      router.push(redirectTo);
-    }
-  }, [session, isLoading, router, redirectTo]);
+    let isMounted = true;
+    setStatus('loading');
+    fetch('/api/auth/session')
+      .then(async (res) => {
+        if (!isMounted) return;
+        if (res.ok) {
+          const data = await res.json();
+          if (data && data.user) {
+            setSession(data as Session);
+            setStatus('authenticated');
+          } else {
+            setSession(null);
+            setStatus('unauthenticated');
+          }
+        } else {
+          setSession(null);
+          setStatus('unauthenticated');
+        }
+      })
+      .catch(() => {
+        if (isMounted) {
+          setSession(null);
+          setStatus('unauthenticated');
+        }
+      });
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
-  return {
-    session,
-    isLoading,
-    isAuthenticated: !!session,
-  };
-};
+  return { data: session, status };
+}
 
 export const useRequireAuth = (redirectTo: string = '/login') => {
   return useAuth(redirectTo);
