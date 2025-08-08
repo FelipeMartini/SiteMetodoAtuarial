@@ -62,7 +62,7 @@ export function ModeToggle() {
 
 
 ####################################################################
-
+cuidado ao instalar e implementar tanstack/react-query" isso causa erro geral deve ver uma maneira especial de implementar
 problema do carregamento rapido e erro do use state
 
 Após pesquisa profunda em fontes oficiais, issues e especialistas, seguem os achados e próximos passos práticos:
