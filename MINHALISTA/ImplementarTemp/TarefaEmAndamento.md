@@ -2,6 +2,19 @@
 
  - [x] Corrigir erro de importação/instalação do Switch (shadcn/ui) e dependência @radix-ui/react-switch
 
+## Tarefas Iniciais Adicionadas (Fluxo Login Social & Sessão)
+- [x] Corrigir erro de tipagem em /api/permissoes (uso incorreto de checkRole stub)
+- [x] Ajustar placeholder permissaoSchema para aceitar argumento e evitar erro de build
+- [x] Ajustar callback session em auth.ts para não atribuir undefined a campos obrigatórios
+- [x] Atualizar uso de cookies() assíncrono (Next.js 15) com await
+- [x] Validar build completo após correções (status: OK)
+- [ ] Revisar redirecionamento pós-login social (garantir callbackUrl configurável)
+- [ ] Implementar suporte a callbackUrl dinâmico (query param ?callback=)
+- [ ] Unificar estratégia de sessão (decidir entre JWT puro Auth.js x session DB custom) (USAR SESSION DB PPURO REMOVER JWT ) e remover duplicidade
+- [ ] Adicionar verificação de expiração/rotacionar token de sessão social
+- [ ] Adicionar testes manuais documentados para Google/GitHub (caminhos de sucesso e erro)
+- [ ] Documentar fluxo completo social em fluxo-autenticacao.md
+
 ---
 ## Planejamento de Atualização de Dependências WebAuthn/MFA
 
