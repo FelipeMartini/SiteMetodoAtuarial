@@ -86,12 +86,13 @@ if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
 // Apple (todos requisitos)
 if (process.env.AUTH_APPLE_ID && process.env.AUTH_APPLE_TEAM_ID && process.env.AUTH_APPLE_PRIVATE_KEY && process.env.AUTH_APPLE_KEY_ID) {
   // Tipagem de Apple em @auth/core pode não expor todas propriedades; usamos cast para permitir configuração avançada.
+  type AppleConfig = { clientId: string; teamId: string; keyId: string; privateKey: string }
   providers.push(Apple({
     clientId: process.env.AUTH_APPLE_ID,
     teamId: process.env.AUTH_APPLE_TEAM_ID,
     keyId: process.env.AUTH_APPLE_KEY_ID,
     privateKey: process.env.AUTH_APPLE_PRIVATE_KEY.split('\\n').join('\n'),
-  } as any))
+  } as unknown as AppleConfig))
 } else if (process.env.AUTH_APPLE_ID && process.env.NODE_ENV !== 'production') {
   console.warn('[auth] Apple incompleto – defina AUTH_APPLE_TEAM_ID, AUTH_APPLE_PRIVATE_KEY, AUTH_APPLE_KEY_ID para habilitar.')
 }

@@ -42,6 +42,7 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
     onPaginaChange,
     serverSide,
     acoesToolbarExtras,
+  onRowClick,
   } = props;
 
   // Estado base
@@ -224,8 +225,8 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
                 </TableCell>
               </TableRow>
             ) : (
-        linhas.map((row: typeof linhas[number]) => (
-                <TableRow key={row.id} data-selected={row.getIsSelected() || undefined} className={row.getIsSelected() ? 'bg-accent/40' : ''}>
+  linhas.map((row: typeof linhas[number]) => (
+    <TableRow key={row.id} data-selected={row.getIsSelected() || undefined} className={row.getIsSelected() ? 'bg-accent/40 cursor-pointer' : 'cursor-pointer'} onClick={()=> onRowClick?.(row.original as TData)}>
           {row.getVisibleCells().map((cell: ReturnType<typeof row.getVisibleCells>[number]) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}

@@ -23,15 +23,13 @@ interface ProviderInfo {
 
 // Tipagem das props do componente
 interface SocialLoginBoxProps {
-  showTitle?: boolean;
   className?: string;
+  /** Exibe ou oculta o título principal */
+  showTitle?: boolean;
 }
 
 // Componente principal migrado para Tailwind + shadcn/ui
-const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
-  showTitle = true,
-  className
-}) => {
+const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({ className, showTitle = true }) => {
 
 
   const [providers, setProviders] = useState<ProviderInfo[] | null>(null);
@@ -41,11 +39,15 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
     let active = true;
     setLoading(true);
     fetch('/api/auth/providers')
-      .then(r => r.json())
-      .then(data => {
+      .then(r => r.json() as Promise<Record<string, ProviderInfo>>)
+      .then((data) => {
         if (!active) return;
         // data é um objeto chave->definição; transformamos em array
-        const arr: ProviderInfo[] = Object.keys(data || {}).map(k => ({ id: k, ...(data as any)[k] }));
+        const arr: ProviderInfo[] = Object.keys(data || {}).map(k => {
+          const prov = (data?.[k] || {}) as ProviderInfo;
+          const clone: ProviderInfo = { ...prov, id: k };
+          return clone;
+        });
         setProviders(arr);
       })
       .catch(() => { if (active) setProviders([]); })
@@ -61,10 +63,11 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
       "bg-card text-card-foreground rounded-lg border border-border shadow-sm",
       className
     )}>
-      {/* Título do componente */}
-      <h3 className="text-lg font-semibold text-foreground text-center mb-2">
-        Entrar com suas redes sociais
-      </h3>
+      {showTitle && (
+        <h3 className="text-lg font-semibold text-foreground text-center mb-2">
+          Entrar com suas redes sociais
+        </h3>
+      )}
 
       {/* Container dos botões de login social */}
       <div className="flex flex-col w-full space-y-3">

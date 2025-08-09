@@ -11,7 +11,7 @@
 
 - [ ] IMPLEMENTAR EVOLUÇÃO PROFUNDA ÁREA CLIENTE (dashboard usuário final moderno)
 		- [ ] Mapear jornadas principais (onboarding, perfil, segurança, billing futuramente)
-		- [ ] Design system consistente (reutilizar shadcn/ui + tokens globais)
+		- [x] Design system consistente (reutilizar shadcn/ui + tokens globais)
 		- [ ] Página resumo com widgets pessoais (atividades recentes, MFA status, sessões ativas)
 		- [ ] Preferências de conta (tema, idioma, notificações)
 		- [ ] Gestão de dispositivos e sessões (revogar sessão)
@@ -84,6 +84,10 @@
 - [ ] Hook `useCan(permission)` reutilizável
 - [ ] Component `<IfCan>` para gating condicional
 - [ ] Logs de auditoria (criação, update, delete usuários)
+	- [x] Estrutura tabela AuditLog
+	- [x] Registro de atualização de usuário
+	- [x] Endpoint métricas inclui últimos logs
+	- [x] Página básica /admin/auditoria
 - [ ] Registrar IP, horário e usuário executor nas ações
 - [ ] Integrar MFA enforcement em ações sensíveis
 - [ ] Rate limit endpoints críticos admin

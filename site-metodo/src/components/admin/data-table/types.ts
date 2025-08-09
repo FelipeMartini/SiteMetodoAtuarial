@@ -33,4 +33,6 @@ export interface DataTableBaseProps<TData, TValue> {
   acoesToolbarExtras?: React.ReactNode;
   acoesLinhaRenderer?: (linha: TData) => React.ReactNode;
   caption?: string; // caption semântico
+  /** Callback opcional disparado ao clicar em uma linha inteira */
+  onRowClick?: (linha: TData) => void;
 }
