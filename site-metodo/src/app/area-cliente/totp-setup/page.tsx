@@ -4,10 +4,10 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Alert } from "@/components/ui/alert";
+import Image from 'next/image';
 
 export default function TotpSetup() {
   const [qr, setQr] = useState<string | null>(null);
-  const [otpauth, setOtpauth] = useState<string | null>(null);
   const [token, setToken] = useState("");
   const [status, setStatus] = useState<string | null>(null);
   const [erro, setErro] = useState<string | null>(null);
@@ -24,7 +24,6 @@ export default function TotpSetup() {
       return;
     }
     setQr(data.qr);
-    setOtpauth(data.otpauth);
     setStep("verify");
   };
 
@@ -56,15 +55,15 @@ export default function TotpSetup() {
         {step === "setup" && (
           <Button onClick={handleSetup} className="w-full">Gerar QR Code</Button>
         )}
-        {step === "verify" && qr && (
+    {step === "verify" && qr && (
           <div className="flex flex-col items-center gap-4">
-            <img src={qr} alt="QR Code MFA" className="w-40 h-40" />
+      <Image src={qr} alt="QR Code MFA" width={160} height={160} className="w-40 h-40" />
             <form onSubmit={handleVerify} className="w-full flex flex-col gap-2">
               <Input
                 type="text"
                 placeholder="Digite o código do app"
                 value={token}
-                onChange={e => setToken(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToken(e.target.value)}
                 maxLength={6}
                 minLength={6}
                 required

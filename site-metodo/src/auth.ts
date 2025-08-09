@@ -73,19 +73,25 @@ export const authConfig: AuthConfig = {
   providers,
   callbacks: {
     async jwt({ token, user }) {
+      // Extendendo token quando usuário faz sign-in
       if (user) {
-  const accessLevel: number = (user as any).accessLevel ?? 1
-  ;(token as any).id = (user as any).id
-  ;(token as any).accessLevel = accessLevel
-  ;(token as any).role = mapAccessLevelToRole(accessLevel)
+        const accessLevel: number = (user as { accessLevel?: number; id?: string }).accessLevel ?? 1
+        return {
+          ...token,
+          id: (user as { id?: string }).id,
+          accessLevel,
+          role: mapAccessLevelToRole(accessLevel),
+        }
       }
       return token
     },
     async session({ session, token }) {
-      if (token) {
-  ;(session.user as any).id = (token as any).id
-  ;(session.user as any).role = (token as any).role
-  ;(session.user as any).accessLevel = (token as any).accessLevel
+      if (session.user && token) {
+        const t = token as Partial<{ id: string; role: string; accessLevel: number }>
+        // Estende dinamicamente user; criação de tipo local evita uso de any
+        (session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).id = t.id
+        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = t.role
+        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).accessLevel = t.accessLevel
       }
       return session
     },
@@ -105,21 +111,24 @@ export async function auth() {
   const store = cookies()
   const candidates = ['__Secure-authjs.session-token', 'authjs.session-token', 'next-auth.session-token']
   let raw: string | undefined
-  for (const c of candidates) { const v = (store as any).get?.(c)?.value; if (v) { raw = v; break } }
+  for (const c of candidates) {
+    const cookie = store.get(c)
+    if (cookie?.value) { raw = cookie.value; break }
+  }
   if (!raw) return null
-  const payload = await decode({ token: raw, secret: AUTH_SECRET, salt: 'authjs' })
+  const payload = await decode({ token: raw, secret: AUTH_SECRET, salt: 'authjs' }) as (Record<string, unknown> | null)
   if (!payload) return null
-  const userId = (payload as any).id
+  const userId = payload.id as string | undefined
   let user = null
   if (userId) {
     user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, name: true, email: true, accessLevel: true } })
   }
-  const accessLevel = user?.accessLevel ?? (payload as any).accessLevel ?? 1
+  const accessLevel = user?.accessLevel ?? (payload.accessLevel as number | undefined) ?? 1
   return {
     user: {
       id: user?.id || userId,
-      name: user?.name || (payload as any).name,
-      email: user?.email || (payload as any).email,
+      name: user?.name || (payload.name as string | undefined),
+      email: user?.email || (payload.email as string | undefined),
       accessLevel,
       role: mapAccessLevelToRole(accessLevel),
     },

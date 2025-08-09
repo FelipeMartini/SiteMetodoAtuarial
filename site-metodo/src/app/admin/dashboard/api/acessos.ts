@@ -8,8 +8,9 @@ function requireAuth(req: NextRequest) {
   return { id: 1, nome: 'Felipe', role: 'admin' }
 }
 
-function requireRole(user: any, role: string) {
-  return user && user.role === role
+interface UsuarioAutenticado { id: number; nome: string; role: string }
+function requireRole(user: UsuarioAutenticado | null, role: string) {
+  return !!user && user.role === role
 }
 
 function withSecurityHeaders(res: NextResponse) {

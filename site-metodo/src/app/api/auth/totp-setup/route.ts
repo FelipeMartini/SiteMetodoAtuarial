@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { db } from '@/lib/prisma';
-import { z } from 'zod';
 import speakeasy from 'speakeasy';
 import qrcode from 'qrcode';
 

@@ -1,6 +1,6 @@
 // use client
 // Util simples para exportação CSV - será evoluído (delimitador configurável, encoding, BOM)
-export function salvarCsv(linhas: Record<string, any>[], nomeBase: string) {
+export function salvarCsv(linhas: Record<string, unknown>[], nomeBase: string) {
   if (!linhas.length) return;
   const colunas = Object.keys(linhas[0]);
   const header = colunas.join(',');

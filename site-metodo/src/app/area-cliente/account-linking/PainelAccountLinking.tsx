@@ -347,7 +347,6 @@ export default function PainelAccountLinking() {
                         {...register("provider")}
                         className="accent-primary h-4 w-4"
                         aria-label={`Selecionar ${prov.nome}`}
-                        aria-invalid={!!errors.provider}
                         aria-describedby={errors.provider ? "erro-provider" : undefined}
                         disabled={isSubmitting || loading}
                       />

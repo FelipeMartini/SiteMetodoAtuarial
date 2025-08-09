@@ -13,7 +13,7 @@ export default function AtividadesRecentes() {
         <div className="text-red-500">Erro ao carregar atividades</div>
       ) : (
         <ul className="flex flex-col gap-2">
-          {data?.map((a: any, i: number) => (
+          {data?.map((a: { usuario: string; acao: string; data: string }, i: number) => (
             <li key={i} className="flex justify-between text-sm text-muted-foreground">
               <span><b>{a.usuario}</b> {a.acao}</span>
               <span className="text-xs">{a.data}</span>

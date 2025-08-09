@@ -14,11 +14,12 @@ import { useUsuarios } from "../hooks/useUsuarios"
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
+interface UsuarioResumo { role: string }
 export function GraficoUsuarios() {
   const { data, isLoading, error } = useUsuarios()
   // Simulação: contar usuários por role
   const roles = ["admin", "editor", "viewer"]
-  const contagem = roles.map(role => data?.filter((u: any) => u.role === role).length || 0)
+  const contagem = roles.map(role => data?.filter((u: UsuarioResumo) => u.role === role).length || 0)
   const chartData = {
     labels: roles,
     datasets: [
