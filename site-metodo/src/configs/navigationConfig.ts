@@ -1,2 +1,3 @@
 // Exemplo de navigationConfig
-export default [];
+const navigationConfig: any[] = [];
+export default navigationConfig;

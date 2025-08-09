@@ -1,2 +1,3 @@
 // Exemplo de settingsConfig
-export default {};
+const settingsConfig = {};
+export default settingsConfig;

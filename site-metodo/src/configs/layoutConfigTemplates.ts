@@ -1,2 +1,3 @@
 // Exemplo de layoutConfigTemplates
-export default {};
+const layoutConfigTemplates = {};
+export default layoutConfigTemplates;
