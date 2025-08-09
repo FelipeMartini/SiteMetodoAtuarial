@@ -3,7 +3,7 @@ import { CardMetrica, UsuariosCard } from "./components"
 import { useQuery } from "@tanstack/react-query"
 
 function PermissoesCard() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['permissoes'],
     queryFn: async () => {
       const res = await fetch('/admin/dashboard/api/permissoes')
@@ -22,7 +22,7 @@ function PermissoesCard() {
 }
 
 function AcessosCard() {
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading } = useQuery({
     queryKey: ['acessos'],
     queryFn: async () => {
       const res = await fetch('/admin/dashboard/api/acessos')

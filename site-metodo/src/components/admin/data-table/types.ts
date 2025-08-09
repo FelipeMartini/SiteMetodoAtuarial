@@ -27,7 +27,6 @@ export interface DataTableBaseProps<TData, TValue> {
   pagina?: number;
   tamanhoPagina?: number;
   onPaginaChange?: (pagina: number) => void;
-  onTamanhoPaginaChange?: (tamanho: number) => void;
   serverSide?: boolean; // indica se paginação e filtros são remotos
   persistencia?: DataTablePersistenciaConfig;
   onRowSelectionChange?: (rows: TData[]) => void;

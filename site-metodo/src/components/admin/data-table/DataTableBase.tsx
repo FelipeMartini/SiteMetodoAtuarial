@@ -18,7 +18,6 @@ import { DataTableBaseProps, DataTableEstado } from './types';
 import { carregarEstadoPersistido, usePersistenciaTabela } from './usePersistenciaTabela';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Checkbox } from '@/components/ui/checkbox';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { salvarCsv } from './exportCsv';
@@ -40,7 +39,6 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
     pagina,
     tamanhoPagina = 10,
     onPaginaChange,
-    onTamanhoPaginaChange,
     serverSide,
     acoesToolbarExtras,
   } = props;
@@ -71,7 +69,7 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
 
   const table = useReactTable({
     data: dados,
-    columns: colunas as ColumnDef<TData, any>[],
+  columns: colunas as ColumnDef<TData, unknown>[],
     state: {
       sorting,
       columnFilters,
@@ -113,12 +111,13 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
 
   // CSV export simples
   const handleExportCsv = () => {
-    const linhasDados = table.getPrePaginationRowModel().rows.map(r => {
-      const obj: Record<string, any> = {};
-      r.getVisibleCells().forEach(c => {
+    const preRows = table.getPrePaginationRowModel().rows;
+    const linhasDados = preRows.map((r): Record<string, string> => {
+      const obj: Record<string, string> = {};
+      r.getVisibleCells().forEach((c) => {
         const key = c.column.id;
         // Renderização textual básica
-        const valor = c.getValue<any>();
+        const valor = c.getValue();
         obj[key] = typeof valor === 'string' ? valor : JSON.stringify(valor);
       });
       return obj;
@@ -133,7 +132,7 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
         <Input
           placeholder="Buscar..."
           value={globalFilter ?? ''}
-            onChange={(e) => setGlobalFilter(e.target.value)}
+          onChange={(e: React.ChangeEvent<HTMLInputElement>) => setGlobalFilter(e.target.value)}
           aria-label="Filtro global"
           className="w-56"
         />
@@ -204,9 +203,9 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
                 </TableCell>
               </TableRow>
             ) : (
-              linhas.map((row) => (
+        linhas.map((row: typeof linhas[number]) => (
                 <TableRow key={row.id} data-selected={row.getIsSelected() || undefined} className={row.getIsSelected() ? 'bg-accent/40' : ''}>
-                  {row.getVisibleCells().map((cell) => (
+          {row.getVisibleCells().map((cell: ReturnType<typeof row.getVisibleCells>[number]) => (
                     <TableCell key={cell.id}>{flexRender(cell.column.columnDef.cell, cell.getContext())}</TableCell>
                   ))}
                 </TableRow>

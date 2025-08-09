@@ -15,10 +15,10 @@ export async function GET() {
     return NextResponse.json({ error: "Usuário não encontrado" }, { status: 404 });
   }
   return NextResponse.json({
-    accounts: user.accounts.map((acc: any) => ({
+    accounts: user.accounts.map((acc) => ({
       provider: acc.provider,
       providerAccountId: acc.providerAccountId,
-      createdAt: acc.createdAt || acc.id, // fallback
+      createdAt: (acc as { createdAt?: Date; id: string }).createdAt ?? acc.id,
     })),
   });
 }

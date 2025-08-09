@@ -1,5 +1,5 @@
 // Rota descontinuada - manter temporariamente para compatibilidade, redirecionando para /api/usuarios
-import { NextRequest, NextResponse } from 'next/server';
+import { NextResponse } from 'next/server';
 
 export async function GET() {
   return NextResponse.redirect('/api/usuarios');

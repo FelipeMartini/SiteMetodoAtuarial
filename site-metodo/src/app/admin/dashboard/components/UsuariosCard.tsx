@@ -4,7 +4,7 @@ import { useUsuarios } from "../hooks/useUsuarios"
 import { UserIcon } from "lucide-react"
 
 export function UsuariosCard() {
-  const { data, isLoading, error } = useUsuarios()
+  const { data, isLoading } = useUsuarios()
   return (
     <CardMetrica
       titulo="Usuários"

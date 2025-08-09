@@ -62,7 +62,7 @@ export async function DELETE(req: NextRequest) {
   if (!id) {
     return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })
   }
-  const user = await prisma.user.delete({ where: { id } })
+  await prisma.user.delete({ where: { id } })
   // logAdminAction(session.user, 'delete', user)
   return withCors(withSecurityHeaders(NextResponse.json({ success: true })))
 }

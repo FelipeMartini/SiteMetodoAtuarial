@@ -25,8 +25,7 @@ const colunas: ColumnDef<UsuarioTabelaRow>[] = [
 export default function ListaUsuariosPage() {
   const [page, setPage] = useState(0);
   const [pageSize] = useState(10);
-  const [search, setSearch] = useState('');
-  const { data, isLoading } = useUsuariosPaginados(page, pageSize, search);
+  const { data, isLoading } = useUsuariosPaginados(page, pageSize, '');
 
   return (
     <div className="p-4 flex flex-col gap-4">

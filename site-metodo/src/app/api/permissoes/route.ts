@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { db as prisma } from '@/lib/prisma'
+// import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
 // TODO: implementar permissaoSchema e checkRole compatíveis com schema atual
 // Placeholders temporários para evitar erro de import inexistente
-const permissaoSchema = { safeParse: (data: any) => ({ success: false, error: { issues: [] } }) } as any
-function checkRole(_user: any, _roles: any) { return true }
+interface ParseResult { success: boolean; error?: { issues: unknown[] } }
+// Placeholders intencionais até implementação real
+const permissaoSchema = { safeParse: (): ParseResult => ({ success: false, error: { issues: [] } }) }
+function checkRole(): boolean { return true }
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 
@@ -29,7 +31,7 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const parse = permissaoSchema.safeParse(body)
   if (!parse.success) {
-    return NextResponse.json({ error: 'Dados inválidos', details: parse.error.issues }, { status: 400 })
+    return NextResponse.json({ error: 'Dados inválidos', details: parse.error?.issues ?? [] }, { status: 400 })
   }
   return withCors(withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 })))
 }
@@ -44,7 +46,7 @@ export async function PUT(req: NextRequest) {
   const body = await req.json()
   const parse = permissaoSchema.safeParse(body)
   if (!parse.success) {
-    return NextResponse.json({ error: 'Dados inválidos', details: parse.error.issues }, { status: 400 })
+    return NextResponse.json({ error: 'Dados inválidos', details: parse.error?.issues ?? [] }, { status: 400 })
   }
   return withCors(withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 })))
 }
