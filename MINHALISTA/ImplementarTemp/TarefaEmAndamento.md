@@ -1,3 +1,97 @@
+# Checklist Avançado – Dashboard Admin Usuários
+
+- [ ] Corrigir erro de importação/instalação do Switch (shadcn/ui) e dependência @radix-ui/react-switch
+
+---
+## Planejamento de Atualização de Dependências WebAuthn/MFA
+
+- [x] Atualizar @simplewebauthn/browser para 13.1.2
+- [x] Atualizar @simplewebauthn/server para 13.1.2
+- [ ] Rodar `npm install` após atualização das libs @simplewebauthn
+- [ ] Validar breaking changes conforme changelog oficial
+- [ ] Migrar código conforme changelog oficial
+- [ ] Testar flows de registro, login e MFA com as novas versões
+- [ ] Documentar ajustes e pontos de atenção na integração WebAuthn/MFA
+
+---
+
+- [x] Adicionar seleção de linhas na tabela de usuários (checkbox por linha e seleção global)
+- [x] Implementar ações em lote (ex: deletar, alterar papel, resetar MFA)
+- [x] Adicionar colunas extras: papéis (roles), flags (ativo, bloqueado), MFA, logs
+- [x] Integrar UI de feature flags (Unleash) para admins (mock)
+- [x] Garantir acessibilidade (a11y) e responsividade
+- [x] Garantir integração com ComponenteBase e design tokens
+- [x] Comentar e documentar código para clareza
+- [x] Validar integração com backend (endpoints de batch actions, roles, MFA, logs) (mock/pronto para integração real)
+- [x] Testar flows de seleção, batch actions e visualização de colunas extras (mock)
+
+> Marque cada item conforme for implementando.
+# Checklist de Unificação e Modernização de Autenticação
+
+- [ ] 1. Consolidar arquitetura unificada de autenticação (Auth.js v5, Prisma, endpoints customizados)
+- [ ] 2. Garantir que todos os fluxos (login tradicional, social, MFA, registro, redefinição de senha) estejam centralizados, sem duplicação
+- [ ] 3. Integrar e padronizar RBAC e checagem de roles em todos os endpoints sensíveis
+- [ ] 4. Integrar Upstash Rate Limit em todos os endpoints de autenticação e segurança
+- [ ] 5. Garantir CORS, headers de segurança e edge compatibility em todos os endpoints
+- [ ] 6. Padronizar e documentar o uso de MFA/TOTP, inclusive flows obrigatórios e opcionais
+- [ ] 7. Garantir que todos os endpoints e páginas usem validação Zod e feedbacks claros
+- [ ] 8. Refatorar e documentar hooks, páginas e componentes para refletir a arquitetura unificada
+- [ ] 9. Validar integração de login social, registro, redefinição e definição de senha, MFA, logout, sessão e RBAC
+- [ ] 10. Revisar e documentar variáveis de ambiente e .env.example
+- [ ] 11. Testar todos os fluxos ponta a ponta e ajustar casos extremos
+
+---
+
+**Progresso:**
+
+- [ ] 1. Consolidar arquitetura unificada de autenticação
+- [ ] 2. Garantir centralização dos fluxos
+- [ ] 3. Integrar RBAC
+- [ ] 4. Integrar Rate Limit
+- [ ] 5. Garantir CORS/headers/edge
+- [ ] 6. Padronizar MFA
+- [ ] 7. Padronizar validação/feedback
+- [ ] 8. Refatorar hooks/páginas/componentes
+- [ ] 9. Validar integração de todos os fluxos
+- [ ] 10. Revisar .env
+- [ ] 11. Testar ponta a ponta
+---
+
+# Checklist de Integração de Validação, Segurança e Boas Práticas (Admin Dashboard)
+
+- [x] Adicionar validação Zod, RBAC, autenticação, rate limit, CORS e headers de segurança ao endpoint de usuários
+- [x] Adicionar validação Zod, RBAC, autenticação, rate limit, CORS e headers de segurança ao endpoint de permissões
+- [x] Adicionar autenticação, RBAC, rate limit, CORS e headers de segurança ao endpoint de acessos
+- [x] Adicionar autenticação, RBAC, rate limit, CORS e headers de segurança ao endpoint de atividades
+- [x] Adicionar autenticação, RBAC, rate limit, CORS e headers de segurança ao endpoint de acessos-semana
+- [x] Corrigir schemas Zod para refletir os campos obrigatórios usados nos endpoints
+- [x] Corrigir imports relativos para garantir compatibilidade Next.js
+- [x] Garantir que todos os endpoints retornam erros padronizados e headers seguros
+
+Próximos passos:
+- [ ] Integrar Auth.js v5 real (substituir requireAuth)
+- [ ] Integrar RBAC real (roles dinâmicos)
+- [ ] Integrar rate limit real (@upstash/ratelimit)
+- [ ] Integrar logs e rastreabilidade
+- [ ] Documentar endpoints e exemplos de uso
+
+---
+
+Checklist atualizado automaticamente após implementação dos endpoints e validação Zod.
+
+
+# Checklist: Implementação Completa - CRUD & Gerenciamento de Provedores (Account Linking)
+
+ [x] Adicionar feedback visual, loading, erros, acessibilidade
+- [ ] Adicionar filtros, busca, paginação, seleção, ações em lote
+- [ ] Exibir status, roles, flags, MFA, logs na tabela e detalhes do usuário
+- [ ] Refatorar formulários com react-hook-form + Zod, feedback e acessibilidade
+- [ ] Integrar feature flags (Unleash) para recursos experimentais
+- [ ] Adicionar AlertDialog para ações críticas (ex: desvincular provedor, deletar usuário)
+- [ ] Garantir responsividade, mobile-first e acessibilidade
+- [ ] Escrever testes unitários e2e para flows principais
+- [ ] Documentar flows, roles, flags, logs, UI e painéis
+- [ ] Checklist de revisão final e QA
 
 # Checklist de Modernização dos Componentes shadcn/ui
 
@@ -37,6 +131,59 @@ applyTo: '**'
 
 
 [//]: # (Checklist: Refatoração dos imports de UI para o barrel file)
+
+
+# Checklist de Revisão Profunda Auth.js v5 + MFA + shadcn/ui + TanStack Query + Zod
+
+## 1. Auth.js v5
+- [ ] Providers configurados corretamente (Credentials, Email, WebAuthn, TOTP)
+- [ ] Adapter Prisma atualizado (User, Account, Session, Authenticator)
+- [ ] MFA (TOTP) implementado conforme doc oficial
+- [ ] WebAuthn (Passkeys) preparado para expansão
+- [ ] Configuração centralizada e extensível (mfaConfig)
+- [ ] Endpoints seguros, protegidos e bem documentados
+
+## 2. Fluxos MFA (TOTP)
+- [ ] Endpoints: /totp-setup, /totp-verify, /totp-status, /totp-disable
+- [ ] Integração com login (prompt condicional)
+- [ ] UI de setup, verificação, status e desativação
+- [ ] Configuração de obrigatoriedade por fluxo
+- [ ] Testes manuais e unitários
+
+## 3. shadcn/ui
+- [ ] Todos os formulários usam <Form />, <FormField />, <Input />, <Button />
+- [ ] Feedbacks e erros com <Alert /> e <FormMessage />
+- [ ] Dialogs e modais com <Dialog />
+- [ ] Acessibilidade (aria, labels, navegação)
+- [ ] Estilização consistente e moderna
+
+## 4. Zod
+- [ ] Schemas robustos para todos os formulários
+- [ ] Integração com react-hook-form (zodResolver)
+- [ ] Mensagens de erro claras e amigáveis
+- [ ] Tipagem forte e validação server/client
+
+## 5. TanStack Query
+- [ ] Uso correto de useQuery/useMutation para autenticação/MFA
+- [ ] SSR/CSR conforme necessidade
+- [ ] Cache, refetch, feedback de loading/erro
+- [ ] Integração com hooks de autenticação
+
+## 6. Segurança, Extensibilidade e UX
+- [ ] Senhas e segredos nunca expostos
+- [ ] HTTPS, rate limiting, logs de autenticação
+- [ ] Código limpo, comentado e documentado
+- [ ] UX moderna, responsiva e acessível
+- [ ] Pronto para expansão de flows (reset, admin, etc)
+
+## 7. Documentação
+- [ ] Fluxo MFA documentado
+- [ ] Como expandir para outros flows
+- [ ] Como contribuir e customizar
+
+---
+
+Marque cada item conforme revisar e ajuste o que for necessário.
 
 - [ ] Etapa 1: Garantir que todos os componentes necessários estejam exportados no `src/components/ui/index.ts`.
 - [ ] Etapa 2: Substituir todos os imports de componentes individuais de `@/components/ui/<componente>` para `@/components/ui` nos arquivos listados.

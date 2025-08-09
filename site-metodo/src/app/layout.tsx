@@ -1,9 +1,10 @@
 
 import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
-import type { Metadata } from "next";
+import Metadata from "next";
 import LayoutCliente from "@/app/LayoutCliente";
 
 import { ThemeProvider } from '@/components/theme-provider';
+import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider';
 
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -33,11 +34,13 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
-        <ThemeProvider>
-          <LayoutCliente>
-            {children}
-          </LayoutCliente>
-        </ThemeProvider>
+        <FeatureFlagProvider>
+          <ThemeProvider>
+            <LayoutCliente>
+              {children}
+            </LayoutCliente>
+          </ThemeProvider>
+        </FeatureFlagProvider>
       </body>
     </html>
   );

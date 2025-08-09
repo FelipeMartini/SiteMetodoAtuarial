@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import BannerNovaHome from '@/components/feature-flags/BannerNovaHome';
 import {
   Calculator,
   FileSpreadsheet,
@@ -88,8 +89,10 @@ const testimonials = [
 
 export default function Home() {
   return (
-    <div className="min-h-screen">
-      {/* Hero Section */}
+    <>
+      <BannerNovaHome />
+      <div className="min-h-screen">
+  {/* Hero Section */}
       <section className="relative overflow-hidden bg-gradient-to-br from-background via-background to-muted/20">
         {/* Background Pattern */}
         <div className="absolute inset-0 bg-grid-white/[0.02] bg-[size:60px_60px]" />
@@ -337,6 +340,7 @@ export default function Home() {
           </Card>
         </div>
       </section>
-    </div>
+      </div>
+    </>
   );
 }

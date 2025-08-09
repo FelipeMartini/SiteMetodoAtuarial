@@ -2,9 +2,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import CheckboxCustom from "@/app/area-cliente/CheckboxCustom";
-import Image from "next/image";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Switch } from "@/components/ui/switch";
+import { Badge } from "@/components/ui/badge";
+import UsuariosTable from "./dashboard-admin/UsuariosTable";
+import UsuariosTableFilters from "./dashboard-admin/UsuariosTableFilters";
+import { Button } from "@/components/ui/button";
 
 interface Usuario {
   id: string;
@@ -17,19 +19,29 @@ interface Usuario {
   createdAt: string;
 }
 
-
-// Dashboard administrativo para usuários nível 5
 const DashboardAdmin: React.FC = () => {
   const [usuarios, setUsuarios] = useState<Usuario[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [mensagem, setMensagem] = useState<string | null>(null);
+  const [filtro, setFiltro] = useState("");
+  const [pagina, setPagina] = useState(1);
+  const [porPagina] = useState(10);
+  // Estado de seleção de usuários (IDs)
+  const [selecionados, setSelecionados] = useState<string[]>([]);
+  // Mock de feature flags (Unleash)
+  const [flags, setFlags] = useState({
+    darkMode: true,
+    betaTable: false,
+    mfaObrigatorio: false,
+    logsAvancados: true,
+  });
 
   useEffect(() => {
     const fetchUsuarios = async () => {
       setIsLoading(true);
       try {
         const res = await fetch("/api/usuario/lista");
-        if (!res.ok) throw new Error('Erro ao buscar usuários');
+        if (!res.ok) throw new Error("Erro ao buscar usuários");
         const data = await res.json();
         setUsuarios(data.usuarios || []);
       } catch {
@@ -41,137 +53,138 @@ const DashboardAdmin: React.FC = () => {
     fetchUsuarios();
   }, []);
 
-  // Atualiza dados do usuário
-  const handleUpdate = async (id: string, campo: keyof Usuario, valor: string | number | boolean) => {
+  const handleResetSenha = async (id: string) => {
+    setMensagem(null);
+    const res = await fetch(`/api/usuario/reset-senha`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }),
+    });
+    if (res.ok) setMensagem("Senha resetada!");
+    else setMensagem("Erro ao resetar senha.");
+  };
+
+  const handleToggleAtivo = async (id: string, ativo: boolean) => {
     setMensagem(null);
     const res = await fetch(`/api/usuario/editar`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ id, campo, valor }),
+      body: JSON.stringify({ id, campo: "isActive", valor: ativo }),
     });
-    if (res.ok) {
-      setMensagem("Usuário atualizado!");
-      // Refaz o fetch dos usuários
-      try {
-        const res = await fetch("/api/usuario/lista");
-        if (!res.ok) throw new Error('Erro ao buscar usuários');
-        const data = await res.json();
-        setUsuarios(data.usuarios || []);
-      } catch {
-        setMensagem("Erro ao buscar usuários.");
-      }
+    if (res.ok) setMensagem("Status atualizado!");
+    else setMensagem("Erro ao atualizar status.");
+    // Atualiza lista
+    const data = await res.json();
+    setUsuarios(data.usuarios || usuarios.map(u => u.id === id ? { ...u, isActive: ativo } : u));
+  };
+
+  const handleChangeNivel = async (id: string, nivel: number) => {
+    setMensagem(null);
+    const res = await fetch(`/api/usuario/editar`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, campo: "accessLevel", valor: nivel }),
+    });
+    if (res.ok) setMensagem("Nível atualizado!");
+    else setMensagem("Erro ao atualizar nível.");
+    // Atualiza lista
+    const data = await res.json();
+    setUsuarios(data.usuarios || usuarios.map(u => u.id === id ? { ...u, accessLevel: nivel } : u));
+  };
+
+  // Filtro e paginação client-side (pode ser adaptado para server-side)
+  const usuariosFiltrados = usuarios.filter(u =>
+    u.name?.toLowerCase().includes(filtro.toLowerCase()) ||
+    u.email?.toLowerCase().includes(filtro.toLowerCase())
+  );
+  const totalPaginas = Math.ceil(usuariosFiltrados.length / porPagina) || 1;
+  const usuariosPagina = usuariosFiltrados.slice((pagina - 1) * porPagina, pagina * porPagina);
+
+  // Funções de seleção
+  const handleSelecionar = (id: string, checked: boolean) => {
+    setSelecionados(prev => checked ? [...prev, id] : prev.filter(sid => sid !== id));
+  };
+  const handleSelecionarTodos = (checked: boolean) => {
+    if (checked) {
+      setSelecionados(usuariosPagina.map(u => u.id));
     } else {
-      setMensagem("Erro ao atualizar usuário.");
+      setSelecionados([]);
     }
   };
 
-  if (isLoading) {
-    // Exibe Skeletons para tabela de usuários enquanto carrega
-    return (
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
-        <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Manutenção de Usuários</h2>
-        <table style={{ width: "100%", borderCollapse: "collapse" }}>
-          <thead>
-            <tr style={{ background: "#f3f4f6" }}>
-              <th>Foto</th>
-              <th>Nome</th>
-              <th>Email</th>
-              <th>Nível</th>
-              <th>Ativo</th>
-              <th>Último Login</th>
-              <th>Data de Criação</th>
-              <th>Ações</th>
-            </tr>
-          </thead>
-          <tbody>
-            {[...Array(5)].map((_, idx) => (
-              <tr key={idx} style={{ borderBottom: "1px solid #eee" }}>
-                <td><Skeleton className="h-[40px] w-[40px] rounded-full" /></td>
-                <td><Skeleton className="h-[20px] w-[100px]" /></td>
-                <td><Skeleton className="h-[20px] w-[160px]" /></td>
-                <td><Skeleton className="h-[20px] w-[40px]" /></td>
-                <td><Skeleton className="h-[20px] w-[60px]" /></td>
-                <td><Skeleton className="h-[20px] w-[120px]" /></td>
-                <td><Skeleton className="h-[20px] w-[120px]" /></td>
-                <td><Skeleton className="h-[32px] w-[100px]" /></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    );
-  }
+  // Mock das ações em lote
+  const handleBatchDelete = () => {
+    setMensagem(`Usuários deletados: ${selecionados.join(", ")}`);
+    setSelecionados([]);
+  };
+  const handleBatchChangeRole = () => {
+    setMensagem(`Papel alterado para usuários: ${selecionados.join(", ")}`);
+    setSelecionados([]);
+  };
+  const handleBatchResetMFA = () => {
+    setMensagem(`MFA resetado para usuários: ${selecionados.join(", ")}`);
+    setSelecionados([]);
+  };
 
   return (
-    <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
-      <h2 style={{ fontSize: 28, fontWeight: 700, marginBottom: 24 }}>Manutenção de Usuários</h2>
-      {mensagem && <div style={{ color: mensagem.includes("atualizado") ? "green" : "red", marginBottom: 16 }}>{mensagem}</div>}
-      <table style={{ width: "100%", borderCollapse: "collapse" }}>
-        <thead>
-          <tr style={{ background: "#f3f4f6" }}>
-            <th>Foto</th>
-            <th>Nome</th>
-            <th>Email</th>
-            <th>Nível</th>
-            <th>Ativo</th>
-            <th>Último Login</th>
-            <th>Data de Criação</th>
-            <th>Ações</th>
-          </tr>
-        </thead>
-        <tbody>
-          {usuarios.map(usuario => (
-            <tr key={usuario.id} style={{ borderBottom: "1px solid #eee" }}>
-              <td>
-                {usuario.image ? (
-                  <Image src={usuario.image} alt="Foto" width={40} height={40} style={{ borderRadius: "50%" }} />
-                ) : (
-                  <span style={{ color: "#aaa" }}>Sem foto</span>
-                )}
-              </td>
-              <td>{usuario.name}</td>
-              <td>{usuario.email}</td>
-              <td>
-                <input
-                  type="number"
-                  min={1}
-                  max={5}
-                  value={usuario.accessLevel}
-                  onChange={e => handleUpdate(usuario.id, "accessLevel", Number(e.target.value))}
-                  style={{ width: 40 }}
-                />
-              </td>
-              <td>
-                <CheckboxCustom
-                  checked={usuario.isActive}
-                  onChange={checked => handleUpdate(usuario.id, "isActive", checked)}
-                  label={usuario.isActive ? "Ativo" : "Inativo"}
-                />
-              </td>
-              <td>{usuario.lastLogin ? new Date(usuario.lastLogin).toLocaleString() : "-"}</td>
-              <td>{new Date(usuario.createdAt).toLocaleString()}</td>
-              <td>
-                <button onClick={async () => {
-                  setMensagem(null);
-                  const res = await fetch(`/api/usuario/reset-senha`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ id: usuario.id }),
-                  });
-                  if (res.ok) setMensagem("Senha resetada!");
-                  else setMensagem("Erro ao resetar senha.");
-                }} style={{ marginRight: 8 }}>
-                  Resetar Senha
-                </button>
-                {/* Outras ações podem ser adicionadas aqui */}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+    <div className="max-w-6xl mx-auto py-8">
+      <h2 className="text-3xl font-bold mb-6 text-gradient">Manutenção de Usuários</h2>
+      {/* Painel de Feature Flags (mock Unleash) */}
+      <div className="mb-6 p-4 rounded border bg-muted flex flex-wrap gap-6 items-center">
+        <span className="font-semibold text-base mr-4">Feature Flags (Admin)</span>
+        {Object.entries(flags).map(([flag, value]) => (
+          <div key={flag} className="flex items-center gap-2">
+            <Switch
+              id={`flag-${flag}`}
+              checked={value}
+              onCheckedChange={checked => setFlags(f => ({ ...f, [flag]: checked }))}
+              aria-label={`Ativar/desativar ${flag}`}
+            />
+            <label htmlFor={`flag-${flag}`} className="text-sm cursor-pointer capitalize">
+              {flag.replace(/([A-Z])/g, ' $1').toLowerCase()}
+            </label>
+            <Badge variant={value ? "default" : "outline"}>{value ? "Ativo" : "Inativo"}</Badge>
+          </div>
+        ))}
+      </div>
+      {mensagem && <div className="mb-4 text-center text-sm font-medium text-primary animate-pulse">{mensagem}</div>}
+      <UsuariosTableFilters
+        filtro={filtro}
+        onFiltroChange={valor => { setFiltro(valor); setPagina(1); }}
+        onLimpar={() => { setFiltro(""); setPagina(1); }}
+      />
+      {/* Barra de ações em lote */}
+      {selecionados.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2 mb-4 p-2 bg-muted rounded border animate-in fade-in">
+          <span className="text-sm font-medium">{selecionados.length} selecionado(s)</span>
+          <Button size="sm" variant="destructive" onClick={handleBatchDelete}>Deletar</Button>
+          <Button size="sm" variant="secondary" onClick={handleBatchChangeRole}>Alterar Papel</Button>
+          <Button size="sm" variant="outline" onClick={handleBatchResetMFA}>Resetar MFA</Button>
+        </div>
+      )}
+      <UsuariosTable
+        usuarios={usuariosPagina}
+        loading={isLoading}
+        onResetSenha={handleResetSenha}
+        onToggleAtivo={handleToggleAtivo}
+        onChangeNivel={handleChangeNivel}
+        selecionados={selecionados}
+        onSelecionar={handleSelecionar}
+        onSelecionarTodos={handleSelecionarTodos}
+        todosSelecionados={usuariosPagina.length > 0 && usuariosPagina.every(u => selecionados.includes(u.id))}
+        algumSelecionado={selecionados.length > 0}
+      />
+      <div className="flex justify-between items-center mt-4 gap-2">
+        <span className="text-sm text-muted-foreground">Página {pagina} de {totalPaginas}</span>
+        <div className="flex gap-2">
+          <Button size="sm" variant="outline" onClick={() => setPagina(1)} disabled={pagina === 1}>Início</Button>
+          <Button size="sm" variant="outline" onClick={() => setPagina(p => Math.max(1, p - 1))} disabled={pagina === 1}>Anterior</Button>
+          <Button size="sm" variant="outline" onClick={() => setPagina(p => Math.min(totalPaginas, p + 1))} disabled={pagina === totalPaginas}>Próxima</Button>
+          <Button size="sm" variant="outline" onClick={() => setPagina(totalPaginas)} disabled={pagina === totalPaginas}>Fim</Button>
+        </div>
+      </div>
     </div>
   );
 };
 
 export default DashboardAdmin;
-// Comentário: Dashboard administrativo completo para manutenção de usuários, edição de dados, ativação, reset de senha e permissões.

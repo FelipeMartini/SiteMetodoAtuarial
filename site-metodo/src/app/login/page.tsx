@@ -1,6 +1,8 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
+import TotpPrompt from "./TotpPrompt";
+import { isMfaObrigatorio } from "@/configs/mfaConfig";
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 // import { ErrorBoundary } from '@/components/ErrorBoundary';
@@ -23,6 +25,8 @@ const LoginPage: React.FC = () => {
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [mfaStep, setMfaStep] = useState(false);
+  const [mfaRequired, setMfaRequired] = useState(false);
 
   // Hook de autenticação unificado (Auth.js puro)
   const { status } = useAuth();
@@ -56,13 +60,29 @@ const LoginPage: React.FC = () => {
         setLoading(false);
         return;
       }
-  // O hook useAuth irá detectar a autenticação pelo cookie
+      // Checa se MFA é obrigatório para login
+      if (isMfaObrigatorio('login')) {
+        // Verifica status do MFA do usuário
+        const mfaRes = await fetch('/api/auth/totp-status');
+        const mfaData = await mfaRes.json();
+        if (mfaData.enabled) {
+          setMfaRequired(true);
+          setMfaStep(true);
+          setLoading(false);
+          return;
+        }
+      }
+      // O hook useAuth irá detectar a autenticação pelo cookie
     } catch {
       setErro('Erro ao tentar autenticar.');
     } finally {
       setLoading(false);
     }
   };
+
+  if (mfaStep && mfaRequired) {
+    return <TotpPrompt onVerify={() => window.location.reload()} />;
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex flex-col items-center justify-center py-8 px-4">
