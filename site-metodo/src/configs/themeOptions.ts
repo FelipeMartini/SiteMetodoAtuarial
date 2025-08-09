@@ -1,2 +1,3 @@
 // Exemplo de themeOptions
-export default [];
+const themeOptions: any[] = [];
+export default themeOptions;

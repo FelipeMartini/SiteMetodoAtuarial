@@ -1,8 +1,6 @@
 #!/bin/bash
 # Script seguro para execução controlada de comandos no workspace
-# Uso: ./exec-comando.sh "comando"
-
-WORKSPACE_DIR="$(dirname $(dirname "$0"))"
+WORKSPACE_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 LISTA_PERMITIDOS="$WORKSPACE_DIR/Yprograma-comandos/lista/comandos_permitidos.txt"
 LISTA_BLOQUEADOS="$WORKSPACE_DIR/Yprograma-comandos/lista/comandos_bloqueados.txt"
 LISTA_PENDENTES="$WORKSPACE_DIR/Yprograma-comandos/lista/comandos_pendentes.txt"
@@ -18,8 +16,21 @@ NC='\033[0m' # No Color
 comando="$1"
 
 
-# Garante que a pasta de logs existe
+
+
+# Garante que as pastas de lista e logs existem
 mkdir -p "$LOGDIR"
+mkdir -p "$WORKSPACE_DIR/Yprograma-comandos/lista"
+
+# Testa permissão de escrita
+if ! touch "$LOGDIR/teste-permissao.log" 2>/dev/null; then
+  echo -e "${RED}[ERRO]${NC} Sem permissão de escrita em '$LOGDIR'. Tente rodar como usuário com permissão ou ajuste as permissões."
+  exit 10
+fi
+rm -f "$LOGDIR/teste-permissao.log"
+
+# Garante que arquivos de lista existem
+touch "$LISTA_PERMITIDOS" "$LISTA_BLOQUEADOS" "$LISTA_PENDENTES"
 
 if [ -z "$comando" ]; then
   echo -e "${YELLOW}[ERRO]${NC} Nenhum comando informado."
@@ -55,15 +66,16 @@ if ! grep -Fxq "$comando_base" "$LISTA_PENDENTES"; then
   echo "$comando_base" >> "$LISTA_PENDENTES"
 fi
 
-# Prompt simples para aprovação
-read -p "Comando '$comando_base' não está na lista. Deseja executar? [s/N]: " resp
-if [[ "$resp" =~ ^[sS]$ ]]; then
-  echo -e "${YELLOW}[ATENÇÃO] Execução manual autorizada.${NC}"
-  echo "$(date) [EXECUCAO MANUAL] $comando" >> "$LOGFILE"
-  eval "$comando"
-  exit $?
-else
-  echo -e "${YELLOW}[NEGADO] Comando não autorizado.${NC}"
-  echo "$(date) [NEGADO] $comando" >> "$LOGFILE"
+
+# Se não está na lista de permitidos, negar automaticamente em modo não interativo (stdin ou stdout não são TTY)
+if [ ! -t 0 ] || [ ! -t 1 ]; then
+  echo -e "${YELLOW}[NEGADO] Comando não autorizado (execução não-interativa).${NC}"
+  echo "$(date) [NEGADO-NONINTERACTIVE] $comando" >> "$LOGFILE"
   exit 4
 fi
+
+
+# NUNCA abrir prompt. Negar comandos não permitidos SEMPRE, sem input.
+echo -e "${YELLOW}[NEGADO] Comando não autorizado.${NC}"
+echo "$(date) [NEGADO] $comando" >> "$LOGFILE"
+exit 4
