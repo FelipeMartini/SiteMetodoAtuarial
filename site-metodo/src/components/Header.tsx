@@ -6,7 +6,7 @@ import { MainNavigation } from "@/components/ui/main-navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
-import useRouter from 'next/router'
+import { useRouter } from 'next/navigation'
 
 /**
  * Header customizado com sistema de temas e navegação avançada

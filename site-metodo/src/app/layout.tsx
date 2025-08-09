@@ -1,6 +1,6 @@
 
 import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
-import Metadata from "next";
+import type { Metadata } from "next";
 import LayoutCliente from "@/app/LayoutCliente";
 
 import { ThemeProvider } from '@/components/theme-provider';
