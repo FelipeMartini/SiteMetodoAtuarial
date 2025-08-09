@@ -2,50 +2,40 @@
 import { CardMetrica, UsuariosCard } from "./components"
 import { useQuery } from "@tanstack/react-query"
 
-function PermissoesCard() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['permissoes'],
-    queryFn: async () => {
-      const res = await fetch('/admin/dashboard/api/permissoes')
-      if (!res.ok) throw new Error('Erro ao buscar permissões')
-      return res.json()
-    },
-  })
-  return (
-    <CardMetrica
-      titulo="Permissões"
-      valor={isLoading ? '...' : data?.length ?? 0}
-      icone={null}
-      className="bg-gradient-to-br from-primary/90 to-background/80"
-    />
-  )
-}
-
-function AcessosCard() {
-  const { data, isLoading } = useQuery({
-    queryKey: ['acessos'],
-    queryFn: async () => {
-      const res = await fetch('/admin/dashboard/api/acessos')
-      if (!res.ok) throw new Error('Erro ao buscar acessos')
-      return res.json()
-    },
-  })
-  return (
-    <CardMetrica
-      titulo="Acessos"
-      valor={isLoading ? '...' : data?.total ?? 0}
-      icone={null}
-      className="bg-gradient-to-br from-primary/90 to-background/80"
-    />
-  )
-}
-
 export default function DashboardCards() {
+  const { data, isLoading } = useQuery({
+    queryKey: ['admin-metrics'],
+    queryFn: async () => {
+      const res = await fetch('/api/admin/metrics')
+      if (!res.ok) throw new Error('Erro ao carregar métricas')
+      return res.json() as Promise<{ totalUsers: number; activeUsers: number; newUsers7d: number; linkedAccounts: number; auditCount: number }>
+    },
+    staleTime: 30000,
+  })
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 w-full">
       <UsuariosCard />
-      <AcessosCard />
-      <PermissoesCard />
+      <CardMetrica
+        titulo="Usuários Ativos"
+        valor={isLoading ? '...' : data?.activeUsers ?? 0}
+        icone={null}
+      />
+      <CardMetrica
+        titulo="Novos (7d)"
+        valor={isLoading ? '...' : data?.newUsers7d ?? 0}
+        icone={null}
+      />
+      <CardMetrica
+        titulo="Contas Vinculadas"
+        valor={isLoading ? '...' : data?.linkedAccounts ?? 0}
+        icone={null}
+      />
+      <CardMetrica
+        titulo="Logs Auditoria"
+        valor={isLoading ? '...' : data?.auditCount ?? 0}
+        icone={null}
+      />
     </div>
   )
 }

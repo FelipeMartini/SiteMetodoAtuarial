@@ -36,7 +36,8 @@ export const FormularioCriarConta: React.FC<Props> = ({ onSucessoAutoLogin }) =>
     const result = await mutateAsync(payload)
     if (!result.ok) {
       console.info('[registro] falha', result)
-      const msg = mensagemAmigavel(result.errorCode, result.mensagem)
+  const codeEnum = Object.values(AuthErrorCode).includes(result.errorCode as AuthErrorCode) ? result.errorCode as AuthErrorCode : undefined
+  const msg = mensagemAmigavel(codeEnum, result.mensagem)
       setMensagem({ tipo: 'erro', texto: msg })
       if (result.errorCode === AuthErrorCode.EMAIL_JA_EXISTE) setFocus('email')
       return
@@ -65,8 +66,33 @@ export const FormularioCriarConta: React.FC<Props> = ({ onSucessoAutoLogin }) =>
     for (const k of keys) { if (errors[k]) { setFocus(k); break } }
   }, [errors, setFocus])
 
+  // Simulação simples de rate limiting local (placeholder até backend real): se mais de 3 tentativas falhas em 60s bloqueia 30s
+  const [falhas, setFalhas] = React.useState<number[]>([]) // timestamps
+  const [bloqueadoAte, setBloqueadoAte] = React.useState<number | null>(null)
+
+  React.useEffect(()=> {
+    const now = Date.now()
+    // limpa falhas antigas (>60s)
+    setFalhas(f=> f.filter(t=> now - t < 60000))
+    if (bloqueadoAte && now > bloqueadoAte) setBloqueadoAte(null)
+  }, [bloqueadoAte])
+
+  const bloqueado = bloqueadoAte && Date.now() < bloqueadoAte
+
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-6" noValidate>
+    <form onSubmit={handleSubmit(async (d)=> {
+      if (bloqueado) return
+      const antes = Date.now()
+      await onSubmit(d)
+      // se houve erro incrementa falhas
+      if (mensagem?.tipo === 'erro') {
+        setFalhas(f=> [...f, antes])
+        const recentes = falhas.filter(t=> antes - t < 60000).length + 1
+        if (recentes >= 3) {
+          setBloqueadoAte(Date.now()+30000)
+        }
+      }
+    })} className="flex flex-col gap-6" noValidate>
       {mensagem && (
         <div className={cn('text-sm text-center rounded p-2 border', mensagem.tipo==='erro' ? 'bg-red-100 text-red-700 border-red-300':'bg-green-100 text-green-700 border-green-300')}>{mensagem.texto}</div>
       )}
@@ -106,8 +132,16 @@ export const FormularioCriarConta: React.FC<Props> = ({ onSucessoAutoLogin }) =>
         </div>
         {errors.confirmarSenha && <p id="erro-confirmar" className="text-xs text-red-600">{errors.confirmarSenha.message}</p>}
       </div>
-      <Button type="submit" className="w-full mt-2" disabled={isSubmitting || isPending} aria-disabled={isSubmitting || isPending}>
-        {(isSubmitting || isPending) ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Criando conta...</span> : 'Criar conta'}
+      {senhaValue && forca.suggestions.length > 0 && (
+        <ul className="text-xs text-muted-foreground list-disc pl-4 space-y-1">
+          {forca.suggestions.slice(0,3).map(sug => <li key={sug}>{sug}</li>)}
+        </ul>
+      )}
+      {bloqueado && (
+        <div className="text-xs text-yellow-700 bg-yellow-100 border border-yellow-300 rounded p-2">Muitas tentativas. Aguarde alguns segundos antes de tentar novamente.</div>
+      )}
+  <Button type="submit" className="w-full mt-2" disabled={!!(isSubmitting || isPending || bloqueado)} aria-disabled={!!(isSubmitting || isPending || bloqueado)}>
+        {(isSubmitting || isPending) ? <span className="flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Criando conta...</span> : (bloqueado ? 'Aguarde...' : 'Criar conta')}
       </Button>
     </form>
   )

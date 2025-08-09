@@ -47,22 +47,18 @@ const LoginPage: React.FC = () => {
     e.preventDefault();
     setErro(null);
     setLoading(true);
-
     try {
-      const res = await fetch('/api/auth/signin/credentials', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password: senha })
-      });
-      const data = await res.json();
-      if (!res.ok || !data.ok) {
-        setErro(data.error || 'Credenciais inválidas.');
+      // Usa fluxo padrão Auth.js credentials: POST /api/auth/callback/credentials
+      const form = new FormData();
+      form.append('email', email);
+      form.append('password', senha);
+      const resp = await fetch('/api/auth/callback/credentials', { method: 'POST', body: form });
+      if (!resp.ok) {
+        setErro('Credenciais inválidas.');
         setLoading(false);
         return;
       }
-      // Checa se MFA é obrigatório para login
       if (isMfaObrigatorio('login')) {
-        // Verifica status do MFA do usuário
         const mfaRes = await fetch('/api/auth/totp-status');
         const mfaData = await mfaRes.json();
         if (mfaData.enabled) {
@@ -72,7 +68,6 @@ const LoginPage: React.FC = () => {
           return;
         }
       }
-      // O hook useAuth irá detectar a autenticação pelo cookie
     } catch {
       setErro('Erro ao tentar autenticar.');
     } finally {

@@ -23,6 +23,7 @@ model User {
   sessions      Session[]
   totpSecret    String?   @map("totp_secret")
   authenticators Authenticator[]
+  auditLogs     AuditLog[]
 }
 
 model Authenticator {
@@ -72,4 +73,17 @@ model VerificationToken {
   expires    DateTime
 
   @@unique([identifier, token])
+}
+
+model AuditLog {
+  id        String   @id @default(cuid())
+  userId    String?
+  action    String
+  target    String?
+  meta      String? // JSON serializado
+  createdAt DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
