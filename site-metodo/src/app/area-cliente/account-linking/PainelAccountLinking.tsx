@@ -26,7 +26,7 @@ const PROVIDERS = [
   { id: "github", nome: "GitHub", icon: "/icons/github.svg" },
   { id: "apple", nome: "Apple", icon: "/icons/apple.svg" },
   { id: "twitter", nome: "Twitter", icon: "/icons/twitter.svg" },
-  { id: "microsoft", nome: "Microsoft", icon: "/icons/microsoft.svg" },
+  { id: "microsoft-entra-id", nome: "Microsoft", icon: "/icons/microsoft.svg" },
 ];
 
 // Tipo expandido para exibir status, roles, flags e logs (mock)
