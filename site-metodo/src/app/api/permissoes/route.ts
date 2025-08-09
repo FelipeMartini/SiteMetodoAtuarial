@@ -1,12 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/auth'
-// import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
-// TODO: implementar permissaoSchema e checkRole compatíveis com schema atual
-// Placeholders temporários para evitar erro de import inexistente
+// import { db as prisma } from '@/lib/prisma' // Futuro CRUD real
+// TODO: implementar permissaoSchema real (usando zod) alinhado ao modelo de permissões
+// Placeholder mínimo enquanto schema não definido
 interface ParseResult { success: boolean; error?: { issues: unknown[] } }
-// Placeholders intencionais até implementação real
-const permissaoSchema = { safeParse: (): ParseResult => ({ success: false, error: { issues: [] } }) }
-function checkRole(): boolean { return true }
+// Placeholder: aceita qualquer payload como válido até definição real
+const permissaoSchema = { safeParse: (_data: unknown): ParseResult => ({ success: true }) }
+import { checkRole } from '@/utils/rbac'
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 
@@ -14,6 +14,7 @@ import { withCors, withSecurityHeaders } from '@/utils/security'
 export async function GET(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
+  // Aceita roles admin ou moderador
   if (!session || !checkRole(session.user, ['admin', 'moderador'])) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
