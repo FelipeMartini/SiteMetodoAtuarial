@@ -1,4 +1,3 @@
-
 # Site Método Atuarial
 
 <p align="center">
@@ -146,6 +145,24 @@ Este projeto é licenciado sob os termos da licença MIT. Veja o arquivo LICENSE
 
 ---
 
+# ⚠️ AVISO IMPORTANTE SOBRE O CLI DO SHADCN/UI
+
+> **O pacote `shadcn-ui` está DEPRECIADO!**
+>
+> Sempre utilize o CLI oficial atualizado para instalar ou atualizar componentes shadcn/ui:
+>
+> ```bash
+> npx shadcn@latest add <componente>
+> ```
+>
+> **NUNCA use:**
+> `npx shadcn-ui@latest ...` (DEPRECIADO)
+>
+> Consulte sempre a documentação oficial: https://ui.shadcn.com/docs/cli
+>
+> Este aviso deve ser revisitado e reforçado em toda documentação e automação do projeto.
+
+---
 
 ## 🔄 Automação de Gerenciamento de Dependências
 
