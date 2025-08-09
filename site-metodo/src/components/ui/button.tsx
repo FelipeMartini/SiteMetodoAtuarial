@@ -35,13 +35,17 @@ const buttonVariants = cva(
   }
 )
 
-interface ButtonProps extends HTMLMotionProps<'button'>, VariantProps<typeof buttonVariants> {
-  asChild?: boolean;
-  className?: string;
-  children?: React.ReactNode;
-  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
-  size?: "default" | "sm" | "lg" | "icon";
-}
+type ButtonProps =
+  & Omit<React.ButtonHTMLAttributes<HTMLButtonElement>, 'ref' | 'as' | 'color'>
+  & HTMLMotionProps<'button'>
+  & VariantProps<typeof buttonVariants>
+  & {
+    asChild?: boolean;
+    className?: string;
+    children?: React.ReactNode;
+    variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+    size?: "default" | "sm" | "lg" | "icon";
+  };
 
 function Button({
   className,
