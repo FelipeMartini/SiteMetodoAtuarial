@@ -43,7 +43,7 @@ const AUTH_SECRET = process.env.AUTH_SECRET || 'DEV_PLACEHOLDER_SECRET_CHANGE_ME
  * - Ordem pensada para UX: Credentials (interno) + Email (se existir) depois principais sociais (Google, GitHub, Apple, Twitter, Microsoft).
  * - O componente SocialLoginBox consome /api/auth/providers para descobrir quais estão realmente ativos.
  */
-const providers: AuthConfig['providers'] = [
+export const providers: AuthConfig['providers'] = [
   Credentials({
     name: 'Login',
     credentials: {
@@ -62,7 +62,7 @@ const providers: AuthConfig['providers'] = [
 ]
 
 // Email magic link (inserido logo após Credentials)
-if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.EMAIL_FROM) {
+if (process.env.NODE_ENV !== 'test' && process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.EMAIL_FROM) {
   providers.push(Email({
     server: {
       host: process.env.SMTP_HOST,
@@ -114,7 +114,8 @@ export const authConfig: AuthConfig = {
   trustHost: true,
   secret: AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'database' },
+  // Em testes usamos 'jwt' porque Credentials provider no Auth.js v5 exige JWT strategy; em produção mantemos 'database' para invalidação server-side
+  session: process.env.NODE_ENV === 'test' ? { strategy: 'jwt' } : { strategy: 'database' },
   providers,
   callbacks: {
     async session({ session }) {
