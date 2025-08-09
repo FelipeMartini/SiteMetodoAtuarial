@@ -29,7 +29,7 @@ function withSecurityHeaders(res: NextResponse) {
 }
 
 // Simulação de dados
-let usuarios = [
+const usuarios = [
   { id: 1, nome: 'Felipe', email: 'felipe@email.com', role: 'admin' },
   { id: 2, nome: 'Ana', email: 'ana@email.com', role: 'editor' },
 ]

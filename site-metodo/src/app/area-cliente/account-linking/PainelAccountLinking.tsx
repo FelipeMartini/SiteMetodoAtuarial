@@ -1,33 +1,8 @@
+"use client";
 // =============================
 // Painel de Account Linking
-// - Paginação client-side (TanStack Table opcional para grandes volumes)
-// - Acessibilidade: aria-label, aria-invalid, roles, feedback visual e navegação por teclado
-// - Feature flags reais: Unleash (FeatureFlagStatus)
-// - Documentação inline para manutenção e onboarding
+// (comentários detalhados movidos abaixo para manter diretiva no topo)
 // =============================
-  // Paginação client-side: permite navegação eficiente mesmo com muitos provedores vinculados.
-  // Para grandes volumes, migrar para paginação server-side ou TanStack Table.
-  // Resetar página ao filtrar: garante UX consistente ao buscar.
-              {/* Paginação e controles: acessível, mobile-first, com labels e navegação por teclado */}
-              {/*
-                Cada cartão de provedor:
-                - Checkbox: permite seleção para ações em lote
-                - Avatar: identificação visual do provedor
-                - Badges: status, role, MFA, último acesso
-                - FeatureFlagStatus: exibe logs e botão de reset MFA apenas se a flag estiver ativa
-                - Botão Desvincular: ação individual, com aria-label para acessibilidade
-              */}
-                        {/*
-                          FeatureFlagStatus:
-                          - Exibe logs avançados apenas se a flag "account-linking-logs" estiver ativa no Unleash
-                          - Permite experimentação e rollout seguro de recursos
-                        */}
-                      {/*
-                        FeatureFlagStatus:
-                        - Exibe botão de reset MFA apenas se a flag "account-linking-reset-mfa" estiver ativa
-                        - Exemplo de uso real de feature flags no frontend
-                      */}
-"use client";
 // Painel de gerenciamento de provedores (account linking) - UI/UX moderna, dark/light mode, integração Auth.js v5 + Prisma
 
 import React, { useEffect, useState } from "react";
@@ -268,11 +243,11 @@ export default function PainelAccountLinking() {
                   </select>
                 </div>
                 <div className="flex items-center gap-1">
-                  <Button variant="ghost" size="icon-xs" onClick={() => setPagina(0)} disabled={pagina === 0} aria-label="Primeira página">{'<<'}</Button>
-                  <Button variant="ghost" size="icon-xs" onClick={() => setPagina(p => Math.max(0, p - 1))} disabled={pagina === 0} aria-label="Página anterior">{'<'}</Button>
+                  <Button variant="ghost" size="icon" onClick={() => setPagina(0)} disabled={pagina === 0} aria-label="Primeira página">{'<<'}</Button>
+                  <Button variant="ghost" size="icon" onClick={() => setPagina(p => Math.max(0, p - 1))} disabled={pagina === 0} aria-label="Página anterior">{'<'}</Button>
                   <span className="text-xs">Página {pagina + 1} de {totalPaginas}</span>
-                  <Button variant="ghost" size="icon-xs" onClick={() => setPagina(p => Math.min(totalPaginas - 1, p + 1))} disabled={pagina >= totalPaginas - 1} aria-label="Próxima página">{'>'}</Button>
-                  <Button variant="ghost" size="icon-xs" onClick={() => setPagina(totalPaginas - 1)} disabled={pagina >= totalPaginas - 1} aria-label="Última página">{'>>'}</Button>
+                  <Button variant="ghost" size="icon" onClick={() => setPagina(p => Math.min(totalPaginas - 1, p + 1))} disabled={pagina >= totalPaginas - 1} aria-label="Próxima página">{'>'}</Button>
+                  <Button variant="ghost" size="icon" onClick={() => setPagina(totalPaginas - 1)} disabled={pagina >= totalPaginas - 1} aria-label="Última página">{'>>'}</Button>
                 </div>
               </div>
               <div className="flex flex-col gap-4">
