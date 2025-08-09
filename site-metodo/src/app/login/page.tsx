@@ -68,7 +68,7 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex flex-col items-center justify-center py-8 px-4">
       <div className="w-full max-w-lg mx-auto">
         {/* Card principal */}
-        <Card variant="elevated" hover="lift" className="backdrop-blur-md bg-card/95">
+  <Card className="backdrop-blur-md bg-card/95">
           <CardHeader className="text-center space-y-4">
             <div className="mx-auto h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Lock className="h-6 w-6 text-primary" />
@@ -143,10 +143,9 @@ const LoginPage: React.FC = () => {
               <Button
                 type="submit"
                 disabled={loading}
-                variant="gradient"
+                variant="default"
                 size="lg"
                 className="w-full"
-                loading={loading}
               >
                 {loading ? 'Entrando...' : 'Entrar'}
               </Button>

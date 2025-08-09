@@ -84,7 +84,7 @@ export function Header() {
                 </Button>
               </Link>
               <Link href="/criar-conta">
-                <Button size="sm" variant="gradient">
+                <Button size="sm" variant="default">
                   Criar Conta
                 </Button>
               </Link>

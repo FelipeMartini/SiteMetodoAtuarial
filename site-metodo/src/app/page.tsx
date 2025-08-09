@@ -134,7 +134,7 @@ export default function Home() {
             {/* CTAs */}
             <div className="flex flex-col sm:flex-row gap-4 pt-6 animate-slide-up">
               <Link href="/contato">
-                <Button size="lg" variant="gradient" className="px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl">
+                <Button size="lg" variant="default" className="px-8 py-6 text-lg font-semibold shadow-lg hover:shadow-xl">
                   Solicitar Orçamento
                   <ArrowRight className="ml-2 h-5 w-5" />
                 </Button>
