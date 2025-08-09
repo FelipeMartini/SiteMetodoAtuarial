@@ -8,6 +8,10 @@ import GitHub from '@auth/core/providers/github'
 import Google from '@auth/core/providers/google'
 import Email from '@auth/core/providers/email'
 import Credentials from '@auth/core/providers/credentials'
+// Providers adicionais opcionais (inclusão condicional por variáveis de ambiente)
+import Apple from '@auth/core/providers/apple'
+import Twitter from '@auth/core/providers/twitter'
+import MicrosoftEntraID from '@auth/core/providers/microsoft-entra-id'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
@@ -26,7 +30,19 @@ function mapAccessLevelToRole(accessLevel?: number): string {
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'DEV_PLACEHOLDER_SECRET_CHANGE_ME'
 
-// Providers (Email incluso apenas se SMTP configurado)
+/**
+ * Montagem dinâmica da lista de providers do Auth.js.
+ * Regras:
+ * - Sempre inclui Credentials (login tradicional) para permitir auto-login pós registro.
+ * - Inclui Email magic-link se variáveis SMTP presentes (mantendo posição logo após Credentials).
+ * - Inclui Google / GitHub sempre que as respectivas variáveis estiverem presentes (Auth.js já usa env padrões AUTH_<PROV>_ID/SECRET).
+ * - Inclui Apple somente se TODOS os requisitos estiverem definidos: AUTH_APPLE_ID, AUTH_APPLE_TEAM_ID, AUTH_APPLE_PRIVATE_KEY, AUTH_APPLE_KEY_ID.
+ *   A chave privada frequentemente vem com quebras de linha escapadas, convertemos '\n' em '\n'.
+ * - Inclui Twitter se AUTH_TWITTER_ID e AUTH_TWITTER_SECRET.
+ * - Inclui Microsoft Entra ID se AUTH_MICROSOFT_ENTRA_ID_ID e AUTH_MICROSOFT_ENTRA_ID_SECRET (issuer opcional restringe tenant).
+ * - Ordem pensada para UX: Credentials (interno) + Email (se existir) depois principais sociais (Google, GitHub, Apple, Twitter, Microsoft).
+ * - O componente SocialLoginBox consome /api/auth/providers para descobrir quais estão realmente ativos.
+ */
 const providers: AuthConfig['providers'] = [
   Credentials({
     name: 'Login',
@@ -43,12 +59,11 @@ const providers: AuthConfig['providers'] = [
       return { id: user.id, name: user.name, email: user.email, accessLevel: user.accessLevel }
     },
   }),
-  Google,
-  GitHub,
 ]
 
+// Email magic link (inserido logo após Credentials)
 if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.EMAIL_FROM) {
-  providers.splice(1, 0, Email({
+  providers.push(Email({
     server: {
       host: process.env.SMTP_HOST,
       port: Number(process.env.SMTP_PORT || 587),
@@ -58,6 +73,39 @@ if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && p
   }))
 } else if (process.env.NODE_ENV !== 'production') {
   console.warn('[auth] Provider Email não configurado (variáveis SMTP ausentes) – ignorando.')
+}
+
+// Google
+if (process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET) {
+  providers.push(Google)
+}
+// GitHub
+if (process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET) {
+  providers.push(GitHub)
+}
+// Apple (todos requisitos)
+if (process.env.AUTH_APPLE_ID && process.env.AUTH_APPLE_TEAM_ID && process.env.AUTH_APPLE_PRIVATE_KEY && process.env.AUTH_APPLE_KEY_ID) {
+  // Tipagem de Apple em @auth/core pode não expor todas propriedades; usamos cast para permitir configuração avançada.
+  providers.push(Apple({
+    clientId: process.env.AUTH_APPLE_ID,
+    teamId: process.env.AUTH_APPLE_TEAM_ID,
+    keyId: process.env.AUTH_APPLE_KEY_ID,
+    privateKey: process.env.AUTH_APPLE_PRIVATE_KEY.split('\\n').join('\n'),
+  } as any))
+} else if (process.env.AUTH_APPLE_ID && process.env.NODE_ENV !== 'production') {
+  console.warn('[auth] Apple incompleto – defina AUTH_APPLE_TEAM_ID, AUTH_APPLE_PRIVATE_KEY, AUTH_APPLE_KEY_ID para habilitar.')
+}
+// Twitter
+if (process.env.AUTH_TWITTER_ID && process.env.AUTH_TWITTER_SECRET) {
+  providers.push(Twitter({ clientId: process.env.AUTH_TWITTER_ID, clientSecret: process.env.AUTH_TWITTER_SECRET }))
+}
+// Microsoft Entra ID (OIDC)
+if (process.env.AUTH_MICROSOFT_ENTRA_ID_ID && process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET) {
+  providers.push(MicrosoftEntraID({
+    clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID,
+    clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET,
+    issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER, // opcional (restringe tenant)
+  }))
 }
 
 export const authConfig: AuthConfig = {
