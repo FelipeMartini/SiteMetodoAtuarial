@@ -21,8 +21,8 @@
  */
 "use client";
 import * as React from "react";
-import { cva, type VariantProps } from "class-variance-authority";
-import { motion } from "framer-motion";
+import { cva } from "class-variance-authority";
+import { motion, HTMLMotionProps } from "framer-motion";
 import { cn } from "@/lib/utils";
 
 // Variantes e tamanhos padronizados, seguindo tokens globais do projeto
@@ -47,9 +47,11 @@ const componenteBaseVariants = cva(
   }
 );
 
-export interface ComponenteBaseProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface ComponenteBaseProps extends HTMLMotionProps<"div"> {
   variant?: "default" | "accent";
   size?: "sm" | "md" | "lg";
+  className?: string;
+  children?: React.ReactNode;
 }
 
 /**

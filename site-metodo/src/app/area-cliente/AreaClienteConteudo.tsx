@@ -5,7 +5,7 @@
 import React from "react";
 import MenuLateralClienteWrapper from "@/app/area-cliente/MenuLateralClienteWrapper";
 import Image from "next/image";
-import { Skeleton } from "@/components/ui/skeleton";
+import { Skeleton } from '@/components/ui/skeleton';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 

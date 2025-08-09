@@ -1,7 +1,7 @@
 import * as React from "react"
 import { Slot } from "@radix-ui/react-slot"
 import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
+import { motion, HTMLMotionProps } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const buttonVariants = cva(
@@ -35,21 +35,66 @@ const buttonVariants = cva(
   }
 )
 
+interface ButtonProps extends HTMLMotionProps<'button'>, VariantProps<typeof buttonVariants> {
+  asChild?: boolean;
+  className?: string;
+  children?: React.ReactNode;
+  variant?: "default" | "destructive" | "outline" | "secondary" | "ghost" | "link";
+  size?: "default" | "sm" | "lg" | "icon";
+}
+
 function Button({
   className,
-  variant,
-  size,
+  variant = "default",
+  size = "default",
   asChild = false,
   children,
   ...props
-}: React.ComponentProps<"button"> &
-  VariantProps<typeof buttonVariants> & {
-    asChild?: boolean
-  }) {
-  const Comp = asChild ? Slot : motion.button
+}: ButtonProps) {
+  if (asChild) {
+    // Filtra dinamicamente todas as props de animação e style
+    const safeProps = Object.fromEntries(
+      Object.entries(props).filter(
+        ([key]) =>
+          ![
+            "whileHover",
+            "whileTap",
+            "transition",
+            "layout",
+            "layoutId",
+            "animate",
+            "initial",
+            "exit",
+            "drag",
+            "dragConstraints",
+            "dragElastic",
+            "dragMomentum",
+            "dragPropagation",
+            "onDrag",
+            "onDragEnd",
+            "onDragStart",
+            "onDragTransitionEnd",
+            "onDirectionLock",
+            "onDragConstraintsChange",
+            "onDragTransitionStart",
+            "style",
+          ].includes(key)
+      )
+    );
+    return (
+      <Slot
+        data-slot="button"
+        className={cn(buttonVariants({ variant, size, className }))}
+        {...safeProps}
+      >
+        {children}
+      </Slot>
+    );
+  }
 
+  // Só passa motionProps para motion.button
   return (
-    <Comp
+    <motion.button
       data-slot="button"
       className={cn(buttonVariants({ variant, size, className }))}
       whileHover={{ scale: 1.04, boxShadow: "0 8px 32px 0 rgba(0,0,0,0.12)" }}
@@ -58,8 +103,8 @@ function Button({
       {...props}
     >
       {children}
-    </Comp>
-  )
+    </motion.button>
+  );
 }
 
 export { Button, buttonVariants }

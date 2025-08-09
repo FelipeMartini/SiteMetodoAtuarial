@@ -1,6 +1,6 @@
 import * as React from "react"
 import { cva, type VariantProps } from "class-variance-authority"
-import { motion } from "framer-motion"
+import { motion, HTMLMotionProps } from "framer-motion"
 import { cn } from "@/lib/utils"
 
 const alertVariants = cva(
@@ -19,12 +19,18 @@ const alertVariants = cva(
   }
 )
 
+interface AlertProps extends HTMLMotionProps<"div">, VariantProps<typeof alertVariants> {
+  className?: string;
+  children?: React.ReactNode;
+  variant?: "default" | "destructive";
+}
+
 function Alert({
   className,
   variant,
   children,
   ...props
-}: React.ComponentProps<"div"> & VariantProps<typeof alertVariants>) {
+}: AlertProps) {
   return (
     <motion.div
       data-slot="alert"

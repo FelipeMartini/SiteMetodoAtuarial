@@ -36,6 +36,13 @@ applyTo: '**'
 # Checklist de Automação de Gerenciamento de Dependências
 
 
+[//]: # (Checklist: Refatoração dos imports de UI para o barrel file)
+
+- [ ] Etapa 1: Garantir que todos os componentes necessários estejam exportados no `src/components/ui/index.ts`.
+- [ ] Etapa 2: Substituir todos os imports de componentes individuais de `@/components/ui/<componente>` para `@/components/ui` nos arquivos listados.
+- [ ] Etapa 3: Remover imports duplicados e garantir que não haja conflitos de nomes.
+- [ ] Etapa 4: Validar o build do projeto e rodar lint/testes para garantir que não houve regressão.
+- [ ] Etapa 5: Validar se as automações (scripts e tasks) continuam funcionando normalmente.
 - [x] Planejar scripts shell reutilizáveis para:
 	- [x] Instalar dependências (npm ci e npm install)
 	- [x] Atualizar dependências (todas, interativo, específicas)
