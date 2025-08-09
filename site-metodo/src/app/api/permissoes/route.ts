@@ -5,8 +5,12 @@ import { auth } from '@/auth'
 // Placeholders temporários para evitar erro de import inexistente
 interface ParseResult { success: boolean; error?: { issues: unknown[] } }
 // Placeholders intencionais até implementação real
-const permissaoSchema = { safeParse: (): ParseResult => ({ success: false, error: { issues: [] } }) }
-function checkRole(): boolean { return true }
+const permissaoSchema = { safeParse: (_data?: unknown): ParseResult => { void _data; return { success: false, error: { issues: [] } } } }
+function checkRole(user: { role?: string }, roles: string | string[]): boolean {
+  if (!user?.role) return false
+  if (Array.isArray(roles)) return roles.includes(user.role)
+  return user.role === roles
+}
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 

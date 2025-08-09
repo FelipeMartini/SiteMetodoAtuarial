@@ -1,10 +1,6 @@
-// Auth.js (@auth/core) configuração unificada sem dependência de next-auth v4
-// Documentação: https://authjs.dev/reference/core
-// Este arquivo expõe:
-// - authConfig: configuração para roteador dinâmico
-// - auth(): util para obter sessão server-side via cookie JWT
-// - authHandler(): handler para rota /api/auth/[...auth]
-// - requireRole(): helper simples de RBAC baseado em accessLevel -> role derivada
+// Configuração central do Auth.js (@auth/core) usando PrismaAdapter e sessões em banco
+// Estratégia: 'database' para permitir invalidação server-side e auditoria
+// Fornece helpers: authConfig, authHandler(), auth(), requireRole()
 
 import { cookies } from 'next/headers'
 import { Auth, type AuthConfig } from '@auth/core'
@@ -14,10 +10,9 @@ import Email from '@auth/core/providers/email'
 import Credentials from '@auth/core/providers/credentials'
 import { PrismaAdapter } from '@auth/prisma-adapter'
 import { PrismaClient } from '@prisma/client'
-import { decode, encode } from '@auth/core/jwt'
+import bcrypt from 'bcryptjs'
 
-// Singleton Prisma (evita múltiplas instâncias em dev)
-// Singleton tipado do Prisma
+// Prisma singleton para evitar múltiplas conexões em dev
 const globalForPrisma = global as unknown as { prisma?: PrismaClient }
 export const prisma: PrismaClient = globalForPrisma.prisma || new PrismaClient()
 if (process.env.NODE_ENV !== 'production') globalForPrisma.prisma = prisma
@@ -31,7 +26,7 @@ function mapAccessLevelToRole(accessLevel?: number): string {
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'DEV_PLACEHOLDER_SECRET_CHANGE_ME'
 
-// Monta providers dinamicamente (Email só se SMTP configurado para evitar erro de build)
+// Providers (Email incluso apenas se SMTP configurado)
 const providers: AuthConfig['providers'] = [
   Credentials({
     name: 'Login',
@@ -42,8 +37,9 @@ const providers: AuthConfig['providers'] = [
     async authorize(credentials) {
       if (!credentials?.email || !credentials.password) return null
       const user = await prisma.user.findUnique({ where: { email: credentials.email as string } })
-      if (!user) return null
-      // TODO: validar hash da senha (bcrypt). Placeholder aceita sempre usuário existente.
+      if (!user || !user.password) return null
+      const ok = await bcrypt.compare(credentials.password as string, user.password)
+      if (!ok) return null
       return { id: user.id, name: user.name, email: user.email, accessLevel: user.accessLevel }
     },
   }),
@@ -69,36 +65,27 @@ export const authConfig: AuthConfig = {
   trustHost: true,
   secret: AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
-  session: { strategy: 'jwt' },
+  session: { strategy: 'database' },
   providers,
   callbacks: {
-    async jwt({ token, user }) {
-      // Extendendo token quando usuário faz sign-in
-      if (user) {
-        const accessLevel: number = (user as { accessLevel?: number; id?: string }).accessLevel ?? 1
-        return {
-          ...token,
-          id: (user as { id?: string }).id,
-          accessLevel,
-          role: mapAccessLevelToRole(accessLevel),
-        }
-      }
-      return token
-    },
-    async session({ session, token }) {
-      if (session.user && token) {
-        const t = token as Partial<{ id: string; role: string; accessLevel: number }>
-        // Estende dinamicamente user; criação de tipo local evita uso de any
-        (session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).id = t.id
-        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = t.role
-        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).accessLevel = t.accessLevel
+    async session({ session }) {
+      if (!session.user?.email && !session.user?.id) return session
+      const userRecord = await prisma.user.findFirst({
+        where: {
+          OR: [
+            session.user.id ? { id: session.user.id } : undefined,
+            session.user.email ? { email: session.user.email } : undefined,
+          ].filter(Boolean) as [{ id: string }] | [{ email: string }],
+        },
+        select: { id: true, accessLevel: true, name: true, email: true },
+      })
+      if (userRecord) {
+        (session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).id = userRecord.id
+        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).accessLevel = userRecord.accessLevel
+        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = mapAccessLevelToRole(userRecord.accessLevel)
       }
       return session
     },
-  },
-  jwt: {
-    async encode(params) { return encode({ ...params, secret: AUTH_SECRET, salt: 'authjs' }) },
-    async decode(params) { return decode({ ...params, secret: AUTH_SECRET, salt: 'authjs' }) },
   },
   experimental: { enableWebAuthn: false },
 }
@@ -107,32 +94,33 @@ export async function authHandler(request: Request) {
   return Auth(request, authConfig)
 }
 
+// Helper para recuperar sessão a partir do cookie de sessão (Session model)
 export async function auth() {
-  const store = cookies()
+  const store = await cookies()
   const candidates = ['__Secure-authjs.session-token', 'authjs.session-token', 'next-auth.session-token']
-  let raw: string | undefined
+  let sessionToken: string | undefined
   for (const c of candidates) {
     const cookie = store.get(c)
-    if (cookie?.value) { raw = cookie.value; break }
+    if (cookie?.value) { sessionToken = cookie.value; break }
   }
-  if (!raw) return null
-  const payload = await decode({ token: raw, secret: AUTH_SECRET, salt: 'authjs' }) as (Record<string, unknown> | null)
-  if (!payload) return null
-  const userId = payload.id as string | undefined
-  let user = null
-  if (userId) {
-    user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, name: true, email: true, accessLevel: true } })
-  }
-  const accessLevel = user?.accessLevel ?? (payload.accessLevel as number | undefined) ?? 1
+  if (!sessionToken) return null
+  const sessionRecord = await prisma.session.findUnique({
+    where: { sessionToken },
+    select: { sessionToken: true, userId: true, expires: true, user: { select: { id: true, name: true, email: true, accessLevel: true } } },
+  })
+  if (!sessionRecord) return null
+  if (sessionRecord.expires.getTime() < Date.now()) return null
+  const accessLevel = sessionRecord.user.accessLevel
   return {
     user: {
-      id: user?.id || userId,
-      name: user?.name || (payload.name as string | undefined),
-      email: user?.email || (payload.email as string | undefined),
+      id: sessionRecord.user.id,
+      name: sessionRecord.user.name ?? undefined,
+      email: sessionRecord.user.email ?? undefined,
       accessLevel,
       role: mapAccessLevelToRole(accessLevel),
     },
-    token: payload,
+    sessionToken,
+    expires: sessionRecord.expires,
   }
 }
 
@@ -143,3 +131,4 @@ export async function requireRole(minRole: string | string[]) {
   if (Array.isArray(minRole)) return minRole.includes(role) ? session : null
   return role === minRole ? session : null
 }
+
