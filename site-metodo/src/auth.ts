@@ -31,53 +31,61 @@ function mapAccessLevelToRole(accessLevel?: number): string {
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'DEV_PLACEHOLDER_SECRET_CHANGE_ME'
 
+// Monta providers dinamicamente (Email só se SMTP configurado para evitar erro de build)
+const providers: AuthConfig['providers'] = [
+  Credentials({
+    name: 'Login',
+    credentials: {
+      email: { label: 'E-mail', type: 'email' },
+      password: { label: 'Senha', type: 'password' },
+    },
+    async authorize(credentials) {
+      if (!credentials?.email || !credentials.password) return null
+      const user = await prisma.user.findUnique({ where: { email: credentials.email as string } })
+      if (!user) return null
+      // TODO: validar hash da senha (bcrypt). Placeholder aceita sempre usuário existente.
+      return { id: user.id, name: user.name, email: user.email, accessLevel: user.accessLevel }
+    },
+  }),
+  Google,
+  GitHub,
+]
+
+if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS && process.env.EMAIL_FROM) {
+  providers.splice(1, 0, Email({
+    server: {
+      host: process.env.SMTP_HOST,
+      port: Number(process.env.SMTP_PORT || 587),
+      auth: { user: process.env.SMTP_USER, pass: process.env.SMTP_PASS },
+    },
+    from: process.env.EMAIL_FROM,
+  }))
+} else if (process.env.NODE_ENV !== 'production') {
+  console.warn('[auth] Provider Email não configurado (variáveis SMTP ausentes) – ignorando.')
+}
+
 export const authConfig: AuthConfig = {
   basePath: '/api/auth',
   trustHost: true,
   secret: AUTH_SECRET,
   adapter: PrismaAdapter(prisma),
   session: { strategy: 'jwt' },
-  providers: [
-    Credentials({
-      name: 'Login',
-      credentials: {
-        email: { label: 'E-mail', type: 'email' },
-        password: { label: 'Senha', type: 'password' },
-      },
-      async authorize(credentials) {
-        if (!credentials?.email || !credentials.password) return null
-        const user = await prisma.user.findUnique({ where: { email: credentials.email as string } })
-        if (!user) return null
-        // TODO: validar hash da senha (bcrypt). Placeholder aceita sempre usuário existente.
-        return { id: user.id, name: user.name, email: user.email, accessLevel: user.accessLevel }
-      },
-    }),
-    Email({}),
-    Google,
-    GitHub,
-  ],
+  providers,
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-  // @ts-expect-error campo custom possivelmente presente (accessLevel)
-  const accessLevel: number = user.accessLevel ?? 1
-  // @ts-expect-error adicionando campo custom ao token
-  token.id = (user as any).id
-  // @ts-expect-error adicionando campo custom ao token
-  token.accessLevel = accessLevel
-  // @ts-expect-error adicionando campo custom ao token
-  token.role = mapAccessLevelToRole(accessLevel)
+  const accessLevel: number = (user as any).accessLevel ?? 1
+  ;(token as any).id = (user as any).id
+  ;(token as any).accessLevel = accessLevel
+  ;(token as any).role = mapAccessLevelToRole(accessLevel)
       }
       return token
     },
     async session({ session, token }) {
       if (token) {
-  // @ts-expect-error augment runtime com campos adicionais
-  session.user.id = token.id
-  // @ts-expect-error augment runtime com campos adicionais
-  session.user.role = token.role
-  // @ts-expect-error augment runtime com campos adicionais
-  session.user.accessLevel = token.accessLevel
+  ;(session.user as any).id = (token as any).id
+  ;(session.user as any).role = (token as any).role
+  ;(session.user as any).accessLevel = (token as any).accessLevel
       }
       return session
     },
