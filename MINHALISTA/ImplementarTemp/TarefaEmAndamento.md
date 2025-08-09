@@ -80,6 +80,23 @@ Próximos passos:
 Checklist atualizado automaticamente após implementação dos endpoints e validação Zod.
 
 
+
+---
+## Plano Incremental: CRUD & Gerenciamento de Provedores (Account Linking)
+
+- [ ] 1. Revisar e aprimorar painel de provedores vinculados (Account Linking)
+	- [ ] Garantir busca/filtro de provedores vinculados
+	- [ ] Implementar paginação (se necessário)
+	- [ ] Adicionar seleção e ações em lote (desvincular múltiplos)
+	- [ ] Exibir status, data de vínculo, tipo de provedor
+	- [ ] Adicionar AlertDialog para confirmação de desvinculação
+	- [ ] Garantir responsividade, acessibilidade e integração visual
+	- [ ] Documentar padrão de integração e flows
+- [ ] 2. Refatorar formulários de vinculação/desvinculação com react-hook-form + Zod
+- [ ] 3. Integrar feature flags (Unleash) para recursos experimentais (real)
+- [ ] 4. Escrever testes unitários e2e para flows principais
+- [ ] 5. Checklist de revisão final e QA
+
 # Checklist: Implementação Completa - CRUD & Gerenciamento de Provedores (Account Linking)
 
  [x] Adicionar feedback visual, loading, erros, acessibilidade
