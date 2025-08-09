@@ -4,112 +4,83 @@
     {
       "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
       "type": "shell",
-  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" 2>&1 | tee \"${workspaceFolder}/XLOGS/git-auto-$(date +'%Y%m%d-%H%M%S').log\"",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" 2>&1 | tee \"${workspaceFolder}/XLOGS/git-auto-$(date +'%Y%m%d-%H%M%S').log\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     },
     {
       "label": "Instalar dependências",
       "type": "shell",
-  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm install 2>&1 | tee \"${workspaceFolder}/XLOGS/install-$(date +'%Y%m%d-%H%M%S').log\"",
-      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm install 2>&1 | tee \"${workspaceFolder}/XLOGS/install-$(date +'%Y%m%d-%H%M%S').log\"",
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      },
       "group": "build",
-      "problemMatcher": ["$tsc"],
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     },
     {
       "label": "Atualizar dependências",
       "type": "shell",
-  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm update 2>&1 | tee \"${workspaceFolder}/XLOGS/update-$(date +'%Y%m%d-%H%M%S').log\"",
-      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm update 2>&1 | tee \"${workspaceFolder}/XLOGS/update-$(date +'%Y%m%d-%H%M%S').log\"",
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      },
       "group": "build",
-      "problemMatcher": ["$tsc"],
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+      "problemMatcher": [
+        "$tsc"
+      ],
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     },
     {
       "label": "Limpeza-Geral",
       "type": "shell",
-  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.' 2>&1 | tee \"${workspaceFolder}/XLOGS/limpeza-geral-$(date +'%Y%m%d-%H%M%S').log\"",
-      "options": { "cwd": "${workspaceFolder}/site-metodo" },
+      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.' 2>&1 | tee \"${workspaceFolder}/XLOGS/limpeza-geral-$(date +'%Y%m%d-%H%M%S').log\"",
+      "options": {
+        "cwd": "${workspaceFolder}/site-metodo"
+      },
       "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     },
     {
       "label": "Executar comando Seguro",
       "type": "shell",
-  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/exec-comando.sh\" && \"${workspaceFolder}/scripts/exec-comando.sh\" ${input:comandoLivre} 2>&1 | tee \"${workspaceFolder}/XLOGS/exec-comando-seguro-$(date +'%Y%m%d-%H%M%S').log\"",
-      "options": { "cwd": "${workspaceFolder}" },
+      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/exec-comando.sh\" && \"${workspaceFolder}/scripts/exec-comando.sh\" 'ls -la' 2>&1 | tee \"${workspaceFolder}/XLOGS/exec-comando-seguro-$(date +'%Y%m%d-%H%M%S').log\"",
+      "options": {
+        "cwd": "${workspaceFolder}"
+      },
       "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    }
-  ],
-  "inputs": [
-    {
-      "id": "dependInstallModo",
-      "type": "pickString",
-      "description": "Modo de instalação de dependências",
-      "options": ["ci", "install"],
-      "default": "ci"
+      "presentation": {
+        "reveal": "always",
+        "panel": "dedicated",
+        "clear": true
+      }
     },
-    {
-      "id": "comandoLivre",
-      "type": "promptString",
-      "description": "Comando livre a ser executado com segurança pelo exec-comando.sh"
-    }
-  ]
-}
-    {
-      "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
-      "type": "shell",
-      "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\"",
-      "tasks": [
-        // ...existing code...
-        // Todas as tasks relevantes já estão ajustadas acima para logar em XLOGS/ com tee
-      ],
-      "inputs": [
-        {
-          "id": "dependInstallModo",
-          "type": "pickString",
-          "description": "Modo de instalação de dependências",
-          "options": ["ci", "install"],
-          "default": "ci"
-        },
-        {
-          "id": "dependUpdatePacote",
-          "type": "promptString",
-          "description": "Nome do pacote e flags para atualizar (ex: react, tailwindcss, --dev)"
-        },
-        {
-          "id": "dependRemovePacote",
-          "type": "promptString",
-          "description": "Nome do pacote e flags para remover (ex: react, tailwindcss, --no-save)"
-        },
-        {
-          "id": "dependOutdatedFlags",
-          "type": "promptString",
-          "description": "Flags extras para listar desatualizadas (ex: --json, --production)"
-        },
-        {
-          "id": "dependAuditFlags",
-          "type": "promptString",
-          "description": "Flags extras para auditoria (ex: --json, --production)"
-        },
-        {
-          "id": "dependAddPacote",
-          "type": "promptString",
-          "description": "Nome do pacote e flags para adicionar (ex: chalk --save-dev)"
-        },
-        {
-          "id": "comandoLivre",
-          "type": "promptString",
-          "description": "Comando livre a ser executado com segurança pelo exec-comando.sh"
-        }
-      ]
     {
       "label": "Atualizar shadcn/ui",
       "type": "shell",
-  "command": "npx shadcn-ui@latest upgrade || echo 'shadcn/ui não instalado' 2>&1 | tee ../../XLOGS/atualizar-shadcn-ui-$(date +'%Y%m%d-%H%M%S').log",
+      "command": "npx shadcn-ui@latest upgrade || echo 'shadcn/ui não instalado' 2>&1 | tee ../../XLOGS/atualizar-shadcn-ui-$(date +'%Y%m%d-%H%M%S').log",
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       },
@@ -172,7 +143,7 @@
     {
       "label": "Prisma Generate Absoluto",
       "type": "shell",
-  "command": "npm run prisma:generate 2>&1 | tee ../../XLOGS/prisma-generate-absoluto-$(date +'%Y%m%d-%H%M%S').log",
+      "command": "npm run prisma:generate 2>&1 | tee ../../XLOGS/prisma-generate-absoluto-$(date +'%Y%m%d-%H%M%S').log",
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       },
@@ -291,7 +262,7 @@
     {
       "label": "Smoke Test Next.js",
       "type": "shell",
-  "command": "npm run test:smoke || echo 'Smoke test não implementado' 2>&1 | tee ../../XLOGS/smoke-test-nextjs-$(date +'%Y%m%d-%H%M%S').log",
+      "command": "npm run test:smoke || echo 'Smoke test não implementado' 2>&1 | tee ../../XLOGS/smoke-test-nextjs-$(date +'%Y%m%d-%H%M%S').log",
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       },
@@ -303,126 +274,11 @@
     },
     {
       "label": "Build Completo Seguro",
-      "dependsOrder": "sequence",
-      {
-        "version": "2.0.0",
-        "tasks": [
-          {
-            "label": "Changelog/Versionamento/Push Automático (mensagem automática)",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" 2>&1 | tee \"${workspaceFolder}/XLOGS/git-auto-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}" },
-            "group": "build",
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Instalar dependências",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm install 2>&1 | tee \"${workspaceFolder}/XLOGS/install-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "build",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Atualizar dependências",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm update 2>&1 | tee \"${workspaceFolder}/XLOGS/update-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "build",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Limpeza-Geral",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.' 2>&1 | tee \"${workspaceFolder}/XLOGS/limpeza-geral-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "build",
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Executar comando Seguro",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && chmod +x \"${workspaceFolder}/scripts/exec-comando.sh\" && \"${workspaceFolder}/scripts/exec-comando.sh\" ${input:comandoLivre} 2>&1 | tee \"${workspaceFolder}/XLOGS/exec-comando-seguro-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}" },
-            "group": "build",
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Build Next.js Absoluto",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm run build 2>&1 | tee \"${workspaceFolder}/XLOGS/build-nextjs-absoluto-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "build",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Prisma Generate Absoluto",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm run prisma:generate 2>&1 | tee \"${workspaceFolder}/XLOGS/prisma-generate-absoluto-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "build",
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Lint Absoluto",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm run lint 2>&1 | tee \"${workspaceFolder}/XLOGS/lint-absoluto-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "test",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Type Check Absoluto",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm run type-check 2>&1 | tee \"${workspaceFolder}/XLOGS/type-check-absoluto-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "test",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Cobertura de Testes",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npx jest --coverage 2>&1 | tee \"${workspaceFolder}/XLOGS/cobertura-testes-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "test",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          },
-          {
-            "label": "Smoke Test Next.js",
-            "type": "shell",
-            "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && npm run test:smoke || echo 'Smoke test não implementado' 2>&1 | tee \"${workspaceFolder}/XLOGS/smoke-test-nextjs-$(date +'%Y%m%d-%H%M%S').log\"",
-            "options": { "cwd": "${workspaceFolder}/site-metodo" },
-            "group": "test",
-            "problemMatcher": ["$tsc"],
-            "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-          }
-        ],
-        "inputs": [
-          {
-            "id": "dependInstallModo",
-            "type": "pickString",
-            "description": "Modo de instalação de dependências",
-            "options": ["ci", "install"],
-            "default": "ci"
-          },
-          {
-            "id": "comandoLivre",
-            "type": "promptString",
-            "description": "Comando livre a ser executado com segurança pelo exec-comando.sh"
-          }
-        ]
-      }
-      "label": "Commit Convencional (Commitizen)",
       "type": "shell",
-  "command": "npx git-cz 2>&1 | tee ../../XLOGS/commit-convencional-commitizen-$(date +'%Y%m%d-%H%M%S').log",
-        "command": "mkdir -p ../../XLOGS && npm run lint 2>&1 | tee ../../XLOGS/lint-absoluto-$(date +'%Y%m%d-%H%M%S').log",
-        "cwd": "${workspaceFolder}/site-metodo"
+      "dependsOrder": "sequence",
+      "command": "echo 'Build seguro completo (ajuste conforme necessário)'",
+      "options": {
+        "cwd": "${workspaceFolder}"
       },
       "group": "build",
       "presentation": {
@@ -431,89 +287,10 @@
         "clear": true
       }
     },
-    {
-      "label": "Changelog/Versionamento/Push Automático",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/git-auto.sh\" && \"${workspaceFolder}/scripts/git-auto.sh\" \"feat: commit automatizado via task\" 2>&1 | tee ../../XLOGS/changelog-versionamento-push-automatico-$(date +'%Y%m%d-%H%M%S').log",
-      "options": {
-        "cwd": "${workspaceFolder}"
-        "command": "mkdir -p ../../XLOGS && npm run type-check 2>&1 | tee ../../XLOGS/type-check-absoluto-$(date +'%Y%m%d-%H%M%S').log",
-      "group": "build",
-      "presentation": {
-        "reveal": "always",
-        "panel": "dedicated",
-        "clear": true
-      }
-    }
-    ,
     {
       "label": "Dependências: Instalar (ci/padrão)",
       "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-install.sh\" && \"${workspaceFolder}/scripts/depend-install.sh\" ${input:dependInstallModo} 2>&1 | tee ../../XLOGS/dependencias-instalar-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-        "command": "mkdir -p ../../XLOGS && npm run build 2>&1 | tee ../../XLOGS/build-nextjs-absoluto-$(date +'%Y%m%d-%H%M%S').log",
-    {
-      "label": "Dependências: Atualizar (todas)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" all 2>&1 | tee ../../XLOGS/dependencias-atualizar-todas-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Dependências: Atualizar (interativo)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" interactive 2>&1 | tee ../../XLOGS/dependencias-atualizar-interativo-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-        "command": "mkdir -p ../../XLOGS && npx jest --coverage 2>&1 | tee ../../XLOGS/cobertura-testes-$(date +'%Y%m%d-%H%M%S').log",
-    {
-      "label": "Dependências: Atualizar (específica)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-update.sh\" && \"${workspaceFolder}/scripts/depend-update.sh\" ${input:dependUpdatePacote} 2>&1 | tee ../../XLOGS/dependencias-atualizar-especifica-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Dependências: Remover (específica)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-remove.sh\" && \"${workspaceFolder}/scripts/depend-remove.sh\" ${input:dependRemovePacote} 2>&1 | tee ../../XLOGS/dependencias-remover-especifica-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-        "command": "mkdir -p ../../XLOGS && npx prisma generate --schema=./src/prisma/schema.prisma 2>&1 | tee ../../XLOGS/prisma-generate-absoluto-$(date +'%Y%m%d-%H%M%S').log",
-    {
-      "label": "Dependências: Listar desatualizadas (custom)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-outdated.sh\" && \"${workspaceFolder}/scripts/depend-outdated.sh\" ${input:dependOutdatedFlags} 2>&1 | tee ../../XLOGS/dependencias-listar-desatualizadas-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Dependências: Auditoria de vulnerabilidades (custom)",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\" ${input:dependAuditFlags} 2>&1 | tee ../../XLOGS/dependencias-auditoria-vulnerabilidades-$(date +'%Y%m%d-%H%M%S').log",
-        "command": "mkdir -p ../../XLOGS && chmod +x \"${workspaceFolder}/scripts/exec-comando.sh\" && \"${workspaceFolder}/scripts/exec-comando.sh\" ${input:comandoLivre} 2>&1 | tee ../../XLOGS/exec-comando-seguro-$(date +'%Y%m%d-%H%M%S').log",
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Dependências: Corrigir vulnerabilidades",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-audit.sh\" && \"${workspaceFolder}/scripts/depend-audit.sh\" fix 2>&1 | tee ../../XLOGS/dependencias-corrigir-vulnerabilidades-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    },
-    {
-      "label": "Refatorar Estrutura do Projeto",
-      "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/refatorar-estrutura.sh\" && \"${workspaceFolder}/scripts/refatorar-estrutura.sh\" 2>&1 | tee ../../XLOGS/refatorar-estrutura-projeto-$(date +'%Y%m%d-%H%M%S').log",
+      "command": "chmod +x \"${workspaceFolder}/scripts/depend-install.sh\" && \"${workspaceFolder}/scripts/depend-install.sh\" ${input:dependInstallModo} 2>&1 | tee ../../XLOGS/dependencias-instalar-$(date +'%Y%m%d-%H%M%S').log",
       "options": {
         "cwd": "${workspaceFolder}"
       },
@@ -522,66 +299,19 @@
         "reveal": "always",
         "panel": "dedicated",
         "clear": true
-      },
-      "problemMatcher": []
-    }
-      ,
-      {
-        "label": "Dependências: Adicionar (específica)",
-        "type": "shell",
-  "command": "chmod +x \"${workspaceFolder}/scripts/depend-add.sh\" && \"${workspaceFolder}/scripts/depend-add.sh\" ${input:dependAddPacote} 2>&1 | tee ../../XLOGS/dependencias-adicionar-especifica-$(date +'%Y%m%d-%H%M%S').log",
-    ,
-    {
-      "label": "Executar comando Seguro",
-      "type": "shell",
-      "command": "chmod +x \"${workspaceFolder}/scripts/exec-comando.sh\" && \"${workspaceFolder}/scripts/exec-comando.sh\" ${input:comandoLivre} 2>&1 | tee ../../XLOGS/exec-comando-seguro-$(date +'%Y%m%d-%H%M%S').log",
-      "options": { "cwd": "${workspaceFolder}" },
-      "group": "build",
-      "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
-    }
-        "options": { "cwd": "${workspaceFolder}" },
-        "group": "build",
-        "presentation": { "reveal": "always", "panel": "dedicated", "clear": true }
       }
-  ]
-  ,
+    }
+  ],
   "inputs": [
     {
       "id": "dependInstallModo",
       "type": "pickString",
       "description": "Modo de instalação de dependências",
-      "options": ["ci", "install"],
+      "options": [
+        "ci",
+        "install"
+      ],
       "default": "ci"
-    },
-    {
-      "id": "dependUpdatePacote",
-      "type": "promptString",
-      "description": "Nome do pacote e flags para atualizar (ex: react, tailwindcss, --dev)"
-    },
-    {
-      "id": "dependRemovePacote",
-      "type": "promptString",
-      "description": "Nome do pacote e flags para remover (ex: react, tailwindcss, --no-save)"
-    },
-    {
-      "id": "dependOutdatedFlags",
-      "type": "promptString",
-      "description": "Flags extras para listar desatualizadas (ex: --json, --production)"
-    },
-    {
-      "id": "dependAuditFlags",
-      "type": "promptString",
-      "description": "Flags extras para auditoria (ex: --json, --production)"
-    },
-    {
-      "id": "dependAddPacote",
-      "type": "promptString",
-      "description": "Nome do pacote e flags para adicionar (ex: chalk --save-dev)"
-    },
-    {
-      "id": "comandoLivre",
-      "type": "promptString",
-      "description": "Comando livre a ser executado com segurança pelo exec-comando.sh"
     }
   ]
 }
