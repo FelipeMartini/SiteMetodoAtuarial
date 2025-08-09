@@ -3,6 +3,8 @@
 // Recebe os dados do usuário autenticado via props.
 
 import React from "react";
+import TotpStatus from "@/app/area-cliente/totp-status/TotpStatus";
+import Link from "next/link";
 import MenuLateralClienteWrapper from "@/app/area-cliente/MenuLateralClienteWrapper";
 import Image from "next/image";
 import { Skeleton } from '@/components/ui/skeleton';
@@ -23,6 +25,7 @@ export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: st
           <CardTitle className="text-center text-2xl font-bold text-gradient">Perfil do Cliente</CardTitle>
         </CardHeader>
         <CardContent>
+          <TotpStatus />
           <div className="flex flex-col items-center gap-4">
             {/* Exibe Skeleton enquanto dados do usuário não estão disponíveis */}
             {!usuario ? (
@@ -53,6 +56,8 @@ export default function AreaClienteConteudo({ usuario }: { usuario?: { name?: st
                   <span className="text-lg font-semibold text-foreground">{usuario.name || 'Usuário sem nome'}</span>
                   <span className="text-sm text-muted-foreground">{usuario.email || 'E-mail não informado'}</span>
                   <Badge variant="outline" className="mt-2">Cliente</Badge>
+                  <Link href="/area-cliente/account-linking" className="text-xs text-primary underline mt-2">Gerenciar Provedores</Link>
+                  <Link href="/area-cliente/totp-setup" className="text-xs text-primary underline mt-2">Ativar/Configurar MFA</Link>
                 </div>
               </>
             )}
