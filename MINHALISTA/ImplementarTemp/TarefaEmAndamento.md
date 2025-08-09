@@ -31,7 +31,7 @@
 		- [ ] Adicionar seção de métricas (progresso % por domínio)
 		- [ ] Atualizar README apontando para mega-checklist
 
-> Nota: Próximo passo da consolidação: remover rotas OAuth manuais (google/github) e delegar totalmente ao handler /api/auth/[...auth] para registrar Accounts automaticamente no adapter.
+> Nota: Rotas OAuth manuais removidas (google/github) – fluxo agora usa handler unificado /api/auth/signin?provider=*
 
 ## 1. Tabelas Avançadas
 - [x] Definir arquitetura base DataTable headless (TanStack Table + shadcn/ui wrappers)
@@ -39,7 +39,7 @@
 - [x] Adicionar suporte a paginação client-side
 - [x] Adicionar suporte a paginação server-side (manualPagination)
 - [x] Implementar exportação CSV
-- [ ] Implementar exportação Excel (SheetJS)
+- [x] Implementar exportação Excel (SheetJS)
 - [ ] Implementar exportação PDF (pdf-lib ou jsPDF) opcional
 - [~] Adicionar row selection + ações em lote (coluna seleção + contagem + placeholder ação)
 - [ ] Adicionar column pinning (esquerda/direita)

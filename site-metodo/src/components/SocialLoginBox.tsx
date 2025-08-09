@@ -10,6 +10,12 @@ import React from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
+// Função helper para redirecionar via Auth.js handler
+function loginSocial(provider: string) {
+  // Auth.js v5: /api/auth/signin?provider=<id>
+  window.location.href = `/api/auth/signin?provider=${provider}`;
+}
+
 // Tipagem das props do componente
 interface SocialLoginBoxProps {
   showTitle?: boolean;
@@ -47,7 +53,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => window.location.href = '/api/auth/signin/google'}
+          onClick={() => loginSocial('google')}
           aria-label="Entrar com Google"
         >
           <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -60,12 +66,13 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
         </Button>
 
         {/* Botão Apple */}
+        {/* Apple (somente se provider adicionado no futuro) */}
         <Button
           type="button"
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => window.location.href = '/api/auth/signin/apple'}
+          onClick={() => loginSocial('apple')}
           aria-label="Entrar com Apple"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -80,7 +87,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => window.location.href = '/api/auth/signin/github'}
+          onClick={() => loginSocial('github')}
           aria-label="Entrar com GitHub"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -95,7 +102,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => window.location.href = '/api/auth/signin/twitter'}
+          onClick={() => loginSocial('twitter')}
           aria-label="Entrar com Twitter"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
@@ -110,7 +117,7 @@ const SocialLoginBox: React.FC<SocialLoginBoxProps> = ({
           variant="outline"
           size="lg"
           className="w-full justify-start space-x-3 hover:bg-accent hover:text-accent-foreground"
-          onClick={() => window.location.href = '/api/auth/signin/microsoft'}
+          onClick={() => loginSocial('microsoft')}
           aria-label="Entrar com Microsoft"
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
