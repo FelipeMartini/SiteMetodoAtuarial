@@ -13,26 +13,26 @@
     --popover-foreground: 222.2 84% 4.9%;
 
     /* Primary brand colors - Azul profissional */
-    --primary: 228 94% 67%;
-    --primary-foreground: 0 0% 100%;
+  --primary: 228 94% 62%;
+  --primary-foreground: 0 0% 100%;
 
     /* Secondary colors - Cinza elegante */
-    --secondary: 210 40% 98%;
-    --secondary-foreground: 222.2 84% 4.9%;
+  --secondary: 210 32% 96%;
+  --secondary-foreground: 222.2 84% 4.9%;
 
     /* Muted colors - Interface suave */
-    --muted: 210 40% 98%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+  --muted: 210 32% 96%;
+  --muted-foreground: 215.4 16.3% 46.9%;
 
     /* Accent colors - Destaque sutil */
-    --accent: 210 40% 98%;
-    --accent-foreground: 222.2 84% 4.9%;
+  --accent: 280 65% 92%;
+  --accent-foreground: 222.2 84% 4.9%;
 
     /* Status colors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --warning: 38 92% 50%;
-    --warning-foreground: 48 96% 89%;
+  --warning: 38 92% 54%;
+  --warning-foreground: 48 96% 89%;
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
@@ -49,14 +49,14 @@
     --chart-5: 340 75% 55%;
 
     /* Border radius personalizado */
-    --radius: 0.75rem;
+  --radius: 1.1rem;
 
     /* Shadows customizadas */
-    --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-    --shadow: 0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1);
-    --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-    --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-    --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-sm: 0 2px 8px 0 rgb(0 0 0 / 0.06);
+  --shadow: 0 4px 12px 0 rgb(0 0 0 / 0.10), 0 2px 8px -2px rgb(0 0 0 / 0.08);
+  --shadow-md: 0 8px 24px -2px rgb(0 0 0 / 0.12), 0 4px 16px -4px rgb(0 0 0 / 0.10);
+  --shadow-lg: 0 16px 32px -4px rgb(0 0 0 / 0.14), 0 8px 20px -8px rgb(0 0 0 / 0.12);
+  --shadow-xl: 0 32px 64px -8px rgb(0 0 0 / 0.16), 0 16px 40px -12px rgb(0 0 0 / 0.14);
   }
 
   .dark {

@@ -52,7 +52,7 @@ export function ModeToggle() {
           <span className="sr-only">Alternar tema</span>
         </CustomButton>
       </PopoverTrigger>
-      <PopoverContent align="end" className="w-52 border-2 border-muted-foreground/10 bg-background/95 backdrop-blur-md shadow-xl">
+  <PopoverContent align="end" fixed className="w-52 border-2 border-muted-foreground/10 bg-background/95 backdrop-blur-md shadow-xl">
         <div className="flex flex-col gap-1">
           <CustomButton
             variant={theme === "light" ? "glass" : "ghost"}
