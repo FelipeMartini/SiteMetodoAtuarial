@@ -120,4 +120,15 @@ entao busque na internet sobre o assunto de como personalizar a pagina not found
 
 
 
+AGPRA ESTUDE A FUNDO E ANALISE A FUNDO O PROJETO fuse-react e vamos começar a desenvolver consultando outros projetos parecidos com CRUD e dashboard admin e sistema de usuarios completos, consulte fontes na web exemplos dependencias tudo que há de mais modernos para realizar esse desenvolvimento em nosso aplicativo seguindo a estrutura e dependencias que ja temos , mas inovando e utilizando pacotes e codegios de comunidade ativa e inovadora de referencia e relevancia no mercado, bole um plano extenso e bem dividido com etapas intermediarias viando a completa adaptação e implementação utilizando tailwind e shadcn com componentes estilizados inovadores seguindo padrao do nosso projeto, cri e organize arquivos de instruções checlist e demais passos para uma boa implementação, simule que voce ira criar arquivos passo a passos e check bocks para outro time realizar a tarefa, entao seja bem descritovo mas ao mesmo tempo objetivo referenciando bibliotecas exemplos de codigos de implementação , documente tudo muito bem documentado e oganizado dentro da pasta MINHALISTA/PLANOCRUD enumere as tarefas e caminhos a ser seguidos para que multaplas equipes entenda e acompanhem o processo e possam contrinbir de forma conjuta e dinamica seja criativo e inovador utilizando as tecnicas mais modernas e que simplifiquem a implementção
+
+
+
+
+
+
+
+
+
+
 
