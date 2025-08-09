@@ -4,22 +4,23 @@ import { cva, type VariantProps } from "class-variance-authority"
 
 import { cn } from "@/lib/utils"
 
+import { motion } from "framer-motion"
 const cardVariants = cva(
-  "rounded-lg border bg-card text-card-foreground shadow-sm transition-all duration-300",
+  "rounded-2xl border bg-card/90 text-card-foreground shadow-lg transition-all duration-300 backdrop-blur-md",
   {
     variants: {
       variant: {
         default: "border-border",
-        elevated: "shadow-lg border-border/50",
+        elevated: "shadow-xl border-border/40",
         ghost: "border-transparent bg-transparent shadow-none",
-        gradient: "bg-gradient-to-br from-card to-card/80 border-border/50 shadow-md",
-        glass: "bg-card/80 backdrop-blur-md border-border/50 shadow-lg",
+        gradient: "bg-gradient-to-br from-card to-card/80 border-border/30 shadow-md",
+        glass: "bg-card/80 backdrop-blur-lg border-border/30 shadow-2xl",
       },
       hover: {
         none: "",
-        lift: "hover:shadow-lg hover:-translate-y-1",
-        glow: "hover:shadow-lg hover:shadow-primary/20",
-        scale: "hover:scale-[1.02]",
+        lift: "hover:shadow-2xl hover:-translate-y-1",
+        glow: "hover:shadow-2xl hover:shadow-primary/20",
+        scale: "hover:scale-[1.03]",
       },
       padding: {
         none: "p-0",
@@ -41,12 +42,18 @@ export interface CardProps
   VariantProps<typeof cardVariants> { }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
-  ({ className, variant, hover, padding, ...props }, ref) => (
-    <div
+  ({ className, variant, hover, padding, children, ...props }, ref) => (
+    <motion.div
       ref={ref}
       className={cn(cardVariants({ variant, hover, padding, className }))}
+      initial={{ opacity: 0, y: 16 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.25, type: "spring", bounce: 0.18 }}
+      whileHover={hover !== "none" ? { scale: 1.03, boxShadow: "0 12px 32px 0 rgba(0,0,0,0.10)" } : {}}
       {...props}
-    />
+    >
+      {children}
+    </motion.div>
   )
 )
 Card.displayName = "Card"
