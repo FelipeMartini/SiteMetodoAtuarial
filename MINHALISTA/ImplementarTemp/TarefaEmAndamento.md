@@ -1,17 +1,16 @@
 # Checklist Avançado – Dashboard Admin Usuários
 
-- [ ] Corrigir erro de importação/instalação do Switch (shadcn/ui) e dependência @radix-ui/react-switch
+ - [x] Corrigir erro de importação/instalação do Switch (shadcn/ui) e dependência @radix-ui/react-switch
 
 ---
 ## Planejamento de Atualização de Dependências WebAuthn/MFA
 
-- [x] Atualizar @simplewebauthn/browser para 13.1.2
-- [x] Atualizar @simplewebauthn/server para 13.1.2
-- [ ] Rodar `npm install` após atualização das libs @simplewebauthn
-- [ ] Validar breaking changes conforme changelog oficial
-- [ ] Migrar código conforme changelog oficial
-- [ ] Testar flows de registro, login e MFA com as novas versões
-- [ ] Documentar ajustes e pontos de atenção na integração WebAuthn/MFA
+ - [x] Atualizar @simplewebauthn/browser para 9.0.1 (compatível com Auth.js v5)
+ - [x] Atualizar @simplewebauthn/server para 9.0.3 (compatível com Auth.js v5)
+ - [x] Rodar `npm install` após ajuste das libs @simplewebauthn
+ - [x] Documentar: "Devido a conflitos de peer dependencies, foi necessário reverter as libs @simplewebauthn para versões 9.x, pois Auth.js v5 exige @simplewebauthn/browser@^9.0.1 e @simplewebauthn/server@^9.0.2. Monitorar releases futuros para atualização segura."
+ - [ ] Validar flows de registro, login e MFA com as versões compatíveis
+ - [ ] Documentar ajustes e pontos de atenção na integração WebAuthn/MFA
 
 ---
 
@@ -226,4 +225,24 @@ Marque cada item conforme revisar e ajuste o que for necessário.
 ---
 
 > Marque cada item conforme for implementando. Atualize este checklist a cada etapa.
+
+# ⚠️ AVISO PERMANENTE SOBRE O CLI DO SHADCN/UI
+
+> **IMPORTANTE:**
+> 
+> O pacote `shadcn-ui` está DEPRECIADO. Sempre utilize o CLI oficial atualizado:
+> 
+> **Use SEMPRE:**
+> ```bash
+> npx shadcn@latest add <componente>
+> ```
+> 
+> **NUNCA use:**
+> `npx shadcn-ui@latest ...` (DEPRECIADO)
+> 
+> Consulte sempre a documentação oficial: https://ui.shadcn.com/docs/cli
+> 
+> Se esquecer, este aviso deve ser revisitado e reforçado em toda documentação e automação do projeto.
+
+---
 
