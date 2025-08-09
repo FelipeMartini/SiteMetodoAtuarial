@@ -88,10 +88,10 @@ export const authConfig: AuthConfig = {
     async session({ session, token }) {
       if (session.user && token) {
         const t = token as Partial<{ id: string; role: string; accessLevel: number }>
-        // Estende dinamicamente user; criação de tipo local evita uso de any
-        (session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).id = t.id
-        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = t.role
-        ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).accessLevel = t.accessLevel
+        const target = session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }
+        if (t.id) target.id = t.id
+        if (t.role) target.role = t.role
+        if (typeof t.accessLevel === 'number') target.accessLevel = t.accessLevel
       }
       return session
     },
@@ -108,11 +108,11 @@ export async function authHandler(request: Request) {
 }
 
 export async function auth() {
-  const store = cookies()
+  const store = await cookies()
   const candidates = ['__Secure-authjs.session-token', 'authjs.session-token', 'next-auth.session-token']
   let raw: string | undefined
   for (const c of candidates) {
-    const cookie = store.get(c)
+  const cookie = store.get(c)
     if (cookie?.value) { raw = cookie.value; break }
   }
   if (!raw) return null
