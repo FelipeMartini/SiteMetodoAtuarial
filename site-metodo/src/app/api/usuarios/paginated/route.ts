@@ -1,11 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getServerSession } from 'next-auth'
-import { authOptions } from '@/src/@auth/authApi'
-import { db } from '@/src/lib/prisma'
+import { auth } from '@/auth'
+import { db } from '@/lib/prisma'
 
 // GET /api/usuarios/paginated?page=0&pageSize=10&search=abc
 export async function GET(req: NextRequest) {
-  const session = await getServerSession(authOptions)
+  const session = await auth()
   if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
   // TODO: validar role admin ou permissões específicas
   const url = new URL(req.url)

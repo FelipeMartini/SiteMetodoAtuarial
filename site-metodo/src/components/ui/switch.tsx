@@ -2,7 +2,8 @@ import * as React from "react"
 import { Switch as RadixSwitch } from "@radix-ui/react-switch"
 import { cn } from "@/lib/utils"
 
-export interface SwitchProps extends React.ComponentPropsWithoutRef<typeof RadixSwitch> {}
+// Usar type alias em vez de interface vazia para evitar no-empty-object-type
+export type SwitchProps = React.ComponentPropsWithoutRef<typeof RadixSwitch>
 
 export const Switch = React.forwardRef<React.ElementRef<typeof RadixSwitch>, SwitchProps>(
   ({ className, ...props }, ref) => (

@@ -74,7 +74,9 @@ export default function TotpSetup() {
           </div>
         )}
         {step === "done" && status && (
-          <Alert variant="success">{status}</Alert>
+          <Alert className="border-green-500/60 text-green-600 dark:text-green-400 bg-green-50/70 dark:bg-green-950/30">
+            {status}
+          </Alert>
         )}
         {erro && <Alert variant="destructive">{erro}</Alert>}
       </CardContent>

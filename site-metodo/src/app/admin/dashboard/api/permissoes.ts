@@ -24,7 +24,7 @@ function withSecurityHeaders(res: NextResponse) {
   return res
 }
 
-let permissoes = [
+const permissoes = [
   { id: 1, nome: 'admin', descricao: 'Administrador' },
   { id: 2, nome: 'editor', descricao: 'Editor de conteúdo' },
   { id: 3, nome: 'viewer', descricao: 'Visualizador' },
