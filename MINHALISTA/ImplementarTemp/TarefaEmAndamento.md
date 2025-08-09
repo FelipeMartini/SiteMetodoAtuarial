@@ -3,6 +3,35 @@
  - [x] Corrigir erro de importação/instalação do Switch (shadcn/ui) e dependência @radix-ui/react-switch
 
 ---
+
+# Mega Checklist Consolidado (Inicial)
+
+> Gerado automaticamente – fase de preparação. Próximos passos: ingestão completa, classificação e métricas.
+
+## Estrutura Inicial
+- [ ] Ingerir todos os 148 arquivos markdown ou mais procurando por todos arquivos .md novamente 
+- [ ] Extrair blocos de checklist
+- [ ] Normalizar formatação
+- [ ] Consolidar duplicatas
+- [ ] Calcular progresso por domínio
+- [ ] Vincular origem (caminho)
+- [ ] Publicar seções abaixo
+
+## Domínios (Placeholder)
+- Auth & MFA
+- Admin Dashboard (Tabelas / Widgets / Segurança / Performance)
+- Área Cliente
+- UI/Design System (shadcn/ui, theming)
+- DevEx & Automação
+- Documentação
+
+---
+
+_Em construção. Atualizar este arquivo conforme scripts de consolidação forem implementados._
+
+
+
+
 ## 1. primordiais 
 - [x] UNIFICAR SESSÃO DE LOGIN USANDO BANCO DE DADOS E REMOVENDO JWT (migrado para strategy: 'database')
 			- [x] Criar tabela de sessões no banco de dados (já existente: model Session em schema Prisma)

@@ -12,7 +12,7 @@ import { cn } from '@/utils/cn';
 
 // Função helper para redirecionar via Auth.js handler
 function loginSocial(provider: string) {
-  window.location.href = `/api/auth/signin?provider=${provider}`;
+  window.location.href = `/api/auth/signin/${provider}`;
 }
 
 interface ProviderInfo {
