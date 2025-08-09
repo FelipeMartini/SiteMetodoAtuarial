@@ -4,13 +4,9 @@ import * as React from "react"
 import { Moon, Sun, Monitor } from "lucide-react"
 import { useTheme } from "next-themes"
 
-import { Button } from "@/components/ui/button"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover"
-import { CustomButton } from "@/components/ui/button-custom"
+import { Button } from "@/components/ui/button";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { CustomButton } from "@/components/ui/button-custom";
 
 /**
  * Componente ModeToggle para alternar entre temas claro/escuro/sistema

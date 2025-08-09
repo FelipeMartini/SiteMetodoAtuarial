@@ -37,9 +37,16 @@ const cardVariants = cva(
   }
 )
 
+import { HTMLMotionProps } from "framer-motion"
 export interface CardProps
-  extends React.HTMLAttributes<HTMLDivElement>,
-  VariantProps<typeof cardVariants> { }
+  extends HTMLMotionProps<"div">,
+  VariantProps<typeof cardVariants> {
+    className?: string;
+    children?: React.ReactNode;
+    variant?: "default" | "elevated" | "ghost" | "gradient" | "glass";
+    hover?: "none" | "lift" | "glow" | "scale";
+    padding?: "none" | "sm" | "default" | "lg";
+  }
 
 const Card = React.forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, hover, padding, children, ...props }, ref) => (

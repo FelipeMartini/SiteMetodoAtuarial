@@ -1,8 +1,8 @@
 "use client"
 
-import { ModeToggle } from "@/components/ui/mode-toggle"
-import { MainNavigation } from "@/components/ui/main-navigation"
-import { Button } from "@/components/ui/button"
+import { ModeToggle } from "@/components/ui/mode-toggle";
+import { MainNavigation } from "@/components/ui/main-navigation";
+import { Button } from "@/components/ui/button";
 import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
 import { useRouter } from 'next/navigation'

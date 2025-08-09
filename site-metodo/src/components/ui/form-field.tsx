@@ -3,8 +3,9 @@
 import * as React from "react"
 /// <reference types="react/next" />
 import { cn } from "@/lib/utils"
-import { Input, type InputProps } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import type { InputProps } from "@/components/ui/input";
 import { cva, type VariantProps } from "class-variance-authority"
 
 const formFieldVariants = cva(

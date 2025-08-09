@@ -1,4 +1,4 @@
-
+"use client";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
@@ -8,7 +8,7 @@ import Link from "next/link";
 export default function NotFound() {
    return (
       <div className="flex min-h-screen items-center justify-center bg-background px-4">
-         <Card variant="glass" className="w-full max-w-md shadow-xl border-primary/30">
+         <Card variant="glass" padding="default" className="w-full max-w-md shadow-xl border-primary/30">
             <CardHeader className="flex flex-col items-center gap-2">
                <Avatar className="mb-2 h-16 w-16">
                   <AvatarFallback className="text-3xl bg-primary text-primary-foreground">404</AvatarFallback>
