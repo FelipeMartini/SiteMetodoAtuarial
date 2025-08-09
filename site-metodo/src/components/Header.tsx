@@ -1,11 +1,12 @@
 "use client"
 
-import { ModeToggle } from "@/components/ui/mode-toggle";
+// Substitua ModeToggle por ThemeToggle para dark mode acessível
+import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { MainNavigation } from "@/components/ui/main-navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
-import { useRouter } from 'next/navigation'
+import useRouter from 'next/router'
 
 /**
  * Header customizado com sistema de temas e navegação avançada
@@ -91,8 +92,8 @@ export function Header() {
             </>
           )}
 
-          {/* Mode Toggle */}
-          <ModeToggle />
+          {/* Alternância de tema acessível */}
+          <ThemeToggle />
         </div>
       </div>
     </header>
