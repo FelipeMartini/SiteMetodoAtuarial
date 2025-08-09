@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableHeader, TableBody, TableHead, TableRow, TableCell } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 import { salvarCsv } from './exportCsv';
+import { salvarExcel } from './exportExcel';
 
 // Container rolagem
 function TabelaContainer({ children }: { children: React.ReactNode }) {
@@ -151,6 +152,26 @@ export function DataTableBase<TData, TValue>(props: DataTableBaseProps<TData, TV
           disabled={linhas.length === 0}
         >
           Exportar CSV
+        </Button>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={async () => {
+            const preRows = table.getPrePaginationRowModel().rows;
+            const linhasDados = preRows.map((r): Record<string, unknown> => {
+              const obj: Record<string, unknown> = {};
+              r.getVisibleCells().forEach((c) => {
+                const key = c.column.id;
+                const valor = c.getValue();
+                obj[key] = valor ?? '';
+              });
+              return obj;
+            });
+            await salvarExcel(linhasDados, 'exportacao');
+          }}
+          disabled={linhas.length === 0}
+        >
+          Exportar Excel
         </Button>
         {acoesToolbarExtras}
       </div>
