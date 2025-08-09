@@ -39,10 +39,13 @@ printf "${GREEN}Modo automático: versionamento, changelog e push automático${N
 npx standard-version --commit-all --release-as patch --skip.tag || true
 # Adiciona tudo (inclui CHANGELOG.md e arquivos fora de site-metodo)
 git add .
+
 # Commit e push
 if git diff --cached --quiet; then
   printf "${YELLOW}Nenhuma alteração para commit.${NC}\n"
 else
+  # Lint do commit (pré-commit)
+  npx commitlint --from=HEAD~1 --to=HEAD || true
   git commit -m "$MSG"
   BRANCH=$(git rev-parse --abbrev-ref HEAD)
   git push origin "$BRANCH"
@@ -62,4 +65,9 @@ else
   exit 0
 fi
 
-echo "Push cancelado. Commit realizado localmente."
+# Prompt interativo moderno (cz-commitlint)
+npx git-cz
+npx commitlint --from=HEAD~1 --to=HEAD || true
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+git push origin "$BRANCH"
+printf "${GREEN}Push realizado com sucesso!${NC}\n"
