@@ -1,6 +1,6 @@
 
 import { DefaultSession, DefaultUser } from "next-auth"
-import { JWT, DefaultJWT } from "next-auth/jwt"
+import { DefaultJWT } from "next-auth/jwt"
 
 // Tipagem customizada para sessão do Auth.js v5
 // Extende os tipos padrão para incluir campos customizados

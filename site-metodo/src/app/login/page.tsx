@@ -1,9 +1,7 @@
 "use client";
 
-import React, { useState, useEffect, useTransition } from "react";
+import React, { useEffect, useTransition } from "react";
 import { useFormState } from "react-dom";
-import TotpPrompt from "./TotpPrompt";
-import { isMfaObrigatorio } from "@/configs/mfaConfig";
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import { signInCredentials, signInOAuth, type SignInCredentialsResult } from '@/actions/signin';
@@ -22,8 +20,6 @@ import Link from 'next/link';
  */
 const LoginPage: React.FC = () => {
   // Estados para feedback
-  const [mfaStep, setMfaStep] = useState(false);
-  const [mfaRequired, setMfaRequired] = useState(false);
   const [isPending, startTransition] = useTransition();
 
   // Hook de autenticação unificado (Auth.js puro)
@@ -59,10 +55,6 @@ const LoginPage: React.FC = () => {
       }
     });
   };
-
-  if (mfaStep && mfaRequired) {
-    return <TotpPrompt onVerify={() => window.location.reload()} />;
-  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex flex-col items-center justify-center py-8 px-4">

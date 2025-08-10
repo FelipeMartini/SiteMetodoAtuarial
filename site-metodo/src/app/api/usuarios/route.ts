@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { db as prisma } from '@/lib/prisma'
+import { UserRole } from '@prisma/client'
 import { usuarioSchema, usuarioUpdateSchema } from '@/validators/usuarioSchemas'
 import { checkRole } from '@/utils/rbac'
 import { rateLimit } from '@/utils/rateLimit'
@@ -32,7 +33,7 @@ export async function POST(req: NextRequest) {
   const user = await prisma.user.create({ 
     data: {
       ...parse.data,
-      role: parse.data.role as any // Cast para UserRole enum
+      role: parse.data.role as UserRole // Cast para UserRole enum
     }
   })
   // logAdminAction(session.user, 'create', user)
@@ -55,7 +56,7 @@ export async function PUT(req: NextRequest) {
     where: { id: parse.data.id }, 
     data: {
       ...parse.data,
-      role: parse.data.role as any // Cast para UserRole enum
+      role: parse.data.role as UserRole // Cast para UserRole enum
     }
   })
   // logAdminAction(session.user, 'update', user)
