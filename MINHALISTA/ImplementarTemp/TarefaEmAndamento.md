@@ -59,24 +59,7 @@ return <div>Bem-vindo, {user?.name}</div>
 
 > Gerado automaticamente – fase de preparação. Próximos passos: ingestão completa, classificação e métricas.
 
-## Estrutura Inicial
-- [ ] Ingerir todos os 148 arquivos markdown ou mais procurando por todos arquivos .md novamente 
-- [ ] Extrair blocos de checklist
-- [ ] Normalizar formatação
-- [ ] Consolidar duplicatas
-- [ ] Calcular progresso por domínio
-- [ ] Vincular origem (caminho)
-- [ ] Publicar seções abaixo
 
-## Domínios (Placeholder)
-- Auth & MFA
-- Admin Dashboard (Tabelas / Widgets / Segurança / Performance)
-- Área Cliente
-- UI/Design System (shadcn/ui, theming)
-- DevEx & Automação
-- Documentação
-
----
 
 
 
@@ -211,7 +194,7 @@ return <div>Bem-vindo, {user?.name}</div>
 - [ ] Cobertura mínima 80% módulos críticos
 
 ## 8. Paridade & Evolução fuse-react
-- [ ] Listar features do DataTable fuse-react já presentes
+- [ ] Listar features do DataTable do app na pasta fuse-react já presentes
 - [ ] Mapear gaps vs implementação atual
 - [ ] Reproduzir comportamento de toolbar (filtros, densidade)
 - [ ] Implementar ícones equivalentes (lucide) nos menus

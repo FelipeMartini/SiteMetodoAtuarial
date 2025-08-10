@@ -1,6 +1,7 @@
 "use client"
 
 import { useCurrentUser } from "@/hooks/useCurrentUser"
+import { useMfaStatus } from "@/hooks/useMfaStatus"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert } from "@/components/ui/alert"
@@ -10,8 +11,10 @@ import { Alert } from "@/components/ui/alert"
  */
 export default function ClienteResumo() {
 
+
   const { data, isLoading, error } = useCurrentUser()
   const user = data?.user
+  const { data: mfaData, isLoading: mfaLoading } = useMfaStatus();
 
   if (isLoading) {
     return <Skeleton className="h-32 w-full" />
@@ -19,6 +22,7 @@ export default function ClienteResumo() {
   if (error) {
     return <Alert variant="destructive">Erro ao carregar usuário: {error.message}</Alert>
   }
+
   if (!user) {
     return <Alert variant="default">Usuário não autenticado.</Alert>
   }
@@ -29,7 +33,9 @@ export default function ClienteResumo() {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
         <Card className="p-4">
           <div className="font-semibold">Status MFA</div>
-          <div>{user.mfaEnabled ? "Ativado" : "Desativado"}</div>
+          <div>
+            {mfaLoading ? 'Carregando...' : mfaData?.enabled ? 'Ativado' : 'Desativado'}
+          </div>
         </Card>
         <Card className="p-4">
           <div className="font-semibold">Sessões Ativas</div>
