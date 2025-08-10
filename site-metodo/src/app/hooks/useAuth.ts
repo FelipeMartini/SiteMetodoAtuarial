@@ -14,7 +14,7 @@ export function useAuth() {
 	else authStatus = "unauthenticated";
 	
 	return {
-		data: session?.user ?? null,
+		data: session, // Retorna a sessão completa, não apenas session.user
 		status: authStatus,
 		isLoading: status === "loading",
 		isError: false,
