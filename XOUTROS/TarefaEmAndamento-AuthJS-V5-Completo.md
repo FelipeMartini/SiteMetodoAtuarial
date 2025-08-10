@@ -169,3 +169,36 @@ site-metodo/
 - [Próximos passos]
 - [Problemas encontrados]
 - [Soluções implementadas]
+
+
+
+# Correção de Problemas de Autenticação Auth.js v5
+
+## Lista de Tarefas
+
+- [x] 1. Instalar dependências Auth.js v5
+- [x] 2. Configurar auth.ts na raiz do projeto  
+- [x] 3. Configurar route handlers API
+- [x] 4. Configurar middleware
+- [x] 5. Atualizar login page para usar signIn
+- [x] 6. Criar AuthSessionProvider
+- [x] 7. Atualizar layout com AuthSessionProvider
+- [ ] 8. Criar server actions para autenticação credentials
+- [ ] 9. Criar server actions para autenticação OAuth (Google/GitHub)
+- [ ] 10. Atualizar página de login para usar server actions com useFormState
+- [ ] 11. Testar login com credentials (admin@test.com/123456)
+- [ ] 12. Testar autenticação OAuth (Google/GitHub)
+- [ ] 13. Verificar se erros de CSRF foram resolvidos
+- [ ] 14. Verificar se erros de UnknownAction foram resolvidos
+- [ ] 15. Limpar código não utilizado
+- [ ] 16. Documentar a solução implementada
+
+## Problemas Identificados
+
+- **MissingCSRF**: Auth.js v5 usa double submit cookie pattern que requer server actions
+- **UnknownAction**: O uso direto de `signIn` no client-side não é o padrão correto para v5
+- **Solução**: Implementar server actions conforme mostrado no GitHub issue #9189
+
+## Status Atual
+
+🔄 **Em andamento** - Criando server actions para resolver problemas de CSRF

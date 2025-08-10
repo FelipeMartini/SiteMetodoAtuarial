@@ -3,10 +3,10 @@ import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
 import type { Metadata } from "next";
 import LayoutCliente from "@/app/LayoutCliente";
 
-
 import { ThemeProvider } from '@/components/theme-provider';
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider';
 import { SessionProvider } from '@/app/providers/SessionProvider';
+import { AuthSessionProvider } from '@/app/providers/AuthSessionProvider';
 import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider';
 
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -40,11 +40,13 @@ export default function RootLayout({
         <FeatureFlagProvider>
           <ThemeProvider>
             <TanstackQueryProvider>
-              <SessionProvider>
-                <LayoutCliente>
-                  {children}
-                </LayoutCliente>
-              </SessionProvider>
+              <AuthSessionProvider>
+                <SessionProvider>
+                  <LayoutCliente>
+                    {children}
+                  </LayoutCliente>
+                </SessionProvider>
+              </AuthSessionProvider>
             </TanstackQueryProvider>
           </ThemeProvider>
         </FeatureFlagProvider>

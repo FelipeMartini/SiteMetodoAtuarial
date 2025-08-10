@@ -1,38 +1,42 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useTransition } from "react";
+import { useFormState } from "react-dom";
 import TotpPrompt from "./TotpPrompt";
 import { isMfaObrigatorio } from "@/configs/mfaConfig";
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-// import { ErrorBoundary } from '@/components/ErrorBoundary';
+import { signInCredentials, signInOAuth, type SignInCredentialsResult } from '@/actions/signin';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { AlertCircle, Mail, Lock } from 'lucide-react';
-import SocialLoginBox from '@/components/SocialLoginBox';
 import Link from 'next/link';
 
 /**
  * Página de Login com design moderno usando shadcn/ui customizado
  * Sistema de temas integrado e componentes profissionais
+ * Atualizada para usar server actions do Auth.js v5
  */
 const LoginPage: React.FC = () => {
-  // Estados para campos e feedback
-  const [email, setEmail] = useState('');
-  const [senha, setSenha] = useState('');
-  const [erro, setErro] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  // Estados para feedback
   const [mfaStep, setMfaStep] = useState(false);
   const [mfaRequired, setMfaRequired] = useState(false);
+  const [isPending, startTransition] = useTransition();
 
   // Hook de autenticação unificado (Auth.js puro)
   const { status } = useAuth();
 
   // Hook de navegação do Next.js
   const router = useRouter();
+
+  // useFormState para credentials
+  const [credentialsState, credentialsAction] = useFormState<SignInCredentialsResult, FormData>(
+    signInCredentials,
+    undefined
+  );
 
   // Efeito para redirecionar após autenticação
   useEffect(() => {
@@ -42,50 +46,18 @@ const LoginPage: React.FC = () => {
     }
   }, [status, router]);
 
-  // Handler do submit do formulário tradicional usando Auth.js v5
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErro(null);
-    setLoading(true);
-    
-    try {
-      // Usar signIn action do Auth.js v5
-      const result = await fetch('/api/auth/signin/credentials', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-          email,
-          password: senha,
-          redirect: 'false',
-        }),
-      });
-
-      if (result.ok) {
-        // Verificar se precisa de MFA
-        if (isMfaObrigatorio('login')) {
-          const mfaRes = await fetch('/api/auth/totp-status');
-          const mfaData = await mfaRes.json();
-          if (mfaData.enabled) {
-            setMfaRequired(true);
-            setMfaStep(true);
-            setLoading(false);
-            return;
-          }
+  // Handler para OAuth social login
+  const handleOAuthLogin = (providerId: string) => {
+    startTransition(async () => {
+      try {
+        const result = await signInOAuth({ providerId });
+        if (result && result.status === "error") {
+          console.error("Erro OAuth:", result.errorMessage);
         }
-        
-        // Login bem-sucedido - redirecionar
-        router.push('/area-cliente');
-      } else {
-        setErro('Credenciais inválidas. Verifique email e senha.');
+      } catch (error) {
+        console.error("Erro OAuth:", error);
       }
-    } catch (error) {
-      console.error('Erro no login:', error);
-      setErro('Erro ao tentar autenticar. Tente novamente.');
-    } finally {
-      setLoading(false);
-    }
+    });
   };
 
   if (mfaStep && mfaRequired) {
@@ -96,7 +68,7 @@ const LoginPage: React.FC = () => {
     <div className="min-h-screen bg-gradient-to-br from-background to-muted/20 flex flex-col items-center justify-center py-8 px-4">
       <div className="w-full max-w-lg mx-auto">
         {/* Card principal */}
-  <Card className="backdrop-blur-md bg-card/95">
+        <Card className="backdrop-blur-md bg-card/95">
           <CardHeader className="text-center space-y-4">
             <div className="mx-auto h-12 w-12 rounded-full bg-primary/10 flex items-center justify-center">
               <Lock className="h-6 w-6 text-primary" />
@@ -109,12 +81,12 @@ const LoginPage: React.FC = () => {
 
           <CardContent className="space-y-6">
             {/* Error Alert */}
-            {erro && (
+            {credentialsState?.status === "error" && (
               <Alert variant="destructive">
                 <AlertCircle className="h-4 w-4" />
                 <AlertDescription>
-                  {erro}
-                  {erro.includes('definir uma senha') && (
+                  {credentialsState.errorMessage}
+                  {credentialsState.errorMessage.includes('definir uma senha') && (
                     <Link
                       href="/definir-senha"
                       className="font-medium underline ml-2 hover:no-underline"
@@ -126,8 +98,8 @@ const LoginPage: React.FC = () => {
               </Alert>
             )}
 
-            {/* Formulário de login */}
-            <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Formulário de login com server action */}
+            <form action={credentialsAction} className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="email" className="text-sm font-medium">
                   Email
@@ -136,11 +108,9 @@ const LoginPage: React.FC = () => {
                   <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
                     id="email"
+                    name="email"
                     type="email"
-                    value={email}
-                    onChange={e => setEmail(e.target.value)}
                     autoComplete="username"
-                    disabled={loading}
                     required
                     className="pl-10"
                     placeholder="seu@email.com"
@@ -149,18 +119,16 @@ const LoginPage: React.FC = () => {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="senha" className="text-sm font-medium">
+                <Label htmlFor="password" className="text-sm font-medium">
                   Senha
                 </Label>
                 <div className="relative">
                   <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                   <Input
-                    id="senha"
+                    id="password"
+                    name="password"
                     type="password"
-                    value={senha}
-                    onChange={e => setSenha(e.target.value)}
                     autoComplete="current-password"
-                    disabled={loading}
                     required
                     className="pl-10"
                     placeholder="••••••••"
@@ -170,12 +138,11 @@ const LoginPage: React.FC = () => {
 
               <Button
                 type="submit"
-                disabled={loading}
                 variant="default"
                 size="lg"
                 className="w-full"
               >
-                {loading ? 'Entrando...' : 'Entrar'}
+                Entrar
               </Button>
             </form>
 
@@ -207,8 +174,27 @@ const LoginPage: React.FC = () => {
               </div>
             </div>
 
-            {/* Login social */}
-            <SocialLoginBox />
+            {/* Login social com server actions */}
+            <div className="grid grid-cols-2 gap-4">
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin('google')}
+                disabled={isPending}
+                className="w-full"
+              >
+                Google
+              </Button>
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => handleOAuthLogin('github')}
+                disabled={isPending}
+                className="w-full"
+              >
+                GitHub
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
