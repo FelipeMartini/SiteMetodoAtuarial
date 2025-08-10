@@ -58,6 +58,8 @@ export const providers: AuthConfig['providers'] = [
       if (!ok) return null
       return { id: user.id, name: user.name, email: user.email, accessLevel: user.accessLevel }
     },
+    // Corrigir tipagem de emailVerified no fluxo de criação de usuário social
+    // O Auth.js v5 espera Date/null, mas Google retorna boolean. Corrigimos no callback.
   }),
 ]
 
@@ -135,6 +137,14 @@ export const authConfig: AuthConfig = {
         ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = mapAccessLevelToRole(userRecord.accessLevel)
       }
       return session
+    },
+    async signIn({ user, profile }) {
+      // Corrigir emailVerified: se vier boolean, converte para Date/null
+      if (profile && typeof profile.email_verified === 'boolean' && user.email) {
+        const emailVerified = profile.email_verified ? new Date() : null
+        await prisma.user.update({ where: { email: user.email as string }, data: { emailVerified } }).catch(() => {})
+      }
+      return true
     },
   },
   experimental: { enableWebAuthn: false },
