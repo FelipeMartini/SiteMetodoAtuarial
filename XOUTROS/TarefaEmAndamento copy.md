@@ -9,25 +9,25 @@
 - [x] Pesquisar documentação oficial Auth.js v5 para implementação correta
 
 ### 🔧 Fase 2: Configuração Base do Auth.js v5
-- [x] Criar arquivo .env com todas as variáveis necessárias para 5 provedores OAuth
-- [x] Implementar prisma.ts com singleton pattern para performance
-- [x] Configurar auth.ts principal com Prisma adapter e database sessions
-- [x] Implementar sistema de roles unificado (substituir accessLevel)
-- [x] Configurar middleware de autenticação
+- [ ] Criar arquivo .env com todas as variáveis necessárias para 5 provedores OAuth
+- [ ] Implementar prisma.ts com singleton pattern para performance
+- [ ] Configurar auth.ts principal com Prisma adapter e database sessions
+- [ ] Implementar sistema de roles unificado (substituir accessLevel)
+- [ ] Configurar middleware de autenticação
 
 ### 🔐 Fase 3: Provedores OAuth (5 Implementações)
-- [x] Google OAuth - configuração completa com refresh tokens
-- [x] Microsoft Entra ID - configuração para multi-tenant
-- [x] Discord OAuth - configuração para servidores e canais
-- [x] Facebook OAuth - configuração para desenvolvimento e produção
-- [x] Apple OAuth - configuração para Sign in with Apple
+- [ ] Google OAuth - configuração completa com refresh tokens
+- [ ] Microsoft Entra ID - configuração para multi-tenant
+- [ ] Discord OAuth - configuração para servidores e canais
+- [ ] Facebook OAuth - configuração para desenvolvimento e produção
+- [ ] Apple OAuth - configuração para Sign in with Apple
 
 ### 🗄️ Fase 4: Sistema de Database Unificado
-- [x] Atualizar schema Prisma com sistema de roles
-- [x] Migrar todos os usuários de accessLevel para roles
-- [x] Implementar auditoria de login e ações
-- [x] Preservar sistema TOTP/MFA existente
-- [x] Implementar logs de segurança
+- [ ] Atualizar schema Prisma com sistema de roles
+- [ ] Migrar todos os usuários de accessLevel para roles
+- [ ] Implementar auditoria de login e ações
+- [ ] Preservar sistema TOTP/MFA existente
+- [ ] Implementar logs de segurança
 
 ### 🎨 Fase 5: Interface Profissional
 - [ ] Harmonizar páginas de login/register com todos os 5 provedores

@@ -7,6 +7,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// 👤 Modelo de usuário atualizado com sistema de roles unificado
 model User {
   id            String    @id @default(cuid())
   name          String?
@@ -14,18 +15,47 @@ model User {
   emailVerified DateTime?
   image         String?
   password      String?
-  accessLevel   Int       @default(1)
+  
+  // 🔐 Sistema de autorização unificado
+  accessLevel   Int       @default(1)          // Compatibilidade: mantém sistema legado
+  role          UserRole  @default(USER)       // Novo: sistema de roles moderno
   isActive      Boolean   @default(true)
+  
+  // 📊 Metadados e auditoria
   lastLogin     DateTime?
+  loginCount    Int       @default(0)         // Contador de logins
+  failedLogins  Int       @default(0)         // Tentativas de login falharam
+  lastFailedLogin DateTime?                   // Último login com falha
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
+  
+  // 🔗 Relacionamentos Auth.js v5
   accounts      Account[]
   sessions      Session[]
-  totpSecret    String?   @map("totp_secret")
   authenticators Authenticator[]
+  
+  // 🔐 TOTP/MFA (preservado do sistema existente)
+  totpSecret    String?   @map("totp_secret")
+  mfaEnabled    Boolean   @default(false)     // Flag MFA ativo
+  
+  // 📝 Auditoria e logs
   auditLogs     AuditLog[]
+  
+  @@index([email])
+  @@index([role])
+  @@index([isActive])
+  @@index([accessLevel])
 }
 
+// 🎭 Enum de roles do sistema (substitui accessLevel gradualmente)
+enum UserRole {
+  GUEST       // Visitante (accessLevel 0)
+  USER        // Usuário padrão (accessLevel 1-49)
+  MODERATOR   // Moderador (accessLevel 50-99)
+  ADMIN       // Administrador (accessLevel 100+)
+}
+
+// 🔑 Authenticator para WebAuthn/Passkeys
 model Authenticator {
   credentialID         String   @id
   userId               String
@@ -41,6 +71,7 @@ model Authenticator {
   @@index([providerAccountId])
 }
 
+// 🔗 Contas OAuth vinculadas (Auth.js v5)
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -57,33 +88,82 @@ model Account {
   user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
+  @@index([userId])
+  @@index([provider])
 }
 
+// 📊 Sessões de usuário (Database Sessions)
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([expires])
 }
 
+// 🔐 Tokens de verificação (email, reset password, etc.)
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
+  @@index([expires])
 }
 
+// 📋 Sistema de auditoria e logs de segurança
 model AuditLog {
   id        String   @id @default(cuid())
   userId    String?
-  action    String
+  action    AuditAction
   target    String?
-  meta      String? // JSON serializado
+  details   String?  // JSON com detalhes da ação
+  ipAddress String?  // IP do usuário
+  userAgent String?  // User agent do browser
+  success   Boolean  @default(true)
   createdAt DateTime @default(now())
+  
   user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
   @@index([userId])
   @@index([action])
   @@index([createdAt])
+  @@index([success])
+}
+
+// 🎯 Enum de ações de auditoria
+enum AuditAction {
+  // Autenticação
+  LOGIN_SUCCESS
+  LOGIN_FAILED
+  LOGOUT
+  SIGNUP
+  PASSWORD_CHANGE
+  EMAIL_CHANGE
+  
+  // OAuth
+  OAUTH_LINK
+  OAUTH_UNLINK
+  
+  // MFA/TOTP
+  MFA_ENABLE
+  MFA_DISABLE
+  TOTP_VERIFY
+  
+  // Administração
+  USER_CREATE
+  USER_UPDATE
+  USER_DELETE
+  USER_ACTIVATE
+  USER_DEACTIVATE
+  ROLE_CHANGE
+  
+  // Sistema
+  SESSION_CREATE
+  SESSION_DELETE
+  ACCOUNT_LINK
+  ACCOUNT_UNLINK
 }
