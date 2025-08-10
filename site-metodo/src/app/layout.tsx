@@ -7,6 +7,7 @@ import LayoutCliente from "@/app/LayoutCliente";
 import { ThemeProvider } from '@/components/theme-provider';
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider';
 import { SessionProvider } from '@/app/providers/SessionProvider';
+import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider';
 
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
 
@@ -38,11 +39,13 @@ export default function RootLayout({
       <body>
         <FeatureFlagProvider>
           <ThemeProvider>
-            <SessionProvider>
-              <LayoutCliente>
-                {children}
-              </LayoutCliente>
-            </SessionProvider>
+            <TanstackQueryProvider>
+              <SessionProvider>
+                <LayoutCliente>
+                  {children}
+                </LayoutCliente>
+              </SessionProvider>
+            </TanstackQueryProvider>
           </ThemeProvider>
         </FeatureFlagProvider>
       </body>

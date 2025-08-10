@@ -9,8 +9,15 @@ export async function GET() {
   const now = new Date()
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
+  interface AuditLog {
+    id: string;
+    action: string;
+    target?: string | null;
+    createdAt: Date;
+    user?: { id: string; email?: string | null; name?: string | null };
+  }
   interface AuditModel {
-    findMany: (args: { orderBy: { createdAt: 'desc' }; take: number; include: { user: { select: { id: true; email: true; name: true } } } }) => Promise<any[]>
+    findMany: (args: { orderBy: { createdAt: 'desc' }; take: number; include: { user: { select: { id: true; email: true; name: true } } } }) => Promise<AuditLog[]>
     count: () => Promise<number>
   }
   const auditModel = (prisma as unknown as { auditLog?: AuditModel }).auditLog

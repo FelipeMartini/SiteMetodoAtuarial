@@ -16,7 +16,8 @@ describe('Fluxo Auth Unificado (configuração)', () => {
   test('Providers incluem credentials e pelo menos 1 total', () => {
     expect(Array.isArray(providers)).toBe(true)
     expect(providers.length).toBeGreaterThan(0)
-    const hasCredentials = providers.some((p: any) => p && (p.id === 'credentials' || p.name === 'Login'))
+  type AuthProvider = { id: string; name?: string }
+  const hasCredentials = providers.some((p: AuthProvider) => p && (p.id === 'credentials' || p.name === 'Login'))
     expect(hasCredentials).toBe(true)
   })
 
