@@ -4,7 +4,6 @@ import LayoutCliente from "@/app/LayoutCliente";
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider';
-import { SessionProvider } from 'next-auth/react';
 import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider';
 
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -43,11 +42,9 @@ export default function RootLayout({
         >
           <FeatureFlagProvider>
             <TanstackQueryProvider>
-              <SessionProvider>
-                <LayoutCliente>
-                  {children}
-                </LayoutCliente>
-              </SessionProvider>
+              <LayoutCliente>
+                {children}
+              </LayoutCliente>
             </TanstackQueryProvider>
           </FeatureFlagProvider>
         </ThemeProvider>

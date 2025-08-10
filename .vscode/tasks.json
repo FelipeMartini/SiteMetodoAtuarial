@@ -52,7 +52,7 @@
     {
       "label": "Limpeza-Geral",
       "type": "shell",
-      "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./src/prisma/schema.prisma && echo 'Limpeza-Geral concluída.' 2>&1 | tee \"${workspaceFolder}/XLOGS/limpeza-geral-$(date +'%Y%m%d-%H%M%S').log\"",
+  "command": "mkdir -p \"${workspaceFolder}/XLOGS\" && echo 'Iniciando Limpeza-Geral...' && rm -rf .next node_modules package-lock.json && npm cache clean --force && npm install && npx prisma generate --schema=./prisma/schema.prisma && echo 'Limpeza-Geral concluída.' 2>&1 | tee \"${workspaceFolder}/XLOGS/limpeza-geral-$(date +'%Y%m%d-%H%M%S').log\"",
       "options": {
         "cwd": "${workspaceFolder}/site-metodo"
       },

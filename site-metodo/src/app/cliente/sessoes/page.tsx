@@ -1,14 +1,24 @@
 "use client"
-
+export const dynamic = 'force-dynamic'
 import { useCurrentUser } from "@/hooks/useCurrentUser"
+import { ClientOnly } from "@/components/util/ClientOnly"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert } from "@/components/ui/alert"
+
 
 /**
  * Página de sessões: dispositivos conectados, revogação de sessão
  */
 export default function ClienteSessoes() {
+  return (
+    <ClientOnly>
+      <ClienteSessoesContent />
+    </ClientOnly>
+  )
+}
+
+function ClienteSessoesContent() {
   const { data, isLoading, error } = useCurrentUser()
   const user = data?.user
 

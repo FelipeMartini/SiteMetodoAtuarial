@@ -1,16 +1,26 @@
 "use client"
+export const dynamic = 'force-dynamic'
 
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { useMfaStatus } from "@/hooks/useMfaStatus"
+import { ClientOnly } from "@/components/util/ClientOnly"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert } from "@/components/ui/alert"
+
 
 /**
  * Página de segurança: status e setup de MFA, sessões, histórico de acessos
  */
 export default function ClienteSeguranca() {
+  return (
+    <ClientOnly>
+      <ClienteSegurancaContent />
+    </ClientOnly>
+  )
+}
 
+function ClienteSegurancaContent() {
   const { data, isLoading, error } = useCurrentUser()
   const user = data?.user
   const { data: mfaData, isLoading: mfaLoading } = useMfaStatus();
