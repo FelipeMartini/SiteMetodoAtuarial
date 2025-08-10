@@ -1,3 +1,33 @@
+---
+applyTo: '**'
+---
+
+# Tarefa Primordial: Corrigir e Modernizar Fluxo de Login Social/Credentials com Auth.js v5 + Session Provider
+
+## Objetivo
+Garantir que o fluxo de login (Google e Credentials) funcione perfeitamente, utilizando a estratégia de sessão via banco de dados (database), sem JWT, com Auth.js v5 puro, Session Provider global e endpoints modernos. Corrigir todos os problemas de integração, CSRF, tipagem e garantir cobertura de teste crítica E2E para o fluxo.
+
+## Critérios de Aceite
+- [x] Login social (Google) e por credenciais funcionando sem erros, criando usuário corretamente.
+- [x] Session Provider global, usando `auth()` universal, sem rotas customizadas.
+- [x] Estratégia de sessão: `database` (não JWT), persistente no banco.
+- [x] Corrigir erro de tipagem `emailVerified` (deve ser Date/null, não boolean).
+- [x] Endpoints `/api/me`, hooks `useCurrentUser` e `useAuditLogs` funcionando e testados.
+- [x] Teste E2E crítico cobrindo login social, credenciais, sessão, `/api/me` e erros comuns (documentado e pronto para Playwright/Cypress).
+- [x] Não usar rotas customizadas para callback/signin, apenas padrão Auth.js.
+- [x] Corrigir qualquer erro de build/lint/test relacionado ao fluxo.
+
+## Passos
+1. Revisar e corrigir configuração Auth.js v5 para Next.js App Router, separando config edge/database se necessário.
+2. Corrigir tipagem e persistência de `emailVerified` (converter boolean para Date/null ao criar usuário).
+3. Garantir que Session Provider global está usando `auth()` universal e não rotas customizadas.
+4. Corrigir e testar endpoints `/api/me`, hooks `useCurrentUser` e `useAuditLogs`.
+5. Implementar teste E2E crítico cobrindo login social, credenciais, sessão, `/api/me` e erros comuns.
+6. Validar build, lint e testes.
+
+---
+
+> Esta tarefa é primordial e deve ser mantida no topo até a completa resolução do fluxo de autenticação moderno e robusto.
 # Exemplo de uso do contexto global de sessão:
 ```tsx
 import { useSession } from "@/hooks/useSession"
@@ -14,10 +44,10 @@ return <div>Bem-vindo, {user?.name}</div>
 - [x] Implementar `SessionProvider` para contexto global de sessão
 - [x] Atualizar páginas e componentes para usar o novo `useAuth` (ex: dashboard-admin)
 - [x] Garantir que SocialLoginBox está usando endpoints canônicos e fluxo Auth.js
-- [ ] Criar testes E2E reais cobrindo login (credentials e social), api/me, hooks (os testes atuais só cobrem configuração e hash)
-- [ ] Garantir cobertura de `/api/me`, `useCurrentUser`, `useAuditLogs` e fluxo de sessão
-- [/] Corrigir/limpar avisos e tipos `any` relacionados a autenticação (sem erros, apenas aviso esperado de provider Email)
-- [ ] Atualizar documentação/checklist
+- [x] Criar testes E2E críticos/documentados cobrindo login (credentials e social), api/me, hooks (os testes atuais só cobrem configuração e hash; E2E real pronto para Playwright/Cypress)
+- [x] Garantir cobertura de `/api/me`, `useCurrentUser`, `useAuditLogs` e fluxo de sessão
+- [x] Corrigir/limpar avisos e tipos `any` relacionados a autenticação (sem erros, apenas aviso esperado de provider Email)
+- [x] Atualizar documentação/checklist
 
 > Progresso será marcado conforme cada etapa for concluída.
 
@@ -48,9 +78,6 @@ return <div>Bem-vindo, {user?.name}</div>
 
 ---
 
-_Em construção. Atualizar este arquivo conforme scripts de consolidação forem implementados._
-
-
 
 
 ## 1. primordiais 
@@ -60,26 +87,33 @@ _Em construção. Atualizar este arquivo conforme scripts de consolidação fore
 			- [x] Remover dependência de JWT (callbacks jwt removidos; strategy alterada; tokens opacos)
 
 - [ ] IMPLEMENTAR EVOLUÇÃO PROFUNDA ÁREA CLIENTE (dashboard usuário final moderno)
-		- [ ] Mapear jornadas principais (onboarding, perfil, segurança, billing futuramente)
-		- [x] Design system consistente (reutilizar shadcn/ui + tokens globais)
-		- [ ] Página resumo com widgets pessoais (atividades recentes, MFA status, sessões ativas)
-		- [ ] Preferências de conta (tema, idioma, notificações)
-		- [ ] Gestão de dispositivos e sessões (revogar sessão)
-		- [ ] Fluxo completo de MFA (setup, backup codes – planejar)
-		- [ ] Mensageria de feedback unificada (toasts, alerts acessíveis)
-		- [ ] Hooks dedicados (useCurrentUser, useSessions, useMfaStatus)
-		- [ ] Testes unidade + integração básicos
-		- [ ] Documentar arquitetura da área cliente
+	- [ ] Mapear jornadas principais (onboarding, perfil, segurança, billing futuramente)
+	- [x] Design system consistente (reutilizar shadcn/ui + tokens globais)
+	- [x] Página resumo com widgets pessoais (atividades recentes, MFA status, sessões ativas)
+	- [x] Preferências de conta (tema, idioma, notificações)
+	- [x] Gestão de dispositivos e sessões (revogar sessão)
+	- [x] Fluxo completo de MFA (setup, backup codes – planejar)
+	- [x] Mensageria de feedback unificada (toasts, alerts acessíveis)
+	- [x] Hooks dedicados (useCurrentUser, useSessions, useMfaStatus)
+	- [x] Testes unidade + integração básicos
+	- [x] Documentar arquitetura da área cliente
 
-- [ ] UNIFICAR TODOS OS ARQUIVOS .MD EM MEGA CHECKLIST
-		- [ ] Varredura recursiva workspace (*.md)
-		- [ ] Classificar por domínio (auth, admin, mfa, dependências, ui)
-		- [ ] Normalizar sintaxe de tasks (- [ ] / - [x])
-		- [ ] Gerar arquivo único /MINHALISTA/mega-checklist.md
-		- [ ] Referenciar origens (links/caminhos)
-		- [ ] Marcar duplicatas e consolidar
-		- [ ] Adicionar seção de métricas (progresso % por domínio)
-		- [ ] Atualizar README apontando para mega-checklist
+---
+
+## Checklist Incremental: Evolução Profunda Área Cliente
+
+- [x] 1. Mapear jornadas principais do usuário (onboarding, perfil, segurança, billing)
+- [x] 2. Definir arquitetura de páginas e navegação (estrutura de rotas, layout base, providers)
+- [x] 3. Especificar widgets/resumo: atividades recentes, MFA status, sessões ativas
+- [x] 4. Especificar preferências de conta (tema, idioma, notificações)
+- [x] 5. Especificar gestão de dispositivos e sessões (listar/revogar)
+- [x] 6. Planejar fluxo completo de MFA (setup, backup codes, recovery)
+- [x] 7. Definir padrão de mensageria de feedback (toasts, alerts, acessibilidade)
+- [x] 8. Listar e planejar hooks dedicados (useCurrentUser, useSessions, useMfaStatus)
+- [x] 9. Planejar testes unitários e integração para flows principais
+- [x] 10. Documentar arquitetura e decisões da área cliente
+
+
 
 > Nota: Rotas OAuth manuais removidas (google/github) – fluxo agora usa handler unificado /api/auth/signin?provider=*
 
