@@ -9,6 +9,7 @@ import Credentials from "next-auth/providers/credentials"
 import bcryptjs from "bcryptjs"
 import { signInSchema } from "./src/lib/validation"
 import { prisma } from "./src/lib/prisma"
+import { migrateAccessLevelToRoles } from "./src/lib/auth/authRoles"
 
 /**
  * 🚀 Auth.js v5 - Configuração Profissional e Completa
@@ -16,7 +17,8 @@ import { prisma } from "./src/lib/prisma"
  * ✨ IMPLEMENTAÇÃO ENTERPRISE-GRADE:
  * ✅ 5 Provedores OAuth: Google, Microsoft, Discord, Facebook, Apple
  * ✅ Database sessions para TODOS os providers (OAuth + Credentials)
- * ✅ Sistema de roles unificado (substituindo accessLevel)
+ * ✅ Sistema de roles unificado moderno (baseado no fuse-react)
+ * ✅ Compatibilidade com accessLevel legado
  * ✅ Auditoria e logs de segurança completos
  * ✅ Validação com Zod para credentials
  * ✅ Performance otimizada com Prisma singleton
@@ -24,22 +26,22 @@ import { prisma } from "./src/lib/prisma"
  * @see https://authjs.dev/getting-started/adapters/prisma
  */
 
-// Definição de roles do sistema
+// Definição de roles do sistema (compatibilidade)
 export const SYSTEM_ROLES = {
   ADMIN: 'admin',
-  MODERATOR: 'moderator', 
+  STAFF: 'staff', 
   USER: 'user',
   GUEST: 'guest'
 } as const
 
 export type SystemRole = typeof SYSTEM_ROLES[keyof typeof SYSTEM_ROLES]
 
-// Mapeamento de accessLevel para roles (compatibilidade)
-export function mapAccessLevelToRole(accessLevel: number): SystemRole {
-  if (accessLevel >= 100) return SYSTEM_ROLES.ADMIN
-  if (accessLevel >= 50) return SYSTEM_ROLES.MODERATOR
-  if (accessLevel >= 1) return SYSTEM_ROLES.USER
-  return SYSTEM_ROLES.GUEST
+// Mapeamento de accessLevel para roles (compatibilidade legada)
+export function mapAccessLevelToRole(accessLevel: number): string[] {
+  if (accessLevel >= 100) return ['admin']      // Admin completo
+  if (accessLevel >= 50) return ['staff']       // Staff/Moderador
+  if (accessLevel >= 1) return ['user']         // Usuário padrão
+  return []                                      // Guest (não autenticado)
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
@@ -205,11 +207,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           })
 
           if (dbUser) {
-            // Estender session com dados customizados
+            // Estender session com dados customizados (incluindo novo sistema de roles)
             const extendedUser = session.user as typeof session.user & {
               id: string
               accessLevel: number
-              role: SystemRole
+              role: string[] // Novo sistema de roles moderno
               isActive: boolean
               emailVerified: Date | null
               createdAt: Date
@@ -220,14 +222,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             extendedUser.email = dbUser.email || ""
             extendedUser.name = dbUser.name
             extendedUser.image = dbUser.image
-            extendedUser.accessLevel = dbUser.accessLevel
-            extendedUser.role = mapAccessLevelToRole(dbUser.accessLevel)
+            extendedUser.accessLevel = dbUser.accessLevel // Manter compatibilidade
+            extendedUser.role = mapAccessLevelToRole(dbUser.accessLevel) // Converter para novo sistema
             extendedUser.isActive = dbUser.isActive
             extendedUser.emailVerified = dbUser.emailVerified
             extendedUser.createdAt = dbUser.createdAt
             extendedUser.lastLogin = dbUser.lastLogin
 
-            console.log("[Auth] ✅ Session enriched for user:", dbUser.email, "role:", extendedUser.role)
+            console.log("[Auth] ✅ Session enriched for user:", dbUser.email, "roles:", extendedUser.role)
           }
         } catch (error) {
           console.error("[Auth] ❌ Error enriching session:", error)

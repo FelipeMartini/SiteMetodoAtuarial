@@ -9,22 +9,23 @@ declare module "next-auth" {
   interface Session {
     user: {
       id: string
-      accessLevel: number
-      role: string
+      accessLevel: number // @deprecated Use role em vez disso
+      role: string[] | string | null // Novo sistema de roles moderno
       isActive: boolean
     } & DefaultSession["user"]
   }
 
   interface User extends DefaultUser {
-    accessLevel: number
+    accessLevel: number // @deprecated Use role em vez disso
+    role?: string[] | string | null // Novo sistema de roles moderno
     isActive: boolean
   }
 }
 
 declare module "next-auth/jwt" {
   interface JWT extends DefaultJWT {
-    accessLevel: number
-    role: string
+    accessLevel: number // @deprecated Use role em vez disso
+    role: string[] | string | null // Novo sistema de roles moderno
     isActive: boolean
   }
 }
