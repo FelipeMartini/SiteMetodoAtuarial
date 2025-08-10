@@ -101,7 +101,8 @@
     "postinstall": "prisma generate --schema=./src/prisma/schema.prisma && prisma db seed --schema=./src/prisma/schema.prisma",
     "release": "standard-version --commit-all",
     "postrelease": "git push --follow-tags origin main",
-    "test": "jest --passWithNoTests"
+    "test": "jest --passWithNoTests",
+    "studio": "prisma studio --schema=./src/prisma/schema.prisma"
   },
   "version": "1.0.0"
 }
