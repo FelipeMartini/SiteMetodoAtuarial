@@ -2,7 +2,7 @@
 // Protege todas as rotas exceto APIs, estáticos e login
 // https://authjs.dev/getting-started/session-management/protecting
 
-export { auth as middleware } from "@/auth"
+export { auth as middleware } from "./auth"
 
 export const config = {
   matcher: [

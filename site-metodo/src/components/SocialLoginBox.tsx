@@ -10,7 +10,7 @@ import React, { useEffect, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/utils/cn';
 
-// Função helper para redirecionar via Auth.js handler
+// Função helper para redirecionar via Auth.js v5 handler
 function loginSocial(provider: string) {
   window.location.href = `/api/auth/signin/${provider}`;
 }
