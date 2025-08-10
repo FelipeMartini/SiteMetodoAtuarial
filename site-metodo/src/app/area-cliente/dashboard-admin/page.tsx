@@ -34,11 +34,15 @@ const PageDashboardAdmin: React.FC = () => {
       </div>
     );
   }
-  if (!session || session.accessLevel !== 5) {
+  const userRole = (session as any)?.role;
+  const isAdmin = Array.isArray(userRole) ? userRole.includes('admin') : userRole === 'admin';
+  const isStaff = Array.isArray(userRole) ? userRole.includes('staff') : userRole === 'staff';
+  
+  if (!session || !(isAdmin || isStaff)) {
     if (status === "authenticated") {
-      // Usuário autenticado mas não é admin
+      // Usuário autenticado mas não é admin/staff
       if (typeof window !== "undefined") {
-        window.alert("Acesso restrito: apenas para administradores nível 5.");
+        window.alert("Acesso restrito: apenas para administradores e staff.");
         window.location.href = "/area-cliente";
       }
       return null;

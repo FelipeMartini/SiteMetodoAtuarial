@@ -20,7 +20,7 @@ export default function ClienteResumo() {
     return <Skeleton className="h-32 w-full" />
   }
   if (error) {
-    return <Alert variant="destructive">Erro ao carregar usuário: {error.message}</Alert>
+    return <Alert variant="destructive">Erro ao carregar usuário: {String(error)}</Alert>
   }
 
   if (!user) {

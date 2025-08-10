@@ -1,32 +1,35 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { checkApiAuthorization } from '@/lib/auth/apiAuth';
 import { db } from '@/lib/prisma';
-import bcrypt from 'bcryptjs';
+import bcryptjs from 'bcryptjs';
 
-// API para resetar senha de usuário (apenas nível 5)
+// API para resetar senha de usuário (apenas admin)
 export async function POST(req: NextRequest) {
-  // Recupera sessão do Auth.js puro via cookie
-  const sessionToken = req.cookies.get('authjs.session-token')?.value;
-  if (!sessionToken) {
-    return NextResponse.json({ error: 'Não autenticado.' }, { status: 401 });
+  const authorizedUser = await checkApiAuthorization(['admin']);
+  
+  if (!authorizedUser) {
+    return NextResponse.json({ error: 'Acesso negado. Apenas administradores.' }, { status: 403 });
   }
-  // Busca sessão pelo token
-  const sessao = await db.session.findUnique({ where: { sessionToken } });
-  if (!sessao) {
-    return NextResponse.json({ error: 'Sessão inválida.' }, { status: 401 });
+
+  try {
+    const { userId, newPassword } = await req.json();
+
+    if (!userId || !newPassword) {
+      return NextResponse.json({ error: 'ID do usuário e nova senha são obrigatórios.' }, { status: 400 });
+    }
+
+    // Hash da nova senha
+    const hashedPassword = await bcryptjs.hash(newPassword, 12);
+
+    // Atualizar senha do usuário
+    await db.user.update({
+      where: { id: userId },
+      data: { password: hashedPassword }
+    });
+
+    return NextResponse.json({ message: 'Senha resetada com sucesso.' });
+  } catch (error) {
+    console.error('Erro ao resetar senha:', error);
+    return NextResponse.json({ error: 'Erro interno do servidor.' }, { status: 500 });
   }
-  // Busca usuário logado pela sessão
-  const usuario = await db.user.findUnique({ where: { id: sessao.userId } });
-  if (!usuario || usuario.accessLevel !== 5) {
-    return NextResponse.json({ error: 'Acesso negado.' }, { status: 403 });
-  }
-  const { id } = await req.json();
-  // Gera senha temporária padrão
-  const novaSenha = 'Temp1234!';
-  const hash = await bcrypt.hash(novaSenha, 10);
-  await db.user.update({
-    where: { id },
-    data: { password: hash },
-  });
-  return NextResponse.json({ success: true, novaSenha });
 }
-// Comentário: Esta rota permite resetar a senha de qualquer usuário para uma senha temporária padrão, apenas para nível 5.

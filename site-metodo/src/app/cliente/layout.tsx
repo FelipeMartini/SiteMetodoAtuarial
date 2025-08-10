@@ -4,7 +4,7 @@
 import { ReactNode } from "react"
 import { Toaster } from "@/components/ui"
 import { ThemeProvider } from "@/components/theme-provider"
-import { SessionProvider } from "@/app/providers/SessionProvider"
+import { SessionProvider } from "next-auth/react"
 
 /**
  * Layout base para todas as páginas da área cliente.

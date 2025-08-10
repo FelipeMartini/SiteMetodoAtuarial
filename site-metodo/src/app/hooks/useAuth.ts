@@ -1,23 +1,24 @@
 "use client";
-import { useCurrentUser } from "@/hooks/useCurrentUser";
+import { useSession } from "next-auth/react";
 
 /**
  * Hook de autenticação unificado para uso client-side.
- * Fornece status, dados do usuário e erro, usando internamente useCurrentUser (React Query).
- * status: 'loading' | 'authenticated' | 'unauthenticated'
+ * Usa diretamente o next-auth/react para evitar conflicts.
  */
 export function useAuth() {
-	const { data, isLoading, isError, error, refetch, isFetching } = useCurrentUser();
-	let status: "loading" | "authenticated" | "unauthenticated" = "loading";
-	if (isLoading || isFetching) status = "loading";
-	else if (data?.user) status = "authenticated";
-	else status = "unauthenticated";
+	const { data: session, status, update } = useSession();
+	
+	let authStatus: "loading" | "authenticated" | "unauthenticated" = "loading";
+	if (status === "loading") authStatus = "loading";
+	else if (session?.user) authStatus = "authenticated";
+	else authStatus = "unauthenticated";
+	
 	return {
-		data: data?.user ?? null,
-		status,
-		isLoading,
-		isError,
-		error,
-		refetch,
+		data: session?.user ?? null,
+		status: authStatus,
+		isLoading: status === "loading",
+		isError: false,
+		error: null,
+		refetch: update,
 	};
 }

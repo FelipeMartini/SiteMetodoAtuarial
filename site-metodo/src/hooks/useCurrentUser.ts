@@ -1,14 +1,15 @@
-// use client
-import { useQuery } from '@tanstack/react-query'
+"use client"
+import { useSession } from "next-auth/react"
 
 export function useCurrentUser() {
-  return useQuery({
-    queryKey: ['current-user'],
-    queryFn: async () => {
-      const res = await fetch('/api/me', { cache: 'no-store' })
-      if (!res.ok) throw new Error('Falha ao carregar usuário atual')
-      return res.json() as Promise<{ user?: { id: string; name?: string | null; email?: string | null; accessLevel?: number } }>
-    },
-    staleTime: 30000,
-  })
+  const { data: session, status, update } = useSession()
+  
+  return {
+    data: session ? { user: session.user } : null,
+    isLoading: status === "loading",
+    isError: false,
+    error: null,
+    refetch: update,
+    isFetching: status === "loading",
+  }
 }

@@ -6,7 +6,7 @@ import { MainNavigation } from "@/components/ui/main-navigation";
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
-import { useRouter } from 'next/navigation'
+import { signOut } from "next-auth/react";
 
 /**
  * Header customizado com sistema de temas e navegação avançada
@@ -14,15 +14,19 @@ import { useRouter } from 'next/navigation'
  */
 export function Header() {
   const { data: session, status } = useAuth();
-  const router = useRouter();
-  // Logout manual: remove cookie e redireciona
+  
+  // Logout usando next-auth
   const handleLogout = async () => {
-    await fetch('/api/auth/signout', { method: 'POST' });
-    // Aguarda a sessão ser invalidada e força atualização do estado
-    setTimeout(() => {
-      router.push('/');
-      window.location.reload(); // força atualização do menu
-    }, 200);
+    try {
+      await signOut({
+        callbackUrl: '/',
+        redirect: true,
+      });
+    } catch (error) {
+      console.error('Erro no logout:', error);
+      // Fallback caso dê erro
+      window.location.href = '/';
+    }
   };
 
   return (
@@ -62,8 +66,8 @@ export function Header() {
                   Área Cliente
                 </Button>
               </Link>
-              {/* Exibe Dashboard Admin só para accessLevel 5 */}
-              {session.user.accessLevel === 5 && (
+              {/* Exibe Dashboard Admin só para roles admin ou staff */}
+              {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && (
                 <Link href="/area-cliente/dashboard-admin">
                   <Button variant="destructive" size="sm">
                     Dashboard Admin
