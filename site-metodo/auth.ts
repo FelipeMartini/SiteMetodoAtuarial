@@ -58,6 +58,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     GoogleProvider({
       clientId: process.env.AUTH_GOOGLE_ID!,
       clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+      allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
       authorization: {
         params: {
           prompt: "consent",
@@ -72,24 +73,28 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!,
       clientSecret: process.env.AUTH_MICROSOFT_ENTRA_ID_SECRET!,
       issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!,
+      allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
     
     // === 🎮 DISCORD OAUTH PROVIDER ===
     DiscordProvider({
       clientId: process.env.AUTH_DISCORD_ID!,
       clientSecret: process.env.AUTH_DISCORD_SECRET!,
+      allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
     
     // === 📘 FACEBOOK OAUTH PROVIDER ===
     FacebookProvider({
       clientId: process.env.AUTH_FACEBOOK_ID!,
       clientSecret: process.env.AUTH_FACEBOOK_SECRET!,
+      allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
     
     // === 🍎 APPLE OAUTH PROVIDER ===
     AppleProvider({
       clientId: process.env.AUTH_APPLE_ID!,
       clientSecret: process.env.AUTH_APPLE_SECRET!,
+      allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
 
     // === 🔐 CREDENTIALS PROVIDER (DATABASE SESSIONS) ===
