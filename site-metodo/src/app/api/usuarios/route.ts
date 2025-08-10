@@ -29,7 +29,12 @@ export async function POST(req: NextRequest) {
   if (!parse.success) {
     return NextResponse.json({ error: 'Dados inválidos', details: parse.error.issues }, { status: 400 })
   }
-  const user = await prisma.user.create({ data: parse.data })
+  const user = await prisma.user.create({ 
+    data: {
+      ...parse.data,
+      role: parse.data.role as any // Cast para UserRole enum
+    }
+  })
   // logAdminAction(session.user, 'create', user)
   return withCors(withSecurityHeaders(NextResponse.json(user, { status: 201 })))
 }
@@ -46,7 +51,13 @@ export async function PUT(req: NextRequest) {
   if (!parse.success) {
     return NextResponse.json({ error: 'Dados inválidos', details: parse.error.issues }, { status: 400 })
   }
-  const user = await prisma.user.update({ where: { id: parse.data.id }, data: parse.data })
+  const user = await prisma.user.update({ 
+    where: { id: parse.data.id }, 
+    data: {
+      ...parse.data,
+      role: parse.data.role as any // Cast para UserRole enum
+    }
+  })
   // logAdminAction(session.user, 'update', user)
   return withCors(withSecurityHeaders(NextResponse.json(user)))
 }

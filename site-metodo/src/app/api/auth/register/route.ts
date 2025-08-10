@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
 // Reutiliza prisma singleton definido em src/auth.ts para evitar múltiplas conexões
-import { prisma } from '@/lib/auth';
+import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 // Prisma já centralizado em '@/lib/auth'

@@ -1,4 +1,4 @@
-import { prisma } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 
 // Tipagem dinâmica parcial para evitar any excessivo
 interface AuditLogRecord { id: string; userId?: string | null; action: string; target?: string | null; meta?: string | null; createdAt: Date; user?: { id: string; email?: string | null; name?: string | null } }
