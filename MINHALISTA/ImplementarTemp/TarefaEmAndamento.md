@@ -1,7 +1,7 @@
 # Checklist Avançado – Dashboard Admin Usuários
 
 - [x] Implementar hook `useAuth` funcional (usando `useCurrentUser` internamente, status/loading/erro)
-- [ ] Implementar `SessionProvider` para contexto global de sessão
+- [x] Implementar `SessionProvider` para contexto global de sessão
 - [x] Atualizar páginas e componentes para usar o novo `useAuth` (ex: dashboard-admin)
 - [x] Garantir que SocialLoginBox está usando endpoints canônicos e fluxo Auth.js
 - [ ] Criar testes E2E reais cobrindo login (credentials e social), api/me, hooks (os testes atuais só cobrem configuração e hash)
