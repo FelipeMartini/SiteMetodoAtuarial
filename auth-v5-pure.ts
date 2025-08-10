@@ -7,7 +7,7 @@ import FacebookProvider from "next-auth/providers/facebook"
 import DiscordProvider from "next-auth/providers/discord"
 import Credentials from "next-auth/providers/credentials"
 import bcryptjs from "bcryptjs"
-import { signInSchema } from "./src/lib/validation"
+import { signInSchema } from "@/src/lib/validation"
 
 // Singleton Prisma instance para evitar múltiplas conexões
 const globalForPrisma = globalThis as unknown as {
@@ -139,10 +139,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }),
   ],
 
-        pages: {
-          signIn: '/auth/signin',
-          error: '/auth/error',
-        },  callbacks: {
+  pages: {
+    signIn: "/login",
+    signUp: "/signup", 
+    error: "/login",
+  },
+
+  callbacks: {
     // Session callback - agora funciona APENAS com database sessions
     async session({ session, user }) {
       console.log("[Auth] Session callback - database user:", user?.email)
@@ -171,7 +174,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           };
 
           extendedUser.id = dbUser.id
-          extendedUser.email = dbUser.email || ""
+          extendedUser.email = dbUser.email
           extendedUser.name = dbUser.name
           extendedUser.image = dbUser.image
           extendedUser.accessLevel = dbUser.accessLevel
@@ -274,6 +277,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   events: {
     async signIn({ user, account, profile, isNewUser }) {
       console.log(`[Auth] ✅ User ${user.email} signed in via ${account?.provider}${isNewUser ? ' (new user)' : ''}`)
+    },
+    async signOut({ session, token }) {
+      console.log(`[Auth] 👋 User ${session?.user?.email} signed out`)
     },
     async createUser({ user }) {
       console.log(`[Auth] 👤 New user created: ${user.email}`)

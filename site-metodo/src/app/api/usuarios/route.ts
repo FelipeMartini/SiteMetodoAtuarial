@@ -10,7 +10,7 @@ import { withCors, withSecurityHeaders } from '@/utils/security'
 export async function GET(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !session.user || !checkRole(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const usuarios = await prisma.user.findMany({ select: { id: true, name: true, email: true, accessLevel: true, isActive: true, createdAt: true } })
@@ -21,7 +21,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !session.user || !checkRole(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const body = await req.json()
@@ -38,7 +38,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !session.user || !checkRole(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const body = await req.json()
@@ -55,7 +55,7 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !session.user || !checkRole(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const { id } = await req.json()
