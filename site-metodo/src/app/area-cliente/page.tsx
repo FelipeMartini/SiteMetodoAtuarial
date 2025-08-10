@@ -4,7 +4,7 @@ import React, { useEffect } from 'react';
 
 import { useAuth } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
-import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo';
+import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo-moderno';
 
 export default function AreaClientePage() {
   const { data: session, status } = useAuth();

@@ -23,6 +23,7 @@ const DashboardAdmin = dynamic(() => import("@/app/area-cliente/DashboardAdmin")
 
 const PageDashboardAdmin: React.FC = () => {
   const { data: session, status } = useAuth();
+  
   if (status === "loading") {
     return (
       <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
@@ -34,27 +35,60 @@ const PageDashboardAdmin: React.FC = () => {
       </div>
     );
   }
-  const userRole = (session as any)?.role;
-  const isAdmin = Array.isArray(userRole) ? userRole.includes('admin') : userRole === 'admin';
-  const isStaff = Array.isArray(userRole) ? userRole.includes('staff') : userRole === 'staff';
-  
-  if (!session || !(isAdmin || isStaff)) {
-    if (status === "authenticated") {
-      // Usuário autenticado mas não é admin/staff
-      if (typeof window !== "undefined") {
-        window.alert("Acesso restrito: apenas para administradores e staff.");
-        window.location.href = "/area-cliente";
-      }
-      return null;
-    }
-    // Não autenticado
+
+  // Verifica se o usuário está autenticado
+  if (!session?.user) {
     if (typeof window !== "undefined") {
       window.location.href = "/";
     }
     return null;
   }
-  return <DashboardAdmin />;
+
+  // Verifica roles - suporta tanto array quanto string
+  const userRole = session.user.role;
+  const userAccessLevel = session.user.accessLevel;
+  
+  let isAdmin = false;
+  let isStaff = false;
+  
+  // Verificação por role (sistema moderno)
+  if (Array.isArray(userRole)) {
+    isAdmin = userRole.includes('admin');
+    isStaff = userRole.includes('staff');
+  } else if (typeof userRole === 'string') {
+    isAdmin = userRole === 'admin';
+    isStaff = userRole === 'staff';
+  }
+  
+  // Fallback: verificação por accessLevel (compatibilidade)
+  if (!isAdmin && !isStaff && userAccessLevel) {
+    isAdmin = userAccessLevel >= 100;
+    isStaff = userAccessLevel >= 50;
+  }
+  
+  console.log('🔍 Debug dashboard admin:', {
+    userEmail: session.user.email,
+    userRole,
+    userAccessLevel,
+    isAdmin,
+    isStaff,
+    hasAccess: isAdmin || isStaff
+  });
+  
+  if (!(isAdmin || isStaff)) {
+    if (typeof window !== "undefined") {
+      window.alert("Acesso restrito: apenas para administradores e staff.");
+      window.location.href = "/area-cliente";
+    }
+    return null;
+  }
+
+  return (
+    <div>
+      <DashboardAdmin />
+    </div>
+  );
 };
 
 export default PageDashboardAdmin;
-// Comentário: Página protegida, só renderiza dashboard se usuário for nível 5.
+// Comentário: Página protegida, só renderiza dashboard se usuário for admin ou staff.
