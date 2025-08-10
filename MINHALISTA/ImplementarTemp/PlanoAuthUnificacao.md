@@ -5,7 +5,7 @@ Remover dependência de `next-auth` (v4) para eliminar conflitos, padronizar aut
 
 ## Premissas
 - Usar apenas `@auth/core` + `@auth/prisma-adapter` (já presentes).
-- Banco correto: `site-metodo/src/prisma/schema.prisma` (sqlite atual, adaptável depois).
+- Banco correto: `site-metodo/prisma/schema.prisma` (sqlite atual, adaptável depois).
 - Session strategy: JWT (criptografado) + custom claims (`role`, `accessLevel`).
 - Mapear `accessLevel` (User) -> `role` derivado (admin | moderador | usuario).
 - WebAuthn/TOTP: manter placeholders até consolidar flows; não bloquear build.

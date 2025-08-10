@@ -41,13 +41,14 @@
     "**/build": true,
     "**/dist": true
   },
-    "typescript.disableAutomaticTypeAcquisition": true, // Desativa aquisição automática de tipos do TypeScript
+
+  "typescript.disableAutomaticTypeAcquisition": true, // Desativa aquisição automática de tipos do TypeScript
   "workbench.editor.revealIfOpen": false, // Não foca automaticamente o editor se o arquivo já estiver aberto
   "workbench.editor.enablePreviewFromQuickOpen": false, // Não abre arquivos em modo preview ao usar Quick Open
   "editor.minimap.enabled": false, // Desativa o minimapa lateral do editor
   "breadcrumbs.enabled": false, // Desativa a navegação por breadcrumbs
   "typescript.suggest.autoImports": false, // Desativa sugestões automáticas de importação no TypeScript
-  "chat.tools.autoApprove": true, // Aprova automaticamente sugestões de ferramentas no chat
+  //"chat.tools.autoApprove": true, // Aprova automaticamente sugestões de ferramentas no chat
   "chat.agent.maxRequests": 100 // Limite máximo de requisições simultâneas do agente de chat
 
 }

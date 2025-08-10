@@ -1,14 +1,25 @@
+
 'use client';
+export const dynamic = 'force-dynamic';
 
 /**
  * Página de Acesso Não Autorizado
  */
 
 import { useAuth } from '@/components/auth/AuthGuard';
+import { ClientOnly } from '@/components/util/ClientOnly';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 export default function UnauthorizedPage() {
+  return (
+    <ClientOnly>
+      <UnauthorizedPageContent />
+    </ClientOnly>
+  );
+}
+
+function UnauthorizedPageContent() {
   const { isAuthenticated, isGuest } = useAuth();
 
   // Função para navegação (compatível com Next.js 15)

@@ -12,9 +12,9 @@
     "@testing-library/jest-dom": "^6.6.4",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
-    "@types/bcryptjs": "^2.4.6",
     "@types/jest": "^30.0.0",
     "@types/node": "24.2.1",
+    "@types/nodemailer": "^6.4.17",
     "@types/react": "^19.1.9",
     "@types/react-dom": "^19.1.7",
     "@whatwg-node/fetch": "^0.10.10",
@@ -73,6 +73,7 @@
     "next": "^15.4.5",
     "next-auth": "^5.0.0-beta.29",
     "next-transpile-modules": "^10.0.1",
+    "pdf-lib": "^1.17.1",
     "prettier": "^3.6.2",
     "prisma": "^6.1.0",
     "qrcode": "^1.5.4",
@@ -95,14 +96,14 @@
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit -p tsconfig.json",
-    "prisma:generate": "prisma generate --schema=./src/prisma/schema.prisma",
-    "prisma:seed": "ts-node --compiler-options '{\"module\":\"commonjs\"}' ./src/prisma/seeds/seed.ts",
+    "prisma:generate": "prisma generate --schema=./prisma/schema.prisma",
+    "prisma:seed": "ts-node --compiler-options '{\"module\":\"commonjs\"}' ./prisma/seeds/seed.ts",
     "analyze": "cross-env ANALYZE=true npm run build",
-    "postinstall": "prisma generate --schema=./src/prisma/schema.prisma && prisma db seed --schema=./src/prisma/schema.prisma",
+    "postinstall": "prisma generate --schema=./prisma/schema.prisma && prisma db seed --schema=./prisma/schema.prisma",
     "release": "standard-version --commit-all",
     "postrelease": "git push --follow-tags origin main",
     "test": "jest --passWithNoTests",
-    "studio": "prisma studio --schema=./src/prisma/schema.prisma"
+    "studio": "prisma studio --schema=./prisma/schema.prisma"
   },
   "version": "1.0.0"
 }

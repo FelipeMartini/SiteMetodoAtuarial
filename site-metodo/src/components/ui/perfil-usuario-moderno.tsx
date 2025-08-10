@@ -6,18 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { User, Mail, Shield, Edit2, Activity, Settings, Calendar } from 'lucide-react'
 import { AvatarCustom } from '@/components/ui/avatar-custom'
-import { 
-  User, 
-  Mail, 
-  Shield, 
-  Calendar, 
-  Activity, 
-  Settings,
-  Edit2,
-  MapPin,
-  Phone
-} from 'lucide-react'
 
 /**
  * Componente de perfil moderno do usuário

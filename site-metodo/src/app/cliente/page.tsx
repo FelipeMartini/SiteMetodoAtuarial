@@ -1,7 +1,9 @@
 "use client"
+export const dynamic = 'force-dynamic'
 
 import { useCurrentUser } from "@/hooks/useCurrentUser"
 import { useMfaStatus } from "@/hooks/useMfaStatus"
+import { ClientOnly } from "@/components/util/ClientOnly"
 import { Card } from "@/components/ui/card"
 import { Skeleton } from "@/components/ui/skeleton"
 import { Alert } from "@/components/ui/alert"
@@ -10,8 +12,14 @@ import { Alert } from "@/components/ui/alert"
  * Página de resumo da área cliente: widgets principais (status MFA, sessões, últimas atividades)
  */
 export default function ClienteResumo() {
+  return (
+    <ClientOnly>
+      <ClienteResumoContent />
+    </ClientOnly>
+  )
+}
 
-
+function ClienteResumoContent() {
   const { data, isLoading, error } = useCurrentUser()
   const user = data?.user
   const { data: mfaData, isLoading: mfaLoading } = useMfaStatus();
