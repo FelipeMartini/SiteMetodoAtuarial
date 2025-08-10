@@ -1,8 +1,8 @@
 /**
- * Teste completo de fluxo Auth.js v5: providers, login credentials, login social (mock), sessão, CSRF.
+import { GET as AuthGet, POST as AuthPost } from '@/app/api/auth/[...nextauth]/route'* Teste completo de fluxo Auth.js v5: providers, login credentials, login social (mock), sessão, CSRF.
  * Requer ambiente limpo, sem rotas dinâmicas conflitantes e variáveis AUTH_DEBUG=1.
  */
-import { GET as AuthGet, POST as AuthPost } from '@/app/api/auth/[...auth]/route'
+import { GET as AuthGet, POST as AuthPost } from '@/app/api/auth/[...nextauth]/route'
 
 function request(url: string, init?: RequestInit) {
   return new Request(url, init)

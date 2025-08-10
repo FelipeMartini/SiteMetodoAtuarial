@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 import bcryptjs from 'bcryptjs';
 // Reutiliza prisma singleton definido em src/auth.ts para evitar múltiplas conexões
-import { prisma } from '@/auth';
+import { prisma } from '@/lib/auth';
 import { z } from 'zod';
 
-// Prisma já centralizado em '@/auth'
+// Prisma já centralizado em '@/lib/auth'
 
 // Schema de validação de entrada
 const registerSchema = z.object({

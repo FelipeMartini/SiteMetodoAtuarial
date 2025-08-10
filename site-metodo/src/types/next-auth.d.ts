@@ -1,11 +1,30 @@
 
+import { DefaultSession, DefaultUser } from "next-auth"
+import { JWT, DefaultJWT } from "next-auth/jwt"
 
+// Tipagem customizada para sessão do Auth.js v5
+// Extende os tipos padrão para incluir campos customizados
 
-// Tipagem customizada para sessão do Auth.js puro
-// This file is marked for removal.
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string
+      accessLevel: number
+      role: string
+      isActive: boolean
+    } & DefaultSession["user"]
+  }
 
-// Comentário: Este arquivo estende a tipagem da sessão do Auth.js para permitir campos extras como id, picture e email.
-// Isso resolve o erro de tipagem ao atribuir session.id, session.picture, etc. no callback de sessão.
+  interface User extends DefaultUser {
+    accessLevel: number
+    isActive: boolean
+  }
+}
 
-// Comentário: Este arquivo estende a tipagem da sessão do Auth.js para permitir campos extras como id, picture e email.
-// Isso resolve o erro de tipagem ao atribuir session.id, session.picture, etc. no callback de sessão.
+declare module "next-auth/jwt" {
+  interface JWT extends DefaultJWT {
+    accessLevel: number
+    role: string
+    isActive: boolean
+  }
+}

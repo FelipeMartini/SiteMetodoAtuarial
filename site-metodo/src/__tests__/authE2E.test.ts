@@ -1,4 +1,4 @@
-// import { prisma } from '@/auth'
+// import { prisma } from '@/lib/auth'
 // import bcrypt from 'bcryptjs'
 
 // Teste E2E crítico: fluxo completo de login social (Google) e credenciais
