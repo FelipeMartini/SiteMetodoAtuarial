@@ -1,8 +1,19 @@
----
 applyTo: '**'
----
 
 # Tarefa Primordial: Corrigir e Modernizar Fluxo de Login Social/Credentials com Auth.js v5 + Session Provider
+
+# Checklist de Implementação Auth.js v5 (2025) - Sessão no Banco de Dados (Prisma)
+
+- [ ] Validar dependências e instalar/atualizar se necessário
+- [ ] Garantir AUTH_SECRET e variáveis dos providers no .env.local
+- [ ] Atualizar src/auth.ts para padrão mais moderno (NextAuth, PrismaAdapter, providers, callbacks, authorized)
+- [ ] Garantir src/app/api/auth/[...auth]/route.ts exportando corretamente os handlers
+- [ ] Implementar/ajustar middleware.ts para proteção global de rotas
+- [ ] Garantir proteção de rotas e APIs usando helper auth
+- [ ] Rodar linter, build e testes automatizados
+- [ ] Corrigir eventuais erros de lint/build/test
+- [ ] Comentar e documentar código conforme padrão do projeto
+- [ ] Validar funcionamento E2E (login, sessão, proteção, logout)
 
 ## Objetivo
 Garantir que o fluxo de login (Google e Credentials) funcione perfeitamente, utilizando a estratégia de sessão via banco de dados (database), sem JWT, com Auth.js v5 puro, Session Provider global e endpoints modernos. Corrigir todos os problemas de integração, CSRF, tipagem e garantir cobertura de teste crítica E2E para o fluxo.
