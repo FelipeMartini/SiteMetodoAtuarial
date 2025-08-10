@@ -1,8 +1,14 @@
 // webcrypto deve ser definido antes de qualquer import do Auth.js
 try {
   const { webcrypto } = require('crypto')
-  if (webcrypto) global.crypto = webcrypto
-} catch {}
+  if (webcrypto) {
+    globalThis.crypto = webcrypto
+    global.crypto = webcrypto
+  }
+} catch (e) {
+  // eslint-disable-next-line no-console
+  console.warn('[jest.setup] Não foi possível definir webcrypto:', e?.message)
+}
 // Polyfill global fetch para ambiente de testes Node.js
 // Mock global fetch para todos os testes: evita chamadas reais e permite simular respostas
 global.fetch = jest.fn().mockImplementation((url, options) => {
