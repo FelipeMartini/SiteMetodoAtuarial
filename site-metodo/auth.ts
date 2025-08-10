@@ -91,7 +91,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name,
-            accessLevel: user.accessLevel
+            accessLevel: user.accessLevel,
+            isActive: user.isActive
           }
         } catch (error) {
           console.error("[Auth] Authorization error:", error)
@@ -216,7 +217,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       console.log(`[Auth] User ${user.email} signed in via ${account?.provider}`)
     },
-    async signOut({ session }) {
+    async signOut() {
       console.log(`[Auth] User signed out`)
     }
   }

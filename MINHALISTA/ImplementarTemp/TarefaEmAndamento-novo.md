@@ -1,26 +1,64 @@
-# Plano Detalhado de Execução Final CRUD/Admin
+# Correção COMPLETA do Auth.js v5 - Solução Híbrida
 
-## 1. Dashboard
-- [ ] Implementar cards de métricas (usuários, acessos, permissões) com shadcn/ui customizado e dados reais
-- [ ] Implementar widgets dinâmicos (atividades recentes, alertas, logs)
-- [ ] Garantir responsividade total (Tailwind v4)
-- [ ] Personalizar todos os componentes shadcn/ui conforme identidade visual
+## 🔍 Problema Identificado
+- **Auth.js v5 + Credentials + Database Sessions = BUG CONHECIDO**
+- OAuth funciona ✅, Credentials não persiste sessões no banco ❌  
+- UnknownAction e MissingCSRF são sintomas do problema
+- GitHub OAuth usando placeholders (não configurado)
 
-## 2. Endpoints/Admin de Usuários e Permissões
-- [ ] Revisar e ajustar endpoints RESTful (GET, POST, PUT, DELETE) para usuários e permissões
-- [ ] Integrar RBAC em todos os endpoints e frontend
-- [ ] Validar dados com Zod em todas as rotas
-- [ ] Garantir autenticação forte (Auth.js v5) e cookies HttpOnly
-- [ ] Proteger endpoints críticos (middleware, checagem de roles)
-- [ ] Implementar rate limiting com @upstash/ratelimit
-- [ ] Configurar CORS corretamente
-- [ ] Adicionar headers de segurança (Helmet ou equivalente Next.js)
-- [ ] Implementar logs de ações administrativas
+## 🎯 Solução: Implementação Híbrida
+- **OAuth Providers** → Database Sessions (Google, GitHub, Facebook, Discord)
+- **Credentials Provider** → JWT Sessions  
+- Interface unificada, funcionamento perfeito
 
-## 3. Integração Visual/Admin
-- [ ] Integrar dados reais dos endpoints nos cards/widgets do dashboard
-- [ ] Garantir navegação/administração fluida e segura
+## ✅ Lista de Tarefas
 
----
+### 1. Configuração de Ambiente
+- [ ] Configurar variáveis de ambiente OAuth corretamente
+- [ ] Criar credenciais Google OAuth
+- [ ] Criar credenciais GitHub OAuth  
+- [ ] Adicionar Facebook e Discord OAuth
+- [ ] Validar .env.local
 
-> Testes e documentação serão tratados posteriormente. Priorize o desenvolvimento dos pontos principais.
+### 2. Refatoração do Auth.js v5
+- [x] Reconfigurar auth.ts com estratégia híbrida
+- [ ] Separar config OAuth (database) de Credentials (JWT)
+- [ ] Implementar callbacks corretos para ambas estratégias
+- [ ] Adicionar todos os 4 provedores OAuth
+
+### 3. Atualização de Componentes
+- [ ] Padronizar login page com 4 provedores OAuth + credentials
+- [ ] Padronizar signup page com 4 provedores OAuth + credentials  
+- [ ] Atualizar server actions para funcionar com JWT
+- [ ] Corrigir middleware para ambas estratégias
+
+### 4. Correção de Endpoints
+- [ ] Corrigir route handler (/api/auth/[...nextauth]/route.ts)
+- [ ] Atualizar API endpoints para detectar tipo de sessão
+- [ ] Implementar /api/me funcional
+- [ ] Testar todos os endpoints
+
+### 5. Testes e Validação
+- [ ] Testar login credentials (JWT)
+- [ ] Testar login Google OAuth (database)  
+- [ ] Testar login GitHub OAuth (database)
+- [ ] Testar login Facebook OAuth (database)
+- [ ] Testar login Discord OAuth (database)
+- [ ] Validar persistência de sessões
+- [ ] Testar logout completo
+- [ ] Verificar middleware de proteção de rotas
+
+### 6. Interface e UX
+- [ ] Garantir 4 botões OAuth em login E signup
+- [ ] Melhorar feedback visual durante auth
+- [ ] Implementar tratamento de erros robusto
+- [ ] Adicionar indicadores de loading
+
+### 7. Documentação e Limpeza
+- [ ] Documentar a solução híbrida
+- [ ] Remover código obsoleto
+- [ ] Atualizar README com instruções OAuth
+- [ ] Limpar logs de debug
+
+## 🚀 Início da Implementação
+Começando pela configuração de ambiente e refatoração do auth.ts...

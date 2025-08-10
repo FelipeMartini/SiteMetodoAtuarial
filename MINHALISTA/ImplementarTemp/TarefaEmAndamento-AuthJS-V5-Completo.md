@@ -17,43 +17,43 @@
 - ❌ Não há middleware na raiz do projeto
 
 ### 📦 **2. Instalação e Configuração de Dependências**
-- [ ] Desinstalar NextAuth v4 (se existir)
-- [ ] Instalar Auth.js v5 (`next-auth@beta`)
-- [ ] Instalar `@auth/prisma-adapter`
-- [ ] Verificar compatibilidade com Next.js 15
-- [ ] Instalar dependências de hash de senha (`bcryptjs`)
-- [ ] Verificar versões do Prisma
+- [x] Desinstalar NextAuth v4 (se existir)
+- [x] Instalar Auth.js v5 (`next-auth@beta`)
+- [x] Instalar `@auth/prisma-adapter`
+- [x] Verificar compatibilidade com Next.js 15
+- [x] Instalar dependências de hash de senha (`bcryptjs`)
+- [x] Verificar versões do Prisma
 
 ### 🗄️ **3. Configuração do Banco de Dados (Prisma)**
-- [ ] Atualizar schema.prisma com modelos Auth.js v5
-- [ ] Configurar modelos: User, Account, Session, VerificationToken
-- [ ] Aplicar migrações do banco
-- [ ] Gerar cliente Prisma
-- [ ] Configurar instância singleton do Prisma
-- [ ] Testar conexão com banco
+- [x] Atualizar schema.prisma com modelos Auth.js v5
+- [x] Configurar modelos: User, Account, Session, VerificationToken
+- [x] Aplicar migrações do banco
+- [x] Gerar cliente Prisma
+- [x] Configurar instância singleton do Prisma
+- [x] Testar conexão com banco
 
 ### 🔧 **4. Configuração Auth.js V5**
-- [ ] Criar arquivo `auth.ts` na raiz do projeto
-- [ ] Configurar PrismaAdapter
-- [ ] Configurar providers (Google, GitHub, Credentials)
-- [ ] Implementar função `authorize` para credentials
-- [ ] Configurar callbacks (jwt, session, signIn)
-- [ ] Configurar páginas customizadas
-- [ ] Configurar variáveis de ambiente
+- [x] Criar arquivo `auth.ts` na raiz do projeto
+- [x] Configurar PrismaAdapter
+- [x] Configurar providers (Google, GitHub, Credentials)
+- [x] Implementar função `authorize` para credentials
+- [x] Configurar callbacks (jwt, session, signIn)
+- [x] Configurar páginas customizadas
+- [x] Configurar variáveis de ambiente
 
 ### 🛣️ **5. Rotas e API Handlers**
-- [ ] Criar route handler: `app/api/auth/[...nextauth]/route.ts`
-- [ ] Implementar GET e POST handlers
-- [ ] Configurar middleware de autenticação
-- [ ] Implementar proteção de rotas
+- [x] Criar route handler: `app/api/auth/[...nextauth]/route.ts`
+- [x] Implementar GET e POST handlers
+- [x] Configurar middleware de autenticação
+- [x] Implementar proteção de rotas
 - [ ] Criar server actions para login/logout
 
 ### 🎨 **6. Interface de Usuário**
-- [ ] Criar página de login `/auth/signin`
+- [x] Criar página de login `/auth/signin`
 - [ ] Criar página de registro `/auth/signup`
-- [ ] Implementar formulários com validação Zod
-- [ ] Criar componentes de autenticação com shadcn/ui
-- [ ] Implementar botões de login social
+- [x] Implementar formulários com validação Zod
+- [x] Criar componentes de autenticação com shadcn/ui
+- [x] Implementar botões de login social
 - [ ] Criar componente de perfil de usuário
 - [ ] Implementar logout
 - [ ] Criar componente de proteção de página
