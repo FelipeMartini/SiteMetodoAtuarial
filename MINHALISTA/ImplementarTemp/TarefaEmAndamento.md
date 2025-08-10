@@ -1,3 +1,13 @@
+# Exemplo de uso do contexto global de sessão:
+```tsx
+import { useSession } from "@/hooks/useSession"
+const { user, status, isLoading } = useSession()
+if (status === "loading") return <Loading />
+if (status === "unauthenticated") return <Login />
+return <div>Bem-vindo, {user?.name}</div>
+```
+
+# Checklist de Unificação e Teste do Fluxo de Autenticação
 # Checklist Avançado – Dashboard Admin Usuários
 
 - [x] Implementar hook `useAuth` funcional (usando `useCurrentUser` internamente, status/loading/erro)
