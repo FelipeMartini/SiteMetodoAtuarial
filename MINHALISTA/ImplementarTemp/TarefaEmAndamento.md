@@ -4,9 +4,9 @@
 - [ ] Implementar `SessionProvider` para contexto global de sessão
 - [x] Atualizar páginas e componentes para usar o novo `useAuth` (ex: dashboard-admin)
 - [x] Garantir que SocialLoginBox está usando endpoints canônicos e fluxo Auth.js
-- [ ] Criar testes E2E reais cobrindo login (credentials e social), api/me, hooks
+- [ ] Criar testes E2E reais cobrindo login (credentials e social), api/me, hooks (os testes atuais só cobrem configuração e hash)
 - [ ] Garantir cobertura de `/api/me`, `useCurrentUser`, `useAuditLogs` e fluxo de sessão
-- [ ] Corrigir/limpar avisos e tipos `any` relacionados a autenticação
+- [/] Corrigir/limpar avisos e tipos `any` relacionados a autenticação (sem erros, apenas aviso esperado de provider Email)
 - [ ] Atualizar documentação/checklist
 
 > Progresso será marcado conforme cada etapa for concluída.
