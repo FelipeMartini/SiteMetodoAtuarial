@@ -42,7 +42,7 @@ export async function POST(request: NextRequest) {
     const hashedPassword = await bcryptjs.hash(password, 12);
 
     // Cria o usuário
-  const user = await db.user.create({
+    const user = await db.user.create({
       data: {
         name,
         email,
@@ -50,6 +50,7 @@ export async function POST(request: NextRequest) {
         accessLevel: 1, // Sempre nível 1 por padrão
         isActive: true,
         lastLogin: new Date(),
+        emailVerified: null, // Sempre null no registro tradicional
       },
     });
 
