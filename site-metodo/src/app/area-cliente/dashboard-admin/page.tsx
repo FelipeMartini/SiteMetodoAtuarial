@@ -3,7 +3,7 @@
 
 import React from "react";
 import dynamic from "next/dynamic";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/app/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
 
 
@@ -34,7 +34,7 @@ const PageDashboardAdmin: React.FC = () => {
       </div>
     );
   }
-  if (!session?.user || session.user.accessLevel !== 5) {
+  if (!session || session.accessLevel !== 5) {
     if (status === "authenticated") {
       // Usuário autenticado mas não é admin
       if (typeof window !== "undefined") {
