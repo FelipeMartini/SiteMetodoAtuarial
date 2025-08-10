@@ -1,19 +1,17 @@
 
 import "./globals.css"; // CSS global com Tailwind e variáveis CSS do tema
-import type { Metadata } from "next";
 import LayoutCliente from "@/app/LayoutCliente";
 
 import { ThemeProvider } from '@/components/theme-provider';
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider';
-import { SessionProvider } from '@/app/providers/SessionProvider';
-import { AuthSessionProvider } from '@/app/providers/AuthSessionProvider';
+import { SessionProvider } from 'next-auth/react';
 import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider';
 
 // import { ErrorBoundary } from "@/components/ErrorBoundary";
 
 // Removido uso de next/font/google por instabilidade de rede
 
-export const metadata: Metadata = {
+export const metadata = {
   title: "Método Atuarial - Consultoria Especializada em Previdência",
   description: "Consultoria especializada em previdência e soluções atuariais. Oferecemos avaliação de passivos, relatórios regulatórios, modelagem atuarial e gestão de riscos.",
   keywords: "consultoria atuarial, previdência, passivos atuariais, relatórios regulatórios, gestão de riscos, modelagem atuarial",
@@ -37,19 +35,22 @@ export default function RootLayout({
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <body>
-        <FeatureFlagProvider>
-          <ThemeProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <FeatureFlagProvider>
             <TanstackQueryProvider>
-              <AuthSessionProvider>
-                <SessionProvider>
-                  <LayoutCliente>
-                    {children}
-                  </LayoutCliente>
-                </SessionProvider>
-              </AuthSessionProvider>
+              <SessionProvider>
+                <LayoutCliente>
+                  {children}
+                </LayoutCliente>
+              </SessionProvider>
             </TanstackQueryProvider>
-          </ThemeProvider>
-        </FeatureFlagProvider>
+          </FeatureFlagProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
