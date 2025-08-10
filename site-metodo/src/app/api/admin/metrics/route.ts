@@ -3,7 +3,7 @@ import { auth, prisma } from '@/lib/auth'
 
 export async function GET() {
   const session = await auth()
-  if (!session) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
+  if (!session || !session.user) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
   if ((session.user.accessLevel ?? 0) < 100) return NextResponse.json({ error: 'Sem permissão' }, { status: 403 })
 
   const now = new Date()

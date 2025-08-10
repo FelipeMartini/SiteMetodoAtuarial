@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
+import { checkRole } from '@/utils/rbac'
 // import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
-// TODO: implementar permissaoSchema e checkRole compatíveis com schema atual
+// TODO: implementar permissaoSchema compatível com schema atual
 // Placeholders temporários para evitar erro de import inexistente
 interface ParseResult { success: boolean; error?: { issues: unknown[] } }
 // Placeholders intencionais até implementação real
 const permissaoSchema = { safeParse: (_data?: unknown): ParseResult => { void _data; return { success: false, error: { issues: [] } } } }
-function checkRole(user: { role?: string }, roles: string | string[]): boolean {
-  if (!user?.role) return false
-  if (Array.isArray(roles)) return roles.includes(user.role)
-  return user.role === roles
-}
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 
