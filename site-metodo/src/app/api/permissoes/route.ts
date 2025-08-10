@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/auth'
+import { auth } from '@/lib/auth'
 // import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
 // TODO: implementar permissaoSchema e checkRole compatíveis com schema atual
 // Placeholders temporários para evitar erro de import inexistente

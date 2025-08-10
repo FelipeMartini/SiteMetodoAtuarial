@@ -178,11 +178,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         })
 
         if (dbUser) {
-          session.user.id = dbUser.id
-          session.user.accessLevel = dbUser.accessLevel
-          session.user.role = dbUser.accessLevel >= 100 ? "admin" : 
-                             dbUser.accessLevel >= 50 ? "moderador" : "usuario"
-          session.user.isActive = dbUser.isActive
+          // Extender o tipo da session.user para incluir campos customizados
+          const extendedUser = session.user as typeof session.user & {
+            id: string;
+            accessLevel: number;
+            role: string;
+            isActive: boolean;
+          };
+          
+          extendedUser.id = dbUser.id;
+          extendedUser.accessLevel = dbUser.accessLevel;
+          extendedUser.role = dbUser.accessLevel >= 100 ? "admin" : 
+                             dbUser.accessLevel >= 50 ? "moderador" : "usuario";
+          extendedUser.isActive = dbUser.isActive;
         }
 
         console.log("[Auth] Session callback for:", session.user.email)
@@ -208,7 +216,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account }) {
       console.log(`[Auth] User ${user.email} signed in via ${account?.provider}`)
     },
-    async signOut({ token }) {
+    async signOut({ session }) {
       console.log(`[Auth] User signed out`)
     }
   }

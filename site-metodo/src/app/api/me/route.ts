@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth, prisma } from '@/auth'
+import { auth, prisma } from '@/lib/auth'
 import { z } from 'zod'
 
 const updateMeSchema = z.object({ name: z.string().min(2).max(120).optional() })

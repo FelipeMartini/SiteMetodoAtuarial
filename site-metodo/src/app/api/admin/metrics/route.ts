@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { auth, prisma } from '@/auth'
+import { auth, prisma } from '@/lib/auth'
 
 export async function GET() {
   const session = await auth()
