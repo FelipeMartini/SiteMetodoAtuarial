@@ -146,6 +146,18 @@ export const authConfig: AuthConfig = {
       }
       return true
     },
+    async redirect({ url, baseUrl }) {
+      // Garante redirecionamento pós login para área do cliente, mantendo retornos internos seguros
+      try {
+        const target = new URL(url)
+        if (target.origin === baseUrl && target.pathname.startsWith('/')) {
+          return target.toString()
+        }
+      } catch {
+        // ignore parse errors e cai no fallback
+      }
+      return baseUrl + '/area-cliente'
+    },
   },
   experimental: { enableWebAuthn: false },
 }
