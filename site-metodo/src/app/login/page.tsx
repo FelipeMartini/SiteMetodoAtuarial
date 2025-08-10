@@ -42,34 +42,47 @@ const LoginPage: React.FC = () => {
     }
   }, [status, router]);
 
-  // Handler do submit do formulário tradicional usando Auth.js puro
+  // Handler do submit do formulário tradicional usando Auth.js v5
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErro(null);
     setLoading(true);
+    
     try {
-      // Usa fluxo padrão Auth.js credentials: POST /api/auth/callback/credentials
-      const form = new FormData();
-      form.append('email', email);
-      form.append('password', senha);
-      const resp = await fetch('/api/auth/callback/credentials', { method: 'POST', body: form });
-      if (!resp.ok) {
-        setErro('Credenciais inválidas.');
-        setLoading(false);
-        return;
-      }
-      if (isMfaObrigatorio('login')) {
-        const mfaRes = await fetch('/api/auth/totp-status');
-        const mfaData = await mfaRes.json();
-        if (mfaData.enabled) {
-          setMfaRequired(true);
-          setMfaStep(true);
-          setLoading(false);
-          return;
+      // Usar signIn action do Auth.js v5
+      const result = await fetch('/api/auth/signin/credentials', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: new URLSearchParams({
+          email,
+          password: senha,
+          redirect: 'false',
+        }),
+      });
+
+      if (result.ok) {
+        // Verificar se precisa de MFA
+        if (isMfaObrigatorio('login')) {
+          const mfaRes = await fetch('/api/auth/totp-status');
+          const mfaData = await mfaRes.json();
+          if (mfaData.enabled) {
+            setMfaRequired(true);
+            setMfaStep(true);
+            setLoading(false);
+            return;
+          }
         }
+        
+        // Login bem-sucedido - redirecionar
+        router.push('/area-cliente');
+      } else {
+        setErro('Credenciais inválidas. Verifique email e senha.');
       }
-    } catch {
-      setErro('Erro ao tentar autenticar.');
+    } catch (error) {
+      console.error('Erro no login:', error);
+      setErro('Erro ao tentar autenticar. Tente novamente.');
     } finally {
       setLoading(false);
     }

@@ -2,17 +2,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-
-
 import type { Session } from "@/types/auth";
 
-// ...
-
 /**
- * Hook de autenticação seguro, moderno e tipado para Auth.js puro.
- * Busca a sessão do usuário via endpoint seguro e retorna status explícito.
- * Nunca expõe dados sensíveis ao client.
+ * Hook de autenticação moderno para Auth.js v5
+ * Busca a sessão via endpoint oficial e gerencia estado de loading
  */
 export function useAuth() {
   const [data, setData] = useState<Session | null>(null);
@@ -20,14 +14,18 @@ export function useAuth() {
 
   useEffect(() => {
     let isMounted = true;
-    setStatus("loading");
-    fetch("/api/auth/session")
-      .then(async (res) => {
+    
+    const fetchSession = async () => {
+      try {
+        const response = await fetch("/api/auth/session");
+        
         if (!isMounted) return;
-        if (res.ok) {
-          const data = await res.json();
-          if (data && data.user) {
-            setData(data);
+        
+        if (response.ok) {
+          const sessionData = await response.json();
+          
+          if (sessionData && sessionData.user) {
+            setData(sessionData);
             setStatus("authenticated");
           } else {
             setData(null);
@@ -37,13 +35,18 @@ export function useAuth() {
           setData(null);
           setStatus("unauthenticated");
         }
-      })
-      .catch(() => {
+      } catch (error) {
+        console.error("[useAuth] Error fetching session:", error);
         if (isMounted) {
           setData(null);
           setStatus("unauthenticated");
         }
-      });
+      }
+    };
+
+    fetchSession();
+    
+    // Cleanup function
     return () => {
       isMounted = false;
     };
