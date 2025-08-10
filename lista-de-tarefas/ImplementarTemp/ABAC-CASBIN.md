@@ -1,7 +1,7 @@
 # Implementação ABAC com Casbin no Next.js + Auth.js v5 + Prisma + SQLite
 
 ## Visão Geral
-Este documento detalha um plano de implementação de ABAC (Attribute-Based Access Control) usando Casbin no contexto do seu projeto Next.js, com Auth.js v5 puro, Prisma, SQLite, sem SessionProvider, e integração com Zustand. O objetivo é migrar do modelo atual baseado em roles para um controle de acesso flexível, auditável e escalável, usando atributos de usuário e recurso.
+Este documento detalha um plano de implementação de ABAC (Attribute-Based Access Control) usando Casbin no contexto do seu projeto Next.js, com Auth.js v5 puro, com Middleware, speakeasy,  Prisma e prisma adapter, SQLite, sem SessionProvider, e integração com Zustand, ZOD, nosso sistema atual de permission e roles deve ser migrado para essa nova abordagem convertendo proteção das paginas cliente e admin dashboard para isso. O objetivo é migrar do modelo atual baseado em roles para um controle de acesso flexível, auditável e escalável, usando atributos de usuário e recurso.
 
 ---
 
@@ -168,15 +168,3 @@ export default async function handler(req, res) {
 
 > **Este plano cobre todos os pontos críticos para migrar seu sistema para ABAC com Casbin, integrando com Auth.js v5, Prisma, SQLite e Zustand, e serve como guia para implementação incremental e segura.**
 
-
-
-Pesquisa profunda concluída! Analisei as melhores práticas, exemplos reais, integrações de Casbin com Next.js, Auth.js v5, Prisma, SQLite, Zustand e ABAC, além de examinar cuidadosamente seus arquivos de referência e checklist.
-
-Criei um README detalhado chamado ABAC-CASBIN.md em ImplementarTemp com:
-
-Plano de implementação completo e incremental para migrar seu sistema para ABAC com Casbin.
-Pontos exatos de integração e arquivos a serem adaptados.
-Exemplos de código para funções de verificação de permissão, middleware, hooks e uso em páginas protegidas.
-Checklist de refatoração, recomendações de modelagem, testes e documentação.
-Referências e links para fontes oficiais, repositórios e exemplos práticos.
-Agora você tem um guia atualizado, prático e seguro para implementar ABAC com Casbin no seu projeto Next.js moderno.
