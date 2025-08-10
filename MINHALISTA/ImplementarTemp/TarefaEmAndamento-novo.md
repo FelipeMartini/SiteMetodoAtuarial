@@ -14,7 +14,7 @@
 ## ✅ Lista de Tarefas
 
 ### 1. Configuração de Ambiente
-- [ ] Configurar variáveis de ambiente OAuth corretamente
+- [x] Configurar variáveis de ambiente OAuth corretamente
 - [ ] Criar credenciais Google OAuth
 - [ ] Criar credenciais GitHub OAuth  
 - [ ] Adicionar Facebook e Discord OAuth
@@ -22,20 +22,20 @@
 
 ### 2. Refatoração do Auth.js v5
 - [x] Reconfigurar auth.ts com estratégia híbrida
-- [ ] Separar config OAuth (database) de Credentials (JWT)
-- [ ] Implementar callbacks corretos para ambas estratégias
-- [ ] Adicionar todos os 4 provedores OAuth
+- [x] Separar config OAuth (database) de Credentials (JWT)
+- [x] Implementar callbacks corretos para ambas estratégias
+- [x] Adicionar todos os 4 provedores OAuth
 
 ### 3. Atualização de Componentes
-- [ ] Padronizar login page com 4 provedores OAuth + credentials
-- [ ] Padronizar signup page com 4 provedores OAuth + credentials  
-- [ ] Atualizar server actions para funcionar com JWT
-- [ ] Corrigir middleware para ambas estratégias
+- [x] Padronizar login page com 4 provedores OAuth + credentials
+- [x] Padronizar signup page com 4 provedores OAuth + credentials  
+- [x] Atualizar server actions para funcionar com JWT
+- [x] Corrigir middleware para ambas estratégias
 
 ### 4. Correção de Endpoints
-- [ ] Corrigir route handler (/api/auth/[...nextauth]/route.ts)
-- [ ] Atualizar API endpoints para detectar tipo de sessão
-- [ ] Implementar /api/me funcional
+- [x] Corrigir route handler (/api/auth/[...nextauth]/route.ts)
+- [x] Atualizar API endpoints para detectar tipo de sessão
+- [x] Implementar /api/me funcional
 - [ ] Testar todos os endpoints
 
 ### 5. Testes e Validação

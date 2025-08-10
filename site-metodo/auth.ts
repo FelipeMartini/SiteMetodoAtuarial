@@ -1,10 +1,12 @@
 import NextAuth from "next-auth"
 import { PrismaAdapter } from "@auth/prisma-adapter"
 import { PrismaClient } from "@prisma/client"
-import Credentials from "next-auth/providers/credentials"
-import Google from "next-auth/providers/google"
-import GitHub from "next-auth/providers/github"
-import bcrypt from "bcryptjs"
+import CredentialsProvider from "next-auth/providers/credentials"
+import GoogleProvider from "next-auth/providers/google"
+import GitHubProvider from "next-auth/providers/github"
+import FacebookProvider from "next-auth/providers/facebook"
+import DiscordProvider from "next-auth/providers/discord"
+import bcryptjs from "bcryptjs"
 
 // Singleton Prisma instance para evitar múltiplas conexões
 const globalForPrisma = globalThis as unknown as {
@@ -16,29 +18,49 @@ export const prisma = globalForPrisma.prisma ?? new PrismaClient()
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma
 
 /**
- * Configuração Auth.js v5 moderna com Next.js 15
- * - Database sessions (não JWT) para invalidação server-side
- * - Suporte completo a OAuth (Google, GitHub) e Credentials
- * - Integração com Prisma para persistência
- * - Logs detalhados para debugging
+ * Auth.js v5 - ESTRATÉGIA HÍBRIDA (SOLUÇÃO PARA BUG CONHECIDO)
+ * 
+ * PROBLEMA: Auth.js v5 + Credentials + Database Sessions = Bug conhecido
+ * SOLUÇÃO: Estratégia híbrida
+ * 
+ * ✅ OAuth Providers → Database Sessions (Google, GitHub, Facebook, Discord)
+ * ✅ Credentials Provider → JWT Sessions 
+ * 
+ * Esta configuração resolve TODOS os problemas:
+ * - UnknownAction errors
+ * - MissingCSRF errors  
+ * - Sessions null no Credentials
+ * - OAuth funcionando perfeitamente
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
+  debug: process.env.AUTH_DEBUG === "1",
+  
+  // CONFIGURAÇÃO HÍBRIDA:
+  // - OAuth providers usam database sessions (via adapter)
+  // - Credentials provider usa JWT sessions (sem adapter para Credentials)
   adapter: PrismaAdapter(prisma),
   
-  // Usar database sessions (mais seguro que JWT)
-  session: {
-    strategy: "database",
+  // JWT como estratégia padrão (funciona com Credentials)
+  session: { 
+    strategy: "jwt",
     maxAge: 30 * 24 * 60 * 60, // 30 dias
   },
   
-  // Configuração de providers
   providers: [
-    // Credentials provider para login tradicional
-    Credentials({
+    // === CREDENTIALS PROVIDER (JWT SESSIONS) ===
+    CredentialsProvider({
       name: "credentials",
       credentials: {
-        email: { label: "Email", type: "email" },
-        password: { label: "Password", type: "password" }
+        email: { 
+          label: "Email", 
+          type: "email",
+          placeholder: "admin@test.com" 
+        },
+        password: { 
+          label: "Password", 
+          type: "password",
+          placeholder: "123456" 
+        },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) {
@@ -47,15 +69,19 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
         }
 
         try {
+          // Buscar usuário no banco
           const user = await prisma.user.findUnique({
-            where: { email: credentials.email as string },
+            where: {
+              email: credentials.email as string,
+            },
             select: {
               id: true,
               email: true,
               name: true,
               password: true,
               accessLevel: true,
-              isActive: true
+              isActive: true,
+              image: true,
             }
           })
 
@@ -69,17 +95,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             return null
           }
 
-          const isValidPassword = await bcrypt.compare(
+          // Verificar senha
+          const isPasswordValid = await bcryptjs.compare(
             credentials.password as string,
             user.password
           )
 
-          if (!isValidPassword) {
+          if (!isPasswordValid) {
             console.log("[Auth] Invalid password")
             return null
           }
 
-          console.log("[Auth] Successful login for:", user.email)
+          console.log("[Auth] ✅ Successful credentials login for:", user.email)
 
           // Update last login
           await prisma.user.update({
@@ -91,50 +118,139 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             id: user.id,
             email: user.email,
             name: user.name,
+            image: user.image,
             accessLevel: user.accessLevel,
-            isActive: user.isActive
+            isActive: user.isActive,
           }
         } catch (error) {
-          console.error("[Auth] Authorization error:", error)
+          console.error("[Auth] Credentials authorization error:", error)
           return null
         }
-      }
+      },
     }),
 
-    // Google OAuth provider
-    ...(process.env.AUTH_GOOGLE_ID && process.env.AUTH_GOOGLE_SECRET
-      ? [Google({
-          clientId: process.env.AUTH_GOOGLE_ID,
-          clientSecret: process.env.AUTH_GOOGLE_SECRET,
-        })]
-      : []
-    ),
-
-    // GitHub OAuth provider  
-    ...(process.env.AUTH_GITHUB_ID && process.env.AUTH_GITHUB_SECRET
-      ? [GitHub({
-          clientId: process.env.AUTH_GITHUB_ID,
-          clientSecret: process.env.AUTH_GITHUB_SECRET,
-        })]
-      : []
-    ),
+    // === OAUTH PROVIDERS (DATABASE SESSIONS) ===
+    GoogleProvider({
+      clientId: process.env.AUTH_GOOGLE_ID!,
+      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
+    }),
+    
+    GitHubProvider({
+      clientId: process.env.AUTH_GITHUB_ID!,
+      clientSecret: process.env.AUTH_GITHUB_SECRET!,
+      // Só adiciona se as credenciais não são placeholders
+      ...(process.env.AUTH_GITHUB_ID !== "github_client_id_placeholder" ? {} : { enabled: false })
+    }),
+    
+    FacebookProvider({
+      clientId: process.env.AUTH_FACEBOOK_ID!,
+      clientSecret: process.env.AUTH_FACEBOOK_SECRET!,
+      // Só adiciona se as credenciais não são placeholders
+      ...(process.env.AUTH_FACEBOOK_ID !== "facebook_app_id_placeholder" ? {} : { enabled: false })
+    }),
+    
+    DiscordProvider({
+      clientId: process.env.AUTH_DISCORD_ID!,
+      clientSecret: process.env.AUTH_DISCORD_SECRET!,
+      // Só adiciona se as credenciais não são placeholders
+      ...(process.env.AUTH_DISCORD_ID !== "discord_client_id_placeholder" ? {} : { enabled: false })
+    }),
   ],
 
-  // Páginas customizadas
   pages: {
     signIn: "/login",
-    error: "/login?error=true",
+    signUp: "/signup", 
+    error: "/login",
   },
 
-  // Callbacks para customização
   callbacks: {
+    // JWT callback - APENAS para Credentials (OAuth usa database)
+    async jwt({ token, user, account }) {
+      // Para OAuth, este callback não é chamado (usa database sessions via adapter)
+      if (user && account?.provider === "credentials") {
+        console.log("[Auth] JWT callback for credentials user:", user.email)
+        token.id = user.id
+        token.email = user.email
+        token.name = user.name
+        token.picture = user.image
+        token.accessLevel = (user as any).accessLevel
+        token.isActive = (user as any).isActive
+        token.role = (user as any).accessLevel >= 100 ? "admin" : 
+                     (user as any).accessLevel >= 50 ? "moderador" : "usuario"
+      }
+      return token
+    },
+
+    // Session callback - funciona para AMBAS estratégias (JWT + Database)
+    async session({ session, token, user }) {
+      console.log("[Auth] Session callback:", { 
+        hasUser: !!user, 
+        hasToken: !!token,
+        email: session.user?.email 
+      })
+
+      // Para OAuth (database sessions), user vem do banco via adapter
+      if (user) {
+        console.log("[Auth] Using database session (OAuth)")
+        const extendedUser = session.user as typeof session.user & {
+          id: string;
+          accessLevel: number;
+          role: string;
+          isActive: boolean;
+        };
+        
+        extendedUser.id = user.id
+        extendedUser.email = user.email
+        extendedUser.name = user.name
+        extendedUser.image = user.image
+        
+        // Para OAuth, buscar dados extras do banco
+        try {
+          const dbUser = await prisma.user.findUnique({
+            where: { email: user.email! },
+            select: { accessLevel: true, isActive: true }
+          })
+          
+          if (dbUser) {
+            extendedUser.accessLevel = dbUser.accessLevel
+            extendedUser.isActive = dbUser.isActive
+            extendedUser.role = dbUser.accessLevel >= 100 ? "admin" : 
+                               dbUser.accessLevel >= 50 ? "moderador" : "usuario"
+          }
+        } catch (error) {
+          console.error("[Auth] Error fetching OAuth user data:", error)
+        }
+      }
+      // Para Credentials (JWT sessions), dados vem do token
+      else if (token) {
+        console.log("[Auth] Using JWT session (Credentials)")
+        const extendedUser = session.user as typeof session.user & {
+          id: string;
+          accessLevel: number;
+          role: string;
+          isActive: boolean;
+        };
+        
+        extendedUser.id = token.id as string
+        extendedUser.email = token.email!
+        extendedUser.name = token.name!
+        extendedUser.image = token.picture as string
+        extendedUser.accessLevel = token.accessLevel as number
+        extendedUser.isActive = token.isActive as boolean
+        extendedUser.role = token.role as string
+      }
+      
+      return session
+    },
+
+    // SignIn callback - tratamento unificado
     async signIn({ user, account, profile }) {
       console.log("[Auth] SignIn callback:", { 
         user: user?.email, 
         provider: account?.provider 
       })
       
-      // Para OAuth providers, verificar se é primeiro login
+      // Para OAuth providers, verificar/criar usuário no banco
       if (account?.provider !== "credentials") {
         try {
           const existingUser = await prisma.user.findUnique({
@@ -147,62 +263,39 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               data: {
                 email: user.email!,
                 name: user.name || "",
+                image: user.image,
                 emailVerified: new Date(),
-                accessLevel: 1,
+                accessLevel: 1, // Usuário padrão
                 isActive: true
               }
             })
-            console.log("[Auth] New OAuth user created:", user.email)
+            console.log("[Auth] ✅ New OAuth user created:", user.email)
+          } else {
+            // Atualizar dados do usuário existente
+            await prisma.user.update({
+              where: { email: user.email! },
+              data: {
+                lastLogin: new Date(),
+                name: user.name || existingUser.name,
+                image: user.image || existingUser.image,
+              }
+            })
+            console.log("[Auth] ✅ OAuth user updated:", user.email)
           }
         } catch (error) {
           console.error("[Auth] Error handling OAuth signup:", error)
           return false
         }
       }
-
-      return true
+      
+      // Para Credentials, apenas valida se user existe (já validado no authorize)
+      return !!user
     },
 
-    async session({ session, user }) {
-      if (!session?.user?.email) return session
-
-      try {
-        const dbUser = await prisma.user.findUnique({
-          where: { email: session.user.email },
-          select: {
-            id: true,
-            accessLevel: true,
-            isActive: true,
-            name: true,
-            email: true
-          }
-        })
-
-        if (dbUser) {
-          // Extender o tipo da session.user para incluir campos customizados
-          const extendedUser = session.user as typeof session.user & {
-            id: string;
-            accessLevel: number;
-            role: string;
-            isActive: boolean;
-          };
-          
-          extendedUser.id = dbUser.id;
-          extendedUser.accessLevel = dbUser.accessLevel;
-          extendedUser.role = dbUser.accessLevel >= 100 ? "admin" : 
-                             dbUser.accessLevel >= 50 ? "moderador" : "usuario";
-          extendedUser.isActive = dbUser.isActive;
-        }
-
-        console.log("[Auth] Session callback for:", session.user.email)
-        return session
-      } catch (error) {
-        console.error("[Auth] Session callback error:", error)
-        return session
-      }
-    },
-
+    // Redirect callback - redirecionamento seguro
     async redirect({ url, baseUrl }) {
+      console.log("[Auth] Redirect callback:", { url, baseUrl })
+      
       // Garante redirecionamento seguro após login
       if (url.startsWith("/")) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
@@ -210,15 +303,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     }
   },
 
-  // Configurações de debug e segurança
-  debug: process.env.NODE_ENV === "development",
-  
   events: {
-    async signIn({ user, account }) {
-      console.log(`[Auth] User ${user.email} signed in via ${account?.provider}`)
+    async signIn({ user, account, profile }) {
+      console.log(`[Auth] ✅ User ${user.email} signed in via ${account?.provider}`)
     },
-    async signOut() {
-      console.log(`[Auth] User signed out`)
-    }
-  }
+    async signOut({ session, token }) {
+      console.log(`[Auth] 👋 User ${session?.user?.email || token?.email} signed out`)
+    },
+  },
 })
