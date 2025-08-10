@@ -29,6 +29,7 @@ function mapAccessLevelToRole(accessLevel?: number): string {
 }
 
 const AUTH_SECRET = process.env.AUTH_SECRET || 'DEV_PLACEHOLDER_SECRET_CHANGE_ME'
+const AUTH_DEBUG = process.env.AUTH_DEBUG === '1'
 
 /**
  * Montagem dinâmica da lista de providers do Auth.js.
@@ -121,6 +122,7 @@ export const authConfig: AuthConfig = {
   providers,
   callbacks: {
     async session({ session }) {
+  if (AUTH_DEBUG) console.info('[auth][callback:session] inicio', { hasUser: !!session.user, email: session.user?.email })
       if (!session.user?.email && !session.user?.id) return session
       const userRecord = await prisma.user.findFirst({
         where: {
@@ -135,14 +137,17 @@ export const authConfig: AuthConfig = {
         (session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).id = userRecord.id
         ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).accessLevel = userRecord.accessLevel
         ;(session.user as typeof session.user & { id?: string; role?: string; accessLevel?: number }).role = mapAccessLevelToRole(userRecord.accessLevel)
+        if (AUTH_DEBUG) console.info('[auth][callback:session] userRecord aplicado', { id: userRecord.id, accessLevel: userRecord.accessLevel })
       }
       return session
     },
     async signIn({ user, profile }) {
+      if (AUTH_DEBUG) console.info('[auth][callback:signIn] tentativa', { providerProfile: !!profile, email: user?.email })
       // Corrigir emailVerified: se vier boolean, converte para Date/null
       if (profile && typeof profile.email_verified === 'boolean' && user.email) {
         const emailVerified = profile.email_verified ? new Date() : null
         await prisma.user.update({ where: { email: user.email as string }, data: { emailVerified } }).catch(() => {})
+        if (AUTH_DEBUG) console.info('[auth][callback:signIn] emailVerified ajustado', { email: user.email, emailVerified: typeof profile.email_verified })
       }
       return true
     },
@@ -163,11 +168,13 @@ export const authConfig: AuthConfig = {
 }
 
 export async function authHandler(request: Request) {
+  if (AUTH_DEBUG) console.info('[auth][handler] request', { method: (request as any).method, url: (request as any).url })
   return Auth(request, authConfig)
 }
 
 // Helper para recuperar sessão a partir do cookie de sessão (Session model)
 export async function auth() {
+  if (AUTH_DEBUG) console.info('[auth][session:get] lendo cookies para sessão')
   const store = await cookies()
   const candidates = ['__Secure-authjs.session-token', 'authjs.session-token', 'next-auth.session-token']
   let sessionToken: string | undefined
@@ -175,6 +182,7 @@ export async function auth() {
     const cookie = store.get(c)
     if (cookie?.value) { sessionToken = cookie.value; break }
   }
+  if (AUTH_DEBUG) console.info('[auth][session:get] sessionToken encontrado?', { has: !!sessionToken })
   if (!sessionToken) return null
   const sessionRecord = await prisma.session.findUnique({
     where: { sessionToken },
@@ -182,6 +190,7 @@ export async function auth() {
   })
   if (!sessionRecord) return null
   if (sessionRecord.expires.getTime() < Date.now()) return null
+  if (AUTH_DEBUG) console.info('[auth][session:get] sessão válida', { userId: sessionRecord.userId })
   const accessLevel = sessionRecord.user.accessLevel
   return {
     user: {
