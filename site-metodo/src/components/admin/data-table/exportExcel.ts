@@ -1,24 +1,112 @@
 /**
- * AVISO DE SEGURANÇA: O pacote xlsx (SheetJS) utilizado neste arquivo está vulnerável a Prototype Pollution e ReDoS em todas as versões publicadas no npm.
- * O uso aqui é restrito à exportação de dados (NÃO leitura de arquivos externos), o que mitiga o risco.
- * Nunca utilize este código para ler arquivos Excel de fontes não confiáveis.
- * Para máxima segurança, considere migrar para exceljs ou importar SheetJS diretamente do CDN oficial.
- * Mais informações: https://cdn.sheetjs.com/advisories/CVE-2023-30533 e https://cdn.sheetjs.com/advisories/CVE-2024-22363
+ * Exportação Excel usando ExcelJS - Biblioteca segura e moderna
+ * 
+ * ExcelJS é uma biblioteca mais segura que oferece:
+ * ✅ Sem vulnerabilidades conhecidas de Prototype Pollution
+ * ✅ Melhor performance para arquivos grandes
+ * ✅ Suporte nativo a TypeScript
+ * ✅ Mais funcionalidades de formatação
  */
-// use client
-// Exportação Excel usando SheetJS (xlsx). Carregamento dinâmico para minimizar impacto no bundle.
-// Converte linhas (array de objetos) em planilha simples.
+'use client'
 
-export async function salvarExcel(linhas: Record<string, unknown>[], nomeBase: string) {
-  if (!linhas.length) return;
-  const xlsx = await import('xlsx');
-  const colunas = Object.keys(linhas[0]);
-  const aoa: unknown[][] = [colunas];
-  for (const l of linhas) {
-    aoa.push(colunas.map((c) => l[c] ?? ''));
+import ExcelJS from 'exceljs'
+
+/**
+ * Exporta dados para arquivo Excel usando ExcelJS
+ * @param linhas Array de objetos com os dados a serem exportados
+ * @param nomeBase Nome base do arquivo (será adicionada a data)
+ * @param nomeAba Nome da aba/planilha (padrão: 'Dados')
+ */
+export async function salvarExcel(
+  linhas: Record<string, unknown>[], 
+  nomeBase: string,
+  nomeAba: string = 'Dados'
+) {
+  if (!linhas.length) {
+    console.warn('Não há dados para exportar')
+    return
   }
-  const ws = xlsx.utils.aoa_to_sheet(aoa);
-  const wb = xlsx.utils.book_new();
-  xlsx.utils.book_append_sheet(wb, ws, 'Dados');
-  xlsx.writeFileXLSX(wb, `${nomeBase}-${new Date().toISOString().slice(0,10)}.xlsx`);
+
+  try {
+    // Criar nova planilha
+    const workbook = new ExcelJS.Workbook()
+    const worksheet = workbook.addWorksheet(nomeAba)
+
+    // Obter colunas do primeiro objeto
+    const colunas = Object.keys(linhas[0])
+    
+    // Definir headers da planilha
+    worksheet.columns = colunas.map(coluna => ({
+      header: coluna.charAt(0).toUpperCase() + coluna.slice(1), // Capitalizar primeira letra
+      key: coluna,
+      width: 15 // Largura padrão
+    }))
+
+    // Aplicar estilo ao header
+    worksheet.getRow(1).font = { bold: true }
+    worksheet.getRow(1).fill = {
+      type: 'pattern',
+      pattern: 'solid',
+      fgColor: { argb: 'FFE0E0E0' }
+    }
+
+    // Adicionar dados
+    linhas.forEach(linha => {
+      const row = worksheet.addRow(linha)
+      
+      // Aplicar formatação de borda a todas as células
+      row.eachCell((cell) => {
+        cell.border = {
+          top: { style: 'thin' },
+          left: { style: 'thin' },
+          bottom: { style: 'thin' },
+          right: { style: 'thin' }
+        }
+      })
+    })
+
+    // Aplicar borda ao header também
+    worksheet.getRow(1).eachCell((cell) => {
+      cell.border = {
+        top: { style: 'thin' },
+        left: { style: 'thin' },
+        bottom: { style: 'thin' },
+        right: { style: 'thin' }
+      }
+    })
+
+    // Ajustar largura das colunas automaticamente
+    worksheet.columns.forEach(column => {
+      if (column.values) {
+        const lengths = column.values.map(v => v ? v.toString().length : 10)
+        const maxLength = Math.max(...lengths.filter(v => typeof v === 'number'))
+        column.width = Math.min(Math.max(maxLength + 2, 10), 50) // Min 10, Max 50
+      }
+    })
+
+    // Gerar nome do arquivo com data
+    const hoje = new Date().toISOString().slice(0, 10)
+    const nomeArquivo = `${nomeBase}-${hoje}.xlsx`
+
+    // Salvar arquivo
+    const buffer = await workbook.xlsx.writeBuffer()
+    const blob = new Blob([buffer], { 
+      type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' 
+    })
+    
+    // Criar link de download
+    const url = window.URL.createObjectURL(blob)
+    const a = document.createElement('a')
+    a.href = url
+    a.download = nomeArquivo
+    document.body.appendChild(a)
+    a.click()
+    window.URL.revokeObjectURL(url)
+    document.body.removeChild(a)
+
+    console.log(`Arquivo ${nomeArquivo} exportado com sucesso!`)
+  } catch (error) {
+    console.error('Erro ao exportar Excel:', error)
+    throw new Error('Falha na exportação do arquivo Excel')
+  }
 }
