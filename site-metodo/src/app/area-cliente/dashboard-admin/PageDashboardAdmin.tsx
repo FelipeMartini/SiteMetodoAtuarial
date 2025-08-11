@@ -4,19 +4,22 @@ export const dynamic = "force-dynamic";
 import React from "react";
 import { useAuth } from "@/app/hooks/useAuth";
 import { Skeleton } from "@/components/ui/skeleton";
+import { AdminLayout } from "@/components/admin-layout";
 import DashboardAdmin from "@/app/area-cliente/DashboardAdmin";
 
 const PageDashboardAdmin: React.FC = () => {
   const { data: session, status } = useAuth();
   if (status === "loading") {
     return (
-      <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
-        <Skeleton className="h-[32px] w-[320px] mb-6" />
-        <Skeleton className="h-[48px] w-full mb-2" />
-        {[...Array(5)].map((_, idx) => (
-          <Skeleton key={idx} className="h-[40px] w-full mb-2" />
-        ))}
-      </div>
+      <AdminLayout>
+        <div style={{ maxWidth: 900, margin: "0 auto", padding: 32 }}>
+          <Skeleton className="h-[32px] w-[320px] mb-6" />
+          <Skeleton className="h-[48px] w-full mb-2" />
+          {[...Array(5)].map((_, idx) => (
+            <Skeleton key={idx} className="h-[40px] w-full mb-2" />
+          ))}
+        </div>
+      </AdminLayout>
     );
   }
   if (!session?.user) {
@@ -48,9 +51,9 @@ const PageDashboardAdmin: React.FC = () => {
     return null;
   }
   return (
-    <div>
+    <AdminLayout>
       <DashboardAdmin />
-    </div>
+    </AdminLayout>
   );
 };
 
