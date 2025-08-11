@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
   } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request data', details: error.issues },
+        { success: false, error: 'Invalid request data', details: _error.issues },
         { status: 400 }
       )
     }
@@ -111,7 +111,7 @@ export async function DELETE(request: NextRequest) {
   } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request data', details: error.issues },
+        { success: false, error: 'Invalid request data', details: _error.issues },
         { status: 400 }
       )
     }

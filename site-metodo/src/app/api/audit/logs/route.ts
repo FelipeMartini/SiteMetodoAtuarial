@@ -107,7 +107,7 @@ export async function GET(request: NextRequest) {
       hasMore: result.hasMore,
     })
   } catch (_error) {
-    structuredLogger.error('Error fetching audit logs', error as Error, {
+    structuredLogger.error('Error fetching audit logs', _error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })
@@ -174,7 +174,7 @@ async function handleExport(filters: LogFilters, userId: string) {
       },
     })
   } catch (_error) {
-    structuredLogger.error('Error exporting audit logs', error as Error, { userId })
+    structuredLogger.error('Error exporting audit logs', _error as Error, { userId })
     return NextResponse.json({ error: 'Erro ao exportar logs' }, { status: 500 })
   }
 }

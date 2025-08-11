@@ -31,7 +31,7 @@ export async function POST(req: Request) {
     })
   } catch (_error) {
     return new Response(
-      JSON.stringify({ success: false, error: error instanceof Error ? _error.message : error }),
+      JSON.stringify({ success: false, error: _error instanceof Error ? _error.message : _error }),
       { status: 500 }
     )
   }

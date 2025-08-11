@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       stats,
     })
   } catch (_error) {
-    structuredLogger.error('Error fetching audit stats', error as Error, {
+    structuredLogger.error('Error fetching audit stats', _error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })

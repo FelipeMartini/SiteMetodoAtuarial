@@ -1,65 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getEnforcer } from '@/lib/abac/enforcer'
 import { withABACAuthorization } from '@/lib/abac/middleware'
-import { prisma } from '@/lib/prisma'
 import { z } from 'zod'
 
 /**
- * API Routes for ABAC Role Management
+ * API Routes for ABAC Policy Management (renamed from roles for pure ABAC)
+ * This endpoint manages user policies instead of roles
  */
 
-const RoleAssignmentSchema = z.object({
+const PolicyAssignmentSchema = z.object({
   userEmail: z.string().email(),
-  roleName: z.string(),
+  resource: z.string(),
+  action: z.string(),
+  effect: z.enum(['allow', 'deny']).default('allow'),
 })
 
-// const UserRolesQuerySchema = z.object({
-//   userEmail: z.string().email().optional(),
-//   roleName: z.string().optional()
-// });
-
 /**
- * GET /api/abac/roles - Get roles for user or users for role
+ * GET /api/abac/roles - Get all policies (kept URL for backward compatibility)
  */
 export async function GET() {
   try {
-    const roleAssignments = await prisma.userRole.findMany({
-      include: {
-        user: {
-          select: {
-            email: true,
-            name: true,
-          },
-        },
-        role: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    })
+    const enforcer = await getEnforcer()
+    const policies = await enforcer.getAllPolicies()
 
     return NextResponse.json({
       success: true,
-      data: roleAssignments.map(
-        (assignment: {
-          user: { email: string | null; name: string | null }
-          role: { name: string }
-          assignedAt: Date
-        }) => ({
-          userEmail: assignment.user.email || '',
-          userName: assignment.user.name,
-          roleName: assignment.role.name,
-          assignedAt: assignment.assignedAt,
-        })
-      ),
+      data: policies,
     })
   } catch (_error) {
-    console.error('Error fetching role assignments:', String(_error))
+    console.error('Error fetching policies:', String(_error))
     return NextResponse.json(
       {
         success: false,
-        error: 'Falha ao buscar atribuições de roles',
+        error: 'Falha ao buscar políticas',
       },
       { status: 500 }
     )
@@ -67,72 +40,89 @@ export async function GET() {
 }
 
 /**
- * POST /api/abac/roles - Assign role to user
+ * POST /api/abac/roles - Assign policy to user
  */
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json()
-    const { userEmail, roleName } = RoleAssignmentSchema.parse(body)
+    const { userEmail, resource, action, effect } = PolicyAssignmentSchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const added = await enforcer.addRoleForUser(userEmail, roleName)
+    const added = await enforcer.addPolicy({
+      id: `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      subject: userEmail,
+      object: resource,
+      action,
+      effect,
+      description: `Policy for ${userEmail} to ${action} ${resource}`,
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
 
     if (added) {
       return NextResponse.json({
         success: true,
-        message: `Role '${roleName}' assigned to user '${userEmail}' successfully`,
+        message: `Policy '${effect}' for '${action}' on '${resource}' assigned to user '${userEmail}' successfully`,
       })
     } else {
       return NextResponse.json(
-        { success: false, error: 'Role assignment already exists or failed' },
+        { success: false, error: 'Policy assignment already exists or failed' },
         { status: 400 }
       )
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request data', details: error.issues },
+        { success: false, error: 'Invalid request data', details: _error.issues },
         { status: 400 }
       )
     }
 
-    console.error('Error assigning role:', String(_error))
-    return NextResponse.json({ success: false, error: 'Failed to assign role' }, { status: 500 })
+    console.error('Error assigning policy:', String(_error))
+    return NextResponse.json({ success: false, error: 'Failed to assign policy' }, { status: 500 })
   }
 }
 
 /**
- * DELETE /api/abac/roles - Remove role from user
+ * DELETE /api/abac/roles - Remove policy from user
  */
 export async function DELETE(request: NextRequest) {
   try {
     const body = await request.json()
-    const { userEmail, roleName } = RoleAssignmentSchema.parse(body)
+    const { userEmail, resource, action } = PolicyAssignmentSchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const removed = await enforcer.deleteRoleForUser(userEmail, roleName)
+    const removed = await enforcer.removePolicy({
+      id: '', // ID não é usado para remoção, apenas para criação
+      subject: userEmail,
+      object: resource,
+      action,
+      effect: 'allow', // Default for removal
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    })
 
     if (removed) {
       return NextResponse.json({
         success: true,
-        message: `Role '${roleName}' removed from user '${userEmail}' successfully`,
+        message: `Policy for '${action}' on '${resource}' removed from user '${userEmail}' successfully`,
       })
     } else {
       return NextResponse.json(
-        { success: false, error: 'Role assignment not found' },
+        { success: false, error: 'Policy not found' },
         { status: 404 }
       )
     }
   } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
-        { success: false, error: 'Invalid request data', details: error.issues },
+        { success: false, error: 'Invalid request data', details: _error.issues },
         { status: 400 }
       )
     }
 
-    console.error('Error removing role:', String(_error))
-    return NextResponse.json({ success: false, error: 'Failed to remove role' }, { status: 500 })
+    console.error('Error removing policy:', String(_error))
+    return NextResponse.json({ success: false, error: 'Failed to remove policy' }, { status: 500 })
   }
 }
 
