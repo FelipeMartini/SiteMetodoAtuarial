@@ -33,7 +33,7 @@ export default function TermosUsoPage() {
             </CardHeader>
             <CardContent className="space-y-4">
               <p className="text-muted-foreground leading-relaxed">
-                Ao acessar e usar o site do Método Atuarial ("Site"), você aceita e concorda 
+                Ao acessar e usar o site do Método Atuarial (&quot;Site&quot;), você aceita e concorda 
                 em ficar vinculado aos termos e condições deste Acordo. Se você não concordar 
                 com todos os termos e condições deste acordo, então você não pode acessar o 
                 Site ou usar qualquer serviço.

@@ -222,7 +222,7 @@ export default function DocumentacaoPage() {
                 <CardContent className="text-center py-12">
                   <FileText className="w-16 h-16 text-muted-foreground mx-auto mb-4" />
                   <p className="text-muted-foreground">
-                    Nenhum documento encontrado para "{searchTerm}"
+                    Nenhum documento encontrado para &quot;{searchTerm}&quot;
                   </p>
                 </CardContent>
               </Card>
@@ -353,7 +353,7 @@ export default function DocumentacaoPage() {
                         Como obter uma chave de API?
                       </h4>
                       <p className="text-sm text-muted-foreground">
-                        Acesse sua área cliente e navegue até "Configurações > API Keys" 
+                        Acesse sua área cliente e navegue até &quot;Configurações &gt; API Keys&quot; 
                         para gerar uma nova chave de autenticação.
                       </p>
                     </div>
