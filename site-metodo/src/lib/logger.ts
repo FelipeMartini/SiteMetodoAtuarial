@@ -45,7 +45,7 @@ const prodFormat = format.combine(
       message: info.message,
       service: 'metodo-atuarial',
       environment: process.env.NODE_ENV,
-      ...info.meta,
+      ...(info.meta && typeof info.meta === 'object' ? info.meta : {}),
     })
   })
 )

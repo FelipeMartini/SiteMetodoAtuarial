@@ -1,4 +1,4 @@
-import { structuredLogger, performanceLogger } from './logger'
+import { simpleLogger } from './simple-logger'
 
 interface PerformanceMetric {
   name: string
@@ -66,16 +66,14 @@ export class MonitoringService {
     this.checkAlerts(metric)
 
     // Log estruturado
-    performanceLogger.api(
-      metric.name,
-      'METRIC',
-      metric.value,
-      200,
-      {
-        unit: metric.unit,
-        tags: metric.tags,
-      }
-    )
+    simpleLogger.info('API Performance', {
+      name: metric.name,
+      type: 'METRIC',
+      value: metric.value,
+      statusCode: 200,
+      unit: metric.unit,
+      tags: metric.tags,
+    })
   }
 
   /**
@@ -103,7 +101,7 @@ export class MonitoringService {
 
     // Log específico para APIs lentas
     if (responseTime > this.alertThresholds.responseTime) {
-      structuredLogger.warn(`Slow API response: ${method} ${endpoint}`, {
+      simpleLogger.warn(`Slow API response: ${method} ${endpoint}`, {
         endpoint,
         method,
         responseTime,
@@ -161,7 +159,7 @@ export class MonitoringService {
       },
     })
 
-    structuredLogger.error('Application error recorded', error, {
+    simpleLogger.error('Application error recorded', {
       userId: context?.userId,
       endpoint: context?.endpoint,
       severity,
@@ -200,7 +198,7 @@ export class MonitoringService {
       }
 
       // Log de saúde
-      structuredLogger.info('System health check', {
+      simpleLogger.info('System health check', {
         status: health.status,
         uptime: health.uptime,
         memoryUsage: health.memory.percentage,
@@ -210,7 +208,7 @@ export class MonitoringService {
 
       return health
     } catch (error) {
-      structuredLogger.error('Health check failed', error)
+      simpleLogger.error('Health check failed', { error: error instanceof Error ? error.message : String(error) })
       return {
         status: 'unhealthy',
         uptime: process.uptime(),
@@ -280,7 +278,7 @@ export class MonitoringService {
   private checkAlerts(metric: PerformanceMetric): void {
     // Verificar threshold de tempo de resposta
     if (metric.name.startsWith('api.') && metric.value > this.alertThresholds.responseTime) {
-      structuredLogger.warn(`Performance alert: ${metric.name} exceeded threshold`, {
+      simpleLogger.warn(`Performance alert: ${metric.name} exceeded threshold`, {
         metricName: metric.name,
         value: metric.value,
         threshold: this.alertThresholds.responseTime,
@@ -297,7 +295,7 @@ export class MonitoringService {
       )
       
       if (recentErrors.length > 10) { // Mais de 10 erros em 5 min
-        structuredLogger.error('High error rate detected', null, {
+        simpleLogger.error('High error rate detected', {
           errorCount: recentErrors.length,
           timeWindow: '5 minutes',
           threshold: 10,

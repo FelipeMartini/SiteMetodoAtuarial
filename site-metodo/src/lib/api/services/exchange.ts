@@ -129,7 +129,7 @@ export class ExchangeService {
     }
 
     // Get exchange rates for the base currency
-    const rates = await this.getExchangeRates(fromCurrency);
+    const rates = await this.fetchExchangeRateApi(fromCurrency);
     
     if (!rates.rates[toCurrency]) {
       throw new Error(`Exchange rate not available for ${toCurrency}`);
@@ -320,7 +320,7 @@ export class ExchangeService {
       throw new Error('Amount must be greater than zero');
     }
 
-    const rates = await this.getExchangeRates(fromCurrency);
+    const rates = await this.fetchExchangeRateApi(fromCurrency);
     const conversions: CurrencyConversion[] = [];
 
     for (const toCurrency of toCurrencies) {
