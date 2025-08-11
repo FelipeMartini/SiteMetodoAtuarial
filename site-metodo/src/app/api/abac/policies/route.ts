@@ -23,7 +23,7 @@ const PolicySchema = z.object({
 /**
  * GET /api/abac/policies - Get all policies
  */
-export async function GET(): Promise<Response> {
+export async function GET(request: NextRequest): Promise<NextResponse> {
   try {
     const enforcer = await getEnforcer();
     const policies = await enforcer.getAllPolicies();

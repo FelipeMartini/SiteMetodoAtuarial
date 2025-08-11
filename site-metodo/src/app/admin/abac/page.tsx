@@ -59,11 +59,6 @@ export default function ABACManagementPage() {
     roleName: ''
   });
 
-  useEffect(() => {
-    loadPolicies();
-    loadRoleAssignments();
-  }, [loadPolicies, loadRoleAssignments]);
-
   const loadPolicies = useCallback(async () => {
     try {
       const response = await fetch('/api/abac/policies');
@@ -113,6 +108,11 @@ export default function ABACManagementPage() {
       });
     }
   }, [toast]);
+
+  useEffect(() => {
+    loadPolicies();
+    loadRoleAssignments();
+  }, [loadPolicies, loadRoleAssignments]);
 
   const addPolicy = async () => {
     try {
