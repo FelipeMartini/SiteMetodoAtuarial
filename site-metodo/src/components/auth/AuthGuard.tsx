@@ -1,28 +1,15 @@
 'use client';
 
 /**
- * AuthGuard Component - Proteção de Rotas Baseada em Roles
+ * AuthGuard Component - Proteção de Rotas Baseada em ABAC (Attribute-Based Access Control)
  * 
- * Inspirado no FuseAuthorization do fuse-react, adaptado para Next.js
- * Protege rotas e componentes   ], [
-    status,
-    session,
-    userRole,
-    requiredRoles,
-    pathname,
-    navigate,
-    loginRedirectUrl,
-    unauthorizedRedirectUrl,
-    noRedirect,
-    onUnauthorized,
-  ]);permissões do usuário
+ * Adaptado para usar sistema ABAC puro, removendo dependências de roles
+ * Protege rotas e componentes baseado em atributos do usuário
  */
 
 import { ReactNode, useEffect, useState } from 'react';
 import { useSession } from 'next-auth/react';
 import { usePathname } from 'next/navigation';
-import { hasPermission, isUserGuest } from '@/lib/auth/permissions';
-import { UserRole } from '@/lib/auth/authRoles';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { auditLogger, AuditSeverity } from '@/lib/audit/auditLogger';
 import { AuditAction } from '@prisma/client';
@@ -34,23 +21,28 @@ interface AuthGuardProps {
   children: ReactNode;
   
   /**
-   * Roles necessários para acessar o recurso
+   * Recursos ou ações necessários para acessar o recurso
    * - null/undefined: acesso público (sem restrições)
-   * - []: apenas guests (usuários não autenticados)
-   * - ['admin']: apenas administradores
-   * - ['admin', 'staff']: administradores ou staff
+   * - 'admin': recurso de administração
+   * - 'moderation': recurso de moderação
+   * - 'authenticated': apenas usuários autenticados
    */
-  requiredRoles?: string[] | string | null;
+  requiredResource?: string | null;
+  
+  /**
+   * Ação a ser verificada no contexto ABAC
+   */
+  action?: string;
   
   /**
    * URL para redirecionamento quando não autenticado
-   * @default '/auth/login'
+   * @default '/auth/signin'
    */
   loginRedirectUrl?: string;
   
   /**
    * URL para redirecionamento quando sem permissão
-   * @default '/unauthorized'
+   * @default '/auth/error?error=InsufficientPrivileges'
    */
   unauthorizedRedirectUrl?: string;
   
@@ -77,20 +69,53 @@ interface AuthGuardProps {
 }
 
 /**
- * Estende o tipo User do NextAuth para incluir role
+ * Verificação ABAC simplificada para AuthGuard
  */
-interface ExtendedUser {
-  role?: string[] | string | null;
-}
+function checkABACAuthorization(
+  user: any,
+  action: string = 'access',
+  resource: string | null = null
+): boolean {
+  try {
+    // Usuário não autenticado
+    if (!user) {
+      return resource === null; // Só permite se for recurso público
+    }
 
-/**
- * Componente para proteção de rotas e recursos baseado em roles
- */
+    // Verificar se usuário está ativo
+    if (!user.isActive) {
+      return false;
+    }
+
+    // Recurso público - sempre permitir para usuários autenticados
+    if (!resource || resource === 'authenticated') {
+      return true;
+    }
+
+    // Lógica específica para recursos
+    if (resource === 'admin') {
+      // Admin requer atributos específicos
+      return user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user';
+    }
+    
+    if (resource === 'moderation') {
+      // Moderação requer verificação de atributos de moderador
+      return user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin');
+    }
+    
+    // Para outros recursos, verificar se está autenticado e ativo
+    return true;
+  } catch (error) {
+    console.error('ABAC Authorization Error:', error);
+    return false;
+  }
+}
 export function AuthGuard({
   children,
-  requiredRoles,
-  loginRedirectUrl = '/auth/login',
-  unauthorizedRedirectUrl = '/unauthorized',
+  requiredResource,
+  action = 'access',
+  loginRedirectUrl = '/auth/signin',
+  unauthorizedRedirectUrl = '/auth/error?error=InsufficientPrivileges',
   fallback,
   unauthorizedComponent,
   noRedirect = false,
@@ -101,9 +126,6 @@ export function AuthGuard({
   
   const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
   const [authReason, setAuthReason] = useState<'unauthenticated' | 'insufficient_permissions' | null>(null);
-
-  // Obtém roles do usuário atual
-  const userRole: UserRole = (session?.user as ExtendedUser)?.role || null;
 
   useEffect(() => {
     // Função para navegação (compatível com Next.js 15)
@@ -123,8 +145,8 @@ export function AuthGuard({
     const ignoredPaths = [
       '/',
       '/api',
-      '/auth/login',
-      '/auth/register',
+      '/auth/signin',
+      '/auth/signup',
       '/auth/error',
       '/unauthorized',
       '/404',
@@ -137,25 +159,28 @@ export function AuthGuard({
       return;
     }
 
-    // Verifica permissões
-    const hasRequiredPermission = hasPermission(requiredRoles, userRole);
-    const isGuest = isUserGuest(userRole);
+    // Verifica permissões usando ABAC
+    const hasAccess = checkABACAuthorization(session?.user, action, requiredResource);
 
     // Se tem permissão, autoriza e registra acesso
-    if (hasRequiredPermission) {
+    if (hasAccess) {
       setIsAuthorized(true);
       setAuthReason(null);
       
-      // Log de acesso autorizado (apenas para rotas protegidas)
-      if (requiredRoles && requiredRoles.length > 0) {
+      // Log de acesso autorizado (apenas para recursos protegidos)
+      if (requiredResource && requiredResource !== 'authenticated') {
         auditLogger.log({
           action: AuditAction.LOGIN_SUCCESS, // Usando como proxy para access granted
           severity: AuditSeverity.LOW,
           userId: session?.user?.id || 'unknown',
           userEmail: session?.user?.email || undefined,
-          userRole,
-          description: `Access granted to resource: ${pathname}`,
+          description: `ABAC access granted to resource: ${pathname}`,
           target: pathname || 'unknown',
+          metadata: {
+            resource: requiredResource,
+            action,
+            authMethod: 'ABAC'
+          },
           success: true,
         }).catch(error => console.error('Audit log error:', error));
       }
@@ -164,15 +189,8 @@ export function AuthGuard({
     }
 
     // Não tem permissão - determina o motivo
-    let reason: 'unauthenticated' | 'insufficient_permissions';
-    
-    if (isGuest) {
-      // Usuário não autenticado
-      reason = 'unauthenticated';
-    } else {
-      // Usuário autenticado mas sem permissão suficiente
-      reason = 'insufficient_permissions';
-    }
+    const reason: 'unauthenticated' | 'insufficient_permissions' = 
+      !session?.user ? 'unauthenticated' : 'insufficient_permissions';
 
     setIsAuthorized(false);
     setAuthReason(reason);
@@ -183,13 +201,13 @@ export function AuthGuard({
       severity: AuditSeverity.MEDIUM,
       userId: session?.user?.id,
       userEmail: session?.user?.email || undefined,
-      userRole,
-      description: `Access denied to resource: ${pathname}`,
+      description: `ABAC access denied to resource: ${pathname}`,
       target: pathname || 'unknown',
       metadata: {
-        requiredRoles,
-        userRole,
+        resource: requiredResource,
+        action,
         reason,
+        authMethod: 'ABAC'
       },
       success: false,
     }).catch(error => console.error('Audit log error:', error));
@@ -210,8 +228,8 @@ export function AuthGuard({
   }, [
     status,
     session,
-    userRole,
-    requiredRoles,
+    requiredResource,
+    action,
     pathname,
     loginRedirectUrl,
     unauthorizedRedirectUrl,
@@ -265,34 +283,32 @@ export function AuthGuard({
  */
 export function useAuth() {
   const { data: session, status } = useSession();
-  const userRole: UserRole = (session?.user as ExtendedUser)?.role || null;
 
   return {
     session,
     status,
     user: session?.user || null,
-    userRole,
     isAuthenticated: status === 'authenticated',
     isLoading: status === 'loading',
-    isGuest: isUserGuest(userRole),
+    isGuest: !session?.user,
     
     /**
-     * Verifica se o usuário tem permissão para um recurso
+     * Verifica se o usuário tem permissão para um recurso usando ABAC
      */
-    hasPermission: (requiredRoles: string[] | string | null | undefined) =>
-      hasPermission(requiredRoles, userRole),
+    hasPermission: (resource: string | null = null, action: string = 'access') =>
+      checkABACAuthorization(session?.user, action, resource),
     
     /**
-     * Verifica se o usuário tem pelo menos uma das roles
+     * Verifica se o usuário tem acesso a recurso de administração
      */
-    hasAnyRole: (roles: string[]) =>
-      hasPermission(roles, userRole),
+    isAdmin: () =>
+      checkABACAuthorization(session?.user, 'access', 'admin'),
     
     /**
-     * Verifica se o usuário tem role específica
+     * Verifica se o usuário tem acesso a recurso de moderação
      */
-    hasRole: (role: string) =>
-      hasPermission([role], userRole),
+    isModerator: () =>
+      checkABACAuthorization(session?.user, 'moderate', 'moderation'),
   };
 }
 

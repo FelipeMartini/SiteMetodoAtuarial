@@ -77,12 +77,12 @@ function isRouteMatch(pathname: string, routes: string[]): boolean {
 /**
  * 🛡️ Verificação ABAC para autorização baseada em atributos
  */
-async function checkABACAuthorization(
+function checkABACAuthorization(
   user: any,
   action: string,
   resource: string,
   context: Record<string, any> = {}
-): Promise<boolean> {
+): boolean {
   try {
     // Para implementação completa futura do ABAC
     // Por enquanto, usamos uma lógica simplificada baseada em atributos do usuário
@@ -134,8 +134,7 @@ export default auth((req: NextRequest & { auth: any }) => {
       method,
       endpoint: pathname,
       isAuthenticated: !!session,
-      userRole: session?.user?.roleType,
-      accessLevel: session?.user?.accessLevel,
+      userEmail: session?.user?.email,
     })
   }
   
@@ -212,35 +211,45 @@ export default auth((req: NextRequest & { auth: any }) => {
       return NextResponse.redirect(new URL('/auth/error?error=AccountDisabled', req.url))
     }
 
-    // 👑 Verificar rotas de admin
+    // �️ Verificar rotas de admin usando ABAC
     if (isRouteMatch(pathname, ADMIN_ROUTES)) {
-      const accessLevel = session.user?.accessLevel || 0
-      if (accessLevel < 100) {
-        structuredLogger.security('Insufficient admin privileges', 'high', {
+      const hasAdminAccess = checkABACAuthorization(session.user, 'access', 'admin', {
+        ip,
+        userAgent,
+        endpoint: pathname,
+        method,
+      })
+      
+      if (!hasAdminAccess) {
+        structuredLogger.security('Insufficient admin privileges - ABAC denied', 'high', {
           userId: session.user?.id,
           email: session.user?.email,
-          accessLevel,
-          requiredLevel: 100,
           ip,
           userAgent,
           endpoint: pathname,
+          reason: 'abac_authorization_failed',
         })
         return NextResponse.redirect(new URL('/auth/error?error=InsufficientPrivileges', req.url))
       }
     }
 
-    // 🛠️ Verificar rotas de moderador
+    // 🛠️ Verificar rotas de moderador usando ABAC
     if (isRouteMatch(pathname, MODERATOR_ROUTES)) {
-      const accessLevel = session.user?.accessLevel || 0
-      if (accessLevel < 50) {
-        structuredLogger.security('Insufficient moderator privileges', 'medium', {
+      const hasModeratorAccess = checkABACAuthorization(session.user, 'moderate', 'moderation', {
+        ip,
+        userAgent,
+        endpoint: pathname,
+        method,
+      })
+      
+      if (!hasModeratorAccess) {
+        structuredLogger.security('Insufficient moderator privileges - ABAC denied', 'medium', {
           userId: session.user?.id,
           email: session.user?.email,
-          accessLevel,
-          requiredLevel: 50,
           ip,
           userAgent,
           endpoint: pathname,
+          reason: 'abac_authorization_failed',
         })
         return NextResponse.redirect(new URL('/auth/error?error=InsufficientPrivileges', req.url))
       }
@@ -250,12 +259,12 @@ export default auth((req: NextRequest & { auth: any }) => {
     structuredLogger.info('Authorized access granted', {
       userId: session.user?.id,
       email: session.user?.email,
-      roleType: session.user?.roleType,
-      accessLevel: session.user?.accessLevel,
+      isActive: session.user?.isActive,
       ip,
       userAgent,
       endpoint: pathname,
       method,
+      authorizationMethod: 'ABAC',
     })
     
     // Log performance para rota protegida
