@@ -215,7 +215,7 @@ export class AuditService {
         auditLogger.apiAccess(userId, method, endpoint, { ip, data })
       }
     } catch (_error) {
-      console.error('Erro ao registrar acesso à API:', error)
+      console.error('Erro ao registrar acesso à API:', String(error))
     }
   }
 

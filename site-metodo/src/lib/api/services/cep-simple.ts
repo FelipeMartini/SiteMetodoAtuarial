@@ -208,7 +208,7 @@ export class CepService {
           })
         )
     } catch (_error) {
-      console.error('Erro na busca por localização:', error)
+      console.error('Erro na busca por localização:', String(error))
       return []
     }
   }

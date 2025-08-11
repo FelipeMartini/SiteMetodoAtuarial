@@ -152,7 +152,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       // Atualiza contagem
       setUnreadCount(prev => Math.max(0, prev - 1))
     } catch (_error) {
-      console.error('Erro ao marcar como lida:', error)
+      console.error('Erro ao marcar como lida:', String(error))
       throw error
     }
   }, [])
@@ -192,7 +192,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setUnreadCount(0)
       return markedCount
     } catch (_error) {
-      console.error('Erro ao marcar todas como lidas:', error)
+      console.error('Erro ao marcar todas como lidas:', String(error))
       throw error
     }
   }, [])
@@ -223,7 +223,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return newNotifications
       })
     } catch (_error) {
-      console.error('Erro ao remover notificação:', error)
+      console.error('Erro ao remover notificação:', String(error))
       throw error
     }
   }, [])
@@ -445,7 +445,7 @@ export function usePushNotifications() {
       setSubscription(pushSubscription)
       return pushSubscription
     } catch (_error) {
-      console.error('Erro ao subscrever push notifications:', error)
+      console.error('Erro ao subscrever push notifications:', String(error))
       throw error
     }
   }
@@ -467,7 +467,7 @@ export function usePushNotifications() {
         setSubscription(null)
       }
     } catch (_error) {
-      console.error('Erro ao cancelar subscription:', error)
+      console.error('Erro ao cancelar subscription:', String(error))
       throw error
     }
   }
@@ -485,7 +485,7 @@ export function usePushNotifications() {
       const data = await response.json()
       return data.success
     } catch (_error) {
-      console.error('Erro no teste push:', error)
+      console.error('Erro no teste push:', String(error))
       return false
     }
   }

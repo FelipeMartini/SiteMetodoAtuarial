@@ -97,7 +97,7 @@ export async function PUT(request: NextRequest, { params }: { params: { id: stri
 
     return NextResponse.json(updatedUser)
   } catch (_error) {
-    console.error('Erro ao atualizar usuário:', error)
+    console.error('Erro ao atualizar usuário:', String(error))
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -151,7 +151,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
 
     return NextResponse.json({ message: 'Usuário excluído com sucesso' })
   } catch (_error) {
-    console.error('Erro ao excluir usuário:', error)
+    console.error('Erro ao excluir usuário:', String(error))
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }
 }

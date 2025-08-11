@@ -105,8 +105,8 @@ export async function salvarExcel(
     document.body.removeChild(a)
 
     console.log(`Arquivo ${nomeArquivo} exportado com sucesso!`)
-  } catch (error) {
-    console.error('Erro ao exportar Excel:', error)
+  } catch (error: any) {
+    console.error('Erro ao exportar Excel:', String(error))
     throw new Error('Falha na exportação do arquivo Excel')
   }
 }

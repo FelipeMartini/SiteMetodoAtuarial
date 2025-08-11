@@ -80,7 +80,7 @@ const ApiMonitoringDashboard: React.FC = () => {
       })
       setLastUpdate(new Date())
     } catch (_error) {
-      console.error('Erro ao carregar estatísticas:', error)
+      console.error('Erro ao carregar estatísticas:', String(error))
     } finally {
       setLoading(false)
     }
