@@ -44,6 +44,12 @@ model User {
   // 📝 Auditoria e logs
   auditLogs     AuditLog[]
   
+  // 🔔 Sistema de Notificações
+  notifications          Notification[]
+  notificationPreferences NotificationPreference[]
+  pushSubscriptions      PushSubscription[]
+  notificationEvents     NotificationEvent[]
+  
   @@index([email])
   @@index([roleType])
   @@index([isActive])
@@ -264,4 +270,215 @@ model AccessLog {
 enum AccessResult {
   allow
   deny
+}
+
+// 🔔 SISTEMA DE NOTIFICAÇÕES
+// =========================
+
+// 📬 Notificações principais
+model Notification {
+  id          String             @id @default(cuid())
+  userId      String
+  type        NotificationType
+  channel     NotificationChannel
+  priority    NotificationPriority @default(normal)
+  status      NotificationStatus   @default(pending)
+  
+  // Conteúdo
+  title       String
+  message     String
+  data        String?             // JSON com dados adicionais
+  
+  // Timestamps
+  scheduledFor DateTime?          // Agendamento
+  sentAt      DateTime?           // Quando foi enviada
+  readAt      DateTime?           // Quando foi lida
+  expiresAt   DateTime?           // Expiração
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+  
+  // Relacionamentos
+  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  queueItems  NotificationQueue[]
+  events      NotificationEvent[]
+  
+  @@index([userId])
+  @@index([type])
+  @@index([channel])
+  @@index([status])
+  @@index([priority])
+  @@index([scheduledFor])
+  @@index([sentAt])
+  @@index([createdAt])
+  @@index([expiresAt])
+}
+
+// 📝 Templates de notificação
+model NotificationTemplate {
+  id           String             @id @default(cuid())
+  name         String             @unique
+  type         NotificationType
+  channel      NotificationChannel
+  
+  // Conteúdo do template
+  subject      String?            // Para emails
+  htmlTemplate String?            // Template HTML
+  textTemplate String?            // Template texto
+  variables    String             // JSON array com variáveis disponíveis
+  
+  // Metadados
+  description  String?
+  category     String?
+  isActive     Boolean            @default(true)
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
+  
+  @@index([type])
+  @@index([channel])
+  @@index([isActive])
+  @@index([category])
+}
+
+// ⚙️ Preferências de notificação por usuário
+model NotificationPreference {
+  id        String             @id @default(cuid())
+  userId    String
+  channel   NotificationChannel
+  type      NotificationType
+  enabled   Boolean            @default(true)
+  frequency String?            // immediate, daily, weekly, monthly
+  
+  // Horário de silêncio
+  quietHoursStart String?      // HH:mm
+  quietHoursEnd   String?      // HH:mm
+  timezone        String?      // Timezone do usuário
+  
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+  
+  // Relacionamentos
+  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, channel, type])
+  @@index([userId])
+  @@index([channel])
+  @@index([type])
+  @@index([enabled])
+}
+
+// 📱 Subscrições para push notifications
+model PushSubscription {
+  id         String   @id @default(cuid())
+  userId     String
+  endpoint   String   @unique
+  p256dh     String   // Chave de criptografia
+  auth       String   // Chave de autenticação
+  userAgent  String?  // Browser/device info
+  isActive   Boolean  @default(true)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  
+  // Relacionamentos
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([userId])
+  @@index([isActive])
+}
+
+// 📮 Fila de processamento de notificações
+model NotificationQueue {
+  id             String              @id @default(cuid())
+  notificationId String
+  priority       NotificationPriority @default(normal)
+  attempts       Int                 @default(0)
+  maxAttempts    Int                 @default(3)
+  nextRetry      DateTime?
+  error          String?             // Último erro
+  status         String              @default("pending") // pending, processing, completed, failed
+  
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+  
+  // Relacionamentos
+  notification   Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  
+  @@index([notificationId])
+  @@index([status])
+  @@index([priority])
+  @@index([nextRetry])
+  @@index([createdAt])
+}
+
+// 📊 Eventos de notificação (para analytics)
+model NotificationEvent {
+  id             String             @id @default(cuid())
+  notificationId String
+  userId         String
+  type           String             // sent, delivered, read, clicked, failed
+  channel        NotificationChannel
+  metadata       String?            // JSON com dados adicionais
+  timestamp      DateTime           @default(now())
+  
+  // Relacionamentos
+  notification   Notification       @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  
+  @@index([notificationId])
+  @@index([userId])
+  @@index([type])
+  @@index([channel])
+  @@index([timestamp])
+}
+
+// 📨 Templates de email específicos
+model EmailTemplate {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  subject     String
+  html        String   // Template HTML
+  text        String?  // Versão texto
+  variables   String   // JSON array com variáveis
+  category    String?  // Categoria do template
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  @@index([category])
+  @@index([isActive])
+}
+
+// 🔔 Enums para notificações
+enum NotificationType {
+  info
+  success
+  warning
+  error
+  security
+  system
+  user_action
+  marketing
+}
+
+enum NotificationChannel {
+  in_app
+  email
+  push
+  sms
+  webhook
+}
+
+enum NotificationStatus {
+  pending
+  sent
+  delivered
+  read
+  failed
+  cancelled
+}
+
+enum NotificationPriority {
+  low
+  normal
+  high
+  urgent
 }
