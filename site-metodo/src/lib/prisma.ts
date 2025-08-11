@@ -42,7 +42,7 @@ export async function checkDatabaseConnection() {
     console.log('✅ Database connection successful')
     return true
   } catch (_error) {
-    console.error('❌ Database connection failed:', error)
+    console.error('❌ Database connection failed:', String(error))
     return false
   }
 }

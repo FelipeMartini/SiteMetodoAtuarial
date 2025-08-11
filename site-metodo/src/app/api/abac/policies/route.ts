@@ -33,7 +33,7 @@ export async function GET(): Promise<NextResponse> {
       data: policies,
     })
   } catch (_error) {
-    console.error('Error fetching policies:', error)
+    console.error('Error fetching policies:', String(error))
     return NextResponse.json({ success: false, error: 'Failed to fetch policies' }, { status: 500 })
   }
 }
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Error adding policy:', error)
+    console.error('Error adding policy:', String(error))
     return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 500 })
   }
 }
@@ -116,7 +116,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    console.error('Error removing policy:', error)
+    console.error('Error removing policy:', String(error))
     return NextResponse.json({ success: false, error: 'Failed to remove policy' }, { status: 500 })
   }
 }

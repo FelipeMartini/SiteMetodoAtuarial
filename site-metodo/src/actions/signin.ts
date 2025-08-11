@@ -46,7 +46,7 @@ export async function signInCredentials(
       }
     }
   } catch (_error) {
-    console.error('[SignIn] Erro na autenticação credentials:', error)
+    console.error('[SignIn] Erro na autenticação credentials:', String(error))
 
     // Melhor tratamento de erro para Auth.js v5
     if (error instanceof Error) {
@@ -138,7 +138,7 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
       throw error // Re-throw para permitir o redirect
     }
 
-    console.error('[SignIn] Erro na autenticação OAuth:', error)
+    console.error('[SignIn] Erro na autenticação OAuth:', String(error))
 
     // Melhor tratamento de erro para OAuth
     if (error instanceof Error) {
@@ -202,7 +202,7 @@ export async function signInEmail(
       }
     }
   } catch (_error) {
-    console.error('[SignIn] Erro no login por email:', error)
+    console.error('[SignIn] Erro no login por email:', String(error))
     return {
       status: 'error',
       errorMessage: 'Falha no envio do email de login',

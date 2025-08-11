@@ -145,7 +145,7 @@ export class NotificationWebSocketServer {
 
       await this.sendMessageToUser(userId, message)
     } catch (_error) {
-      simpleLogger.error('Erro ao notificar contagem não lidas', { error, userId })
+      simpleLogger.error('Erro ao notificar contagem não lidas', { error: String(error), userId })
     }
   }
 
@@ -294,7 +294,7 @@ export class NotificationWebSocketServer {
 
       this.sendMessageToConnection(ws, message)
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar dados iniciais', { error, userId })
+      simpleLogger.error('Erro ao enviar dados iniciais', { error: String(error), userId })
     }
   }
 

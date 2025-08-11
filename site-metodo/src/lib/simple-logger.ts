@@ -3,7 +3,7 @@
  */
 
 export interface LogMeta {
-  [key: string]: Record<string, unknown>
+  [key: string]: any
 }
 
 export interface LogEntry {

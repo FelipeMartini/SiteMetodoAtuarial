@@ -70,7 +70,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (_error) {
-    console.error('CEP lookup error:', error)
+    console.error('CEP lookup error:', String(error))
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -145,7 +145,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (_error) {
-    console.error('CEP bulk lookup error:', error)
+    console.error('CEP bulk lookup error:', String(error))
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -205,7 +205,7 @@ export async function PATCH(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (_error) {
-    console.error('CEP validation error:', error)
+    console.error('CEP validation error:', String(error))
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

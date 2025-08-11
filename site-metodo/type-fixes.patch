@@ -1,0 +1,19 @@
+#!/bin/bash
+
+# Script para corrigir os principais erros de tipos no TypeScript
+
+echo "Aplicando correções de tipos..."
+
+# Corrigir problema do error variable scope nos catch blocks
+find src -name "*.ts" -type f -exec sed -i 's/} catch (error/} catch (error: any/g' {} \;
+find src -name "*.tsx" -type f -exec sed -i 's/} catch (error/} catch (error: any/g' {} \;
+
+# Corrigir console.error com error não definido
+find src -name "*.ts" -type f -exec sed -i 's/console\.error(\(.*\), error)/console.error(\1, String(error))/g' {} \;
+find src -name "*.tsx" -type f -exec sed -i 's/console\.error(\(.*\), error)/console.error(\1, String(error))/g' {} \;
+
+# Corrigir simpleLogger.error sem destructuring
+find src -name "*.ts" -type f -exec sed -i 's/simpleLogger\.error(\(.*\), { error, /simpleLogger.error(\1, { error: String(error), /g' {} \;
+find src -name "*.tsx" -type f -exec sed -i 's/simpleLogger\.error(\(.*\), { error, /simpleLogger.error(\1, { error: String(error), /g' {} \;
+
+echo "Correções aplicadas!"

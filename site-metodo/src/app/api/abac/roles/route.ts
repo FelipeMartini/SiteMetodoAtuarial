@@ -55,7 +55,7 @@ export async function GET() {
       ),
     })
   } catch (_error) {
-    console.error('Error fetching role assignments:', error)
+    console.error('Error fetching role assignments:', String(error))
     return NextResponse.json(
       {
         success: false,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Error assigning role:', error)
+    console.error('Error assigning role:', String(error))
     return NextResponse.json({ success: false, error: 'Failed to assign role' }, { status: 500 })
   }
 }
@@ -131,7 +131,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    console.error('Error removing role:', error)
+    console.error('Error removing role:', String(error))
     return NextResponse.json({ success: false, error: 'Failed to remove role' }, { status: 500 })
   }
 }

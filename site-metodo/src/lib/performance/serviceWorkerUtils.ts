@@ -36,7 +36,7 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
 
     return registration
   } catch (_error) {
-    console.error('Erro ao registrar Service Worker:', error)
+    console.error('Erro ao registrar Service Worker:', String(error))
     return null
   }
 }
@@ -58,7 +58,7 @@ export async function unregisterServiceWorker(): Promise<boolean> {
     }
     return false
   } catch (_error) {
-    console.error('Erro ao desregistrar Service Worker:', error)
+    console.error('Erro ao desregistrar Service Worker:', String(error))
     return false
   }
 }
@@ -158,7 +158,7 @@ export async function subscribeToPushNotifications(): Promise<PushSubscription |
 
     return subscription
   } catch (_error) {
-    console.error('Erro ao se inscrever para push notifications:', error)
+    console.error('Erro ao se inscrever para push notifications:', String(error))
     return null
   }
 }
@@ -274,7 +274,7 @@ export async function precacheResources(urls: string[]): Promise<void> {
     await cache.addAll(urls)
     console.log('Recursos pré-cached:', urls)
   } catch (_error) {
-    console.error('Erro ao pré-cachear recursos:', error)
+    console.error('Erro ao pré-cachear recursos:', String(error))
   }
 }
 

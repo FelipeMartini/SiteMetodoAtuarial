@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         return await handleGetAllStats()
     }
   } catch (_error) {
-    console.error('API monitoring error:', error)
+    console.error('API monitoring error:', String(error))
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(
@@ -120,7 +120,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
     }
   } catch (_error) {
-    console.error('API monitoring POST error:', error)
+    console.error('API monitoring POST error:', String(error))
 
     if (error instanceof z.ZodError) {
       return NextResponse.json(

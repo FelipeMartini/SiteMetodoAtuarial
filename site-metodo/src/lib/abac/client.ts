@@ -31,7 +31,7 @@ export async function checkClientPermission(
     const data = await response.json()
     return data.allowed || false
   } catch (_error) {
-    console.error('Permission check error:', error)
+    console.error('Permission check error:', String(error))
     return false
   }
 }

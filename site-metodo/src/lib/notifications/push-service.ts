@@ -86,7 +86,7 @@ export class PushNotificationService {
         return created.id
       }
     } catch (_error) {
-      simpleLogger.error('Erro ao registrar push subscription', { error, userId })
+      simpleLogger.error('Erro ao registrar push subscription', { error: String(error), userId })
       throw error
     }
   }
@@ -105,7 +105,7 @@ export class PushNotificationService {
         endpoint: this.maskEndpoint(endpoint),
       })
     } catch (_error) {
-      simpleLogger.error('Erro ao remover subscription', { error, endpoint })
+      simpleLogger.error('Erro ao remover subscription', { error: String(error), endpoint })
       throw error
     }
   }
@@ -150,7 +150,7 @@ export class PushNotificationService {
             userId,
             subscriptionId: subscription.id,
           })
-        } catch (error: Record<string, unknown>) {
+        } catch (error: any: Record<string, unknown>) {
           simpleLogger.warn('Falha ao enviar push notification', {
             error: error.message,
             userId,
@@ -178,7 +178,7 @@ export class PushNotificationService {
 
       return sent > 0
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar push notification', { error, userId })
+      simpleLogger.error('Erro ao enviar push notification', { error: String(error), userId })
       return false
     }
   }
@@ -287,7 +287,7 @@ export class PushNotificationService {
         endpoint: this.maskEndpoint(sub.endpoint),
       }))
     } catch (_error) {
-      simpleLogger.error('Erro ao listar subscriptions do usuário', { error, userId })
+      simpleLogger.error('Erro ao listar subscriptions do usuário', { error: String(error), userId })
       return []
     }
   }
@@ -478,7 +478,7 @@ export const pushNotificationClient = {
 
       return subscription
     } catch (_error) {
-      console.error('Erro ao subscrever push notifications:', error)
+      console.error('Erro ao subscrever push notifications:', String(error))
       return null
     }
   },
@@ -497,7 +497,7 @@ export const pushNotificationClient = {
       }
       return true
     } catch (_error) {
-      console.error('Erro ao cancelar subscription:', error)
+      console.error('Erro ao cancelar subscription:', String(error))
       return false
     }
   },
