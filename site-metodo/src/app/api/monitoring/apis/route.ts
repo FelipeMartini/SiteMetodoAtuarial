@@ -150,7 +150,7 @@ async function handleHealthCheck(endpointName?: string) {
       return NextResponse.json(
         {
           error: `Health check failed for ${endpointName}`,
-          details: error instanceof Error ? _error.message : 'Unknown error',
+          details: _error instanceof Error ? _error.message : 'Unknown error',
         },
         { status: 404 }
       )
