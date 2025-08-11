@@ -112,15 +112,17 @@ export async function GET(request: NextRequest) {
     if (query.amount) {
       response.data.amount = query.amount
       response.data.convertedAmount = query.amount * rate
-      response.data.formatted = {
-        amount: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: query.from,
-        }).format(query.amount),
-        converted: new Intl.NumberFormat('pt-BR', {
-          style: 'currency',
-          currency: query.to,
-        }).format(query.amount * rate),
+      response.metadata = {
+        formatted: {
+          amount: new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: query.from,
+          }).format(query.amount),
+          converted: new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: query.to,
+          }).format(query.amount * rate),
+        }
       }
     }
 
