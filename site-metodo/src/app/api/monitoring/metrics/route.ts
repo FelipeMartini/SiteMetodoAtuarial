@@ -6,13 +6,12 @@ import { getClientIP } from '@/lib/utils/ip'
 import { z } from 'zod'
 
 // Schema para validação dos parâmetros
-const MetricsParamsSchema = z.object({
+const MetricsParams = z.object({
   metric: z.string().optional(),
   timeRange: z.string().optional().transform(str => str ? parseInt(str) : 3600000), // 1 hour default
   format: z.enum(['json', 'prometheus']).default('json'),
 })
 
-type MetricsParams = z.infer<typeof MetricsParamsSchema>;
 
 interface MetricData {
   avg: number;
@@ -56,7 +55,7 @@ export async function GET(request: NextRequest) {
 
     // Extrair e validar parâmetros
     const searchParams = request.nextUrl.searchParams
-    const params = MetricsParamsSchema.parse({
+    const params = MetricsParams.parse({
       metric: searchParams.get('metric') || undefined,
       timeRange: searchParams.get('timeRange') || undefined,
       format: searchParams.get('format') || 'json',
@@ -123,8 +122,8 @@ export async function GET(request: NextRequest) {
       metrics: metricsData,
       availableMetrics,
     })
-  } catch (error) {
-    structuredLogger.error('Error fetching metrics', error as Error, {
+  } catch (_error) {
+    structuredLogger.error('Error fetching metrics', _error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })

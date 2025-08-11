@@ -5,31 +5,34 @@
  * Site Método Atuarial - Authorization System
  */
 
-// Basic authorization interfaces
+// Pure ABAC System Types and Interfaces
 export interface Subject {
   id: string;
   email: string;
-  role: string;
+  authenticated: boolean;
   department?: string;
-  accessLevel?: number;
-  attributes?: Record<string, any>;
+  experience?: number;
+  subscription?: string;
+  attributes: Record<string, unknown>;
 }
 
 export interface Resource {
   id: string;
   type: string;
-  owner_id?: string;
+  ownerId?: string;
   department?: string;
-  attributes?: Record<string, any>;
+  attributes: Record<string, unknown>;
 }
 
 export interface Context {
   time?: Date;
+  hour?: number;
   location?: string;
   device?: string;
   ip?: string;
   userAgent?: string;
-  [key: string]: Record<string, unknown>;
+  moderation_mode?: boolean;
+  attributes: Record<string, unknown>;
 }
 
 export interface PolicyRule {
@@ -77,29 +80,15 @@ export interface PolicyManager {
   getPoliciesForObject(object: string): Promise<PolicyRule[]>;
 }
 
-export interface RoleManager {
-  addRole(role: RoleDefinition): Promise<boolean>;
-  removeRole(roleId: string): Promise<boolean>;
-  getRoles(): Promise<RoleDefinition[]>;
-  assignRoleToUser(userId: string, roleId: string): Promise<boolean>;
-  removeRoleFromUser(userId: string, roleId: string): Promise<boolean>;
-  getUserRoles(userId: string): Promise<string[]>;
-}
-
-// Enforcement interfaces
+// Pure ABAC Enforcement interfaces (no RBAC methods)
 export interface Enforcer {
   enforce(request: AuthorizationRequest): Promise<AuthorizationResult>;
   addPolicy(policy: PolicyRule): Promise<boolean>;
   removePolicy(policy: PolicyRule): Promise<boolean>;
   getAllPolicies(): Promise<PolicyRule[]>;
-  addRoleForUser(user: string, role: string): Promise<boolean>;
-  deleteRoleForUser(user: string, role: string): Promise<boolean>;
-  getRolesForUser(user: string): Promise<string[]>;
-  getUsersForRole(role: string): Promise<string[]>;
-  hasRoleForUser(user: string, role: string): Promise<boolean>;
 }
 
-// Next.js middleware types
+// Next.js middleware types for pure ABAC
 export interface AuthorizedRoute {
   path: string;
   requiredPermissions: {
@@ -107,7 +96,6 @@ export interface AuthorizedRoute {
     resource?: string;
     conditions?: string;
   }[];
-  roles?: string[];
 }
 
 export interface AuthorizationMiddlewareConfig {

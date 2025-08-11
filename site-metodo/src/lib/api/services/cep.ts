@@ -2,8 +2,6 @@
 
 import { z } from 'zod';
 import { ApiClient, createApiClient } from '../client';
-import { cached, apiCache } from '../cache';
-import { monitored } from '../index';
 import { apiMonitor } from '../monitor-simple';
 
 // Type definitions for CEP API
@@ -184,7 +182,7 @@ export class CepService {
         result.cep = this.addCepMask(result.cep);
         
         return result;
-      } catch (error) {
+      } catch (_error) {
         lastError = error instanceof Error ? error : new Error('Erro desconhecido');
         console.warn(`Falha ao consultar ${provider.name}:`, lastError.message);
         continue;
@@ -218,7 +216,7 @@ export class CepService {
         try {
           const data = await this.lookupCep(cep);
           return { cep, data };
-        } catch (error) {
+        } catch (_error) {
           return { 
             cep, 
             error: error instanceof Error ? error.message : 'Erro desconhecido' 

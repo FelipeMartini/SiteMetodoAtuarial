@@ -52,7 +52,7 @@ export async function GET() {
         assignedAt: assignment.assignedAt
       }))
     });
-  } catch (error) {
+  } catch (_error) {
     console.error('Error fetching role assignments:', error);
     return NextResponse.json(
       { 
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       );
     }
-  } catch (error) {
+  } catch (_error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },
@@ -124,7 +124,7 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       );
     }
-  } catch (error) {
+  } catch (_error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },

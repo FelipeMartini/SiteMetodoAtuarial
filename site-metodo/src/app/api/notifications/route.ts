@@ -69,7 +69,7 @@ export async function GET(request: NextRequest) {
       data: result
     });
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro ao buscar notificações', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
@@ -161,7 +161,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro ao criar notificação', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },

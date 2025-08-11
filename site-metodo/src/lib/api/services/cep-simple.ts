@@ -68,7 +68,7 @@ export class CepService {
         if (result) {
           return result;
         }
-      } catch (error) {
+      } catch (_error) {
         console.warn(`Falha no provedor ${providerMethod}:`, error);
         continue;
       }
@@ -208,7 +208,7 @@ export class CepService {
           ddd: item.ddd,
           siafi: item.siafi,
         }));
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro na busca por localização:', error);
       return [];
     }

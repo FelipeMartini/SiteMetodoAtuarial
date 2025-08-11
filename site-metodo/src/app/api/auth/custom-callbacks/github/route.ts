@@ -5,7 +5,7 @@ import { randomBytes } from 'crypto';
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
   const code = searchParams.get('code');
-  const error = searchParams.get('error');
+  const _error = searchParams.get('error');
   const state = searchParams.get('state');
   const stateCookie = request.cookies.get('authjs.oauth-state')?.value;
   if (!state || !stateCookie || state !== stateCookie) {

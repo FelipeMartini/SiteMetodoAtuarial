@@ -73,7 +73,7 @@ export default function ABACManagementPage() {
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error loading policies:', error);
       toast({
         title: "Erro",
@@ -99,7 +99,7 @@ export default function ABACManagementPage() {
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error loading role assignments:', error);
       toast({
         title: "Erro",
@@ -148,7 +148,7 @@ export default function ABACManagementPage() {
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error adding policy:', error);
       toast({
         title: "Erro",
@@ -188,7 +188,7 @@ export default function ABACManagementPage() {
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error removing policy:', error);
       toast({
         title: "Erro",
@@ -228,7 +228,7 @@ export default function ABACManagementPage() {
           variant: "destructive"
         });
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error adding role assignment:', error);
       toast({
         title: "Erro",

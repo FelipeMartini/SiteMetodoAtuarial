@@ -86,7 +86,7 @@ export function AuditDashboard() {
       if (data.success) {
         setLogs(data.logs)
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching logs:', error)
     } finally {
       setLoading(false)
@@ -102,7 +102,7 @@ export function AuditDashboard() {
       if (data.success) {
         setStats(data.stats)
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching stats:', error)
     }
   }, [selectedPeriod])
@@ -148,7 +148,7 @@ export function AuditDashboard() {
       a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.csv`
       a.click()
       URL.revokeObjectURL(url)
-    } catch (error) {
+    } catch (_error) {
       console.error('Error exporting logs:', error)
     }
   }

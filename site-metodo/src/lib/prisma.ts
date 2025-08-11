@@ -41,7 +41,7 @@ export async function checkDatabaseConnection() {
     await prisma.$connect();
     console.log('✅ Database connection successful');
     return true;
-  } catch (error) {
+  } catch (_error) {
     console.error('❌ Database connection failed:', error);
     return false;
   }

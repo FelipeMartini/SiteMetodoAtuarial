@@ -35,7 +35,7 @@ export class CustomPrismaAdapter {
       const policyLines: string[][] = [];
 
       // Converter políticas para formato Casbin
-      policies.forEach((policy: any) => {
+      policies.forEach((policy: Record<string, unknown>) => {
         const line = [
           'p',
           policy.subject,
@@ -50,7 +50,7 @@ export class CustomPrismaAdapter {
       });
 
       // Converter roles para formato Casbin
-      roles.forEach((userRole: any) => {
+      roles.forEach((userRole: Record<string, unknown>) => {
         policyLines.push([
           'g',
           userRole.user.email,
@@ -59,7 +59,7 @@ export class CustomPrismaAdapter {
       });
 
       return policyLines;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error loading policies:', error);
       return [];
     }
@@ -132,7 +132,7 @@ export class CustomPrismaAdapter {
           }
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Error saving policies:', error);
       throw error;
     }
@@ -237,7 +237,7 @@ export class CustomPrismaAdapter {
     ...fieldValues: string[]
   ): Promise<void> {
     if (ptype === 'p') {
-      const whereClause: any = {};
+      const whereClause: Record<string, unknown> = {};
       
       fieldValues.forEach((value, index) => {
         const actualIndex = fieldIndex + index;

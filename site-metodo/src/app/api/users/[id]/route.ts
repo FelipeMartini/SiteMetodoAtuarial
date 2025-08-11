@@ -93,7 +93,7 @@ export async function PUT(
     });
 
     return NextResponse.json(updatedUser);
-  } catch (error) {
+  } catch (_error) {
     console.error('Erro ao atualizar usuário:', error);
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 });
   }
@@ -141,7 +141,7 @@ export async function DELETE(
     });
 
     return NextResponse.json({ message: 'Usuário excluído com sucesso' });
-  } catch (error) {
+  } catch (_error) {
     console.error('Erro ao excluir usuário:', error);
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 });
   }

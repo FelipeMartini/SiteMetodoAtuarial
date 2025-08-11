@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
     })
 
     return NextResponse.json(health, { status: statusCode })
-  } catch (error) {
+  } catch (_error) {
     structuredLogger.error('Health check failed', error as Error, {
       ip: getClientIP(request),
     })

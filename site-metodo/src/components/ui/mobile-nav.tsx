@@ -10,7 +10,6 @@ import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from "@/co
 import { Separator } from "@/components/ui/separator"
 import { 
   Menu, 
-  Calculator,
   Users,
   Briefcase,
   Building,

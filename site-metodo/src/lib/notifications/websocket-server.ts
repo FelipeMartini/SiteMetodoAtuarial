@@ -62,7 +62,7 @@ export class NotificationWebSocketServer {
         } else {
           deadConnections.push(ws);
         }
-      } catch (error) {
+      } catch (_error) {
         simpleLogger.warn('Erro ao enviar para conexão WebSocket', { error, userId });
         deadConnections.push(ws);
       }
@@ -116,7 +116,7 @@ export class NotificationWebSocketServer {
           } else {
             deadConnections.push(ws);
           }
-        } catch (error) {
+        } catch (_error) {
           simpleLogger.warn('Erro no broadcast WebSocket', { error, userId });
           deadConnections.push(ws);
         }
@@ -148,7 +148,7 @@ export class NotificationWebSocketServer {
       };
 
       await this.sendMessageToUser(userId, message);
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao notificar contagem não lidas', { error, userId });
     }
   }
@@ -196,7 +196,7 @@ export class NotificationWebSocketServer {
    * Trata nova conexão WebSocket
    */
   private handleConnection(ws: WebSocket, request: IncomingMessage): void {
-    const userId = this.extractUserIdFromRequest(request);
+    const _userId = this.extractUserIdFromRequest(request);
     
     if (!userId) {
       simpleLogger.warn('Conexão WebSocket rejeitada - usuário não autenticado');
@@ -260,7 +260,7 @@ export class NotificationWebSocketServer {
             userId 
           });
       }
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.warn('Erro ao processar mensagem WebSocket', { error, userId });
     }
   }
@@ -297,7 +297,7 @@ export class NotificationWebSocketServer {
       };
 
       this.sendMessageToConnection(ws, message);
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao enviar dados iniciais', { error, userId });
     }
   }
@@ -322,7 +322,7 @@ export class NotificationWebSocketServer {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message));
       }
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.warn('Erro ao enviar mensagem WebSocket', { error });
     }
   }
@@ -353,7 +353,7 @@ export class NotificationWebSocketServer {
       // Mock implementation - substituir por verificação real do JWT
       const mockUserId = url.searchParams.get('userId');
       return mockUserId;
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.warn('Erro ao extrair userId da requisição WebSocket', { error });
       return null;
     }
@@ -376,7 +376,7 @@ export class NotificationWebSocketServer {
           (ws as any).isAlive = false;
           try {
             ws.ping();
-          } catch (error) {
+          } catch (_error) {
             deadConnections.push(ws);
           }
         }
@@ -393,7 +393,7 @@ export class NotificationWebSocketServer {
     for (const ws of deadConnections) {
       try {
         ws.terminate();
-      } catch (error) {
+      } catch (_error) {
         // Ignora erros ao terminar conexão já morta
       }
 

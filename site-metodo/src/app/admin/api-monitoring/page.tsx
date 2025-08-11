@@ -86,7 +86,7 @@ export default function ApiMonitoringPage() {
         const data = await response.json();
         setMetrics(data);
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao buscar métricas:', error);
     } finally {
       setLoading(false);
@@ -102,7 +102,7 @@ export default function ApiMonitoringPage() {
         const data = await response.json();
         setTestResults(data);
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao executar testes:', error);
     } finally {
       setTestLoading(false);
@@ -120,7 +120,7 @@ export default function ApiMonitoringPage() {
         timestamp: new Date().toISOString(),
         message: `Teste de CEP ${cepTest}`,
       });
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao testar CEP:', error);
     }
   };
@@ -136,7 +136,7 @@ export default function ApiMonitoringPage() {
         timestamp: new Date().toISOString(),
         message: `Teste de câmbio ${exchangeFrom} → ${exchangeTo}`,
       });
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao testar câmbio:', error);
     }
   };
@@ -148,7 +148,7 @@ export default function ApiMonitoringPage() {
       if (response.ok) {
         fetchMetrics(); // Atualizar métricas após limpar cache
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao limpar cache:', error);
     }
   };

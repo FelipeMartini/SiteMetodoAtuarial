@@ -67,7 +67,7 @@ export async function GET(request: NextRequest) {
       }
     });
 
-  } catch (error) {
+  } catch (_error) {
     console.error('CEP lookup error:', error);
 
     if (error instanceof z.ZodError) {
@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
       }
     });
 
-  } catch (error) {
+  } catch (_error) {
     console.error('CEP bulk lookup error:', error);
 
     if (error instanceof z.ZodError) {
@@ -212,7 +212,7 @@ export async function PATCH(request: NextRequest) {
       timestamp: new Date().toISOString(),
     });
 
-  } catch (error) {
+  } catch (_error) {
     console.error('CEP validation error:', error);
 
     if (error instanceof z.ZodError) {

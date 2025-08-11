@@ -56,7 +56,7 @@ export async function checkApiAuthorization(requiredRole: UserRoleType = UserRol
       role: [getRoleTypeLabel(user.roleType)],
       isActive: user.isActive,
     }
-  } catch (error) {
+  } catch (_error) {
     console.error('Erro na verificação de autorização da API:', error)
     return null
   }

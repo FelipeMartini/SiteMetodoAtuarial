@@ -1,0 +1,25 @@
+# Pure ABAC Policies for Site Método Atuarial
+# Format: p, sub_rule, obj_rule, act, ctx_rule, eft
+
+# Administradores podem fazer qualquer coisa
+p, r.sub.email == "admin@metodoatuarial.com", r.obj.match("/.*"), read, true, allow
+p, r.sub.email == "admin@metodoatuarial.com", r.obj.match("/.*"), write, true, allow
+p, r.sub.email == "admin@metodoatuarial.com", r.obj.match("/.*"), delete, true, allow
+
+# Usuários podem acessar seus próprios dados
+p, r.sub.id == r.obj.ownerId, r.obj.type == "user_data", read, true, allow
+p, r.sub.id == r.obj.ownerId, r.obj.type == "user_data", write, true, allow
+
+# Atuários experientes podem acessar cálculos atuariais
+p, r.sub.department == "actuarial" && r.sub.experience > 2, r.obj.type == "calculation", read, true, allow
+p, r.sub.department == "actuarial" && r.sub.experience > 5, r.obj.type == "calculation", write, true, allow
+
+# Acesso baseado em horário de trabalho (8h às 18h)
+p, r.sub.authenticated == true, r.obj.type == "public", read, r.ctx.hour >= 8 && r.ctx.hour <= 18, allow
+
+# Usuários premium podem acessar recursos premium
+p, r.sub.subscription == "premium", r.obj.type == "premium_content", read, true, allow
+
+# Moderadores podem gerenciar conteúdo
+p, r.sub.role == "moderator", r.obj.type == "content", write, r.ctx.moderation_mode == true, allow
+p, r.sub.role == "moderator", r.obj.type == "content", delete, r.ctx.moderation_mode == true, allow

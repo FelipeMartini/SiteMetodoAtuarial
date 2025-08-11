@@ -87,7 +87,7 @@ async function getUserFromRequest(request: NextRequest): Promise<{
     }
 
     return null;
-  } catch (error) {
+  } catch (_error) {
     console.error('Error getting user from request:', error);
     return null;
   }
@@ -169,7 +169,7 @@ export async function abacMiddleware(
     }
 
     return NextResponse.next();
-  } catch (error) {
+  } catch (_error) {
     console.error('ABAC Middleware error:', error);
     
     // In case of error, allow access but log the error
@@ -261,7 +261,7 @@ export function withABACAuthorization(
       }
 
       return handler(request);
-    } catch (error) {
+    } catch (_error) {
       console.error('Authorization error:', error);
       return new NextResponse('Internal Server Error', { status: 500 });
     }
@@ -286,7 +286,7 @@ export async function checkPermission(
     });
 
     return result.allowed;
-  } catch (error) {
+  } catch (_error) {
     console.error('Permission check error:', error);
     return false;
   }

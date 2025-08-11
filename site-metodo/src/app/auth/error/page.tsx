@@ -13,7 +13,7 @@ import Link from 'next/link';
  */
 function AuthErrorContent() {
   const searchParams = useSearchParams();
-  const error = searchParams?.get('error') || null;
+  const _error = searchParams?.get('error') || null;
 
   const getErrorMessage = (errorType: string | null) => {
     switch (errorType) {
