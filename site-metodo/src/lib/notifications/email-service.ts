@@ -12,7 +12,7 @@ import { PrismaClient } from '@prisma/client';
  * Suporte para SMTP, SendGrid, Mailgun, AWS SES
  */
 export class EmailService {
-  private transporter: nodemailer.Transporter;
+  private transporter!: nodemailer.Transporter;
   private prisma: PrismaClient;
   private config: EmailConfig;
 
