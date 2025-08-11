@@ -13,6 +13,7 @@ import {
   CheckCircle, 
   Clock, 
   RefreshCw, 
+  TrendingUp,
   TrendingDown,
   Globe,
   Shield,

@@ -152,7 +152,7 @@ export async function DELETE(request: NextRequest) {
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
-    const clientIp = getClientIP(request);
+    // const clientIp = getClientIP(request); // Removido: não utilizado
 
     if (!session?.user?.id) {
       return NextResponse.json(
