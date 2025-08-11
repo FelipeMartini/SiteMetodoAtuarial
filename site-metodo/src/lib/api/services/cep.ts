@@ -241,8 +241,6 @@ export class CepService {
   /**
    * Search for addresses by city and state
    */
-  @cached(600) // 10 minutes cache
-  @monitored('viacep')
   async searchAddresses(uf: string, city: string, street?: string): Promise<CepData[]> {
     if (uf.length !== 2) {
       throw new Error('UF deve conter exatamente 2 caracteres');

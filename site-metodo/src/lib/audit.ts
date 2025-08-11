@@ -53,7 +53,7 @@ export class AuditService {
 
       // 2. Log estruturado
       const logMessage = `Audit: ${entry.action} ${entry.target ? `on ${entry.target}` : ''}`
-      structuredLogger.audit(entry.action, {
+      simpleLogger.info(logMessage, {
         userId: entry.userId,
         sessionId: entry.sessionId,
         ip: entry.ipAddress,
@@ -66,7 +66,7 @@ export class AuditService {
       })
     } catch (error) {
       // Falha na auditoria é crítica, mas não deve quebrar a aplicação
-      structuredLogger.error('Failed to create audit log', error as Error, {
+      simpleLogger.error('Failed to create audit log', {
         action: entry.action,
         userId: entry.userId,
         target: entry.target,
