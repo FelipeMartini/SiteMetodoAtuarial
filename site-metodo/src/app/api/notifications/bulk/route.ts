@@ -44,7 +44,7 @@ export async function POST(request: NextRequest) {
             markedCount++
           } catch (_error) {
             simpleLogger.warn('Erro ao marcar notificação como lida', {
-              error,
+              error: _error,
               notificationId,
               userId: session.user.id,
             })
@@ -61,7 +61,7 @@ export async function POST(request: NextRequest) {
             deletedCount++
           } catch (_error) {
             simpleLogger.warn('Erro ao deletar notificação', {
-              error,
+              error: _error,
               notificationId,
               userId: session.user.id,
             })
