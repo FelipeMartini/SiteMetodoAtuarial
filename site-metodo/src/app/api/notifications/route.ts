@@ -99,7 +99,7 @@ export async function POST(request: NextRequest) {
     }
 
     const body = await request.json();
-    const { type, bulk, ...notificationData } = body;
+    const { bulk, ...notificationData } = body; // Removido 'type' não utilizado
 
     const notificationService = getNotificationService();
     let notificationIds: string[];
