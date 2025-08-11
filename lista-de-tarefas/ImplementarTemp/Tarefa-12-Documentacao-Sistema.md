@@ -6,6 +6,7 @@ Criar documentação completa e profissional para todo o sistema, facilitando ma
 ## 🎯 Subtarefas
 
 ### 1. Documentação Técnica
+ [ ] remova todos warning de lint
 - [ ] Arquitetura do sistema completa
 - [ ] Diagramas de fluxo de dados
 - [ ] Documentação de APIs (OpenAPI/Swagger)

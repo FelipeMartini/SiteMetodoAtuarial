@@ -6,6 +6,7 @@ Validar e aprimorar o sistema de controle de acesso baseado em atributos (ABAC) 
 ## 🎯 Subtarefas
 
 ### 1. Validação do Sistema Atual
+ [ ] remova todos warning de lint
 - [ ] Conulta extensa e aprofundada na internet google e docs oficiais e no repositorio do github do CASBIN sobre abac puro nao hibrido e toda remoção completa do rbac ficando só com ABAC que é o que quermos dai compare com nosso sistema atual e implemente da melhor maneira possivel e atualizada ja criando os mesmo parametros de acesso e politicas que tinhamos antes.
 - [ ] Testar todas as políticas de acesso implementadas
 - [ ] Verificar funcionamento do Casbin adapter

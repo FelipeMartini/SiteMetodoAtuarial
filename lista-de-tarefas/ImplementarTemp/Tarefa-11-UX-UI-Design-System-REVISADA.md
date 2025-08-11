@@ -6,7 +6,7 @@ Padronizar, documentar e evoluir o Design System do projeto, garantindo acessibi
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear componentes e padrões de UI**
   - Buscar por duplicidade, inconsistências, oportunidades de padronização.
   - Referência: [Busca no GitHub por design system](https://github.com/search?q=design+system)

@@ -6,6 +6,7 @@ Implementar otimizações avançadas de performance para melhorar a experiência
 ## 🎯 Subtarefas
 
 ### 1. Otimização de Rendering
+ [ ] remova todos warning de lint
 - [ ] Implementar React.memo em componentes críticos
 - [ ] Otimizar re-renders desnecessários
 - [ ] Implementar virtualização para listas grandes

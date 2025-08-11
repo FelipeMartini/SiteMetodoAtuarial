@@ -107,7 +107,11 @@ async function handleExport(filters: LogFilters, userId: string) {
   try {
     // Buscar todos os logs (sem paginação para export)
     const result = await auditService.searchLogs({
-      ...filters,
+      userId: filters.userId,
+      action: filters.action as AuditAction,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+      success: filters.success,
       limit: 10000, // Limite grande para export
       offset: 0,
     })

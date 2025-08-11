@@ -6,7 +6,7 @@ Refatorar o front-end para garantir código limpo, modular, reutilizável, acess
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear componentes e hooks reutilizáveis**
   - Buscar por duplicidade, padrões, oportunidades de abstração.
   - Referência: [Busca no GitHub por componentes reutilizáveis](https://github.com/search?q=react+reusable+component)

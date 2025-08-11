@@ -6,6 +6,7 @@ Substituir completamente a biblioteca `xlsx` pela `exceljs` em todo o projeto, m
 ## 🎯 Subtarefas
 
 ### 1. Análise e Mapeamento
+ [ ] remova todos warning de lint
 - [ ] Identificar todas as utilizações da biblioteca `xlsx` no projeto
 - [ ] Mapear funcionalidades específicas utilizadas (read, write, parse, etc.)
 - [ ] Verificar dependências e possíveis conflitos
