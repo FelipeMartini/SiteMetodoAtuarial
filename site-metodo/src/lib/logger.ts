@@ -264,6 +264,8 @@ export const auditLogger = {
     structuredLogger.audit('user_deleted', { ...meta, performedBy, targetUser }),
   roleChanged: (performedBy: string, targetUser: string, fromRole: string, toRole: string, meta?: LogMeta) =>
     structuredLogger.audit('role_changed', { ...meta, performedBy, targetUser, fromRole, toRole }),
+  apiAccess: (userId: string, method: string, endpoint: string, meta?: LogMeta) =>
+    structuredLogger.audit('api_access', { ...meta, performedBy: userId, method, endpoint }),
 }
 
 export const performanceLogger = {

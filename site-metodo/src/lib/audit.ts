@@ -1,5 +1,5 @@
 import { prisma } from './prisma'
-import { structuredLogger, auditLogger, authLogger, securityLogger } from './logger'
+import { simpleLogger, auditLogger, authLogger, securityLogger } from './simple-logger'
 import { AuditAction } from '@prisma/client'
 
 export interface AuditEntry {
@@ -175,6 +175,36 @@ export class AuditService {
           }
           break
       }
+    }
+  }
+
+  /**
+   * Logs de acesso a API
+   */
+  async logApiAccess(
+    userId: string | null,
+    method: string,
+    endpoint: string,
+    ip: string,
+    data?: any
+  ): Promise<void> {
+    try {
+      // Log estruturado
+      simpleLogger.info(`API ${method} ${endpoint}`, {
+        userId: userId || 'anonymous',
+        method,
+        endpoint,
+        ip,
+        data: data ? JSON.stringify(data) : undefined,
+        timestamp: new Date().toISOString(),
+      });
+
+      // Log específico de auditoria se necessário
+      if (userId) {
+        auditLogger.apiAccess(userId, method, endpoint, { ip, data });
+      }
+    } catch (error) {
+      console.error('Erro ao registrar acesso à API:', error);
     }
   }
 
