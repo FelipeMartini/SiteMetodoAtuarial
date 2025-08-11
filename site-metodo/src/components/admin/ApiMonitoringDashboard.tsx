@@ -13,16 +13,13 @@ import {
   CheckCircle, 
   Clock, 
   RefreshCw, 
-  TrendingUp,
   TrendingDown,
-  Zap,
   Globe,
   Shield,
   Database
 } from 'lucide-react';
 import { apiMonitor, EndpointMetrics as ApiEndpoint } from '@/lib/api/monitor-simple';
 import { apiCache } from '@/lib/api/cache';
-import { cepService } from '@/lib/api/services/cep';
 
 interface MonitoringStats {
   endpoints: ApiEndpoint[];

@@ -3,6 +3,8 @@
  * Registra e controla o Service Worker no client-side
  */
 
+import { useState, useEffect } from 'react';
+
 // === REGISTRO DO SERVICE WORKER ===
 
 /**
@@ -245,8 +247,15 @@ export async function addToBackgroundSync(url: string, options: RequestInit): Pr
   const request = new Request(url, options);
   await cache.put(request, new Response(JSON.stringify(options.body)));
 
-  // Registrar para background sync
-  await registration.sync.register('background-sync');
+  // Registrar para background sync (se disponível)
+  try {
+    // @ts-expect-error - Background Sync API pode não estar tipada corretamente
+    if ('sync' in registration && registration.sync) {
+      await registration.sync.register('background-sync');
+    }
+  } catch (error) {
+    console.warn('Background Sync não disponível:', error);
+  }
 }
 
 // === CACHE MANUAL ===
