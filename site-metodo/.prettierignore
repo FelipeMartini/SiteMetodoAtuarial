@@ -10,6 +10,9 @@ build/
 # Database
 prisma/migrations/
 
+# Service Worker (contains TS syntax in JS file)
+public/sw.js
+
 # Logs
 *.log
 npm-debug.log*
