@@ -374,42 +374,39 @@ const ApiMonitoringDashboard: React.FC = () => {
                         {Math.round(endpoint.averageResponseTime)}ms
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        Min: {Math.round(endpoint.metrics.minResponseTime)}ms, 
-                        Max: {Math.round(endpoint.metrics.maxResponseTime)}ms
+                        Total: {endpoint.totalResponseTime}ms
                       </div>
                     </div>
                     
                     <div>
                       <div className="text-sm font-medium">Uptime</div>
                       <div className="text-2xl font-bold">
-                        {endpoint.metrics.uptime.toFixed(1)}%
+                        {endpoint.healthy ? '100.0' : '0.0'}%
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        Último check: {
-                          endpoint.lastCheck > 0 
-                            ? new Date(endpoint.lastCheck).toLocaleTimeString()
+                        Último request: {
+                          endpoint.lastRequest 
+                            ? endpoint.lastRequest.toLocaleTimeString()
                             : 'Nunca'
                         }
                       </div>
                     </div>
                   </div>
 
-                  {endpoint.errors.length > 0 && (
+                  {endpoint.recentErrors.length > 0 && (
                     <>
                       <Separator />
                       <div>
                         <div className="text-sm font-medium mb-2">Erros Recentes</div>
                         <div className="space-y-1 max-h-32 overflow-y-auto">
-                          {endpoint.errors.slice(0, 3).map((error, index) => (
+                          {endpoint.recentErrors.slice(0, 3).map((errorCode, index) => (
                             <div 
                               key={index}
                               className="text-xs bg-red-50 dark:bg-red-950 p-2 rounded"
                             >
                               <div className="font-medium">
-                                {new Date(error.timestamp).toLocaleString()}
-                                {error.status && ` (${error.status})`}
+                                Erro {errorCode} - {new Date().toLocaleString()}
                               </div>
-                              <div className="text-muted-foreground">{error.error}</div>
                             </div>
                           ))}
                         </div>

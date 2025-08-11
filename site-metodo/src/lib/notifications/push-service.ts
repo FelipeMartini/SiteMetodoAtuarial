@@ -428,7 +428,6 @@ export interface PushConfig {
 
 // Factory function
 export function createPushNotificationService(config: PushConfig): PushNotificationService {
-  const { PrismaClient } = require('@prisma/client');
   const prisma = new PrismaClient();
   return new PushNotificationService(prisma, config);
 }

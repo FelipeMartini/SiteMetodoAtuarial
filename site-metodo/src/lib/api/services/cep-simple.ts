@@ -60,7 +60,7 @@ export class CepService {
     }
 
     // Tentar todos os provedores em ordem de preferência
-    const providers: Array<keyof typeof this> = ['lookupViaCep', 'lookupBrasilApi', 'lookupAwesomeApi'];
+    const providers = ['lookupViaCep', 'lookupBrasilApi', 'lookupAwesomeApi'] as const;
     
     for (const providerMethod of providers) {
       try {
