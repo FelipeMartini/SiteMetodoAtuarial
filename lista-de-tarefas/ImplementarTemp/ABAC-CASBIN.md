@@ -1,7 +1,7 @@
 # Implementação ABAC com Casbin no Next.js + Auth.js v5 + Prisma + SQLite
 
 ## Visão Geral
-Este documento detalha um plano de implementação de ABAC (Attribute-Based Access Control) usando Casbin no contexto do seu projeto Next.js, com Auth.js v5 puro, com Middleware, speakeasy,  Prisma e prisma adapter, SQLite, sem SessionProvider, e integração com Zustand, ZOD, nosso sistema atual de permission e roles deve ser migrado para essa nova abordagem convertendo proteção das paginas cliente e admin dashboard para isso. O objetivo é migrar do modelo atual baseado em roles para um controle de acesso flexível, auditável e escalável, usando atributos de usuário e recurso.
+Este documento detalha um plano de implementação de ABAC (Attribute-Based Access Control) usando Casbin no contexto do seu projeto Next.js, com Auth.js v5 puro, com Middleware, speakeasy,  Prisma e prisma adapter, SQLite,  e integração com Zustand, ZOD, nosso sistema atual de permission e roles deve ser migrado para essa nova abordagem convertendo proteção das paginas cliente e admin dashboard para isso. O objetivo é migrar do modelo atual baseado em roles para um controle de acesso flexível, auditável e escalável, usando atributos de usuário e recurso.
 
 ---
 
