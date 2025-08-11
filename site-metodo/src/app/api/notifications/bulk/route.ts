@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       data: result,
     })
   } catch (_error) {
-    simpleLogger.error('Erro em ação bulk de notificações', { error })
+    simpleLogger.error('Erro em ação bulk de notificações', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
