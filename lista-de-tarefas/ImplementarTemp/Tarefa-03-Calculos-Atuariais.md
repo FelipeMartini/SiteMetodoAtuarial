@@ -9,7 +9,7 @@ Implementar módulo completo de cálculos atuariais para análises financeiras e
 - [ ] Criar módulo de matemática atuarial
 - [ ] Implementar funções de valor presente
 - [ ] Criar cálculos de valor futuro
-- [ ] Implementar tábuas de mortalidade
+- [ ] Implementar tábuas de mortalidade com possibilidade de adicionar e exportar
 - [ ] Adicionar cálculos de expectativa de vida
 
 ### 2. Cálculos de Seguros
@@ -23,14 +23,9 @@ Implementar módulo completo de cálculos atuariais para análises financeiras e
 - [ ] Benefícios programados
 - [ ] Contribuições necessárias
 - [ ] Déficit/superávit atuarial
-- [ ] Planos de amortização
-- [ ] Projeções de fluxo de caixa
+
 
 ### 4. Modelagem Financeira
-- [ ] Análise de sensibilidade
-- [ ] Simulações Monte Carlo
-- [ ] Testes de stress
-- [ ] Projeções de cenários
 - [ ] Análise de ALM (Asset Liability Management)
 
 ### 5. Interface e Visualização
@@ -40,12 +35,6 @@ Implementar módulo completo de cálculos atuariais para análises financeiras e
 - [ ] Relatórios automatizados
 - [ ] Exportação de resultados
 
-### 6. Validação e Testes
-- [ ] Testes unitários para todas as fórmulas
-- [ ] Validação com casos conhecidos
-- [ ] Testes de precisão numérica
-- [ ] Benchmarks de performance
-- [ ] Validação com especialistas
 
 ## ⚡ Benefícios Esperados
 - **Precisão**: Cálculos atuariais precisos e confiáveis
@@ -73,3 +62,13 @@ Implementar módulo completo de cálculos atuariais para análises financeiras e
 **Prioridade**: Média-Alta  
 **Complexidade**: Alta  
 **Tempo Estimado**: 15-20 horas
+
+
+## Referências
+- [actuarial.js (GitHub)](https://github.com/actuaries/actuarial.js)
+- [Mermaid.js](https://mermaid.js.org/)
+- [KaTeX](https://katex.org/)
+- [Normas SUSEP](https://www.gov.br/susep/pt-br)
+- [Busca Google: actuarial calculations](https://www.google.com/search?q=actuarial+calculations)
+- [Projetos no GitHub sobre cálculos atuariais](https://github.com/search?q=actuarial+calculation)
+
