@@ -228,7 +228,7 @@ export const SmartNavigation = memo(function SmartNavigation({
   if (userRole === 'ADMIN') {
     navigationItems.push(
       { href: '/admin/dashboard', label: 'Admin', strategy: 'hover' as const },
-      { href: '/admin/usuarios', label: 'Usuários', strategy: 'visible' as const }
+      { href: '/admin/usuarios', label: 'Usuários', strategy: 'hover' as const }
     );
   }
 
@@ -287,7 +287,7 @@ export function getRoutePriority(route: string, userRole?: string): 'high' | 'me
   }
   
   // Rotas baseadas em role têm prioridade média
-  if (userRole && ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES]?.includes(route as any)) {
+  if (userRole && ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES]?.includes(route as string as any)) {
     return 'medium';
   }
   

@@ -291,3 +291,5 @@ export function PerfilUsuarioModerno() {
     </div>
   )
 }
+
+export default PerfilUsuarioModerno
