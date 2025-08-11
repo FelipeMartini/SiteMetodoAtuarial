@@ -4,8 +4,8 @@ import { prisma } from '@/lib/prisma';
 import path from 'path';
 import fs from 'fs';
 import {
-  Subject,
-  Resource,
+  // Subject,
+  // Resource,
   Context,
   AuthorizationRequest,
   AuthorizationResult,

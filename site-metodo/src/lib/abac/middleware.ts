@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getEnforcer } from './enforcer';
-import { AuthorizationError } from './types';
+// import { AuthorizationError } from './types';
 
 /**
  * ABAC Middleware for Next.js

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -62,9 +62,9 @@ export default function ABACManagementPage() {
   useEffect(() => {
     loadPolicies();
     loadRoleAssignments();
-  }, []);
+  }, [loadPolicies, loadRoleAssignments]);
 
-  const loadPolicies = async () => {
+  const loadPolicies = useCallback(async () => {
     try {
       const response = await fetch('/api/abac/policies');
       const data = await response.json();
@@ -88,9 +88,9 @@ export default function ABACManagementPage() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [toast]);
 
-  const loadRoleAssignments = async () => {
+  const loadRoleAssignments = useCallback(async () => {
     try {
       const response = await fetch('/api/abac/roles');
       const data = await response.json();
@@ -112,7 +112,7 @@ export default function ABACManagementPage() {
         variant: "destructive"
       });
     }
-  };
+  }, [toast]);
 
   const addPolicy = async () => {
     try {

@@ -15,15 +15,15 @@ const PolicySchema = z.object({
   conditions: z.string().optional()
 });
 
-const RoleAssignmentSchema = z.object({
-  userEmail: z.string().email(),
-  roleName: z.string()
-});
+// const RoleAssignmentSchema = z.object({
+//   userEmail: z.string().email(),
+//   roleName: z.string()
+// });
 
 /**
  * GET /api/abac/policies - Get all policies
  */
-export async function GET(request: NextRequest) {
+export async function GET(): Promise<Response> {
   try {
     const enforcer = await getEnforcer();
     const policies = await enforcer.getAllPolicies();
