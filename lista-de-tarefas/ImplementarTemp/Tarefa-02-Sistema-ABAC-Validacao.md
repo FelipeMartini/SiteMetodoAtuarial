@@ -20,10 +20,8 @@ Validar e aprimorar o sistema de controle de acesso baseado em atributos (ABAC) 
 - [ ] Otimizar verificação de permissões
 
 ### 3. Funcionalidades Avançadas
-- [ ] Implementar políticas baseadas em tempo
 - [ ] Adicionar suporte a atributos contextuais
 - [ ] Criar sistema de herança de roles
-- [ ] Implementar políticas condicionais avançadas
 
 ### 4. Interface de Administração
 - [ ] Melhorar/criar  interface para gerenciar políticas para que o usuario possa ter controle total de cada uma das permissoes e alterálas e ver quem faz parte do que e toda hierarquia, tudo com shacn estilizado voce deve ter como referencia o componente-base e estilizar cada novo compoenente de acordo com o visual e temas escuro e claro do nosso projeto
