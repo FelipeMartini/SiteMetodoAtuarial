@@ -55,7 +55,7 @@ export function monitored(name: string) {
         return result
       } catch (_error) {
         apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message)
-        throw error
+        throw _error
       }
     }
     return descriptor

@@ -135,7 +135,7 @@ export function MortalityTableImporter() {
       setImportState(prev => ({
         ...prev,
         isProcessing: false,
-        error: error instanceof Error ? error.message : 'Erro ao processar arquivo',
+        error: error instanceof Error ? _error.message : 'Erro ao processar arquivo',
       }))
     }
   }
@@ -181,7 +181,7 @@ export function MortalityTableImporter() {
       setImportState(prev => ({
         ...prev,
         isProcessing: false,
-        error: error instanceof Error ? error.message : 'Erro ao processar dados',
+        error: error instanceof Error ? _error.message : 'Erro ao processar dados',
       }))
     }
   }

@@ -93,7 +93,7 @@ export class AuditLogger {
         })
       }
     } catch (_error) {
-      console.error('[AUDIT] ❌ Failed to log audit event:', String(error))
+      console.error('[AUDIT] ❌ Failed to log audit event:', String(_error))
       // Em caso de erro no sistema de auditoria, logar no console como fallback
       console.error('[AUDIT-FALLBACK]', JSON.stringify(data, null, 2))
     }
@@ -269,7 +269,7 @@ export class AuditLogger {
       userId,
       userEmail,
       description: `System error occurred${context ? ` in ${context}` : ''}`,
-      errorMessage: error.message,
+      errorMessage: _error.message,
       metadata: {
         stack: error.stack,
         context,

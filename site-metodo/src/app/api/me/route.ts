@@ -30,7 +30,7 @@ export async function GET() {
       timestamp: new Date().toISOString(),
     })
   } catch (_error) {
-    console.error('[API] GET /api/me - Erro:', String(error))
+    console.error('[API] GET /api/me - Erro:', String(_error))
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -83,7 +83,7 @@ export async function PATCH(req: NextRequest) {
 
     return NextResponse.json({ ok: true, user: updated })
   } catch (_error) {
-    console.error('[API] PATCH /api/me - Erro:', String(error))
+    console.error('[API] PATCH /api/me - Erro:', String(_error))
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

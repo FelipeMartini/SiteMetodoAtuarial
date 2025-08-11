@@ -24,7 +24,7 @@ export function Header() {
         redirect: true,
       })
     } catch (_error) {
-      console.error('Erro no logout:', String(error))
+      console.error('Erro no logout:', String(_error))
       // Fallback caso dê erro
       window.location.href = '/'
     }

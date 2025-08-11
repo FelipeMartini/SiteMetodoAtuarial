@@ -118,8 +118,8 @@ function getClientIP(request: NextRequest): string {
     return cfConnectingIP.trim()
   }
 
-  // Fallback para IP do request
-  return request.ip || '127.0.0.1'
+  // Fallback para IP local
+  return '127.0.0.1'
 }
 
 // Middleware para auditoria de APIs
@@ -137,12 +137,12 @@ export function createAuditMiddleware() {
       // TODO: Extrair userId do token/session quando implementado
       // const userId = await getUserIdFromRequest(request)
 
-      structuredLogger.audit(`API ${request.method} ${pathname}`, {
+      structuredLogger.audit(`API ${request.method} ${pathname}`, { performedBy: 'system',
+        performedBy: 'system',
         ip,
         userAgent,
         endpoint: pathname,
         method: request.method,
-        // userId,
       })
     }
 
@@ -227,7 +227,7 @@ export function createComprehensiveMiddleware() {
 
       return loggingResponse
     } catch (_error) {
-      structuredLogger.error('Middleware error', error, {
+      structuredLogger.error('Middleware error', String(_error), {
         ip: getClientIP(request),
         userAgent: request.headers.get('user-agent') || undefined,
         method: request.method,

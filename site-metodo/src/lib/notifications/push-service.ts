@@ -86,8 +86,8 @@ export class PushNotificationService {
         return created.id
       }
     } catch (_error) {
-      simpleLogger.error('Erro ao registrar push subscription', { error: String(error), userId })
-      throw error
+      simpleLogger.error('Erro ao registrar push subscription', { error: String(_error), userId })
+      throw _error
     }
   }
 
@@ -105,8 +105,8 @@ export class PushNotificationService {
         endpoint: this.maskEndpoint(endpoint),
       })
     } catch (_error) {
-      simpleLogger.error('Erro ao remover subscription', { error: String(error), endpoint })
-      throw error
+      simpleLogger.error('Erro ao remover subscription', { error: String(_error), endpoint })
+      throw _error
     }
   }
 
@@ -150,9 +150,9 @@ export class PushNotificationService {
             userId,
             subscriptionId: subscription.id,
           })
-        } catch (error: any: Record<string, unknown>) {
+        } catch (error: any) {
           simpleLogger.warn('Falha ao enviar push notification', {
-            error: error.message,
+            error: _error.message,
             userId,
             subscriptionId: subscription.id,
           })
@@ -178,7 +178,7 @@ export class PushNotificationService {
 
       return sent > 0
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar push notification', { error: String(error), userId })
+      simpleLogger.error('Erro ao enviar push notification', { error: String(_error), userId })
       return false
     }
   }
@@ -287,7 +287,7 @@ export class PushNotificationService {
         endpoint: this.maskEndpoint(sub.endpoint),
       }))
     } catch (_error) {
-      simpleLogger.error('Erro ao listar subscriptions do usuário', { error: String(error), userId })
+      simpleLogger.error('Erro ao listar subscriptions do usuário', { error: String(_error), userId })
       return []
     }
   }
@@ -313,7 +313,7 @@ export class PushNotificationService {
       simpleLogger.info('Web Push configurado com sucesso')
     } catch (_error) {
       simpleLogger.error('Erro ao configurar Web Push', { error })
-      throw error
+      throw _error
     }
   }
 
@@ -385,8 +385,8 @@ export class PushNotificationService {
     const invalidCodes = [410, 404, 400]
     return (
       invalidCodes.includes(error.statusCode) ||
-      error.message?.includes('invalid') ||
-      error.message?.includes('expired')
+      _error.message?.includes('invalid') ||
+      _error.message?.includes('expired')
     )
   }
 
@@ -478,7 +478,7 @@ export const pushNotificationClient = {
 
       return subscription
     } catch (_error) {
-      console.error('Erro ao subscrever push notifications:', String(error))
+      console.error('Erro ao subscrever push notifications:', String(_error))
       return null
     }
   },
@@ -497,7 +497,7 @@ export const pushNotificationClient = {
       }
       return true
     } catch (_error) {
-      console.error('Erro ao cancelar subscription:', String(error))
+      console.error('Erro ao cancelar subscription:', String(_error))
       return false
     }
   },

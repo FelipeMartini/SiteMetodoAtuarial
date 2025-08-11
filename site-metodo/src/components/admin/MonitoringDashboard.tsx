@@ -107,7 +107,7 @@ export default function MonitoringDashboard() {
       const result = await response.json()
       setData(result)
     } catch (_error) {
-      console.error('Error fetching monitoring data:', String(error))
+      console.error('Error fetching monitoring data:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao carregar dados de monitoramento.',
@@ -141,7 +141,7 @@ export default function MonitoringDashboard() {
         description: `Métricas exportadas em formato ${format.toUpperCase()}.`,
       })
     } catch (_error) {
-      console.error('Error exporting metrics:', String(error))
+      console.error('Error exporting metrics:', String(_error))
       toast({
         title: 'Erro na exportação',
         description: 'Erro ao exportar métricas.',

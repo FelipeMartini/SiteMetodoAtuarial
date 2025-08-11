@@ -46,17 +46,17 @@ export async function signInCredentials(
       }
     }
   } catch (_error) {
-    console.error('[SignIn] Erro na autenticação credentials:', String(error))
+    console.error('[SignIn] Erro na autenticação credentials:', String(_error))
 
     // Melhor tratamento de erro para Auth.js v5
-    if (error instanceof Error) {
-      if (error.message.includes('CredentialsSignin')) {
+    if (_error instanceof Error) {
+      if (__error.message.includes('CredentialsSignin')) {
         return {
           status: 'error',
           errorMessage: 'Email ou senha incorretos.',
         }
       }
-      if (error.message.includes('CallbackRouteError')) {
+      if (__error.message.includes('CallbackRouteError')) {
         return {
           status: 'error',
           errorMessage: 'Erro no processamento do login. Tente novamente.',
@@ -133,22 +133,22 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
     redirect(redirectUrl)
   } catch (_error) {
     // O redirect() do Next.js gera uma exceção NEXT_REDIRECT que é normal
-    if (error instanceof Error && error.message === 'NEXT_REDIRECT') {
+    if (_error instanceof Error && __error.message === 'NEXT_REDIRECT') {
       // Este é o comportamento esperado, não é um erro real
-      throw error // Re-throw para permitir o redirect
+      throw _error // Re-throw para permitir o redirect
     }
 
-    console.error('[SignIn] Erro na autenticação OAuth:', String(error))
+    console.error('[SignIn] Erro na autenticação OAuth:', String(_error))
 
     // Melhor tratamento de erro para OAuth
-    if (error instanceof Error) {
-      if (error.message.includes('OAuthSignin')) {
+    if (_error instanceof Error) {
+      if (__error.message.includes('OAuthSignin')) {
         return {
           status: 'error',
           errorMessage: 'Erro na autenticação OAuth. Tente novamente.',
         } as const
       }
-      if (error.message.includes('OAuthCallback')) {
+      if (__error.message.includes('OAuthCallback')) {
         return {
           status: 'error',
           errorMessage: 'Erro no callback OAuth. Verifique a configuração.',
@@ -202,7 +202,7 @@ export async function signInEmail(
       }
     }
   } catch (_error) {
-    console.error('[SignIn] Erro no login por email:', String(error))
+    console.error('[SignIn] Erro no login por email:', String(_error))
     return {
       status: 'error',
       errorMessage: 'Falha no envio do email de login',

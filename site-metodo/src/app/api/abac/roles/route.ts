@@ -55,7 +55,7 @@ export async function GET() {
       ),
     })
   } catch (_error) {
-    console.error('Error fetching role assignments:', String(error))
+    console.error('Error fetching role assignments:', String(_error))
     return NextResponse.json(
       {
         success: false,
@@ -89,14 +89,14 @@ export async function POST(request: NextRequest) {
       )
     }
   } catch (_error) {
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },
         { status: 400 }
       )
     }
 
-    console.error('Error assigning role:', String(error))
+    console.error('Error assigning role:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to assign role' }, { status: 500 })
   }
 }
@@ -124,14 +124,14 @@ export async function DELETE(request: NextRequest) {
       )
     }
   } catch (_error) {
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },
         { status: 400 }
       )
     }
 
-    console.error('Error removing role:', String(error))
+    console.error('Error removing role:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to remove role' }, { status: 500 })
   }
 }

@@ -43,13 +43,13 @@ export async function GET(request: NextRequest) {
       message: `Teste ${testType} executado com sucesso`,
     })
   } catch (_error) {
-    console.error('Erro durante teste de APIs:', String(error))
+    console.error('Erro durante teste de APIs:', String(_error))
 
     return NextResponse.json(
       {
         error: 'Erro durante execução dos testes',
         testType,
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details: error instanceof Error ? _error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
       },
       { status: 500 }
@@ -104,12 +104,12 @@ export async function POST(request: NextRequest) {
         )
     }
   } catch (_error) {
-    console.error('Erro durante teste POST:', String(error))
+    console.error('Erro durante teste POST:', String(_error))
 
     return NextResponse.json(
       {
         error: 'Erro durante execução do teste',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details: error instanceof Error ? _error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
       },
       { status: 500 }

@@ -47,7 +47,7 @@ export class ABACEnforcer implements Enforcer {
 
       console.log('ABAC Enforcer initialized successfully')
     } catch (_error) {
-      console.error('Failed to initialize ABAC Enforcer:', String(error))
+      console.error('Failed to initialize ABAC Enforcer:', String(_error))
       throw new AuthorizationError(
         'Failed to initialize authorization system',
         'ENFORCER_INIT_FAILED',
@@ -149,7 +149,7 @@ export class ABACEnforcer implements Enforcer {
 
       return added
     } catch (_error) {
-      console.error('Error adding policy:', String(error))
+      console.error('Error adding policy:', String(_error))
       return false
     }
   }
@@ -174,7 +174,7 @@ export class ABACEnforcer implements Enforcer {
 
       return removed
     } catch (_error) {
-      console.error('Error removing policy:', String(error))
+      console.error('Error removing policy:', String(_error))
       return false
     }
   }
@@ -199,7 +199,7 @@ export class ABACEnforcer implements Enforcer {
         updatedAt: new Date(),
       }))
     } catch (_error) {
-      console.error('Error getting policies:', String(error))
+      console.error('Error getting policies:', String(_error))
       return []
     }
   }
