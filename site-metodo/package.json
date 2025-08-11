@@ -68,6 +68,7 @@
     "@tanstack/react-query": "^5.84.2",
     "@tanstack/react-table": "^8.21.3",
     "@types/morgan": "^1.9.10",
+    "@types/ws": "^8.18.1",
     "@unleash/nextjs": "^1.6.2",
     "axios": "^1.11.0",
     "bcryptjs": "^3.0.2",
@@ -102,7 +103,9 @@
     "tailwind-merge": "^3.3.1",
     "tailwindcss-animate": "^1.0.7",
     "uuid": "^11.1.0",
+    "web-push": "^3.6.7",
     "winston": "^3.17.0",
+    "ws": "^8.18.3",
     "xlsx": "^0.18.5",
     "zod": "^4.0.14",
     "zustand": "^5.0.7"
