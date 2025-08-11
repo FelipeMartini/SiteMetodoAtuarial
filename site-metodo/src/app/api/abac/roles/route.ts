@@ -12,10 +12,10 @@ const RoleAssignmentSchema = z.object({
   roleName: z.string()
 });
 
-const UserRolesQuerySchema = z.object({
-  userEmail: z.string().email().optional(),
-  roleName: z.string().optional()
-});
+// const UserRolesQuerySchema = z.object({
+//   userEmail: z.string().email().optional(),
+//   roleName: z.string().optional()
+// });
 
 /**
  * GET /api/abac/roles - Get roles for user or users for role

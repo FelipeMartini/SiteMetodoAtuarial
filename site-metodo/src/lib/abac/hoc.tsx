@@ -4,7 +4,7 @@ import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import { checkClientPermission } from './client';
-import { AuthorizationError } from './types';
+// import { AuthorizationError } from './types';
 
 /**
  * Higher-Order Components for ABAC protection
@@ -54,7 +54,7 @@ export function withABAC<T extends object>(
         try {
           // If specific roles are required, check them first
           if (roles.length > 0) {
-            const userRole = (session.user as any).role || 'user';
+            const userRole = (session.user as { role?: string }).role || 'user';
             if (!roles.includes(userRole)) {
               setIsAuthorized(false);
               setIsLoading(false);
@@ -80,7 +80,7 @@ export function withABAC<T extends object>(
       }
 
       checkAuthorization();
-    }, [session, status, resource, requiredAction, roles]);
+    }, [session, status]);
 
     useEffect(() => {
       if (isAuthorized === false && !isLoading) {
@@ -90,7 +90,7 @@ export function withABAC<T extends object>(
           router.push(redirectTo);
         }
       }
-    }, [isAuthorized, isLoading, router, redirectTo, onUnauthorized]);
+    }, [isAuthorized, isLoading, router]);
 
     // Show loading state
     if (isLoading || status === 'loading') {
@@ -174,7 +174,7 @@ export function PermissionGate({
 
   // Check roles if specified
   if (roles.length > 0) {
-    const userRole = (session.user as any).role || 'user';
+    const userRole = (session.user as { role?: string }).role || 'user';
     if (!roles.includes(userRole)) {
       return <>{fallback}</>;
     }
@@ -196,13 +196,13 @@ export function useRole() {
   
   const hasRole = (role: string): boolean => {
     if (!session?.user) return false;
-    const userRole = (session.user as any).role || 'user';
+    const userRole = (session.user as { role?: string }).role || 'user';
     return userRole === role;
   };
 
   const hasAnyRole = (roles: string[]): boolean => {
     if (!session?.user) return false;
-    const userRole = (session.user as any).role || 'user';
+    const userRole = (session.user as { role?: string }).role || 'user';
     return roles.includes(userRole);
   };
 
@@ -216,7 +216,7 @@ export function useRole() {
     isAdmin,
     isModerator,
     isUser,
-    role: (session?.user as any)?.role || 'guest'
+    role: (session?.user as { role?: string })?.role || 'guest'
   };
 }
 
@@ -285,7 +285,7 @@ export function ABACProtectedPage({
       try {
         // Check roles
         if (roles.length > 0) {
-          const userRole = (session.user as any).role || 'user';
+          const userRole = (session.user as { role?: string }).role || 'user';
           if (!roles.includes(userRole)) {
             setIsAuthorized(false);
             return;
