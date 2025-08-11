@@ -159,7 +159,7 @@ export class MonitoringService {
       endpoint: context?.endpoint,
       severity,
       errorName: error.name,
-      errorMessage: error.message,
+      errorMessage: _error.message,
     })
   }
 
@@ -205,7 +205,7 @@ export class MonitoringService {
       return health
     } catch (_error) {
       simpleLogger.error('Health check failed', {
-        error: error instanceof Error ? error.message : String(error),
+        error: error instanceof Error ? _error.message : String(_error),
       })
       return {
         status: 'unhealthy',

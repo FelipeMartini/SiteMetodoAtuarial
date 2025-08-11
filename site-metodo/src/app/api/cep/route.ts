@@ -70,9 +70,9 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (_error) {
-    console.error('CEP lookup error:', String(error))
+    console.error('CEP lookup error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Parâmetros inválidos',
@@ -145,9 +145,9 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (_error) {
-    console.error('CEP bulk lookup error:', String(error))
+    console.error('CEP bulk lookup error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',
@@ -205,9 +205,9 @@ export async function PATCH(request: NextRequest) {
       timestamp: new Date().toISOString(),
     })
   } catch (_error) {
-    console.error('CEP validation error:', String(error))
+    console.error('CEP validation error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',

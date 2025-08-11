@@ -47,7 +47,7 @@ export class ApiTestHelper {
             cep,
             provider,
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error',
+            error: error instanceof Error ? _error.message : 'Unknown error',
           })
         }
       }
@@ -70,7 +70,7 @@ export class ApiTestHelper {
       console.log(`    💥 Bulk: ${error}`)
       results.bulk = {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
@@ -133,7 +133,7 @@ export class ApiTestHelper {
             ...pair,
             provider,
             success: false,
-            error: error instanceof Error ? error.message : 'Unknown error',
+            error: error instanceof Error ? _error.message : 'Unknown error',
           })
         }
       }
@@ -174,7 +174,7 @@ export class ApiTestHelper {
         results.conversions.push({
           ...conversion,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
@@ -202,7 +202,7 @@ export class ApiTestHelper {
         currency: 'USD',
         days: 7,
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? _error.message : 'Unknown error',
       })
     }
 
@@ -244,7 +244,7 @@ export class ApiTestHelper {
         results.registration.push({
           ...endpoint,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
@@ -269,7 +269,7 @@ export class ApiTestHelper {
         results.healthChecks.push({
           name: endpoint.name,
           success: false,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
@@ -291,7 +291,7 @@ export class ApiTestHelper {
       console.log(`    💥 Métricas: ${error}`)
       results.metrics = {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
@@ -320,7 +320,7 @@ export class ApiTestHelper {
       console.log(`    💥 Cache: ${error}`)
       results.cache = {
         success: false,
-        error: error instanceof Error ? error.message : 'Unknown error',
+        error: error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
@@ -360,7 +360,7 @@ export class ApiTestHelper {
       results.monitoring = await this.testMonitoring()
       console.log('')
     } catch (_error) {
-      console.error('💥 Erro durante os testes:', String(error))
+      console.error('💥 Erro durante os testes:', String(_error))
     }
 
     // Calcular resumo

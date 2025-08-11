@@ -50,7 +50,7 @@ export class CustomPrismaAdapter {
 
       return policyLines
     } catch (_error) {
-      console.error('Error loading policies:', String(error))
+      console.error('Error loading policies:', String(_error))
       return []
     }
   }
@@ -123,8 +123,8 @@ export class CustomPrismaAdapter {
         }
       }
     } catch (_error) {
-      console.error('Error saving policies:', String(error))
-      throw error
+      console.error('Error saving policies:', String(_error))
+      throw _error
     }
   }
 

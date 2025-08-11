@@ -49,9 +49,9 @@ export async function GET(request: NextRequest) {
         return await handleGetAllStats()
     }
   } catch (_error) {
-    console.error('API monitoring error:', String(error))
+    console.error('API monitoring error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Invalid request parameters',
@@ -120,9 +120,9 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Invalid action' }, { status: 400 })
     }
   } catch (_error) {
-    console.error('API monitoring POST error:', String(error))
+    console.error('API monitoring POST error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Invalid request body',
@@ -150,7 +150,7 @@ async function handleHealthCheck(endpointName?: string) {
       return NextResponse.json(
         {
           error: `Health check failed for ${endpointName}`,
-          details: error instanceof Error ? error.message : 'Unknown error',
+          details: error instanceof Error ? _error.message : 'Unknown error',
         },
         { status: 404 }
       )
@@ -172,7 +172,7 @@ async function handleHealthCheck(endpointName?: string) {
           name: endpoint.name,
           healthy: false,
           responseTime: 0,
-          error: error instanceof Error ? error.message : 'Unknown error',
+          error: error instanceof Error ? _error.message : 'Unknown error',
         }
       }
     })
@@ -283,7 +283,7 @@ async function handleRegisterEndpoint(endpoint: { name: string; url: string; met
     return NextResponse.json(
       {
         error: 'Failed to register endpoint',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details: error instanceof Error ? _error.message : 'Unknown error',
       },
       { status: 500 }
     )
@@ -329,7 +329,7 @@ async function handleRecordMetric(metric: {
     return NextResponse.json(
       {
         error: 'Failed to record metric',
-        details: error instanceof Error ? error.message : 'Unknown error',
+        details: error instanceof Error ? _error.message : 'Unknown error',
       },
       { status: 500 }
     )

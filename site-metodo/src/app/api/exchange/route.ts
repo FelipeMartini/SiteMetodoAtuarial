@@ -125,9 +125,9 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(response)
   } catch (_error) {
-    console.error('Exchange rate error:', String(error))
+    console.error('Exchange rate error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Parâmetros inválidos',
@@ -168,9 +168,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ error: 'Ação não suportada' }, { status: 400 })
   } catch (_error) {
-    console.error('Exchange POST error:', String(error))
+    console.error('Exchange POST error:', String(_error))
 
-    if (error instanceof z.ZodError) {
+    if (_error instanceof z.ZodError) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',

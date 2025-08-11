@@ -168,8 +168,8 @@ export class EmailService {
 
       return created.id
     } catch (_error) {
-      simpleLogger.error('Erro ao criar template', { error: String(error), template: template.name })
-      throw error
+      simpleLogger.error('Erro ao criar template', { error: String(_error), template: template.name })
+      throw _error
     }
   }
 
@@ -197,7 +197,7 @@ export class EmailService {
         updatedAt: template.updatedAt,
       }
     } catch (_error) {
-      simpleLogger.error('Erro ao buscar template', { error: String(error), templateId })
+      simpleLogger.error('Erro ao buscar template', { error: String(_error), templateId })
       return null
     }
   }
@@ -228,7 +228,7 @@ export class EmailService {
         updatedAt: template.updatedAt,
       }))
     } catch (_error) {
-      simpleLogger.error('Erro ao listar templates', { error: String(error), category })
+      simpleLogger.error('Erro ao listar templates', { error: String(_error), category })
       return []
     }
   }
@@ -306,7 +306,7 @@ export class EmailService {
         text: `Teste de Email - ${new Date().toLocaleString()}`,
       })
     } catch (_error) {
-      simpleLogger.error('Erro no teste de email', { error: String(error), to })
+      simpleLogger.error('Erro no teste de email', { error: String(_error), to })
       return false
     }
   }
@@ -356,7 +356,7 @@ export class EmailService {
       })
     } catch (_error) {
       simpleLogger.error('Erro ao inicializar email transporter', { error })
-      throw error
+      throw _error
     }
   }
 

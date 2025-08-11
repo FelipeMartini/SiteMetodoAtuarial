@@ -221,7 +221,7 @@ export class CepService {
         } catch (_error) {
           return {
             cep,
-            error: error instanceof Error ? error.message : 'Erro desconhecido',
+            error: error instanceof Error ? _error.message : 'Erro desconhecido',
           }
         }
       })

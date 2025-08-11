@@ -105,7 +105,7 @@ export default function ABACManagementPage() {
         })
       }
     } catch (_error) {
-      console.error('Error loading policies:', String(error))
+      console.error('Error loading policies:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -131,7 +131,7 @@ export default function ABACManagementPage() {
         })
       }
     } catch (_error) {
-      console.error('Error loading role assignments:', String(error))
+      console.error('Error loading role assignments:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -180,7 +180,7 @@ export default function ABACManagementPage() {
         })
       }
     } catch (_error) {
-      console.error('Error adding policy:', String(error))
+      console.error('Error adding policy:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -220,7 +220,7 @@ export default function ABACManagementPage() {
         })
       }
     } catch (_error) {
-      console.error('Error removing policy:', String(error))
+      console.error('Error removing policy:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -260,7 +260,7 @@ export default function ABACManagementPage() {
         })
       }
     } catch (_error) {
-      console.error('Error adding role assignment:', String(error))
+      console.error('Error adding role assignment:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
