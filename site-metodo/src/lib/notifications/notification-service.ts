@@ -192,10 +192,58 @@ export class NotificationService {
           })
         ]);
 
+        // Construir agregações usando todos os tipos
+        const defaultByType = {
+          info: 0,
+          success: 0,
+          warning: 0,
+          error: 0,
+          security: 0,
+          system: 0,
+          user_action: 0,
+          marketing: 0
+        };
+        
+        const defaultByChannel = {
+          in_app: 0,
+          email: 0,
+          push: 0,
+          sms: 0,
+          webhook: 0
+        };
+        
+        const defaultByStatus = {
+          pending: 0,
+          sent: 0,
+          delivered: 0,
+          read: 0,
+          failed: 0,
+          cancelled: 0
+        };
+
+        // Aplicar valores reais sobre os defaults
+        byType.forEach(item => {
+          if (item.type in defaultByType) {
+            defaultByType[item.type as keyof typeof defaultByType] = item._count.type;
+          }
+        });
+        
+        byChannel.forEach(item => {
+          if (item.channel in defaultByChannel) {
+            defaultByChannel[item.channel as keyof typeof defaultByChannel] = item._count.channel;
+          }
+        });
+        
+        byStatus.forEach(item => {
+          if (item.status in defaultByStatus) {
+            defaultByStatus[item.status as keyof typeof defaultByStatus] = item._count.status;
+          }
+        });
+
         aggregations = {
-          byType: Object.fromEntries(byType.map(item => [item.type, item._count.type])),
-          byChannel: Object.fromEntries(byChannel.map(item => [item.channel, item._count.channel])),
-          byStatus: Object.fromEntries(byStatus.map(item => [item.status, item._count.status]))
+          byType: defaultByType,
+          byChannel: defaultByChannel,
+          byStatus: defaultByStatus
         };
       }
 
@@ -228,7 +276,7 @@ export class NotificationService {
       });
 
       // Registra evento
-      await this.createEvent(notificationId, userId, 'read', notification.channel, {});
+      await this.createEvent(notificationId, userId, 'read', notification.channel as any, {});
 
       simpleLogger.info(`Notificação marcada como lida`, {
         notificationId,
@@ -345,8 +393,8 @@ export class NotificationService {
             ...where,
             sentAt: { not: null }
           },
-          _avg: {
-            // Calcularia tempo médio de entrega se tivéssemos campo apropriado
+          _count: {
+            id: true
           }
         })
       ]);
@@ -355,11 +403,59 @@ export class NotificationService {
       const readCount = byStatus.find(item => item.status === NotificationStatus.READ)?._count.status || 0;
       const sentCount = byStatus.find(item => item.status === NotificationStatus.SENT)?._count.status || 0;
 
+      // Construir agregações completas com defaults
+      const defaultByType = {
+        info: 0,
+        success: 0,
+        warning: 0,
+        error: 0,
+        security: 0,
+        system: 0,
+        user_action: 0,
+        marketing: 0
+      };
+      
+      const defaultByChannel = {
+        in_app: 0,
+        email: 0,
+        push: 0,
+        sms: 0,
+        webhook: 0
+      };
+      
+      const defaultByStatus = {
+        pending: 0,
+        sent: 0,
+        delivered: 0,
+        read: 0,
+        failed: 0,
+        cancelled: 0
+      };
+
+      // Aplicar valores reais
+      byType.forEach(item => {
+        if (item.type in defaultByType) {
+          defaultByType[item.type as keyof typeof defaultByType] = item._count.type;
+        }
+      });
+      
+      byChannel.forEach(item => {
+        if (item.channel in defaultByChannel) {
+          defaultByChannel[item.channel as keyof typeof defaultByChannel] = item._count.channel;
+        }
+      });
+      
+      byStatus.forEach(item => {
+        if (item.status in defaultByStatus) {
+          defaultByStatus[item.status as keyof typeof defaultByStatus] = item._count.status;
+        }
+      });
+
       return {
         total,
-        byType: Object.fromEntries(byType.map(item => [item.type, item._count.type])),
-        byChannel: Object.fromEntries(byChannel.map(item => [item.channel, item._count.channel])),
-        byStatus: Object.fromEntries(byStatus.map(item => [item.status, item._count.status])),
+        byType: defaultByType,
+        byChannel: defaultByChannel,
+        byStatus: defaultByStatus,
         deliveryRate: sentCount > 0 ? (deliveredCount / sentCount) * 100 : 0,
         readRate: deliveredCount > 0 ? (readCount / deliveredCount) * 100 : 0,
         averageDeliveryTime: 0, // Implementar se necessário

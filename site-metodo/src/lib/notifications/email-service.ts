@@ -317,7 +317,7 @@ export class EmailService {
     try {
       switch (this.config.provider) {
         case 'smtp':
-          this.transporter = nodemailer.createTransporter({
+          this.transporter = nodemailer.createTransport({
             host: this.config.smtp?.host,
             port: this.config.smtp?.port || 587,
             secure: this.config.smtp?.secure || false,
@@ -329,7 +329,7 @@ export class EmailService {
           break;
 
         case 'sendgrid':
-          this.transporter = nodemailer.createTransporter({
+          this.transporter = nodemailer.createTransport({
             service: 'SendGrid',
             auth: {
               user: 'apikey',
@@ -376,7 +376,7 @@ export class EmailService {
   /**
    * Mapeia prioridade para formato do Nodemailer
    */
-  private mapPriorityToNodemailer(priority?: NotificationPriority): string {
+  private mapPriorityToNodemailer(priority?: NotificationPriority): 'low' | 'normal' | 'high' {
     switch (priority) {
       case NotificationPriority.URGENT:
         return 'high';

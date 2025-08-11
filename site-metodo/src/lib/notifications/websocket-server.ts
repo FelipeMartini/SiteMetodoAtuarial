@@ -212,7 +212,7 @@ export class NotificationWebSocketServer {
 
     // Configura handlers da conexão
     ws.on('message', (data) => {
-      this.handleMessage(ws, userId, data);
+      this.handleMessage(ws, userId, Buffer.from(data as any));
     });
 
     ws.on('close', () => {
