@@ -3,7 +3,7 @@
 import { z } from 'zod';
 import { ApiClient, createApiClient } from '../client';
 import { cached } from '../cache';
-import { monitored, apiMonitor } from '../monitor';
+import { monitored, apiMonitor } from '../monitor-simple';
 
 // Type definitions for Exchange Rate API
 export interface ExchangeRates {

@@ -21,23 +21,49 @@ export {
 } from './cache';
 
 export { 
-  ApiMonitor,
+  SimpleApiMonitor as ApiMonitor,
   apiMonitor,
-  monitored,
-  type ApiMetrics,
-  type ApiEndpoint,
-  type MonitoringConfig,
-} from './monitor';
+  type EndpointMetrics as ApiMetrics,
+  type EndpointMetrics as ApiEndpoint,
+  type SystemMetrics,
+  type HealthCheckResult,
+} from './monitor-simple';
+
+// Import para export default
+import { ApiClient } from './client';
+import { ApiCache } from './cache';
+import { SimpleApiMonitor } from './monitor-simple';
+import { cepService } from './services/cep';
+import { exchangeService } from './services/exchange';
+// Import apiMonitor to use in monitored function
+import { apiMonitor } from './monitor-simple';
+import { apiCache } from './cache';
+
+// Compatibility function for monitored decorator
+export function monitored(name: string) {
+  return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+    const original = descriptor.value;
+    descriptor.value = async function(...args: any[]) {
+      const start = Date.now();
+      try {
+        const result = await original.apply(this, args);
+        apiMonitor.recordRequest(name, Date.now() - start, true);
+        return result;
+      } catch (error) {
+        apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message);
+        throw error;
+      }
+    };
+    return descriptor;
+  };
+}
 
 // API Services
-export { 
+export {
   CepService,
   cepService,
-  type CepData,
   type CepError,
-} from './services/cep';
-
-export { 
+} from './services/cep';export { 
   ExchangeService,
   exchangeService,
   type ExchangeRates,
@@ -306,7 +332,7 @@ export const DEFAULT_CONFIGS = {
 export default {
   ApiClient,
   ApiCache,
-  ApiMonitor,
+  ApiMonitor: SimpleApiMonitor,
   ApiHelpers,
   ApiHealthChecker,
   cepService,

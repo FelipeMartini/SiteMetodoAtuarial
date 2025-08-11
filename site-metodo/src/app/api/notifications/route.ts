@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Verifica permissão para criar notificações
-    if (!session.user.roles?.includes('admin') && !session.user.roles?.includes('manager')) {
+    if (session.user.role !== 'admin' && session.user.role !== 'manager') {
       return NextResponse.json(
         { error: 'Permissão insuficiente' },
         { status: 403 }
