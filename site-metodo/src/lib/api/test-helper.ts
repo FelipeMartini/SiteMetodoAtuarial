@@ -42,7 +42,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`);
           }
-        } catch (error) {
+        } catch (_error) {
           console.log(`    💥 ${provider}: Erro - ${error}`);
           results.individual.push({
             cep,
@@ -69,7 +69,7 @@ export class ApiTestHelper {
       };
       
       console.log(`    ✅ Bulk: ${results.bulk.found}/${results.bulk.total} encontrados`);
-    } catch (error) {
+    } catch (_error) {
       console.log(`    💥 Bulk: ${error}`);
       results.bulk = {
         success: false,
@@ -130,7 +130,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`);
           }
-        } catch (error) {
+        } catch (_error) {
           console.log(`    💥 ${provider}: ${error}`);
           results.rates.push({
             ...pair,
@@ -168,7 +168,7 @@ export class ApiTestHelper {
         } else {
           console.log(`    ❌ Conversão falhou`);
         }
-      } catch (error) {
+      } catch (_error) {
         console.log(`    💥 Conversão: ${error}`);
         results.conversions.push({
           ...conversion,
@@ -195,7 +195,7 @@ export class ApiTestHelper {
       } else {
         console.log(`    ❌ Tendências: Falhou`);
       }
-    } catch (error) {
+    } catch (_error) {
       console.log(`    💥 Tendências: ${error}`);
       results.trends.push({
         currency: 'USD',
@@ -238,7 +238,7 @@ export class ApiTestHelper {
         });
         
         console.log(`    ✅ Endpoint ${endpoint.name} registrado`);
-      } catch (error) {
+      } catch (_error) {
         console.log(`    💥 Registro: ${error}`);
         results.registration.push({
           ...endpoint,
@@ -261,7 +261,7 @@ export class ApiTestHelper {
         });
         
         console.log(`    ${healthResult.healthy ? '✅' : '❌'} ${endpoint.name}: ${healthResult.responseTime}ms`);
-      } catch (error) {
+      } catch (_error) {
         console.log(`    💥 Health check: ${error}`);
         results.healthChecks.push({
           name: endpoint.name,
@@ -284,7 +284,7 @@ export class ApiTestHelper {
       };
       
       console.log(`    ✅ Métricas: ${allMetrics.length} endpoints monitorados`);
-    } catch (error) {
+    } catch (_error) {
       console.log(`    💥 Métricas: ${error}`);
       results.metrics = {
         success: false,
@@ -313,7 +313,7 @@ export class ApiTestHelper {
       };
       
       console.log(`    ✅ Cache funcionando: ${cached ? 'dados recuperados' : 'falhou'}`);
-    } catch (error) {
+    } catch (_error) {
       console.log(`    💥 Cache: ${error}`);
       results.cache = {
         success: false,
@@ -357,7 +357,7 @@ export class ApiTestHelper {
       results.monitoring = await this.testMonitoring();
       console.log('');
       
-    } catch (error) {
+    } catch (_error) {
       console.error('💥 Erro durante os testes:', error);
     }
 

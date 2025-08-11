@@ -116,7 +116,7 @@ export class ApiClient {
     this.client.interceptors.response.use(
       (response: AxiosResponse) => {
         // Duration tracking simplified
-        const duration = 0; // Placeholder
+        const _duration = 0; // Placeholder
         
         // Logger call simplified
 
@@ -124,7 +124,7 @@ export class ApiClient {
       },
       (error: AxiosError) => {
         // Duration tracking simplified for error case
-        const duration = 0; // Placeholder
+        const _duration = 0; // Placeholder
         const apiError = this.formatError(error);
 
         // Logger call simplified
@@ -193,7 +193,7 @@ export class ApiClient {
   ): Promise<T> {
     try {
       return await requestFn();
-    } catch (error) {
+    } catch (_error) {
       if (retries <= 0) {
         throw error;
       }
@@ -331,7 +331,7 @@ export class ApiClient {
         healthy: true,
         latency: Date.now() - startTime,
       };
-    } catch (error) {
+    } catch (_error) {
       return {
         healthy: false,
         latency: Date.now() - startTime,

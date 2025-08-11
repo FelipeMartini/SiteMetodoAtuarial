@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from 'react';
 import { 
   NotificationData, 
-  NotificationFilter,
   UseNotificationsOptions,
   UseNotificationsReturn 
 } from '@/types/notifications';
@@ -117,7 +116,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
           setUnreadCount(data.data.user.unreadCount);
         }
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn('Erro ao buscar contagem não lidas:', error);
     }
   }, []);
@@ -149,7 +148,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       // Atualiza contagem
       setUnreadCount(prev => Math.max(0, prev - 1));
 
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao marcar como lida:', error);
       throw error;
     }
@@ -188,7 +187,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setUnreadCount(0);
       return markedCount;
 
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao marcar todas como lidas:', error);
       throw error;
     }
@@ -220,7 +219,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return newNotifications;
       });
 
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao remover notificação:', error);
       throw error;
     }
@@ -300,7 +299,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
             } else if (message.type === 'status') {
               setUnreadCount(message.data.unreadCount);
             }
-          } catch (error) {
+          } catch (_error) {
             console.warn('Erro ao processar mensagem WebSocket:', error);
           }
         };
@@ -318,7 +317,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return () => {
           ws.close();
         };
-      } catch (error) {
+      } catch (_error) {
         console.warn('WebSocket não disponível:', error);
       }
     };
@@ -358,7 +357,7 @@ export function useUnreadCount(userId: string) {
             setCount(data.data.user.unreadCount);
           }
         }
-      } catch (error) {
+      } catch (_error) {
         console.warn('Erro ao buscar contagem:', error);
       } finally {
         setLoading(false);
@@ -442,7 +441,7 @@ export function usePushNotifications() {
 
       setSubscription(pushSubscription);
       return pushSubscription;
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao subscrever push notifications:', error);
       throw error;
     }
@@ -464,7 +463,7 @@ export function usePushNotifications() {
         await subscription.unsubscribe();
         setSubscription(null);
       }
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao cancelar subscription:', error);
       throw error;
     }
@@ -482,7 +481,7 @@ export function usePushNotifications() {
 
       const data = await response.json();
       return data.success;
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro no teste push:', error);
       return false;
     }
@@ -500,17 +499,3 @@ export function usePushNotifications() {
 }
 
 // Utility function para converter VAPID key
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = '='.repeat((4 - base64String.length % 4) % 4);
-  const base64 = (base64String + padding)
-    .replace(/-/g, '+')
-    .replace(/_/g, '/');
-
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(new ArrayBuffer(rawData.length));
-
-  for (let i = 0; i < rawData.length; ++i) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}

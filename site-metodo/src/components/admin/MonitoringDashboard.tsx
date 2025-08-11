@@ -93,7 +93,7 @@ export default function MonitoringDashboard() {
 
       const result = await response.json()
       setData(result)
-    } catch (error) {
+    } catch (_error) {
       console.error('Error fetching monitoring data:', error)
       toast({
         title: "Erro",
@@ -127,7 +127,7 @@ export default function MonitoringDashboard() {
         title: "Exportação concluída",
         description: `Métricas exportadas em formato ${format.toUpperCase()}.`,
       })
-    } catch (error) {
+    } catch (_error) {
       console.error('Error exporting metrics:', error)
       toast({
         title: "Erro na exportação",
@@ -399,7 +399,7 @@ export default function MonitoringDashboard() {
                         <YAxis />
                         <Tooltip 
                           labelFormatter={(value) => new Date(value).toLocaleString()}
-                          formatter={(value: any) => [
+                          formatter={(value: Record<string, unknown>) => [
                             `${value.toFixed(2)}${metricName.includes('time') ? 'ms' : ''}`,
                             metricName
                           ]}
@@ -434,7 +434,7 @@ export default function MonitoringDashboard() {
                       <YAxis domain={[0, 100]} />
                       <Tooltip 
                         labelFormatter={(value) => new Date(value).toLocaleString()}
-                        formatter={(value: any) => [`${value}%`, 'Score de Saúde']}
+                        formatter={(value: Record<string, unknown>) => [`${value}%`, 'Score de Saúde']}
                       />
                       <Area 
                         type="monotone" 

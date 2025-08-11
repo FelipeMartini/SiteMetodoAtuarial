@@ -85,7 +85,7 @@ export class PushNotificationService {
 
         return created.id;
       }
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao registrar push subscription', { error, userId });
       throw error;
     }
@@ -104,7 +104,7 @@ export class PushNotificationService {
       simpleLogger.info('Push subscription removida', { 
         endpoint: this.maskEndpoint(endpoint) 
       });
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao remover subscription', { error, endpoint });
       throw error;
     }
@@ -177,7 +177,7 @@ export class PushNotificationService {
       });
 
       return sent > 0;
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao enviar push notification', { error, userId });
       return false;
     }
@@ -257,7 +257,7 @@ export class PushNotificationService {
         activeSubscriptions: active,
         subscriptionsByUser: byUser.length
       };
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao obter estatísticas push', { error });
       return {
         totalSubscriptions: 0,
@@ -286,7 +286,7 @@ export class PushNotificationService {
         ...sub,
         endpoint: this.maskEndpoint(sub.endpoint)
       }));
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao listar subscriptions do usuário', { error, userId });
       return [];
     }
@@ -311,7 +311,7 @@ export class PushNotificationService {
       );
 
       simpleLogger.info('Web Push configurado com sucesso');
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao configurar Web Push', { error });
       throw error;
     }
@@ -401,7 +401,7 @@ export class PushNotificationService {
       simpleLogger.info('Subscriptions inválidas marcadas como inativas', { 
         count: endpoints.length 
       });
-    } catch (error) {
+    } catch (_error) {
       simpleLogger.error('Erro ao marcar subscriptions como inativas', { error });
     }
   }
@@ -475,7 +475,7 @@ export const pushNotificationClient = {
       });
 
       return subscription;
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao subscrever push notifications:', error);
       return null;
     }
@@ -494,7 +494,7 @@ export const pushNotificationClient = {
         }
       }
       return true;
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro ao cancelar subscription:', error);
       return false;
     }

@@ -23,7 +23,7 @@ export function Header() {
         callbackUrl: '/',
         redirect: true,
       });
-    } catch (error) {
+    } catch (_error) {
       console.error('Erro no logout:', error);
       // Fallback caso dê erro
       window.location.href = '/';

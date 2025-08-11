@@ -262,7 +262,7 @@ export async function prefetchWithRetry(
     try {
       await router.prefetch(route);
       return true;
-    } catch (error) {
+    } catch (_error) {
       console.warn(`Prefetch failed for ${route}, attempt ${attempt}:`, error);
       
       if (attempt === maxRetries) {

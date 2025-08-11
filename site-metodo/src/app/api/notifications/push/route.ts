@@ -92,7 +92,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro na API de push notifications', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
@@ -140,7 +140,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Subscription removida com sucesso'
     });
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro ao remover push subscription', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
@@ -205,7 +205,7 @@ export async function GET(request: NextRequest) {
         );
     }
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro ao obter dados de push notifications', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },

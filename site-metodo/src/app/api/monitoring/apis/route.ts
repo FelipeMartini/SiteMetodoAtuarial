@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
         return await handleGetAllStats();
     }
 
-  } catch (error) {
+  } catch (_error) {
     console.error('API monitoring error:', error);
 
     if (error instanceof z.ZodError) {
@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         );
     }
 
-  } catch (error) {
+  } catch (_error) {
     console.error('API monitoring POST error:', error);
 
     if (error instanceof z.ZodError) {
@@ -159,7 +159,7 @@ async function handleHealthCheck(endpointName?: string) {
         ...result,
         timestamp: new Date().toISOString(),
       });
-    } catch (error) {
+    } catch (_error) {
       return NextResponse.json(
         { 
           error: `Health check failed for ${endpointName}`,
@@ -180,7 +180,7 @@ async function handleHealthCheck(endpointName?: string) {
           name: endpoint.name,
           ...result,
         };
-      } catch (error) {
+      } catch (_error) {
         return {
           name: endpoint.name,
           healthy: false,
@@ -303,7 +303,7 @@ async function handleRegisterEndpoint(endpoint: {
       endpoint,
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { 
         error: 'Failed to register endpoint',
@@ -352,7 +352,7 @@ async function handleRecordMetric(metric: {
       message: 'Metric recorded successfully',
       timestamp: new Date().toISOString(),
     });
-  } catch (error) {
+  } catch (_error) {
     return NextResponse.json(
       { 
         error: 'Failed to record metric',

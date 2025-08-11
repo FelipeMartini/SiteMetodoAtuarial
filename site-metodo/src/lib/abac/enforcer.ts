@@ -26,7 +26,7 @@ export class ABACEnforcer implements Enforcer {
 
   constructor() {
     this.adapter = new CustomPrismaAdapter(prisma);
-    this.modelPath = path.join(process.cwd(), 'src/lib/abac/models/rbac_model.conf');
+    this.modelPath = path.join(process.cwd(), 'src/lib/abac/models/pure_abac_model.conf');
   }
 
   /**
@@ -46,7 +46,7 @@ export class ABACEnforcer implements Enforcer {
       await this.enforcer.loadPolicy();
       
       console.log('ABAC Enforcer initialized successfully');
-    } catch (error) {
+    } catch (_error) {
       console.error('Failed to initialize ABAC Enforcer:', error);
       throw new AuthorizationError(
         'Failed to initialize authorization system',
@@ -69,48 +69,68 @@ export class ABACEnforcer implements Enforcer {
   }
 
   /**
-   * Main authorization method
+   * Main ABAC authorization method with attribute evaluation
    */
   async enforce(request: AuthorizationRequest): Promise<AuthorizationResult> {
     this.ensureInitialized();
 
     try {
+      // Prepare subject attributes
       const subject = typeof request.subject === 'string' 
-        ? request.subject 
-        : request.subject.email;
+        ? { email: request.subject, authenticated: true, attributes: {} }
+        : request.subject;
       
+      // Prepare object attributes  
       const object = typeof request.object === 'string'
-        ? request.object
-        : request.object.id;
+        ? { id: request.object, type: 'resource', attributes: {} }
+        : request.object;
+
+      // Prepare context with current time attributes
+      const context = request.context || {};
+      const now = new Date();
+      const enrichedContext = {
+        ...context,
+        time: now,
+        hour: now.getHours(),
+        attributes: context.attributes || {}
+      };
 
       const startTime = Date.now();
-      const allowed = await this.enforcer!.enforce(subject, object, request.action);
+      
+      // ABAC enforcement with all attributes
+      const allowed = await this.enforcer!.enforce(
+        subject,
+        object, 
+        request.action,
+        enrichedContext
+      );
+      
       const endTime = Date.now();
 
       const result: AuthorizationResult = {
         allowed,
-        reason: allowed ? 'Access granted by policy' : 'No matching policy found',
+        reason: allowed ? 'Access granted by ABAC policy' : 'No matching ABAC policy found',
         timestamp: new Date()
       };
 
       // Log da decisão de autorização
       await this.logAccess({
-        userId: typeof request.subject === 'string' ? request.subject : request.subject.id,
-        resource: object,
+        userId: subject.id || subject.email,
+        resource: object.id,
         action: request.action,
         result: allowed ? 'allow' : 'deny',
         reason: result.reason,
-        context: request.context,
+        context: enrichedContext,
         responseTime: endTime - startTime
       });
 
       return result;
-    } catch (error) {
-      console.error('Authorization error:', error);
+    } catch (_error) {
+      console.error('ABAC authorization error:', _error);
       throw new AuthorizationError(
-        'Authorization check failed',
+        'ABAC authorization check failed',
         'AUTHORIZATION_FAILED',
-        error
+        _error
       );
     }
   }
@@ -134,7 +154,7 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return added;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error adding policy:', error);
       return false;
     }
@@ -159,7 +179,7 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return removed;
-    } catch (error) {
+    } catch (_error) {
       console.error('Error removing policy:', error);
       return false;
     }
@@ -184,96 +204,14 @@ export class ABACEnforcer implements Enforcer {
         createdAt: new Date(),
         updatedAt: new Date()
       }));
-    } catch (error) {
+    } catch (_error) {
       console.error('Error getting policies:', error);
       return [];
     }
   }
 
   /**
-   * Add role for user
-   */
-  async addRoleForUser(user: string, role: string): Promise<boolean> {
-    this.ensureInitialized();
-
-    try {
-      const added = await this.enforcer!.addRoleForUser(user, role);
-      
-      if (added) {
-        await this.enforcer!.savePolicy();
-      }
-
-      return added;
-    } catch (error) {
-      console.error('Error adding role for user:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Delete role for user
-   */
-  async deleteRoleForUser(user: string, role: string): Promise<boolean> {
-    this.ensureInitialized();
-
-    try {
-      const deleted = await this.enforcer!.deleteRoleForUser(user, role);
-      
-      if (deleted) {
-        await this.enforcer!.savePolicy();
-      }
-
-      return deleted;
-    } catch (error) {
-      console.error('Error deleting role for user:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Get roles for user
-   */
-  async getRolesForUser(user: string): Promise<string[]> {
-    this.ensureInitialized();
-
-    try {
-      return await this.enforcer!.getRolesForUser(user);
-    } catch (error) {
-      console.error('Error getting roles for user:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Get users for role
-   */
-  async getUsersForRole(role: string): Promise<string[]> {
-    this.ensureInitialized();
-
-    try {
-      return await this.enforcer!.getUsersForRole(role);
-    } catch (error) {
-      console.error('Error getting users for role:', error);
-      return [];
-    }
-  }
-
-  /**
-   * Check if user has role
-   */
-  async hasRoleForUser(user: string, role: string): Promise<boolean> {
-    this.ensureInitialized();
-
-    try {
-      return await this.enforcer!.hasRoleForUser(user, role);
-    } catch (error) {
-      console.error('Error checking role for user:', error);
-      return false;
-    }
-  }
-
-  /**
-   * Log access attempt
+   * Log access attempt for pure ABAC
    */
   private async logAccess(logData: {
     userId: string;
@@ -297,40 +235,34 @@ export class ABACEnforcer implements Enforcer {
           userAgent: logData.context?.userAgent
         }
       });
-    } catch (error) {
-      console.error('Error logging access:', error);
+    } catch (_error) {
+      console.error('Error logging access:', _error);
       // Não propagar erro de log para não afetar a autorização
     }
   }
 
   /**
-   * Initialize default policies
+   * Initialize default ABAC policies
    */
   async initializeDefaultPolicies(): Promise<void> {
     this.ensureInitialized();
 
     const defaultPolicies = [
-      // Admin permissions
-      ['admin', '/admin/*', 'read', 'allow'],
-      ['admin', '/admin/*', 'write', 'allow'],
-      ['admin', '/admin/*', 'delete', 'allow'],
-      ['admin', '/area-cliente/*', 'read', 'allow'],
-      ['admin', '/area-cliente/*', 'write', 'allow'],
+      // Admin email can access everything
+      ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'read', 'true', 'allow'],
+      ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'write', 'true', 'allow'],
+      ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'delete', 'true', 'allow'],
       
-      // User permissions
-      ['user', '/area-cliente/perfil', 'read', 'allow'],
-      ['user', '/area-cliente/perfil', 'write', 'allow'],
-      ['user', '/area-cliente/dashboard-admin', 'read', 'allow'],
+      // Users can access their own data
+      ['r.sub.id == r.obj.ownerId', 'r.obj.type == "user_data"', 'read', 'true', 'allow'],
+      ['r.sub.id == r.obj.ownerId', 'r.obj.type == "user_data"', 'write', 'true', 'allow'],
       
-      // Actuarial permissions
-      ['actuarial', '/area-cliente/calculos-atuariais', 'read', 'allow'],
-      ['actuarial', '/area-cliente/calculos-atuariais', 'write', 'allow'],
+      // Authenticated users can access public content
+      ['r.sub.authenticated == true', 'r.obj.type == "public"', 'read', 'true', 'allow'],
       
-      // Public permissions
-      ['*', '/', 'read', 'allow'],
-      ['*', '/login', 'read', 'allow'],
-      ['*', '/criar-conta', 'read', 'allow'],
-      ['*', '/sobre', 'read', 'allow']
+      // Department-based access
+      ['r.sub.department == "actuarial"', 'r.obj.type == "calculation"', 'read', 'true', 'allow'],
+      ['r.sub.department == "actuarial" && r.sub.experience > 5', 'r.obj.type == "calculation"', 'write', 'true', 'allow'],
     ];
 
     try {
@@ -339,9 +271,9 @@ export class ABACEnforcer implements Enforcer {
       }
       
       await this.enforcer!.savePolicy();
-      console.log('Default policies initialized');
-    } catch (error) {
-      console.error('Error initializing default policies:', error);
+      console.log('Default ABAC policies initialized');
+    } catch (_error) {
+      console.error('Error initializing default policies:', _error);
     }
   }
 
@@ -354,12 +286,12 @@ export class ABACEnforcer implements Enforcer {
     try {
       await this.enforcer!.loadPolicy();
       console.log('Policies reloaded successfully');
-    } catch (error) {
-      console.error('Error reloading policies:', error);
+    } catch (_error) {
+      console.error('Error reloading policies:', _error);
       throw new AuthorizationError(
         'Failed to reload policies',
         'POLICY_RELOAD_FAILED',
-        error
+        _error
       );
     }
   }

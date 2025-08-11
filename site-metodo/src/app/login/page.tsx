@@ -50,7 +50,7 @@ const LoginPage: React.FC = () => {
         if (result && result.status === "error") {
           console.error("Erro OAuth:", result.errorMessage);
         }
-      } catch (error) {
+      } catch (_error) {
         console.error("Erro OAuth:", error);
       }
     });

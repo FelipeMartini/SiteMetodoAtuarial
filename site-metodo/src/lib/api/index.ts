@@ -49,7 +49,7 @@ export function monitored(name: string) {
         const result = await original.apply(this, args);
         apiMonitor.recordRequest(name, Date.now() - start, true);
         return result;
-      } catch (error) {
+      } catch (_error) {
         apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message);
         throw error;
       }
@@ -138,7 +138,7 @@ export class ApiHelpers {
     for (let i = 0; i <= retries; i++) {
       try {
         return await fn();
-      } catch (error) {
+      } catch (_error) {
         lastError = error instanceof Error ? error : new Error('Unknown error');
         
         if (i === retries) {
@@ -288,7 +288,7 @@ if (typeof window !== 'undefined') {
     apiMonitor.registerEndpoint('exchangerate', 'https://api.exchangerate-api.com/v4/latest/USD', 'GET');
     
     console.log('✅ API monitoring endpoints registered successfully');
-  } catch (error) {
+  } catch (_error) {
     console.warn('⚠️ Failed to register API monitoring endpoints:', error);
   }
 }

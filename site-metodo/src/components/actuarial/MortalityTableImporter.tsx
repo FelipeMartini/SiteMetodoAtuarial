@@ -122,7 +122,7 @@ export function MortalityTableImporter() {
         success: `Arquivo processado: ${entries.length} idades encontradas`
       }));
 
-    } catch (error) {
+    } catch (_error) {
       setImportState(prev => ({
         ...prev,
         isProcessing: false,
@@ -169,7 +169,7 @@ export function MortalityTableImporter() {
         success: `Tabela processada: ${entries.length} idades encontradas`
       }));
 
-    } catch (error) {
+    } catch (_error) {
       setImportState(prev => ({
         ...prev,
         isProcessing: false,

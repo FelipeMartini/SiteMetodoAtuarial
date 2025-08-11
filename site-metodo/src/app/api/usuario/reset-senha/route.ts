@@ -29,7 +29,7 @@ export async function POST(req: NextRequest) {
     });
 
     return NextResponse.json({ message: 'Senha resetada com sucesso.' });
-  } catch (error) {
+  } catch (_error) {
     console.error('Erro ao resetar senha:', error);
     return NextResponse.json({ error: 'Erro interno do servidor.' }, { status: 500 });
   }

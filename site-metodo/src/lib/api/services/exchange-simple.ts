@@ -53,7 +53,7 @@ export class ExchangeService {
       } else {
         return await this.getRateFromAwesomeApi(from, to);
       }
-    } catch (error) {
+    } catch (_error) {
       console.warn(`Falha no provedor ${provider}:`, error);
       
       // Fallback para o outro provedor
@@ -210,7 +210,7 @@ export class ExchangeService {
             low: parseFloat(data.low),
             timestamp: data.create_date,
           };
-        } catch (error) {
+        } catch (_error) {
           console.warn(`Erro ao buscar ${currency}:`, error);
           return null;
         }

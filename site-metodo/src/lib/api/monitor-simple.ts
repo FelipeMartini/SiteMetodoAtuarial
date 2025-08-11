@@ -170,7 +170,7 @@ export class SimpleApiMonitor {
         error: healthy ? undefined : `HTTP ${response.status}`,
       };
       
-    } catch (error) {
+    } catch (_error) {
       const responseTime = Date.now() - startTime;
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       
@@ -239,7 +239,7 @@ export class SimpleApiMonitor {
    */
   private updateCircuitBreaker(endpoint: EndpointMetrics): void {
     const maxErrors = 5;
-    const timeWindow = 5 * 60 * 1000; // 5 minutos
+    const _timeWindow = 5 * 60 * 1000; // 5 minutos
     
     switch (endpoint.circuitBreakerState) {
       case 'CLOSED':

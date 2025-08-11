@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
           try {
             await notificationService.markAsRead(notificationId, session.user.id);
             markedCount++;
-          } catch (error) {
+          } catch (_error) {
             simpleLogger.warn('Erro ao marcar notificação como lida', { 
               error, 
               notificationId, 
@@ -65,7 +65,7 @@ export async function POST(request: NextRequest) {
           try {
             await notificationService.deleteNotification(notificationId, session.user.id);
             deletedCount++;
-          } catch (error) {
+          } catch (_error) {
             simpleLogger.warn('Erro ao deletar notificação', { 
               error, 
               notificationId, 
@@ -97,7 +97,7 @@ export async function POST(request: NextRequest) {
       data: result
     });
 
-  } catch (error) {
+  } catch (_error) {
     simpleLogger.error('Erro em ação bulk de notificações', { error });
     return NextResponse.json(
       { error: 'Erro interno do servidor' },
