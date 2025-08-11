@@ -6,6 +6,7 @@ Validar e aprimorar o sistema de controle de acesso baseado em atributos (ABAC) 
 ## 🎯 Subtarefas
 
 ### 1. Validação do Sistema Atual
+- [ ] Conulta extensa e aprofundada na internet google e docs oficiais e no repositorio do github do CASBIN sobre abac puro nao hibrido e toda remoção completa do rbac ficando só com ABAC que é o que quermos dai compare com nosso sistema atual e implemente da melhor maneira possivel e atualizada ja criando os mesmo parametros de acesso e politicas que tinhamos antes.
 - [ ] Testar todas as políticas de acesso implementadas
 - [ ] Verificar funcionamento do Casbin adapter
 - [ ] Validar integração com Auth.js
@@ -25,22 +26,27 @@ Validar e aprimorar o sistema de controle de acesso baseado em atributos (ABAC) 
 - [ ] Implementar políticas condicionais avançadas
 
 ### 4. Interface de Administração
-- [ ] Criar interface para gerenciar políticas
+- [ ] Melhorar/criar  interface para gerenciar políticas para que o usuario possa ter controle total de cada uma das permissoes e alterálas e ver quem faz parte do que e toda hierarquia, tudo com shacn estilizado voce deve ter como referencia o componente-base e estilizar cada novo compoenente de acordo com o visual e temas escuro e claro do nosso projeto
 - [ ] Implementar editor visual de regras
 - [ ] Adicionar dashboard de monitoramento
 - [ ] Criar relatórios de acesso
 
-### 5. Testes de Segurança
-- [ ] Executar testes de penetração
-- [ ] Validar cenários de escalação de privilégios
-- [ ] Testar bypass de autorização
-- [ ] Verificar logs de segurança
+### 5. ELIMINAR POR COMPLETO TODOS ERROS DE LINT WARNING E TUDO
+- [ ] Executar linting no código
+- [ ] Corrigir todos os warnings e erros
+- [ ] Garantir que não haja novos warnings
+
 
 ### 6. Documentação e Compliance
 - [ ] Documentar todas as políticas
 - [ ] Criar guia de configuração
 - [ ] Mapear conformidade com LGPD
 - [ ] Documentar procedimentos de auditoria
+
+### 7. Garantir que o sistema de roles antigos nao existe mais e eliminar todos arquivos nao utilizados
+- [ ] Remover referências a roles antigas mas cuidando para nao quebrar nada que foi implementado DE ABAC PURO, tenha ceteza que esta usando abac puro consulte na internet a fonte coom referencia
+- [ ] Eliminar arquivos não utilizados
+- [ ] Atualizar documentação para refletir mudanças
 
 ## ⚡ Benefícios Esperados
 - **Segurança**: Controle de acesso granular e robusto
