@@ -155,7 +155,6 @@ export class SimpleApiMonitor {
       // Fazer uma requisição simples para testar o endpoint
       const response = await fetch(endpoint.url, {
         method: endpoint.method,
-        timeout: 5000,
       });
       
       const responseTime = Date.now() - startTime;

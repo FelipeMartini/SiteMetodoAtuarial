@@ -35,7 +35,7 @@ export interface CacheStats {
  */
 export class ApiCache {
   private cache: LRUCache<string, CacheEntry<any>>;
-  private logger: StructuredLogger;
+  private logger: typeof simpleLogger;
   private stats: Omit<CacheStats, 'hitRate' | 'memoryUsage' | 'size' | 'maxSize'>;
   private defaultTtl: number;
   private compressionEnabled: boolean;
@@ -87,7 +87,7 @@ export class ApiCache {
     
     if (!entry) {
       this.stats.misses++;
-      this.logger.debug({ key }, 'Cache miss');
+      this.logger.debug(`Cache miss for key: ${key}`);
       return null;
     }
 
@@ -96,7 +96,7 @@ export class ApiCache {
     if (entry.timestamp + (entry.ttl * 1000) < now) {
       this.cache.delete(key);
       this.stats.misses++;
-      this.logger.debug({ key, age: now - entry.timestamp }, 'Cache entry expired');
+      this.logger.debug(`Cache entry expired for key: ${key}, age: ${now - entry.timestamp}ms`);
       return null;
     }
 
@@ -105,97 +105,27 @@ export class ApiCache {
     entry.lastAccessed = now;
     this.stats.hits++;
 
-    this.logger.debug({ 
-      key, 
-      hits: entry.hits,
-      age: now - entry.timestamp,
-    }, 'Cache hit');
-
     return entry.data;
   }
 
   /**
    * Set item in cache
    */
-  set<T>(key: string, data: T, ttl?: number): void {
+  set<T>(key: string, value: T, ttl?: number): void {
+    const effectiveTtl = ttl || this.defaultTtl;
     const now = Date.now();
-    const entryTtl = ttl || this.defaultTtl;
-
-    const entry: CacheEntry<T> = {
-      data,
-      timestamp: now,
-      ttl: entryTtl,
-      hits: 0,
-      lastAccessed: now,
-    };
-
-    this.cache.set(key, entry, { ttl: entryTtl * 1000 });
-    this.stats.sets++;
-
-    this.logger.debug({ 
-      key, 
-      ttl: entryTtl,
-      dataSize: this.estimateSize(data),
-    }, 'Cache entry set');
-  }
-
-  /**
-   * Check if key exists in cache (without updating access time)
-   */
-  has(key: string): boolean {
-    return this.cache.has(key);
-  }
-
-  /**
-   * Delete item from cache
-   */
-  delete(key: string): boolean {
-    const deleted = this.cache.delete(key);
-    if (deleted) {
-      this.stats.deletes++;
-      this.logger.debug({ key }, 'Cache entry deleted');
-    }
-    return deleted;
-  }
-
-  /**
-   * Clear all cache entries
-   */
-  clear(): void {
-    const sizeBefore = this.cache.size;
-    this.cache.clear();
-    this.logger.info({ 
-      entriesCleared: sizeBefore 
-    }, 'Cache cleared');
-  }
-
-  /**
-   * Get cache statistics
-   */
-  getStats(): CacheStats {
-    const totalRequests = this.stats.hits + this.stats.misses;
-    const hitRate = totalRequests > 0 ? (this.stats.hits / totalRequests) * 100 : 0;
-
-    return {
-      ...this.stats,
-      size: this.cache.size,
-      maxSize: this.cache.max,
-      hitRate: Math.round(hitRate * 100) / 100,
-      memoryUsage: this.estimateMemoryUsage(),
-    };
-  }
-
-  /**
-   * Get cached entries with metadata
-   */
-  getEntries(): Array<{ key: string; entry: CacheEntry<any> }> {
-    const entries: Array<{ key: string; entry: CacheEntry<any> }> = [];
     
-    for (const [key, entry] of this.cache.entries()) {
-      entries.push({ key, entry: entry as CacheEntry<any> });
-    }
+    const entry: CacheEntry<T> = {
+      data: value,
+      timestamp: now,
+      lastAccessed: now,
+      hits: 0,
+      ttl: effectiveTtl
+    };
 
-    return entries.sort((a, b) => b.entry.lastAccessed - a.entry.lastAccessed);
+    this.cache.set(key, entry);
+    this.stats.sets++;
+    this.logger.debug(`Cache set for key: ${key}`);
   }
 
   /**
@@ -212,10 +142,7 @@ export class ApiCache {
       }
     }
 
-    this.logger.info({ 
-      pattern: pattern.toString(), 
-      invalidated 
-    }, 'Cache pattern invalidation');
+    this.logger.info(`Cache pattern invalidation: ${pattern.toString()}, invalidated: ${invalidated}`);
 
     return invalidated;
   }
@@ -258,10 +185,46 @@ export class ApiCache {
     const pruned = sizeBefore - this.cache.size;
 
     if (pruned > 0) {
-      this.logger.info({ pruned }, 'Pruned expired entries');
+      this.logger.info(`Pruned expired entries: ${pruned}`);
     }
 
     return pruned;
+  }
+
+  /**
+   * Clear all cache entries
+   */
+  clear(): void {
+    this.cache.clear();
+    this.stats = {
+      hits: 0,
+      misses: 0,
+      sets: 0,
+      deletes: 0
+    };
+  }
+
+  /**
+   * Get cache statistics
+   */
+  getStats(): CacheStats {
+    const size = this.cache.size;
+    const maxSize = this.cache.maxSize || 0;
+    const hits = this.stats.hits;
+    const misses = this.stats.misses;
+    const hitRate = hits + misses > 0 ? hits / (hits + misses) : 0;
+    const memoryUsage = this.estimateMemoryUsage();
+
+    return {
+      hits,
+      misses,
+      sets: this.stats.sets,
+      deletes: this.stats.deletes,
+      hitRate,
+      size,
+      maxSize,
+      memoryUsage
+    };
   }
 
   /**

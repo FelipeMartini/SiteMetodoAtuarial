@@ -4,7 +4,7 @@
  */
 
 import { apiCache } from './cache';
-import { apiMonitor } from './monitor';
+import { apiMonitor } from './monitor-simple';
 
 /**
  * Helper para adicionar cache a métodos de classe

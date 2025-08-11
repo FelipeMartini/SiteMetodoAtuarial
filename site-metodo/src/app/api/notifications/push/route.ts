@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
         });
 
       case 'stats':
-        if (!session.user.roles?.includes('admin')) {
+        if (session.user.role !== 'admin') {
           return NextResponse.json(
             { error: 'Permissão insuficiente' },
             { status: 403 }

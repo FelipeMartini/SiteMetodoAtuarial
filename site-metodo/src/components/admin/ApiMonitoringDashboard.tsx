@@ -20,7 +20,7 @@ import {
   Shield,
   Database
 } from 'lucide-react';
-import { apiMonitor, ApiEndpoint } from '@/lib/api/monitor';
+import { apiMonitor, EndpointMetrics as ApiEndpoint } from '@/lib/api/monitor-simple';
 import { apiCache } from '@/lib/api/cache';
 import { cepService } from '@/lib/api/services/cep';
 
@@ -60,9 +60,21 @@ const ApiMonitoringDashboard: React.FC = () => {
       const systemMetrics = apiMonitor.getSystemMetrics();
       const cacheStats = apiCache.normal.getStats();
 
+      // Adaptamos os dados para o formato esperado
+      const adaptedSystemMetrics = {
+        totalEndpoints: endpoints.length,
+        healthyEndpoints: endpoints.filter(e => e.healthy).length,
+        degradedEndpoints: endpoints.filter(e => e.errorRate > 0.1 && e.errorRate < 0.5).length,
+        unhealthyEndpoints: endpoints.filter(e => !e.healthy).length,
+        totalRequests: systemMetrics.totalRequests,
+        totalErrors: systemMetrics.totalErrors,
+        averageResponseTime: systemMetrics.averageResponseTime,
+        systemErrorRate: systemMetrics.totalRequests > 0 ? systemMetrics.totalErrors / systemMetrics.totalRequests : 0,
+      };
+
       setStats({
         endpoints,
-        systemMetrics,
+        systemMetrics: adaptedSystemMetrics,
         cacheStats,
       });
       setLastUpdate(new Date());
@@ -315,8 +327,8 @@ const ApiMonitoringDashboard: React.FC = () => {
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center space-x-2">
-                      <div className={getStatusColor(endpoint.status)}>
-                        {getStatusIcon(endpoint.status)}
+                      <div className={getStatusColor(endpoint.healthy ? 'healthy' : 'unhealthy')}>
+                        {getStatusIcon(endpoint.healthy ? 'healthy' : 'unhealthy')}
                       </div>
                       <div>
                         <div className="font-medium">{endpoint.name}</div>
@@ -327,11 +339,11 @@ const ApiMonitoringDashboard: React.FC = () => {
                     </div>
                     <div className="flex items-center space-x-2">
                       <Badge 
-                        variant={endpoint.status === 'healthy' ? 'default' : 'destructive'}
+                        variant={endpoint.healthy ? 'default' : 'destructive'}
                       >
-                        {endpoint.status}
+                        {endpoint.healthy ? 'healthy' : 'unhealthy'}
                       </Badge>
-                      {getCircuitBreakerBadge(endpoint.metrics.circuitBreakerState)}
+                      {getCircuitBreakerBadge(endpoint.circuitBreakerState)}
                     </div>
                   </div>
 
@@ -340,26 +352,26 @@ const ApiMonitoringDashboard: React.FC = () => {
                   <div className="grid gap-4 md:grid-cols-4">
                     <div>
                       <div className="text-sm font-medium">Requests</div>
-                      <div className="text-2xl font-bold">{endpoint.metrics.requestCount}</div>
+                      <div className="text-2xl font-bold">{endpoint.totalRequests}</div>
                       <div className="text-xs text-muted-foreground">
-                        {endpoint.metrics.successCount} sucessos
+                        {endpoint.successfulRequests} sucessos
                       </div>
                     </div>
                     
                     <div>
                       <div className="text-sm font-medium">Taxa de Erro</div>
                       <div className="text-2xl font-bold">
-                        {endpoint.metrics.errorRate.toFixed(1)}%
+                        {endpoint.errorRate.toFixed(1)}%
                       </div>
                       <div className="text-xs text-muted-foreground">
-                        {endpoint.metrics.errorCount} erros
+                        {endpoint.errorCount} erros
                       </div>
                     </div>
                     
                     <div>
                       <div className="text-sm font-medium">Tempo de Resposta</div>
                       <div className="text-2xl font-bold">
-                        {Math.round(endpoint.metrics.averageResponseTime)}ms
+                        {Math.round(endpoint.averageResponseTime)}ms
                       </div>
                       <div className="text-xs text-muted-foreground">
                         Min: {Math.round(endpoint.metrics.minResponseTime)}ms, 

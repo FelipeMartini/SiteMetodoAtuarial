@@ -36,18 +36,34 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setError(null);
 
       const currentOffset = reset ? 0 : offset;
-      const params = new URLSearchParams({
-        ...filter,
-        offset: currentOffset.toString(),
-        limit: filter.limit?.toString() || '50'
-      } as Record<string, string>);
-
-      // Remove parâmetros undefined
-      Array.from(params.entries()).forEach(([key, value]) => {
-        if (!value || value === 'undefined') {
-          params.delete(key);
-        }
-      });
+      const params = new URLSearchParams();
+      
+      // Adiciona filtros básicos
+      params.append('offset', currentOffset.toString());
+      params.append('limit', filter.limit?.toString() || '50');
+      
+      // Adiciona outros filtros condicionalmente
+      if (filter.userId) params.append('userId', filter.userId);
+      if (filter.unreadOnly !== undefined) params.append('unreadOnly', filter.unreadOnly.toString());
+      if (filter.search) params.append('search', filter.search);
+      if (filter.dateFrom) params.append('dateFrom', filter.dateFrom.toISOString());
+      if (filter.dateTo) params.append('dateTo', filter.dateTo.toISOString());
+      if (filter.sortBy) params.append('sortBy', filter.sortBy);
+      if (filter.sortOrder) params.append('sortOrder', filter.sortOrder);
+      
+      // Adiciona arrays como strings separadas por vírgula
+      if (filter.types && filter.types.length > 0) {
+        params.append('types', filter.types.join(','));
+      }
+      if (filter.channels && filter.channels.length > 0) {
+        params.append('channels', filter.channels.join(','));
+      }
+      if (filter.statuses && filter.statuses.length > 0) {
+        params.append('statuses', filter.statuses.join(','));
+      }
+      if (filter.priorities && filter.priorities.length > 0) {
+        params.append('priorities', filter.priorities.join(','));
+      }
 
       const response = await fetch(`/api/notifications?${params}`);
       
@@ -213,17 +229,17 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
   /**
    * Atualiza a lista
    */
-  const refresh = useCallback(() => {
+  const refresh = useCallback(async () => {
     setOffset(0);
-    fetchNotifications(true);
+    await fetchNotifications(true);
   }, [fetchNotifications]);
 
   /**
    * Carrega mais notificações
    */
-  const loadMore = useCallback(() => {
+  const loadMore = useCallback(async () => {
     if (!loading && hasMore) {
-      fetchNotifications(false);
+      await fetchNotifications(false);
     }
   }, [loading, hasMore, fetchNotifications]);
 
@@ -402,10 +418,10 @@ export function usePushNotifications() {
       const registration = await navigator.serviceWorker.register('/sw.js');
       await navigator.serviceWorker.ready;
 
-      // Cria subscription
+      // Cria subscription  
       const pushSubscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapidPublicKey)
+        applicationServerKey: vapidPublicKey // Usa diretamente a string
       });
 
       // Envia para servidor
@@ -491,7 +507,7 @@ function urlBase64ToUint8Array(base64String: string): Uint8Array {
     .replace(/_/g, '/');
 
   const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
+  const outputArray = new Uint8Array(new ArrayBuffer(rawData.length));
 
   for (let i = 0; i < rawData.length; ++i) {
     outputArray[i] = rawData.charCodeAt(i);

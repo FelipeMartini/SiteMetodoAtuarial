@@ -26,7 +26,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url);
     const period = searchParams.get('period') || '7d'; // 7d, 30d, 90d
     const includeGlobal = searchParams.get('includeGlobal') === 'true' && 
-                         session.user.roles?.includes('admin');
+                         session.user.role === 'admin';
 
     // Calcula datas baseado no período
     const now = new Date();
