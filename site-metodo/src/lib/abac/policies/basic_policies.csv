@@ -1,0 +1,29 @@
+# Basic RBAC Policies
+# Format: p, subject, object, action, effect
+
+# Admin permissions
+p, admin, /admin/*, *, allow
+p, admin, /area-cliente/*, *, allow
+p, admin, /api/admin/*, *, allow
+
+# User permissions
+p, user, /area-cliente/perfil, read, allow
+p, user, /area-cliente/perfil, write, allow
+p, user, /area-cliente/dashboard-admin, read, allow
+
+# Actuarial permissions
+p, actuarial, /area-cliente/calculos-atuariais, *, allow
+p, actuarial, /api/actuarial/*, *, allow
+
+# Public permissions
+p, *, /, read, allow
+p, *, /login, *, allow
+p, *, /criar-conta, *, allow
+p, *, /sobre, read, allow
+p, *, /contato, *, allow
+p, *, /servicos, read, allow
+
+# Role assignments
+g, admin_user, admin
+g, actuarial_user, actuarial
+g, actuarial_user, user

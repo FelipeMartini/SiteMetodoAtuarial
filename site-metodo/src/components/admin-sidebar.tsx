@@ -136,6 +136,12 @@ const adminMenuItems: AdminMenuItem[] = [
     icon: Settings,
     items: [
       {
+        title: 'Gestão ABAC',
+        url: '/admin/abac',
+        icon: Shield,
+        badge: 'Novo',
+      },
+      {
         title: 'Configurações',
         url: '/admin/configuracoes',
         icon: Settings,
