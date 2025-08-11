@@ -8,30 +8,32 @@ import { z } from 'zod'
 // Schema para validação dos parâmetros
 const MetricsParams = z.object({
   metric: z.string().optional(),
-  timeRange: z.string().optional().transform(str => str ? parseInt(str) : 3600000), // 1 hour default
+  timeRange: z
+    .string()
+    .optional()
+    .transform(str => (str ? parseInt(str) : 3600000)), // 1 hour default
   format: z.enum(['json', 'prometheus']).default('json'),
 })
 
-
 interface MetricData {
-  avg: number;
-  min: number;
-  max: number;
-  count: number;
-  total?: number;
-  timestamp?: string;
-  p95?: number;
-  p99?: number;
+  avg: number
+  min: number
+  max: number
+  count: number
+  total?: number
+  timestamp?: string
+  p95?: number
+  p99?: number
 }
 
 interface HealthStatus {
-  status: string;
-  uptime: number;
-  memory: Record<string, number>;
-  cpu?: Record<string, number>;
-  database?: Record<string, unknown>;
-  lastChecked?: Date | string;
-  [key: string]: unknown;
+  status: string
+  uptime: number
+  memory: Record<string, number>
+  cpu?: Record<string, number>
+  database?: Record<string, unknown>
+  lastChecked?: Date | string
+  [key: string]: unknown
 }
 
 export async function GET(request: NextRequest) {
@@ -64,12 +66,9 @@ export async function GET(request: NextRequest) {
     // Se métrica específica foi solicitada
     if (params.metric) {
       const aggregated = monitoring.getAggregatedMetrics(params.metric, params.timeRange)
-      
+
       if (!aggregated) {
-        return NextResponse.json(
-          { error: 'Métrica não encontrada' },
-          { status: 404 }
-        )
+        return NextResponse.json({ error: 'Métrica não encontrada' }, { status: 404 })
       }
 
       return NextResponse.json({
@@ -127,30 +126,30 @@ export async function GET(request: NextRequest) {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })
-    
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
+
+    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
 
 // Converter métricas para formato Prometheus
-function convertToPrometheus(metricsData: Record<string, MetricData>, health: HealthStatus): string {
+function convertToPrometheus(
+  metricsData: Record<string, MetricData>,
+  health: HealthStatus
+): string {
   const lines: string[] = []
 
   // Métricas de aplicação
   for (const [metricName, data] of Object.entries(metricsData)) {
     const promName = metricName.replace(/[^a-zA-Z0-9_]/g, '_')
-    
+
     lines.push(`# HELP ${promName}_avg Average value`)
     lines.push(`# TYPE ${promName}_avg gauge`)
     lines.push(`${promName}_avg ${data.avg}`)
-    
+
     lines.push(`# HELP ${promName}_max Maximum value`)
     lines.push(`# TYPE ${promName}_max gauge`)
     lines.push(`${promName}_max ${data.max}`)
-    
+
     lines.push(`# HELP ${promName}_p95 95th percentile`)
     lines.push(`# TYPE ${promName}_p95 gauge`)
     lines.push(`${promName}_p95 ${data.p95}`)
@@ -165,7 +164,9 @@ function convertToPrometheus(metricsData: Record<string, MetricData>, health: He
   lines.push('# TYPE system_memory_usage_ratio gauge')
   lines.push(`system_memory_usage_ratio ${health.memory.percentage}`)
 
-  lines.push('# HELP system_health_status System health status (1=healthy, 0.5=degraded, 0=unhealthy)')
+  lines.push(
+    '# HELP system_health_status System health status (1=healthy, 0.5=degraded, 0=unhealthy)'
+  )
   lines.push('# TYPE system_health_status gauge')
   const healthValue = health.status === 'healthy' ? 1 : health.status === 'degraded' ? 0.5 : 0
   lines.push(`system_health_status ${healthValue}`)

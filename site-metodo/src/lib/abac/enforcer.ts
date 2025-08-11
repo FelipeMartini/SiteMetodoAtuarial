@@ -1,8 +1,8 @@
-import { newEnforcer, Enforcer as CasbinEnforcer } from 'casbin';
-import { CustomPrismaAdapter } from './prisma-adapter';
-import { prisma } from '@/lib/prisma';
-import path from 'path';
-import fs from 'fs';
+import { newEnforcer, Enforcer as CasbinEnforcer } from 'casbin'
+import { CustomPrismaAdapter } from './prisma-adapter'
+import { prisma } from '@/lib/prisma'
+import path from 'path'
+import fs from 'fs'
 import {
   // Subject,
   // Resource,
@@ -11,8 +11,8 @@ import {
   AuthorizationResult,
   Enforcer,
   PolicyRule,
-  AuthorizationError
-} from './types';
+  AuthorizationError,
+} from './types'
 
 /**
  * ABAC Enforcer for Site Método Atuarial
@@ -20,13 +20,13 @@ import {
  */
 
 export class ABACEnforcer implements Enforcer {
-  private enforcer: CasbinEnforcer | null = null;
-  private adapter: CustomPrismaAdapter;
-  private modelPath: string;
+  private enforcer: CasbinEnforcer | null = null
+  private adapter: CustomPrismaAdapter
+  private modelPath: string
 
   constructor() {
-    this.adapter = new CustomPrismaAdapter(prisma);
-    this.modelPath = path.join(process.cwd(), 'src/lib/abac/models/pure_abac_model.conf');
+    this.adapter = new CustomPrismaAdapter(prisma)
+    this.modelPath = path.join(process.cwd(), 'src/lib/abac/models/pure_abac_model.conf')
   }
 
   /**
@@ -36,23 +36,23 @@ export class ABACEnforcer implements Enforcer {
     try {
       // Verificar se o arquivo de modelo existe
       if (!fs.existsSync(this.modelPath)) {
-        throw new Error(`Model file not found: ${this.modelPath}`);
+        throw new Error(`Model file not found: ${this.modelPath}`)
       }
 
       // Criar enforcer com adapter customizado
-      this.enforcer = await newEnforcer(this.modelPath, this.adapter);
-      
+      this.enforcer = await newEnforcer(this.modelPath, this.adapter)
+
       // Carregar políticas do banco
-      await this.enforcer.loadPolicy();
-      
-      console.log('ABAC Enforcer initialized successfully');
+      await this.enforcer.loadPolicy()
+
+      console.log('ABAC Enforcer initialized successfully')
     } catch (_error) {
-      console.error('Failed to initialize ABAC Enforcer:', error);
+      console.error('Failed to initialize ABAC Enforcer:', error)
       throw new AuthorizationError(
         'Failed to initialize authorization system',
         'ENFORCER_INIT_FAILED',
         error
-      );
+      )
     }
   }
 
@@ -61,10 +61,7 @@ export class ABACEnforcer implements Enforcer {
    */
   private ensureInitialized(): void {
     if (!this.enforcer) {
-      throw new AuthorizationError(
-        'Enforcer not initialized',
-        'ENFORCER_NOT_INITIALIZED'
-      );
+      throw new AuthorizationError('Enforcer not initialized', 'ENFORCER_NOT_INITIALIZED')
     }
   }
 
@@ -72,46 +69,43 @@ export class ABACEnforcer implements Enforcer {
    * Main ABAC authorization method with attribute evaluation
    */
   async enforce(request: AuthorizationRequest): Promise<AuthorizationResult> {
-    this.ensureInitialized();
+    this.ensureInitialized()
 
     try {
       // Prepare subject attributes
-      const subject = typeof request.subject === 'string' 
-        ? { email: request.subject, authenticated: true, attributes: {} }
-        : request.subject;
-      
-      // Prepare object attributes  
-      const object = typeof request.object === 'string'
-        ? { id: request.object, type: 'resource', attributes: {} }
-        : request.object;
+      const subject =
+        typeof request.subject === 'string'
+          ? { email: request.subject, authenticated: true, attributes: {} }
+          : request.subject
+
+      // Prepare object attributes
+      const object =
+        typeof request.object === 'string'
+          ? { id: request.object, type: 'resource', attributes: {} }
+          : request.object
 
       // Prepare context with current time attributes
-      const context = request.context || {};
-      const now = new Date();
+      const context = request.context || {}
+      const now = new Date()
       const enrichedContext = {
         ...context,
         time: now,
         hour: now.getHours(),
-        attributes: context.attributes || {}
-      };
+        attributes: context.attributes || {},
+      }
 
-      const startTime = Date.now();
-      
+      const startTime = Date.now()
+
       // ABAC enforcement with all attributes
-      const allowed = await this.enforcer!.enforce(
-        subject,
-        object, 
-        request.action,
-        enrichedContext
-      );
-      
-      const endTime = Date.now();
+      const allowed = await this.enforcer!.enforce(subject, object, request.action, enrichedContext)
+
+      const endTime = Date.now()
 
       const result: AuthorizationResult = {
         allowed,
         reason: allowed ? 'Access granted by ABAC policy' : 'No matching ABAC policy found',
-        timestamp: new Date()
-      };
+        timestamp: new Date(),
+      }
 
       // Log da decisão de autorização
       await this.logAccess({
@@ -121,17 +115,17 @@ export class ABACEnforcer implements Enforcer {
         result: allowed ? 'allow' : 'deny',
         reason: result.reason,
         context: enrichedContext,
-        responseTime: endTime - startTime
-      });
+        responseTime: endTime - startTime,
+      })
 
-      return result;
+      return result
     } catch (_error) {
-      console.error('ABAC authorization error:', _error);
+      console.error('ABAC authorization error:', _error)
       throw new AuthorizationError(
         'ABAC authorization check failed',
         'AUTHORIZATION_FAILED',
         _error
-      );
+      )
     }
   }
 
@@ -139,7 +133,7 @@ export class ABACEnforcer implements Enforcer {
    * Add a policy
    */
   async addPolicy(policy: PolicyRule): Promise<boolean> {
-    this.ensureInitialized();
+    this.ensureInitialized()
 
     try {
       const added = await this.enforcer!.addPolicy(
@@ -147,16 +141,16 @@ export class ABACEnforcer implements Enforcer {
         policy.object,
         policy.action,
         policy.effect
-      );
+      )
 
       if (added) {
-        await this.enforcer!.savePolicy();
+        await this.enforcer!.savePolicy()
       }
 
-      return added;
+      return added
     } catch (_error) {
-      console.error('Error adding policy:', error);
-      return false;
+      console.error('Error adding policy:', error)
+      return false
     }
   }
 
@@ -164,7 +158,7 @@ export class ABACEnforcer implements Enforcer {
    * Remove a policy
    */
   async removePolicy(policy: PolicyRule): Promise<boolean> {
-    this.ensureInitialized();
+    this.ensureInitialized()
 
     try {
       const removed = await this.enforcer!.removePolicy(
@@ -172,16 +166,16 @@ export class ABACEnforcer implements Enforcer {
         policy.object,
         policy.action,
         policy.effect
-      );
+      )
 
       if (removed) {
-        await this.enforcer!.savePolicy();
+        await this.enforcer!.savePolicy()
       }
 
-      return removed;
+      return removed
     } catch (_error) {
-      console.error('Error removing policy:', error);
-      return false;
+      console.error('Error removing policy:', error)
+      return false
     }
   }
 
@@ -189,11 +183,11 @@ export class ABACEnforcer implements Enforcer {
    * Get all policies
    */
   async getAllPolicies(): Promise<PolicyRule[]> {
-    this.ensureInitialized();
+    this.ensureInitialized()
 
     try {
-      const policies = await this.enforcer!.getPolicy();
-      
+      const policies = await this.enforcer!.getPolicy()
+
       return policies.map((policy, index) => ({
         id: `policy_${index}`,
         subject: policy[0],
@@ -202,11 +196,11 @@ export class ABACEnforcer implements Enforcer {
         effect: (policy[3] || 'allow') as 'allow' | 'deny',
         description: `Policy for ${policy[0]} to ${policy[2]} ${policy[1]}`,
         createdAt: new Date(),
-        updatedAt: new Date()
-      }));
+        updatedAt: new Date(),
+      }))
     } catch (_error) {
-      console.error('Error getting policies:', error);
-      return [];
+      console.error('Error getting policies:', error)
+      return []
     }
   }
 
@@ -214,13 +208,13 @@ export class ABACEnforcer implements Enforcer {
    * Log access attempt for pure ABAC
    */
   private async logAccess(logData: {
-    userId: string;
-    resource: string;
-    action: string;
-    result: 'allow' | 'deny';
-    reason?: string;
-    context?: Context;
-    responseTime?: number;
+    userId: string
+    resource: string
+    action: string
+    result: 'allow' | 'deny'
+    reason?: string
+    context?: Context
+    responseTime?: number
   }): Promise<void> {
     try {
       await prisma.accessLog.create({
@@ -232,11 +226,11 @@ export class ABACEnforcer implements Enforcer {
           reason: logData.reason,
           context: logData.context ? JSON.stringify(logData.context) : null,
           ipAddress: logData.context?.ip,
-          userAgent: logData.context?.userAgent
-        }
-      });
+          userAgent: logData.context?.userAgent,
+        },
+      })
     } catch (_error) {
-      console.error('Error logging access:', _error);
+      console.error('Error logging access:', _error)
       // Não propagar erro de log para não afetar a autorização
     }
   }
@@ -245,35 +239,47 @@ export class ABACEnforcer implements Enforcer {
    * Initialize default ABAC policies
    */
   async initializeDefaultPolicies(): Promise<void> {
-    this.ensureInitialized();
+    this.ensureInitialized()
 
     const defaultPolicies = [
       // Admin email can access everything
       ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'read', 'true', 'allow'],
       ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'write', 'true', 'allow'],
-      ['r.sub.email == "admin@metodoatuarial.com"', 'r.obj.match("/.*")', 'delete', 'true', 'allow'],
-      
+      [
+        'r.sub.email == "admin@metodoatuarial.com"',
+        'r.obj.match("/.*")',
+        'delete',
+        'true',
+        'allow',
+      ],
+
       // Users can access their own data
       ['r.sub.id == r.obj.ownerId', 'r.obj.type == "user_data"', 'read', 'true', 'allow'],
       ['r.sub.id == r.obj.ownerId', 'r.obj.type == "user_data"', 'write', 'true', 'allow'],
-      
+
       // Authenticated users can access public content
       ['r.sub.authenticated == true', 'r.obj.type == "public"', 'read', 'true', 'allow'],
-      
+
       // Department-based access
       ['r.sub.department == "actuarial"', 'r.obj.type == "calculation"', 'read', 'true', 'allow'],
-      ['r.sub.department == "actuarial" && r.sub.experience > 5', 'r.obj.type == "calculation"', 'write', 'true', 'allow'],
-    ];
+      [
+        'r.sub.department == "actuarial" && r.sub.experience > 5',
+        'r.obj.type == "calculation"',
+        'write',
+        'true',
+        'allow',
+      ],
+    ]
 
     try {
       for (const policy of defaultPolicies) {
-        await this.enforcer!.addPolicy(...policy);
+        await this.enforcer!.addPolicy(...policy)
       }
-      
-      await this.enforcer!.savePolicy();
-      console.log('Default ABAC policies initialized');
+
+      await this.enforcer!.savePolicy()
+      console.log('Default ABAC policies initialized')
     } catch (_error) {
-      console.error('Error initializing default policies:', _error);
+      console.error('Error initializing default policies:', _error)
     }
   }
 
@@ -281,33 +287,29 @@ export class ABACEnforcer implements Enforcer {
    * Reload policies from database
    */
   async reloadPolicies(): Promise<void> {
-    this.ensureInitialized();
-    
+    this.ensureInitialized()
+
     try {
-      await this.enforcer!.loadPolicy();
-      console.log('Policies reloaded successfully');
+      await this.enforcer!.loadPolicy()
+      console.log('Policies reloaded successfully')
     } catch (_error) {
-      console.error('Error reloading policies:', _error);
-      throw new AuthorizationError(
-        'Failed to reload policies',
-        'POLICY_RELOAD_FAILED',
-        _error
-      );
+      console.error('Error reloading policies:', _error)
+      throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error)
     }
   }
 }
 
 // Singleton instance
-let enforcerInstance: ABACEnforcer | null = null;
+let enforcerInstance: ABACEnforcer | null = null
 
 /**
  * Get the singleton enforcer instance
  */
 export async function getEnforcer(): Promise<ABACEnforcer> {
   if (!enforcerInstance) {
-    enforcerInstance = new ABACEnforcer();
-    await enforcerInstance.initialize();
+    enforcerInstance = new ABACEnforcer()
+    await enforcerInstance.initialize()
   }
-  
-  return enforcerInstance;
+
+  return enforcerInstance
 }

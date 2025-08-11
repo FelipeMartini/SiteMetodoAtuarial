@@ -1,5 +1,5 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getEnforcer } from './enforcer';
+import { NextRequest, NextResponse } from 'next/server'
+import { getEnforcer } from './enforcer'
 // import { AuthorizationError } from './types';
 
 /**
@@ -8,11 +8,11 @@ import { getEnforcer } from './enforcer';
  */
 
 export interface ABACMiddlewareConfig {
-  publicPaths: string[];
-  adminPaths: string[];
-  protectedPaths: string[];
-  enableLogging: boolean;
-  onUnauthorized?: (request: NextRequest) => NextResponse;
+  publicPaths: string[]
+  adminPaths: string[]
+  protectedPaths: string[]
+  enableLogging: boolean
+  onUnauthorized?: (request: NextRequest) => NextResponse
 }
 
 const defaultConfig: ABACMiddlewareConfig = {
@@ -24,72 +24,66 @@ const defaultConfig: ABACMiddlewareConfig = {
     '/contato',
     '/servicos',
     '/recuperar-senha',
-    '/api/auth/*'
+    '/api/auth/*',
   ],
-  adminPaths: [
-    '/admin/*',
-    '/api/admin/*'
-  ],
-  protectedPaths: [
-    '/area-cliente/*',
-    '/api/users/*',
-    '/api/usuario/*'
-  ],
-  enableLogging: true
-};
+  adminPaths: ['/admin/*', '/api/admin/*'],
+  protectedPaths: ['/area-cliente/*', '/api/users/*', '/api/usuario/*'],
+  enableLogging: true,
+}
 
 /**
  * Check if path matches pattern (supports wildcards)
  */
 function matchesPath(path: string, pattern: string): boolean {
   if (pattern.endsWith('*')) {
-    const prefix = pattern.slice(0, -1);
-    return path.startsWith(prefix);
+    const prefix = pattern.slice(0, -1)
+    return path.startsWith(prefix)
   }
-  return path === pattern;
+  return path === pattern
 }
 
 /**
  * Check if path is in patterns array
  */
 function isPathInPatterns(path: string, patterns: string[]): boolean {
-  return patterns.some(pattern => matchesPath(path, pattern));
+  return patterns.some(pattern => matchesPath(path, pattern))
 }
 
 /**
  * Get user from request (integrates with Auth.js)
  */
 async function getUserFromRequest(request: NextRequest): Promise<{
-  email: string;
-  role: string;
-  id: string;
+  email: string
+  role: string
+  id: string
 } | null> {
   try {
     // Try to get session token from cookies
-    const sessionToken = request.cookies.get('authjs.session-token')?.value ||
-                         request.cookies.get('__Secure-authjs.session-token')?.value;
+    const sessionToken =
+      request.cookies.get('authjs.session-token')?.value ||
+      request.cookies.get('__Secure-authjs.session-token')?.value
 
     if (!sessionToken) {
-      return null;
+      return null
     }
 
     // In a real implementation, you would validate the session token
     // For now, we'll use a simplified approach
-    const authHeader = request.headers.get('authorization');
+    const authHeader = request.headers.get('authorization')
     if (authHeader?.startsWith('Bearer ')) {
       // Extract user info from token or session
       // This is a simplified implementation
       return {
         email: 'user@example.com',
         role: 'user',
-        id: 'user-id'
-      };
+        id: 'user-id',
+      }
     }
 
-    return null;
+    return null
   } catch (_error) {
-    console.error('Error getting user from request:', error);
-    return null;
+    console.error('Error getting user from request:', error)
+    return null
   }
 }
 
@@ -100,35 +94,36 @@ export async function abacMiddleware(
   request: NextRequest,
   config: Partial<ABACMiddlewareConfig> = {}
 ): Promise<NextResponse> {
-  const mergedConfig = { ...defaultConfig, ...config };
-  const { pathname } = request.nextUrl;
+  const mergedConfig = { ...defaultConfig, ...config }
+  const { pathname } = request.nextUrl
 
   try {
     // Skip authorization for public paths
     if (isPathInPatterns(pathname, mergedConfig.publicPaths)) {
-      return NextResponse.next();
+      return NextResponse.next()
     }
 
     // Get user from request
-    const user = await getUserFromRequest(request);
-    
+    const user = await getUserFromRequest(request)
+
     // Redirect to login if user not authenticated and path is protected
-    if (!user && (
-      isPathInPatterns(pathname, mergedConfig.protectedPaths) ||
-      isPathInPatterns(pathname, mergedConfig.adminPaths)
-    )) {
-      const loginUrl = new URL('/login', request.url);
-      loginUrl.searchParams.set('callbackUrl', pathname);
-      return NextResponse.redirect(loginUrl);
+    if (
+      !user &&
+      (isPathInPatterns(pathname, mergedConfig.protectedPaths) ||
+        isPathInPatterns(pathname, mergedConfig.adminPaths))
+    ) {
+      const loginUrl = new URL('/login', request.url)
+      loginUrl.searchParams.set('callbackUrl', pathname)
+      return NextResponse.redirect(loginUrl)
     }
 
     // If user is authenticated, check permissions
     if (user) {
-      const enforcer = await getEnforcer();
-      
+      const enforcer = await getEnforcer()
+
       // Determine action based on HTTP method
-      const action = getActionFromMethod(request.method);
-      
+      const action = getActionFromMethod(request.method)
+
       // Check authorization
       const result = await enforcer.enforce({
         subject: user.email,
@@ -137,44 +132,44 @@ export async function abacMiddleware(
         context: {
           ip: getClientIP(request),
           userAgent: request.headers.get('user-agent') || undefined,
-          time: new Date()
-        }
-      });
+          time: new Date(),
+        },
+      })
 
       if (!result.allowed) {
         // Log unauthorized access attempt
         if (mergedConfig.enableLogging) {
-          console.warn(`Unauthorized access attempt: ${user.email} -> ${pathname} (${action})`);
+          console.warn(`Unauthorized access attempt: ${user.email} -> ${pathname} (${action})`)
         }
 
         // Custom unauthorized handler or default
         if (mergedConfig.onUnauthorized) {
-          return mergedConfig.onUnauthorized(request);
+          return mergedConfig.onUnauthorized(request)
         }
 
         // Default unauthorized response
         if (isPathInPatterns(pathname, mergedConfig.adminPaths)) {
           // Admin paths -> 403 Forbidden
-          return new NextResponse('Forbidden: Insufficient permissions', { status: 403 });
+          return new NextResponse('Forbidden: Insufficient permissions', { status: 403 })
         } else {
           // Other protected paths -> redirect to unauthorized page
-          return NextResponse.redirect(new URL('/unauthorized', request.url));
+          return NextResponse.redirect(new URL('/unauthorized', request.url))
         }
       }
 
       // Log successful access
       if (mergedConfig.enableLogging) {
-        console.log(`Access granted: ${user.email} -> ${pathname} (${action})`);
+        console.log(`Access granted: ${user.email} -> ${pathname} (${action})`)
       }
     }
 
-    return NextResponse.next();
+    return NextResponse.next()
   } catch (_error) {
-    console.error('ABAC Middleware error:', error);
-    
+    console.error('ABAC Middleware error:', error)
+
     // In case of error, allow access but log the error
     // In production, you might want to deny access instead
-    return NextResponse.next();
+    return NextResponse.next()
   }
 }
 
@@ -185,15 +180,15 @@ function getActionFromMethod(method: string): string {
   switch (method.toUpperCase()) {
     case 'GET':
     case 'HEAD':
-      return 'read';
+      return 'read'
     case 'POST':
     case 'PUT':
     case 'PATCH':
-      return 'write';
+      return 'write'
     case 'DELETE':
-      return 'delete';
+      return 'delete'
     default:
-      return 'read';
+      return 'read'
   }
 }
 
@@ -201,30 +196,30 @@ function getActionFromMethod(method: string): string {
  * Get client IP address
  */
 function getClientIP(request: NextRequest): string {
-  const xForwardedFor = request.headers.get('x-forwarded-for');
-  const xRealIP = request.headers.get('x-real-ip');
-  const cfConnectingIP = request.headers.get('cf-connecting-ip');
-  
+  const xForwardedFor = request.headers.get('x-forwarded-for')
+  const xRealIP = request.headers.get('x-real-ip')
+  const cfConnectingIP = request.headers.get('cf-connecting-ip')
+
   if (xForwardedFor) {
-    return xForwardedFor.split(',')[0].trim();
+    return xForwardedFor.split(',')[0].trim()
   }
-  
+
   if (cfConnectingIP) {
-    return cfConnectingIP;
+    return cfConnectingIP
   }
-  
+
   if (xRealIP) {
-    return xRealIP;
+    return xRealIP
   }
-  
-  return 'unknown';
+
+  return 'unknown'
 }
 
 /**
  * Create a middleware function with custom config
  */
 export function createABACMiddleware(config: Partial<ABACMiddlewareConfig> = {}) {
-  return (request: NextRequest) => abacMiddleware(request, config);
+  return (request: NextRequest) => abacMiddleware(request, config)
 }
 
 /**
@@ -236,15 +231,15 @@ export function withABACAuthorization(
 ) {
   return async (request: NextRequest): Promise<NextResponse> => {
     try {
-      const user = await getUserFromRequest(request);
-      
+      const user = await getUserFromRequest(request)
+
       if (!user) {
-        return new NextResponse('Unauthorized', { status: 401 });
+        return new NextResponse('Unauthorized', { status: 401 })
       }
 
-      const enforcer = await getEnforcer();
-      const { pathname } = request.nextUrl;
-      
+      const enforcer = await getEnforcer()
+      const { pathname } = request.nextUrl
+
       const result = await enforcer.enforce({
         subject: user.email,
         object: pathname,
@@ -252,20 +247,20 @@ export function withABACAuthorization(
         context: {
           ip: getClientIP(request),
           userAgent: request.headers.get('user-agent') || undefined,
-          time: new Date()
-        }
-      });
+          time: new Date(),
+        },
+      })
 
       if (!result.allowed) {
-        return new NextResponse('Forbidden', { status: 403 });
+        return new NextResponse('Forbidden', { status: 403 })
       }
 
-      return handler(request);
+      return handler(request)
     } catch (_error) {
-      console.error('Authorization error:', error);
-      return new NextResponse('Internal Server Error', { status: 500 });
+      console.error('Authorization error:', error)
+      return new NextResponse('Internal Server Error', { status: 500 })
     }
-  };
+  }
 }
 
 /**
@@ -277,17 +272,17 @@ export async function checkPermission(
   action: string = 'read'
 ): Promise<boolean> {
   try {
-    const enforcer = await getEnforcer();
-    
+    const enforcer = await getEnforcer()
+
     const result = await enforcer.enforce({
       subject: userEmail,
       object: resource,
-      action: action
-    });
+      action: action,
+    })
 
-    return result.allowed;
+    return result.allowed
   } catch (_error) {
-    console.error('Permission check error:', error);
-    return false;
+    console.error('Permission check error:', error)
+    return false
   }
 }

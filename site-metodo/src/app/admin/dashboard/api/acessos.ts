@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '../../../../lib/rateLimit'
 
@@ -8,7 +7,11 @@ function requireAuth(req: NextRequest) {
   return { id: 1, nome: 'Felipe', role: 'admin' }
 }
 
-interface UsuarioAutenticado { id: number; nome: string; role: string }
+interface UsuarioAutenticado {
+  id: number
+  nome: string
+  role: string
+}
 function requireRole(user: UsuarioAutenticado | null, role: string) {
   return !!user && user.role === role
 }
@@ -31,7 +34,9 @@ export async function OPTIONS() {
 export async function GET(req: NextRequest) {
   await rateLimit(req, 'acessos-get')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   return withSecurityHeaders(NextResponse.json({ total: 5421 }))
 }

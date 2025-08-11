@@ -1,14 +1,17 @@
-import { NextResponse } from 'next/server';
-import { checkApiAuthorization } from '@/lib/auth/apiAuth';
-import { db } from '@/lib/prisma';
-import { UserRoleType } from '@prisma/client';
+import { NextResponse } from 'next/server'
+import { checkApiAuthorization } from '@/lib/auth/apiAuth'
+import { db } from '@/lib/prisma'
+import { UserRoleType } from '@prisma/client'
 
 // API para listar todos os usuários (apenas admin/moderator)
 export async function GET() {
-  const authorizedUser = await checkApiAuthorization(UserRoleType.MODERATOR);
-  
+  const authorizedUser = await checkApiAuthorization(UserRoleType.MODERATOR)
+
   if (!authorizedUser) {
-    return NextResponse.json({ error: 'Acesso negado. Apenas moderadores e administradores.' }, { status: 403 });
+    return NextResponse.json(
+      { error: 'Acesso negado. Apenas moderadores e administradores.' },
+      { status: 403 }
+    )
   }
 
   try {
@@ -23,12 +26,12 @@ export async function GET() {
         createdAt: true,
         lastLogin: true,
       },
-      orderBy: { createdAt: 'desc' }
-    });
-    
-    return NextResponse.json({ usuarios });
+      orderBy: { createdAt: 'desc' },
+    })
+
+    return NextResponse.json({ usuarios })
   } catch (_error) {
-    console.error('Erro ao listar usuários:', error);
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 });
+    console.error('Erro ao listar usuários:', error)
+    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

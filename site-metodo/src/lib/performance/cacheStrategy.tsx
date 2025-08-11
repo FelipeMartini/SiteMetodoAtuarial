@@ -3,8 +3,8 @@
  * Melhora performance reduzindo requests redundantes
  */
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
 // Configuração otimizada do React Query
 export const queryClient = new QueryClient({
@@ -18,10 +18,10 @@ export const queryClient = new QueryClient({
       retry: (failureCount, error: Record<string, unknown>) => {
         // Não retry em erros 4xx (client errors)
         if (error?.status >= 400 && error?.status < 500) {
-          return false;
+          return false
         }
         // Máximo 3 tentativas para outros erros
-        return failureCount < 3;
+        return failureCount < 3
       },
       // Refetch on window focus para dados críticos
       refetchOnWindowFocus: true,
@@ -33,7 +33,7 @@ export const queryClient = new QueryClient({
       retry: 1,
     },
   },
-});
+})
 
 // === CONFIGURAÇÕES DE CACHE POR TIPO DE DADOS ===
 
@@ -42,28 +42,28 @@ export const queryClient = new QueryClient({
  */
 export const STATIC_CACHE_CONFIG = {
   staleTime: 30 * 60 * 1000, // 30 minutos
-  gcTime: 60 * 60 * 1000,    // 1 hora
+  gcTime: 60 * 60 * 1000, // 1 hora
   refetchOnWindowFocus: false,
-};
+}
 
 /**
  * Configuração para dados dinâmicos (mudam frequentemente)
  */
 export const DYNAMIC_CACHE_CONFIG = {
-  staleTime: 1 * 60 * 1000,  // 1 minuto
-  gcTime: 5 * 60 * 1000,     // 5 minutos
+  staleTime: 1 * 60 * 1000, // 1 minuto
+  gcTime: 5 * 60 * 1000, // 5 minutos
   refetchOnWindowFocus: true,
-};
+}
 
 /**
  * Configuração para dados críticos (sempre atualizados)
  */
 export const CRITICAL_CACHE_CONFIG = {
-  staleTime: 0,              // Sempre stale, sempre refetch
-  gcTime: 1 * 60 * 1000,     // 1 minuto
+  staleTime: 0, // Sempre stale, sempre refetch
+  gcTime: 1 * 60 * 1000, // 1 minuto
   refetchOnWindowFocus: true,
   refetchInterval: 30 * 1000, // Refetch a cada 30 segundos
-};
+}
 
 // === QUERY KEYS PADRONIZADAS ===
 
@@ -76,14 +76,14 @@ export const QUERY_KEYS = {
     details: () => [...QUERY_KEYS.users.all, 'detail'] as const,
     detail: (id: string) => [...QUERY_KEYS.users.details(), id] as const,
   },
-  
+
   // Sessão/Auth
   auth: {
     all: ['auth'] as const,
     session: () => [...QUERY_KEYS.auth.all, 'session'] as const,
     permissions: () => [...QUERY_KEYS.auth.all, 'permissions'] as const,
   },
-  
+
   // ABAC
   abac: {
     all: ['abac'] as const,
@@ -91,14 +91,14 @@ export const QUERY_KEYS = {
     roles: () => [...QUERY_KEYS.abac.all, 'roles'] as const,
     roleAssignments: () => [...QUERY_KEYS.abac.all, 'role-assignments'] as const,
   },
-  
+
   // Auditoria
   audit: {
     all: ['audit'] as const,
     logs: () => [...QUERY_KEYS.audit.all, 'logs'] as const,
     metrics: () => [...QUERY_KEYS.audit.all, 'metrics'] as const,
   },
-} as const;
+} as const
 
 // === HOOKS CUSTOMIZADOS PARA CACHE ===
 
@@ -115,7 +115,7 @@ export function useOptimisticCache<T>(
     queryFn: fetcher,
     ...DYNAMIC_CACHE_CONFIG,
     ...options,
-  };
+  }
 }
 
 /**
@@ -125,31 +125,31 @@ export function useInvalidateCache() {
   return {
     // Invalidar todos os dados de usuários
     invalidateUsers: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.users.all });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.users.all })
     },
-    
+
     // Invalidar sessão/auth
     invalidateAuth: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.all });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.auth.all })
     },
-    
+
     // Invalidar ABAC
     invalidateABAC: () => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abac.all });
+      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.abac.all })
     },
-    
+
     // Invalidar específico por ID
     invalidateUser: (userId: string) => {
-      queryClient.invalidateQueries({ 
-        queryKey: QUERY_KEYS.users.detail(userId) 
-      });
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.users.detail(userId),
+      })
     },
-    
+
     // Limpar todo o cache (usar com cuidado)
     clearAll: () => {
-      queryClient.clear();
+      queryClient.clear()
     },
-  };
+  }
 }
 
 // === PREFETCH STRATEGIES ===
@@ -163,14 +163,14 @@ export function prefetchCriticalData() {
     queryKey: QUERY_KEYS.auth.session(),
     queryFn: () => fetch('/api/auth/session').then(res => res.json()),
     ...CRITICAL_CACHE_CONFIG,
-  });
-  
+  })
+
   // Prefetch permissions
   queryClient.prefetchQuery({
     queryKey: QUERY_KEYS.auth.permissions(),
     queryFn: () => fetch('/api/auth/permissions').then(res => res.json()),
     ...STATIC_CACHE_CONFIG,
-  });
+  })
 }
 
 /**
@@ -183,21 +183,21 @@ export function prefetchAdminData(userRole: string) {
       queryKey: QUERY_KEYS.users.lists(),
       queryFn: () => fetch('/api/usuario/lista').then(res => res.json()),
       ...DYNAMIC_CACHE_CONFIG,
-    });
-    
+    })
+
     // Prefetch ABAC data
     queryClient.prefetchQuery({
       queryKey: QUERY_KEYS.abac.policies(),
       queryFn: () => fetch('/api/abac/policies').then(res => res.json()),
       ...STATIC_CACHE_CONFIG,
-    });
+    })
   }
 }
 
 // === COMPONENTE PROVIDER ===
 
 interface CacheProviderProps {
-  children: React.ReactNode;
+  children: React.ReactNode
 }
 
 export function CacheProvider({ children }: CacheProviderProps) {
@@ -205,11 +205,8 @@ export function CacheProvider({ children }: CacheProviderProps) {
     <QueryClientProvider client={queryClient}>
       {children}
       {process.env.NODE_ENV === 'development' && (
-        <ReactQueryDevtools 
-          initialIsOpen={false}
-          position={"bottom-right" as any}
-        />
+        <ReactQueryDevtools initialIsOpen={false} position={'bottom-right' as any} />
       )}
     </QueryClientProvider>
-  );
+  )
 }

@@ -5,7 +5,7 @@
 Este documento apresenta a implementação **profissional e completa** do **Auth.js v5** (next-auth@beta) com:
 
 - ✅ **5 Provedores OAuth** (Google, Microsoft Entra ID, Discord, Facebook, Apple)
-- ✅ **Sistema de Roles Unificado** (ADMIN, MANAGER, USER)  
+- ✅ **Sistema de Roles Unificado** (ADMIN, MANAGER, USER)
 - ✅ **Sessões de Banco de Dados** (PrismaAdapter)
 - ✅ **Middleware de Proteção** com controle de acesso por roles
 - ✅ **Testes Jest Compreensivos** (7 suítes de teste)
@@ -24,7 +24,7 @@ Este documento apresenta a implementação **profissional e completa** do **Auth
 npm install next-auth@beta @auth/prisma-adapter
 
 # Provedores OAuth
-npm install @auth/google-provider @auth/microsoft-entra-id-provider 
+npm install @auth/google-provider @auth/microsoft-entra-id-provider
 npm install @auth/discord-provider @auth/facebook-provider @auth/apple-provider
 
 # Segurança e Validação
@@ -113,36 +113,40 @@ graph TD
 ### 3.1 Configuração Principal
 
 ```typescript
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import Google from "next-auth/providers/google"
-import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id"
-import Discord from "next-auth/providers/discord"
-import Facebook from "next-auth/providers/facebook"
-import Apple from "next-auth/providers/apple"
-import prisma from "@/lib/prisma"
+import NextAuth from 'next-auth'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import Google from 'next-auth/providers/google'
+import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id'
+import Discord from 'next-auth/providers/discord'
+import Facebook from 'next-auth/providers/facebook'
+import Apple from 'next-auth/providers/apple'
+import prisma from '@/lib/prisma'
 
 // Sistema de Roles Unificado
 export enum SystemRole {
   ADMIN = 'ADMIN',
-  MANAGER = 'MANAGER', 
-  USER = 'USER'
+  MANAGER = 'MANAGER',
+  USER = 'USER',
 }
 
 // Mapeamento de accessLevel para roles
 export function mapAccessLevelToRole(accessLevel: number): SystemRole {
   switch (accessLevel) {
-    case 0: return SystemRole.ADMIN
-    case 1: return SystemRole.MANAGER
-    case 2: return SystemRole.USER
-    default: return SystemRole.USER
+    case 0:
+      return SystemRole.ADMIN
+    case 1:
+      return SystemRole.MANAGER
+    case 2:
+      return SystemRole.USER
+    default:
+      return SystemRole.USER
   }
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   // PrismaAdapter para sessões de banco
   adapter: PrismaAdapter(prisma),
-  
+
   // 5 Provedores OAuth Profissionais
   providers: [
     Google({
@@ -164,14 +168,14 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     Apple({
       clientId: process.env.AUTH_APPLE_ID!,
       clientSecret: process.env.AUTH_APPLE_SECRET!,
-    })
+    }),
   ],
 
   // Sessões de banco de dados
   session: {
-    strategy: "database",
+    strategy: 'database',
     maxAge: 30 * 24 * 60 * 60, // 30 dias
-    updateAge: 24 * 60 * 60,   // 24 horas
+    updateAge: 24 * 60 * 60, // 24 horas
   },
 
   // Callbacks de segurança
@@ -180,7 +184,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       console.info(`[AUTH] SignIn attempt: ${user.email} via ${account?.provider}`)
       return true
     },
-    
+
     async session({ session, user }) {
       if (session.user) {
         session.user.id = user.id
@@ -188,13 +192,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
       return session
     },
-    
+
     async jwt({ token, user }) {
       if (user) {
         token.role = (user as any).role || SystemRole.USER
       }
       return token
-    }
+    },
   },
 
   // Páginas customizadas
@@ -233,22 +237,22 @@ model User {
   email         String    @unique
   emailVerified DateTime?
   image         String?
-  
+
   // Sistema de Roles Unificado
   role          UserRole  @default(USER)
-  
+
   // Campos de Auditoria
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   lastLoginAt   DateTime?
-  
+
   // Relações Auth.js v5
   accounts      Account[]
   sessions      Session[]
-  
+
   // Auditoria
   auditLogs     AuditLog[]
-  
+
   @@map("users")
 }
 
@@ -260,9 +264,9 @@ model AuditLog {
   ipAddress String?
   userAgent String?
   createdAt DateTime    @default(now())
-  
+
   user      User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
+
   @@index([userId, createdAt])
   @@map("audit_logs")
 }
@@ -303,37 +307,36 @@ function isRouteMatch(pathname: string, routes: string[]): boolean {
 
 export default async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
-  
+
   // Permitir rotas públicas
   if (isRouteMatch(pathname, PUBLIC_ROUTES)) {
     return NextResponse.next()
   }
-  
+
   try {
     const session = await auth()
-    
+
     // Redirecionar não autenticados
     if (!session?.user) {
       console.warn(`[MIDDLEWARE] Acesso não autorizado: ${pathname}`)
       return NextResponse.redirect(new URL('/login', request.url))
     }
-    
+
     const userRole = session.user.role
-    
+
     // Controle de acesso por role
     if (isRouteMatch(pathname, ADMIN_ROUTES) && userRole !== 'ADMIN') {
       console.warn(`[MIDDLEWARE] Acesso negado - Role insuficiente: ${userRole} para ${pathname}`)
       return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
-    
+
     if (isRouteMatch(pathname, MANAGER_ROUTES) && !['ADMIN', 'MANAGER'].includes(userRole)) {
       console.warn(`[MIDDLEWARE] Acesso negado - Role insuficiente: ${userRole} para ${pathname}`)
       return NextResponse.redirect(new URL('/unauthorized', request.url))
     }
-    
+
     console.info(`[MIDDLEWARE] Acesso autorizado: ${userRole} -> ${pathname}`)
     return NextResponse.next()
-    
   } catch (error) {
     console.error('[MIDDLEWARE] Erro de autenticação:', error)
     return NextResponse.redirect(new URL('/login', request.url))
@@ -341,9 +344,7 @@ export default async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|public).*)',
-  ],
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|public).*)'],
 }
 ```
 
@@ -363,7 +364,7 @@ import { signIn } from 'next-auth/react'
 
 export default function LoginPage() {
   const [isPending, setIsPending] = useState(false)
-  
+
   const handleOAuthLogin = async (provider: string) => {
     setIsPending(true)
     try {
@@ -386,7 +387,7 @@ export default function LoginPage() {
             Entre com sua conta para acessar o sistema
           </CardDescription>
         </CardHeader>
-        
+
         <CardContent className="space-y-4">
           {/* 5 PROVEDORES OAUTH PROFISSIONAIS */}
           <div className="space-y-3">
@@ -473,20 +474,19 @@ module.exports = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   transform: {
-    '^.+\\.(ts|tsx)$': ['ts-jest', {
-      useESM: true,
-      tsconfig: 'tsconfig.json'
-    }],
+    '^.+\\.(ts|tsx)$': [
+      'ts-jest',
+      {
+        useESM: true,
+        tsconfig: 'tsconfig.json',
+      },
+    ],
   },
   testMatch: [
     '<rootDir>/src/**/__tests__/**/*.(ts|tsx)',
-    '<rootDir>/src/**/?(*.)(test|spec).(ts|tsx)'
+    '<rootDir>/src/**/?(*.)(test|spec).(ts|tsx)',
   ],
-  collectCoverageFrom: [
-    'src/**/*.(ts|tsx)',
-    '!src/**/*.d.ts',
-    '!src/tests/**/*',
-  ],
+  collectCoverageFrom: ['src/**/*.(ts|tsx)', '!src/**/*.d.ts', '!src/tests/**/*'],
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
 }
 ```
@@ -494,14 +494,16 @@ module.exports = {
 ### 6.2 Suítes de Teste
 
 #### ✅ Teste 1: Configuração Auth.js v5
+
 - ✅ 5 provedores OAuth configurados
 - ✅ Configuração do Google OAuth
-- ✅ Configuração do Microsoft OAuth  
+- ✅ Configuração do Microsoft OAuth
 - ✅ Configuração do Discord OAuth
 - ✅ Configuração do Facebook OAuth
 - ✅ Configuração do Apple OAuth
 
 #### ✅ Teste 2: Sistema de Roles
+
 - ✅ Mapeamento correto de accessLevel para roles
 - ✅ Validação de permissões ADMIN
 - ✅ Validação de permissões MANAGER
@@ -509,27 +511,32 @@ module.exports = {
 - ✅ Hierarquia de roles respeitada
 
 #### ✅ Teste 3: Configuração de Banco
+
 - ✅ PrismaAdapter para sessões
 - ✅ Configuração correta de sessão
 - ✅ Callbacks de segurança implementados
 
 #### ✅ Teste 4: Middleware de Proteção
+
 - ✅ Proteção de rotas por role
 - ✅ Logs de auditoria
 - ✅ Tratamento de erros
 
 #### ✅ Teste 5: Componentes OAuth
+
 - ✅ Renderização dos 5 provedores
 - ✅ Funcionalidade de login
 - ✅ Estados de loading
 - ✅ Acessibilidade
 
 #### ✅ Teste 6: Segurança
+
 - ✅ Validação de variáveis de ambiente
 - ✅ Tratamento de sessões malformadas
 - ✅ Graceful error handling
 
 #### ✅ Teste 7: Integração E2E
+
 - ✅ Fluxo completo de autenticação
 - ✅ Redirecionamentos corretos
 - ✅ Persistência de sessão
@@ -599,7 +606,7 @@ ADMIN > MANAGER > USER
 
 // Permissões por Role
 - ADMIN: Acesso total (admin/*, dashboard/*, profile/*)
-- MANAGER: Gestão (dashboard/manage, reports/*, profile/*)  
+- MANAGER: Gestão (dashboard/manage, reports/*, profile/*)
 - USER: Básico (dashboard, profile/*)
 ```
 
@@ -623,7 +630,7 @@ ADMIN > MANAGER > USER
 ```bash
 # Configurar OAuth Apps nos provedores
 # Google: console.cloud.google.com
-# Microsoft: portal.azure.com  
+# Microsoft: portal.azure.com
 # Discord: discord.com/developers
 # Facebook: developers.facebook.com
 # Apple: developer.apple.com
@@ -654,7 +661,7 @@ https://seudominio.com/api/auth/callback/apple
 
 ```
 ✅ Statements: 95%+
-✅ Branches: 90%+  
+✅ Branches: 90%+
 ✅ Functions: 95%+
 ✅ Lines: 95%+
 ```
@@ -685,18 +692,21 @@ https://seudominio.com/api/auth/callback/apple
 ### 11.1 Problemas Comuns
 
 **Erro: "OAuthAccountNotLinked"**
+
 ```typescript
 // Solução: Verificar configuração de providers
 // Verificar se email já existe com outro provider
 ```
 
 **Erro: "Session callback error"**
+
 ```typescript
 // Solução: Verificar schema Prisma
 // Executar prisma:generate
 ```
 
 **Erro: "Middleware redirect loop"**
+
 ```typescript
 // Solução: Verificar rotas públicas no middleware
 // Adicionar rota à lista PUBLIC_ROUTES
@@ -726,6 +736,7 @@ export const { handlers, auth } = NextAuth({
 ### 12.2 Contato
 
 Para dúvidas sobre esta implementação:
+
 - 📧 Email: suporte@metodoactuarial.com
 - 💬 Discord: [Link do servidor]
 - 📚 Wiki: [Link da documentação interna]
@@ -740,11 +751,11 @@ Esta implementação Auth.js v5 oferece:
 🛡️ **Segurança Enterprise**: Sessões de banco + auditoria completa  
 🧪 **Qualidade Assegurada**: 7 suítes de teste + 95% cobertura  
 🎨 **UX Profissional**: Interface moderna com shadcn/ui  
-📚 **Documentação Completa**: Guia detalhado para desenvolvedores  
+📚 **Documentação Completa**: Guia detalhado para desenvolvedores
 
 **Status Final**: ✅ **IMPLEMENTAÇÃO CONCLUÍDA E VALIDADA**
 
 ---
 
-*Documento gerado automaticamente pela IA em: $(date +'%Y-%m-%d %H:%M:%S')*  
-*Versão: 1.0 | Auth.js v5 + Next.js 15 + Prisma + 5 OAuth Providers*
+_Documento gerado automaticamente pela IA em: $(date +'%Y-%m-%d %H:%M:%S')_  
+_Versão: 1.0 | Auth.js v5 + Next.js 15 + Prisma + 5 OAuth Providers_

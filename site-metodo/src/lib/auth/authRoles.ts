@@ -1,6 +1,6 @@
 /**
  * Sistema de Autorização Moderno - Baseado no Fuse-React
- * 
+ *
  * Define hierarquia de roles e permissões para o sistema.
  * Inspirado no sistema do fuse-react para máxima flexibilidade.
  */
@@ -48,17 +48,17 @@ export const authRoles = {
    * - Usado para recursos completamente abertos
    */
   public: null,
-} as const;
+} as const
 
 /**
  * Type para roles válidos
  */
-export type AuthRole = keyof typeof authRoles;
+export type AuthRole = keyof typeof authRoles
 
 /**
  * Type para array de roles de usuário
  */
-export type UserRole = string[] | string | null;
+export type UserRole = string[] | string | null
 
 /**
  * Configurações de permissões especiais
@@ -92,7 +92,7 @@ export const specialPermissions = {
     editProfile: ['admin', 'staff', 'user'],
     changePassword: ['admin', 'staff', 'user'],
   },
-} as const;
+} as const
 
 /**
  * Mapeamento de accessLevel legado para novo sistema de roles
@@ -100,23 +100,23 @@ export const specialPermissions = {
  */
 export const accessLevelToRoles: Record<string, string[]> = {
   // Sistema legado -> Novo sistema
-  'admin': ['admin'],
-  'administrador': ['admin'],
-  'moderador': ['staff'],
-  'staff': ['staff'],
-  'usuario': ['user'],
-  'user': ['user'],
-  'guest': [],
-  'publico': [],
-  'public': [],
-} as const;
+  admin: ['admin'],
+  administrador: ['admin'],
+  moderador: ['staff'],
+  staff: ['staff'],
+  usuario: ['user'],
+  user: ['user'],
+  guest: [],
+  publico: [],
+  public: [],
+} as const
 
 /**
  * Helper para obter roles a partir do accessLevel legado
  */
 export function migrateAccessLevelToRoles(accessLevel: string): string[] {
-  const normalized = accessLevel?.toLowerCase() || 'user';
-  return accessLevelToRoles[normalized] || ['user'];
+  const normalized = accessLevel?.toLowerCase() || 'user'
+  return accessLevelToRoles[normalized] || ['user']
 }
 
-export default authRoles;
+export default authRoles

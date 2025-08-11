@@ -1,4 +1,4 @@
-"use client"
+'use client'
 import { useQuery } from '@tanstack/react-query'
 
 export interface UsuarioPaginado {
@@ -26,6 +26,6 @@ export function useUsuariosPaginados(page: number, pageSize: number, search: str
       const res = await fetch(`/api/usuarios/paginated?${params.toString()}`)
       if (!res.ok) throw new Error('Erro ao buscar usuários paginados')
       return res.json()
-  },
+    },
   })
 }

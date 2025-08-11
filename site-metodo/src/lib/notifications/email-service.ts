@@ -1,62 +1,58 @@
-import nodemailer from 'nodemailer';
-import { 
-  EmailData, 
-  EmailTemplate, 
-  NotificationPriority 
-} from '@/types/notifications';
-import { simpleLogger } from '@/lib/simple-logger';
-import { PrismaClient } from '@prisma/client';
+import nodemailer from 'nodemailer'
+import { EmailData, EmailTemplate, NotificationPriority } from '@/types/notifications'
+import { simpleLogger } from '@/lib/simple-logger'
+import { PrismaClient } from '@prisma/client'
 
 /**
  * Serviço de email com templates responsivos
  * Suporte para SMTP, SendGrid, Mailgun, AWS SES
  */
 export class EmailService {
-  private transporter!: nodemailer.Transporter;
-  private prisma: PrismaClient;
-  private config: EmailConfig;
+  private transporter!: nodemailer.Transporter
+  private prisma: PrismaClient
+  private config: EmailConfig
 
   constructor(config: EmailConfig, prisma: PrismaClient) {
-    this.config = config;
-    this.prisma = prisma;
-    this.initializeTransporter();
+    this.config = config
+    this.prisma = prisma
+    this.initializeTransporter()
   }
 
   /**
    * Envia email usando template
    */
   async sendWithTemplate(
-    templateId: string, 
-    to: string | string[], 
+    templateId: string,
+    to: string | string[],
     variables: Record<string, any>,
     options?: Partial<EmailData>
   ): Promise<boolean> {
     try {
-      const template = await this.getTemplate(templateId);
+      const template = await this.getTemplate(templateId)
       if (!template) {
-        throw new Error(`Template ${templateId} não encontrado`);
+        throw new Error(`Template ${templateId} não encontrado`)
       }
 
-      const html = this.processTemplate(template.html, variables);
-      const text = template.text ? this.processTemplate(template.text, variables) : undefined;
-      const subject = this.processTemplate(template.subject, variables);
+      const html = this.processTemplate(template.html, variables)
+      const text = template.text ? this.processTemplate(template.text, variables) : undefined
+      const subject = this.processTemplate(template.subject, variables)
 
       const emailData: EmailData = {
         to,
         subject,
         html,
         text,
-        ...options
-      };
+        ...options,
+      }
 
-      return await this.send(emailData);
+      return await this.send(emailData)
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar email com template', { 
-        error, 
-        templateId, 
-        to: Array.isArray(to) ? to.length : 1 
-      });
-      return false;
+      simpleLogger.error('Erro ao enviar email com template', {
+        error,
+        templateId,
+        to: Array.isArray(to) ? to.length : 1,
+      })
+      return false
     }
   }
 
@@ -65,8 +61,8 @@ export class EmailService {
    */
   async send(emailData: EmailData): Promise<boolean> {
     try {
-      const recipients = Array.isArray(emailData.to) ? emailData.to : [emailData.to];
-      
+      const recipients = Array.isArray(emailData.to) ? emailData.to : [emailData.to]
+
       for (const recipient of recipients) {
         const mailOptions = {
           from: this.config.from,
@@ -81,27 +77,27 @@ export class EmailService {
             content: att.content,
             contentType: att.contentType,
             encoding: att.encoding as any,
-            cid: att.cid
+            cid: att.cid,
           })),
-          priority: this.mapPriorityToNodemailer(emailData.priority)
-        };
+          priority: this.mapPriorityToNodemailer(emailData.priority),
+        }
 
-        await this.transporter.sendMail(mailOptions);
-        
+        await this.transporter.sendMail(mailOptions)
+
         simpleLogger.info('Email enviado com sucesso', {
           to: recipient,
-          subject: emailData.subject
-        });
+          subject: emailData.subject,
+        })
       }
 
-      return true;
+      return true
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar email', { 
-        error, 
+      simpleLogger.error('Erro ao enviar email', {
+        error,
         to: emailData.to,
-        subject: emailData.subject 
-      });
-      return false;
+        subject: emailData.subject,
+      })
+      return false
     }
   }
 
@@ -109,47 +105,49 @@ export class EmailService {
    * Envia email em lote
    */
   async sendBulk(emails: EmailData[]): Promise<{ sent: number; failed: number }> {
-    const results = { sent: 0, failed: 0 };
-    
-    // Processa em batches para evitar rate limiting
-    const batchSize = 10;
-    
-    for (let i = 0; i < emails.length; i += batchSize) {
-      const batch = emails.slice(i, i + batchSize);
-      
-      const promises = batch.map(async (email) => {
-        try {
-          const success = await this.send(email);
-          return success ? 'sent' : 'failed';
-        } catch (_error) {
-          return 'failed';
-        }
-      });
+    const results = { sent: 0, failed: 0 }
 
-      const batchResults = await Promise.allSettled(promises);
-      
+    // Processa em batches para evitar rate limiting
+    const batchSize = 10
+
+    for (let i = 0; i < emails.length; i += batchSize) {
+      const batch = emails.slice(i, i + batchSize)
+
+      const promises = batch.map(async email => {
+        try {
+          const success = await this.send(email)
+          return success ? 'sent' : 'failed'
+        } catch (_error) {
+          return 'failed'
+        }
+      })
+
+      const batchResults = await Promise.allSettled(promises)
+
       batchResults.forEach(result => {
         if (result.status === 'fulfilled' && result.value === 'sent') {
-          results.sent++;
+          results.sent++
         } else {
-          results.failed++;
+          results.failed++
         }
-      });
+      })
 
       // Pausa entre batches para respeitar rate limits
       if (i + batchSize < emails.length) {
-        await new Promise(resolve => setTimeout(resolve, 1000));
+        await new Promise(resolve => setTimeout(resolve, 1000))
       }
     }
 
-    simpleLogger.info('Email em lote processado', results);
-    return results;
+    simpleLogger.info('Email em lote processado', results)
+    return results
   }
 
   /**
    * Cria ou atualiza template de email
    */
-  async createTemplate(template: Omit<EmailTemplate, 'id' | 'createdAt' | 'updatedAt'>): Promise<string> {
+  async createTemplate(
+    template: Omit<EmailTemplate, 'id' | 'createdAt' | 'updatedAt'>
+  ): Promise<string> {
     try {
       const created = await this.prisma.emailTemplate.create({
         data: {
@@ -159,19 +157,19 @@ export class EmailService {
           text: template.text,
           variables: JSON.stringify(template.variables),
           category: template.category,
-          isActive: template.isActive
-        }
-      });
+          isActive: template.isActive,
+        },
+      })
 
-      simpleLogger.info('Template de email criado', { 
-        templateId: created.id, 
-        name: template.name 
-      });
+      simpleLogger.info('Template de email criado', {
+        templateId: created.id,
+        name: template.name,
+      })
 
-      return created.id;
+      return created.id
     } catch (_error) {
-      simpleLogger.error('Erro ao criar template', { error, template: template.name });
-      throw error;
+      simpleLogger.error('Erro ao criar template', { error, template: template.name })
+      throw error
     }
   }
 
@@ -181,10 +179,10 @@ export class EmailService {
   async getTemplate(templateId: string): Promise<EmailTemplate | null> {
     try {
       const template = await this.prisma.emailTemplate.findUnique({
-        where: { id: templateId, isActive: true }
-      });
+        where: { id: templateId, isActive: true },
+      })
 
-      if (!template) return null;
+      if (!template) return null
 
       return {
         id: template.id,
@@ -196,11 +194,11 @@ export class EmailService {
         category: template.category || undefined,
         isActive: template.isActive,
         createdAt: template.createdAt,
-        updatedAt: template.updatedAt
-      };
+        updatedAt: template.updatedAt,
+      }
     } catch (_error) {
-      simpleLogger.error('Erro ao buscar template', { error, templateId });
-      return null;
+      simpleLogger.error('Erro ao buscar template', { error, templateId })
+      return null
     }
   }
 
@@ -209,13 +207,13 @@ export class EmailService {
    */
   async listTemplates(category?: string): Promise<EmailTemplate[]> {
     try {
-      const where: Record<string, unknown> = { isActive: true };
-      if (category) where.category = category;
+      const where: Record<string, unknown> = { isActive: true }
+      if (category) where.category = category
 
       const templates = await this.prisma.emailTemplate.findMany({
         where,
-        orderBy: { name: 'asc' }
-      });
+        orderBy: { name: 'asc' },
+      })
 
       return templates.map(template => ({
         id: template.id,
@@ -227,55 +225,58 @@ export class EmailService {
         category: template.category || undefined,
         isActive: template.isActive,
         createdAt: template.createdAt,
-        updatedAt: template.updatedAt
-      }));
+        updatedAt: template.updatedAt,
+      }))
     } catch (_error) {
-      simpleLogger.error('Erro ao listar templates', { error, category });
-      return [];
+      simpleLogger.error('Erro ao listar templates', { error, category })
+      return []
     }
   }
 
   /**
    * Valida template (verifica sintaxe e variáveis)
    */
-  async validateTemplate(html: string, variables: string[]): Promise<{
-    valid: boolean;
-    errors: string[];
-    usedVariables: string[];
+  async validateTemplate(
+    html: string,
+    variables: string[]
+  ): Promise<{
+    valid: boolean
+    errors: string[]
+    usedVariables: string[]
   }> {
-    const errors: string[] = [];
-    const usedVariables: string[] = [];
+    const errors: string[] = []
+    const usedVariables: string[] = []
 
     try {
       // Extrai variáveis do template
-      const variableRegex = /\{\{([^}]+)\}\}/g;
-      let match;
-      
+      const variableRegex = /\{\{([^}]+)\}\}/g
+      let match
+
       while ((match = variableRegex.exec(html)) !== null) {
-        const variable = match[1].trim();
-        usedVariables.push(variable);
-        
+        const variable = match[1].trim()
+        usedVariables.push(variable)
+
         if (!variables.includes(variable)) {
-          errors.push(`Variável ${variable} não está declarada`);
+          errors.push(`Variável ${variable} não está declarada`)
         }
       }
 
       // Verifica se HTML é válido (básico)
       if (!html.includes('<html') && !html.includes('<body')) {
-        errors.push('Template deve conter estrutura HTML básica');
+        errors.push('Template deve conter estrutura HTML básica')
       }
 
       return {
         valid: errors.length === 0,
         errors,
-        usedVariables: [...new Set(usedVariables)] // Remove duplicatas
-      };
+        usedVariables: [...new Set(usedVariables)], // Remove duplicatas
+      }
     } catch (_error) {
       return {
         valid: false,
         errors: ['Erro ao validar template'],
-        usedVariables: []
-      };
+        usedVariables: [],
+      }
     }
   }
 
@@ -296,17 +297,17 @@ export class EmailService {
             </p>
           </body>
         </html>
-      `;
+      `
 
       return await this.send({
         to,
         subject,
         html: testHtml,
-        text: `Teste de Email - ${new Date().toLocaleString()}`
-      });
+        text: `Teste de Email - ${new Date().toLocaleString()}`,
+      })
     } catch (_error) {
-      simpleLogger.error('Erro no teste de email', { error, to });
-      return false;
+      simpleLogger.error('Erro no teste de email', { error, to })
+      return false
     }
   }
 
@@ -323,39 +324,39 @@ export class EmailService {
             secure: this.config.smtp?.secure || false,
             auth: {
               user: this.config.smtp?.user,
-              pass: this.config.smtp?.pass
-            }
-          });
-          break;
+              pass: this.config.smtp?.pass,
+            },
+          })
+          break
 
         case 'sendgrid':
           this.transporter = nodemailer.createTransport({
             service: 'SendGrid',
             auth: {
               user: 'apikey',
-              pass: this.config.apiKey
-            }
-          });
-          break;
+              pass: this.config.apiKey,
+            },
+          })
+          break
 
         case 'mailgun':
           // Implementar configuração Mailgun
-          throw new Error('Mailgun ainda não implementado');
+          throw new Error('Mailgun ainda não implementado')
 
         case 'aws-ses':
           // Implementar configuração AWS SES
-          throw new Error('AWS SES ainda não implementado');
+          throw new Error('AWS SES ainda não implementado')
 
         default:
-          throw new Error(`Provedor ${this.config.provider} não suportado`);
+          throw new Error(`Provedor ${this.config.provider} não suportado`)
       }
 
-      simpleLogger.info('Email transporter inicializado', { 
-        provider: this.config.provider 
-      });
+      simpleLogger.info('Email transporter inicializado', {
+        provider: this.config.provider,
+      })
     } catch (_error) {
-      simpleLogger.error('Erro ao inicializar email transporter', { error });
-      throw error;
+      simpleLogger.error('Erro ao inicializar email transporter', { error })
+      throw error
     }
   }
 
@@ -363,14 +364,14 @@ export class EmailService {
    * Processa template substituindo variáveis
    */
   private processTemplate(template: string, variables: Record<string, any>): string {
-    let processed = template;
-    
+    let processed = template
+
     for (const [key, value] of Object.entries(variables)) {
-      const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g');
-      processed = processed.replace(regex, String(value));
+      const regex = new RegExp(`\\{\\{\\s*${key}\\s*\\}\\}`, 'g')
+      processed = processed.replace(regex, String(value))
     }
 
-    return processed;
+    return processed
   }
 
   /**
@@ -379,36 +380,36 @@ export class EmailService {
   private mapPriorityToNodemailer(priority?: NotificationPriority): 'low' | 'normal' | 'high' {
     switch (priority) {
       case NotificationPriority.URGENT:
-        return 'high';
+        return 'high'
       case NotificationPriority.HIGH:
-        return 'normal';
+        return 'normal'
       case NotificationPriority.LOW:
-        return 'low';
+        return 'low'
       default:
-        return 'normal';
+        return 'normal'
     }
   }
 }
 
 // Interfaces para configuração
 export interface EmailConfig {
-  provider: 'smtp' | 'sendgrid' | 'mailgun' | 'aws-ses';
-  from: string;
-  replyTo?: string;
-  apiKey?: string;
+  provider: 'smtp' | 'sendgrid' | 'mailgun' | 'aws-ses'
+  from: string
+  replyTo?: string
+  apiKey?: string
   smtp?: {
-    host: string;
-    port: number;
-    secure: boolean;
-    user: string;
-    pass: string;
-  };
+    host: string
+    port: number
+    secure: boolean
+    user: string
+    pass: string
+  }
 }
 
 // Factory function
 export function createEmailService(config: EmailConfig): EmailService {
-  const prisma = new PrismaClient();
-  return new EmailService(config, prisma);
+  const prisma = new PrismaClient()
+  return new EmailService(config, prisma)
 }
 
 // Templates padrão
@@ -453,7 +454,7 @@ export const defaultEmailTemplates = {
       </html>
     `,
     variables: ['siteName', 'userName', 'userEmail', 'signupDate', 'loginUrl', 'siteUrl'],
-    category: 'auth'
+    category: 'auth',
   },
 
   passwordReset: {
@@ -497,7 +498,7 @@ export const defaultEmailTemplates = {
       </html>
     `,
     variables: ['siteName', 'userName', 'resetUrl', 'expirationTime', 'siteUrl'],
-    category: 'auth'
+    category: 'auth',
   },
 
   notification: {
@@ -537,7 +538,17 @@ export const defaultEmailTemplates = {
         </body>
       </html>
     `,
-    variables: ['siteName', 'userName', 'notificationTitle', 'notificationMessage', 'notificationColor', 'notificationDate', 'actionUrl', 'actionText', 'siteUrl'],
-    category: 'notification'
-  }
-};
+    variables: [
+      'siteName',
+      'userName',
+      'notificationTitle',
+      'notificationMessage',
+      'notificationColor',
+      'notificationDate',
+      'actionUrl',
+      'actionText',
+      'siteUrl',
+    ],
+    category: 'notification',
+  },
+}

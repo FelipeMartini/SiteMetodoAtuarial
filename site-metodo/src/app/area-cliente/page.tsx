@@ -1,15 +1,14 @@
+'use client'
+export const dynamic = 'force-dynamic'
 
-'use client';
-export const dynamic = "force-dynamic";
+import React from 'react'
 
-import React from 'react';
-
-import { useAuth } from '@/hooks/useAuth';
+import { useAuth } from '@/hooks/useAuth'
 // import { useRouter } from 'next/navigation';
-import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo-moderno';
+import AreaClienteConteudo from '@/app/area-cliente/AreaClienteConteudo-moderno'
 
 export default function AreaClientePage() {
-  const { status } = useAuth();
+  const { status } = useAuth()
   // const router = useRouter();
 
   // useEffect(() => {
@@ -20,22 +19,24 @@ export default function AreaClientePage() {
 
   if (status === 'loading') {
     return (
-      <div style={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '50vh',
-        fontSize: '1.2rem'
-      }}>
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          height: '50vh',
+          fontSize: '1.2rem',
+        }}
+      >
         Carregando...
       </div>
-    );
+    )
   }
 
   if (status === 'unauthenticated') {
-    return null;
+    return null
   }
 
   // status === 'authenticated' e session existe
-  return <AreaClienteConteudo />;
+  return <AreaClienteConteudo />
 }

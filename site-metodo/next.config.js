@@ -1,8 +1,8 @@
 // Inclui Bundle Analyzer, configuração de imagens e compilação otimizada
 
-const withBundleAnalyzer = require("@next/bundle-analyzer")({
-  enabled: process.env.ANALYZE === "true",
-});
+const withBundleAnalyzer = require('@next/bundle-analyzer')({
+  enabled: process.env.ANALYZE === 'true',
+})
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -22,16 +22,16 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "lh3.googleusercontent.com",
+        protocol: 'https',
+        hostname: 'lh3.googleusercontent.com',
       },
       {
-        protocol: "https",
-        hostname: "developers.google.com",
+        protocol: 'https',
+        hostname: 'developers.google.com',
       },
       {
-        protocol: "https",
-        hostname: "appleid.cdn-apple.com",
+        protocol: 'https',
+        hostname: 'appleid.cdn-apple.com',
       },
     ],
   },
@@ -40,8 +40,8 @@ const nextConfig = {
     'http://localhost:3000',
     'http://127.0.0.1:3000',
     // Adicione outros IPs usados no dev, ex: sua rede local
-    'http://10.0.0.69:3000'
+    'http://10.0.0.69:3000',
   ],
-};
+}
 
-module.exports = withBundleAnalyzer(nextConfig);
+module.exports = withBundleAnalyzer(nextConfig)

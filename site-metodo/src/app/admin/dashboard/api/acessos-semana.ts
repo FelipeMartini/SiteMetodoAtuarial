@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server'
 import { rateLimit } from '../../../../lib/rateLimit'
 
@@ -36,8 +35,10 @@ export async function OPTIONS() {
 export async function GET(req: NextRequest) {
   await rateLimit(req, 'acessos-semana-get')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   const acessos = {
     labels: ['Seg', 'Ter', 'Qua', 'Qui', 'Sex'],
     data: [120, 190, 300, 250, 220],

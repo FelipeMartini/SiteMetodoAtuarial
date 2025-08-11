@@ -1,15 +1,15 @@
-import { toast } from "sonner"
+import { toast } from 'sonner'
 
 type ToastProps = {
   title?: string
   description?: string
-  variant?: "default" | "destructive"
+  variant?: 'default' | 'destructive'
 }
 
 export const useToast = () => {
   return {
     toast: ({ title, description, variant }: ToastProps) => {
-      if (variant === "destructive") {
+      if (variant === 'destructive') {
         toast.error(title, {
           description,
         })

@@ -4,9 +4,17 @@ import { auth } from '@/lib/auth'
 // import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
 // TODO: implementar permissaoSchema compatível com schema atual
 // Placeholders temporários para evitar erro de import inexistente
-interface ParseResult { success: boolean; error?: { issues: unknown[] } }
+interface ParseResult {
+  success: boolean
+  error?: { issues: unknown[] }
+}
 // Placeholders intencionais até implementação real
-const permissaoSchema = { safeParse: (_data?: unknown): ParseResult => { void _data; return { success: false, error: { issues: [] } } } }
+const permissaoSchema = {
+  safeParse: (_data?: unknown): ParseResult => {
+    void _data
+    return { success: false, error: { issues: [] } }
+  },
+}
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 
@@ -15,15 +23,19 @@ import { withCors, withSecurityHeaders } from '@/utils/security'
  */
 function checkABACAccess(user: any, resource: string): boolean {
   if (!user?.isActive) return false
-  
+
   if (resource === 'admin') {
-    return user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
+    return (
+      user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
+    )
   }
-  
+
   if (resource === 'moderation') {
-    return user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
+    return (
+      user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
+    )
   }
-  
+
   return false
 }
 
@@ -31,7 +43,10 @@ function checkABACAccess(user: any, resource: string): boolean {
 export async function GET(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || (!checkABACAccess(session.user, 'admin') && !checkABACAccess(session.user, 'moderation'))) {
+  if (
+    !session ||
+    (!checkABACAccess(session.user, 'admin') && !checkABACAccess(session.user, 'moderation'))
+  ) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   // Not implemented: retornar lista de permissões baseada em ABAC
@@ -48,9 +63,14 @@ export async function POST(req: NextRequest) {
   const body = await req.json()
   const parse = permissaoSchema.safeParse(body)
   if (!parse.success) {
-    return NextResponse.json({ error: 'Dados inválidos', details: parse.error?.issues ?? [] }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Dados inválidos', details: parse.error?.issues ?? [] },
+      { status: 400 }
+    )
   }
-  return withCors(withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 })))
+  return withCors(
+    withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 }))
+  )
 }
 
 // PUT: Atualiza permissão (apenas admin)
@@ -63,9 +83,14 @@ export async function PUT(req: NextRequest) {
   const body = await req.json()
   const parse = permissaoSchema.safeParse(body)
   if (!parse.success) {
-    return NextResponse.json({ error: 'Dados inválidos', details: parse.error?.issues ?? [] }, { status: 400 })
+    return NextResponse.json(
+      { error: 'Dados inválidos', details: parse.error?.issues ?? [] },
+      { status: 400 }
+    )
   }
-  return withCors(withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 })))
+  return withCors(
+    withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 }))
+  )
 }
 
 // DELETE: Remove permissão (apenas admin)
@@ -79,5 +104,7 @@ export async function DELETE(req: NextRequest) {
   if (!id) {
     return NextResponse.json({ error: 'ID obrigatório' }, { status: 400 })
   }
-  return withCors(withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 })))
+  return withCors(
+    withSecurityHeaders(NextResponse.json({ message: 'Não implementado' }, { status: 501 }))
+  )
 }

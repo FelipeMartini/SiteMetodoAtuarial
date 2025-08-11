@@ -1,4 +1,4 @@
-import { UserRoleType } from '@prisma/client';
+import { UserRoleType } from '@prisma/client'
 
 /**
  * Utilitários para mapeamento entre accessLevel legado e roleType moderno
@@ -8,12 +8,12 @@ import { UserRoleType } from '@prisma/client';
 // Enum de roles do sistema
 export const SYSTEM_ROLES = {
   GUEST: 'GUEST',
-  USER: 'USER', 
+  USER: 'USER',
   MODERATOR: 'MODERATOR',
-  ADMIN: 'ADMIN'
-} as const;
+  ADMIN: 'ADMIN',
+} as const
 
-export type SystemRole = typeof SYSTEM_ROLES[keyof typeof SYSTEM_ROLES];
+export type SystemRole = (typeof SYSTEM_ROLES)[keyof typeof SYSTEM_ROLES]
 
 /**
  * Converte accessLevel legado para roleType moderno
@@ -21,10 +21,10 @@ export type SystemRole = typeof SYSTEM_ROLES[keyof typeof SYSTEM_ROLES];
  * @returns UserRoleType correspondente
  */
 export function mapAccessLevelToRoleType(accessLevel: number): UserRoleType {
-  if (accessLevel >= 100) return UserRoleType.ADMIN;      // Admin completo
-  if (accessLevel >= 50) return UserRoleType.MODERATOR;   // Moderador
-  if (accessLevel >= 1) return UserRoleType.USER;         // Usuário padrão
-  return UserRoleType.GUEST;                              // Visitante
+  if (accessLevel >= 100) return UserRoleType.ADMIN // Admin completo
+  if (accessLevel >= 50) return UserRoleType.MODERATOR // Moderador
+  if (accessLevel >= 1) return UserRoleType.USER // Usuário padrão
+  return UserRoleType.GUEST // Visitante
 }
 
 /**
@@ -35,14 +35,14 @@ export function mapAccessLevelToRoleType(accessLevel: number): UserRoleType {
 export function mapRoleTypeToAccessLevel(roleType: UserRoleType): number {
   switch (roleType) {
     case UserRoleType.ADMIN:
-      return 100;
+      return 100
     case UserRoleType.MODERATOR:
-      return 50;
+      return 50
     case UserRoleType.USER:
-      return 1;
+      return 1
     case UserRoleType.GUEST:
     default:
-      return 0;
+      return 0
   }
 }
 
@@ -54,15 +54,15 @@ export function mapRoleTypeToAccessLevel(roleType: UserRoleType): number {
 export function getRoleTypeLabel(roleType: UserRoleType): string {
   switch (roleType) {
     case UserRoleType.ADMIN:
-      return 'Administrador';
+      return 'Administrador'
     case UserRoleType.MODERATOR:
-      return 'Moderador';
+      return 'Moderador'
     case UserRoleType.USER:
-      return 'Usuário';
+      return 'Usuário'
     case UserRoleType.GUEST:
-      return 'Visitante';
+      return 'Visitante'
     default:
-      return 'Desconhecido';
+      return 'Desconhecido'
   }
 }
 
@@ -72,7 +72,7 @@ export function getRoleTypeLabel(roleType: UserRoleType): string {
  * @returns Valor numérico equivalente para exibição
  */
 export function getRoleTypeDisplayValue(roleType: UserRoleType): number {
-  return mapRoleTypeToAccessLevel(roleType);
+  return mapRoleTypeToAccessLevel(roleType)
 }
 
 /**
@@ -81,7 +81,7 @@ export function getRoleTypeDisplayValue(roleType: UserRoleType): number {
  * @returns true se tem permissões de admin
  */
 export function hasAdminPermissions(roleType: UserRoleType): boolean {
-  return roleType === UserRoleType.ADMIN;
+  return roleType === UserRoleType.ADMIN
 }
 
 /**
@@ -90,7 +90,7 @@ export function hasAdminPermissions(roleType: UserRoleType): boolean {
  * @returns true se tem permissões de moderador ou superior
  */
 export function hasModeratorPermissions(roleType: UserRoleType): boolean {
-  return roleType === UserRoleType.ADMIN || roleType === UserRoleType.MODERATOR;
+  return roleType === UserRoleType.ADMIN || roleType === UserRoleType.MODERATOR
 }
 
 /**
@@ -99,7 +99,7 @@ export function hasModeratorPermissions(roleType: UserRoleType): boolean {
  * @returns true se é usuário autenticado ou superior
  */
 export function hasUserPermissions(roleType: UserRoleType): boolean {
-  return roleType !== UserRoleType.GUEST;
+  return roleType !== UserRoleType.GUEST
 }
 
 /**
@@ -114,7 +114,7 @@ export function hasRequiredRole(userRole: UserRoleType, requiredRole: UserRoleTy
     [UserRoleType.USER]: 1,
     [UserRoleType.MODERATOR]: 2,
     [UserRoleType.ADMIN]: 3,
-  };
+  }
 
-  return roleHierarchy[userRole] >= roleHierarchy[requiredRole];
+  return roleHierarchy[userRole] >= roleHierarchy[requiredRole]
 }

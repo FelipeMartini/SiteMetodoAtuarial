@@ -9,8 +9,8 @@
 @layer utilities {
   .cursor-pointer-global,
   button:not([disabled]),
-  [role="button"],
-  [tabindex="0"],
+  [role='button'],
+  [tabindex='0'],
   a[href],
   summary,
   [aria-pressed],
@@ -25,18 +25,18 @@
   textarea,
   select,
   [contenteditable],
-  input[type="text"],
-  input[type="password"],
-  input[type="email"],
-  input[type="search"],
-  input[type="number"],
-  input[type="tel"],
-  input[type="url"],
-  input[type="date"],
-  input[type="time"],
-  input[type="datetime-local"],
-  input[type="month"],
-  input[type="week"] {
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  input[type='search'],
+  input[type='number'],
+  input[type='tel'],
+  input[type='url'],
+  input[type='date'],
+  input[type='time'],
+  input[type='datetime-local'],
+  input[type='month'],
+  input[type='week'] {
     cursor: text !important;
   }
 }

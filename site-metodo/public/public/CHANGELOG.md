@@ -3,10 +3,10 @@
 Todas as mudanças notáveis deste projeto serão documentadas neste arquivo.
 O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.0.0/) e este projeto adota [Versionamento Semântico](https://semver.org/lang/pt-BR/).
 
-
 ## [Unreleased]
 
 ### Adicionado
+
 - Estrutura modular baseada no padrão fuse-react (Next.js Skeleton).
 - README.md detalhado, com regras, estrutura, onboarding, exemplos práticos e boas práticas para toda a equipe.
 - Seção de recomendações para evolução futura: dashboards, relatórios, cálculos atuariais, controle de usuários e tecnologias modernas.
@@ -24,6 +24,7 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 - Checklist de reestruturação documentado em `CHECKLIST_REESTRUTURACAO.md`.
 
 ### Modificado
+
 - Refatoração completa da estrutura de pastas para seguir o padrão fuse-react.
 - Atualização de todos os imports e caminhos para refletir a nova estrutura.
 - Atualização das tasks e configurações do VS Code para uso de caminhos absolutos e corretos.
@@ -34,6 +35,7 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 - Comentários explicativos adicionados em todo o código.
 
 ### Corrigido
+
 - Correção de referências quebradas a imagens e assets após unificação da pasta public.
 - Correção de problemas de terminal e tasks apontando para diretórios antigos (ex: nextjs-app).
 - Remoção de arquivos, pastas e resíduos obsoletos após a migração.
@@ -46,6 +48,7 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 ### [2025-08-08] - Refatoração Auth.js puro, access level e logout
 
 #### Corrigido/Refatorado
+
 - Refatoração profunda do sistema de autenticação para uso do Auth.js puro (`@auth/core`), eliminando completamente qualquer dependência ou vestígio de `next-auth` antigo.
 - Padronização do hook `useAuth` e endpoints para garantir segurança, tipagem e compatibilidade com Auth.js v5+.
 - Correção de problemas de tipagem, imports e duplicidade de código no hook de autenticação.
@@ -54,6 +57,7 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 - Identificado e será corrigido: problema no sistema de logout, onde o menu superior não atualiza corretamente após logout.
 
 #### Checklist das próximas tarefas
+
 1. Corrigir o sistema de logout para que o menu superior e mensagem de usuário sumam imediatamente após logout.
 2. Corrigir o endpoint `/api/auth/session` para retornar o campo `accessLevel` no objeto `user` da sessão.
 3. Padronizar o uso do tipo oficial `Session` do Auth.js puro em todo o projeto.
@@ -64,14 +68,16 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 
 ---
 
-*Commit e push detalhado realizado antes de iniciar as próximas tarefas críticas de correção e padronização.*
+_Commit e push detalhado realizado antes de iniciar as próximas tarefas críticas de correção e padronização._
 
 ### Removido
+
 - Remoção de toda a estrutura antiga (nextjs-app, src/public duplicada, arquivos e pastas vazias).
 - Remoção de instruções e comentários obsoletos.
 - Limpeza de arquivos duplicados, resíduos e variáveis não utilizadas.
 
 ### Histórico resumido de implementações anteriores (baseado nos commits):
+
 - Modernização completa do projeto Next.js: otimização de imports, memoização, lazy loading, responsividade, acessibilidade e documentação.
 - Refatoração e padronização de todos os componentes principais, ErrorBoundary, diretiva 'use client', testes Jest, padronização de páginas e design system.
 - Implementação de multi temas com alternância, persistência em cookies e revisão visual.
@@ -81,12 +87,13 @@ O formato segue o padrão [Keep a Changelog](https://keepachangelog.com/pt-BR/1.
 - Correção de erros de hydration, build, tipagem e integração total de temas.
 - Integração e revisão final do sistema: área do cliente, relatórios, navegação, login/logout, rodapé otimizado.
 
-
 ## [1.0.0] - 2025-08-06
 
 ### Adicionado
+
 - Criação do projeto institucional Método Atuarial com Next.js, React, TypeScript e arquitetura moderna.
 - Primeira versão funcional com autenticação, design system, temas, testes e documentação inicial.
 
 ---
-*Mantenha este changelog sempre atualizado a cada release ou mudança importante!*
+
+_Mantenha este changelog sempre atualizado a cada release ou mudança importante!_

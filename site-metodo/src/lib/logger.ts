@@ -28,9 +28,7 @@ winston.addColors(logColors)
 const devFormat = format.combine(
   format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
   format.colorize({ all: true }),
-  format.printf(
-    (info) => `${info.timestamp} ${info.level}: ${info.message}`
-  )
+  format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
 )
 
 // Formato para produção (JSON estruturado)
@@ -38,7 +36,7 @@ const prodFormat = format.combine(
   format.timestamp(),
   format.errors({ stack: true }),
   format.json(),
-  format.printf((info) => {
+  format.printf(info => {
     return JSON.stringify({
       timestamp: info.timestamp,
       level: info.level,
@@ -72,7 +70,7 @@ if (process.env.NODE_ENV === 'production') {
       maxsize: 5242880, // 5MB
       maxFiles: 5,
     }),
-    
+
     // Log de auditoria
     new winston.transports.File({
       filename: path.join(logsDir, 'audit.log'),
@@ -81,7 +79,7 @@ if (process.env.NODE_ENV === 'production') {
       maxsize: 5242880, // 5MB
       maxFiles: 10,
     }),
-    
+
     // Log combinado
     new winston.transports.File({
       filename: path.join(logsDir, 'combined.log'),
@@ -153,11 +151,11 @@ export class StructuredLogger {
   }
 
   public error(message: string, error?: Error | string, meta?: LogMeta) {
-    this.logger.error(message, { 
-      meta: { 
-        ...meta, 
-        error: error instanceof Error ? error.stack : error 
-      }
+    this.logger.error(message, {
+      meta: {
+        ...meta,
+        error: error instanceof Error ? error.stack : error,
+      },
     })
   }
 
@@ -172,24 +170,24 @@ export class StructuredLogger {
 
   // Logs de auditoria
   public audit(action: string, meta: LogMeta & { performedBy: string }) {
-    this.logger.log('audit', `Audit: ${action}`, { 
-      meta: { 
-        ...meta, 
+    this.logger.log('audit', `Audit: ${action}`, {
+      meta: {
+        ...meta,
         action,
         auditType: 'user_action',
-        timestamp: new Date().toISOString()
-      }
+        timestamp: new Date().toISOString(),
+      },
     })
   }
 
   // Logs de autenticação
   public auth(event: 'login' | 'logout' | 'register' | 'password_reset', meta: LogMeta) {
-    this.logger.info(`Auth: ${event}`, { 
-      meta: { 
-        ...meta, 
+    this.logger.info(`Auth: ${event}`, {
+      meta: {
+        ...meta,
         authEvent: event,
-        category: 'authentication'
-      }
+        category: 'authentication',
+      },
     })
   }
 
@@ -201,8 +199,8 @@ export class StructuredLogger {
         ...meta,
         endpoint,
         responseTime,
-        category: 'performance'
-      }
+        category: 'performance',
+      },
     })
   }
 
@@ -214,8 +212,8 @@ export class StructuredLogger {
         ...meta,
         securityEvent: event,
         severity,
-        category: 'security'
-      }
+        category: 'security',
+      },
     })
   }
 
@@ -226,8 +224,8 @@ export class StructuredLogger {
         ...meta,
         dbOperation: operation,
         table,
-        category: 'database'
-      }
+        category: 'database',
+      },
     })
   }
 
@@ -245,32 +243,45 @@ export default structuredLogger
 
 // Helpers para contextos específicos
 export const authLogger = {
-  login: (userId: string, meta?: LogMeta) => 
-    structuredLogger.auth('login', { ...meta, userId }),
-  logout: (userId: string, meta?: LogMeta) => 
-    structuredLogger.auth('logout', { ...meta, userId }),
-  register: (email: string, meta?: LogMeta) => 
+  login: (userId: string, meta?: LogMeta) => structuredLogger.auth('login', { ...meta, userId }),
+  logout: (userId: string, meta?: LogMeta) => structuredLogger.auth('logout', { ...meta, userId }),
+  register: (email: string, meta?: LogMeta) =>
     structuredLogger.auth('register', { ...meta, email }),
-  failed: (email: string, reason: string, meta?: LogMeta) => 
+  failed: (email: string, reason: string, meta?: LogMeta) =>
     structuredLogger.security('authentication_failed', 'medium', { ...meta, email, reason }),
 }
 
 export const auditLogger = {
   userCreated: (performedBy: string, targetUser: string, meta?: LogMeta) =>
     structuredLogger.audit('user_created', { ...meta, performedBy, targetUser }),
-  userUpdated: (performedBy: string, targetUser: string, changes: Record<string, any>, meta?: LogMeta) =>
-    structuredLogger.audit('user_updated', { ...meta, performedBy, targetUser, changes }),
+  userUpdated: (
+    performedBy: string,
+    targetUser: string,
+    changes: Record<string, any>,
+    meta?: LogMeta
+  ) => structuredLogger.audit('user_updated', { ...meta, performedBy, targetUser, changes }),
   userDeleted: (performedBy: string, targetUser: string, meta?: LogMeta) =>
     structuredLogger.audit('user_deleted', { ...meta, performedBy, targetUser }),
-  roleChanged: (performedBy: string, targetUser: string, fromRole: string, toRole: string, meta?: LogMeta) =>
+  roleChanged: (
+    performedBy: string,
+    targetUser: string,
+    fromRole: string,
+    toRole: string,
+    meta?: LogMeta
+  ) =>
     structuredLogger.audit('role_changed', { ...meta, performedBy, targetUser, fromRole, toRole }),
   apiAccess: (userId: string, method: string, endpoint: string, meta?: LogMeta) =>
     structuredLogger.audit('api_access', { ...meta, performedBy: userId, method, endpoint }),
 }
 
 export const performanceLogger = {
-  api: (endpoint: string, method: string, responseTime: number, statusCode: number, meta?: LogMeta) =>
-    structuredLogger.performance(endpoint, responseTime, { ...meta, method, statusCode }),
+  api: (
+    endpoint: string,
+    method: string,
+    responseTime: number,
+    statusCode: number,
+    meta?: LogMeta
+  ) => structuredLogger.performance(endpoint, responseTime, { ...meta, method, statusCode }),
   database: (query: string, duration: number, meta?: LogMeta) =>
     structuredLogger.performance(`Database Query`, duration, { ...meta, query }),
 }

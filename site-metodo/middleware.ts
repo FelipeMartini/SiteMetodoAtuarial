@@ -1,6 +1,6 @@
 /**
  * 🛡️ Middleware de Autenticação Auth.js v5 - Configuração Profissional com ABAC
- * 
+ *
  * ✨ Recursos implementados:
  * ✅ Proteção inteligente de rotas baseada em ABAC (Attribute-Based Access Control)
  * ✅ Redirecionamento otimizado baseado em contexto
@@ -10,22 +10,22 @@
  * ✅ Sistema de logging estruturado e auditoria
  * ✅ Monitoramento de performance
  * ✅ Sistema ABAC puro com políticas baseadas em atributos
- * 
+ *
  * @see https://authjs.dev/getting-started/session-management/protecting
  */
 
-import { auth } from "./auth"
-import { NextResponse } from "next/server"
-import type { NextRequest } from "next/server"
-import { structuredLogger } from "./src/lib/logger"
-import { createComprehensiveMiddleware } from "./src/middleware/logging"
-import { getClientIP } from "./src/lib/utils/ip"
+import { auth } from './auth'
+import { NextResponse } from 'next/server'
+import type { NextRequest } from 'next/server'
+import { structuredLogger } from './src/lib/logger'
+import { createComprehensiveMiddleware } from './src/middleware/logging'
+import { getClientIP } from './src/lib/utils/ip'
 
 // 🌍 Rotas públicas (não requerem autenticação)
 const PUBLIC_ROUTES = [
   '/',
   '/auth/signin',
-  '/auth/signup', 
+  '/auth/signup',
   '/auth/error',
   '/about',
   '/contact',
@@ -43,7 +43,7 @@ const PUBLIC_ROUTES = [
 // 🔐 Rotas que requerem autenticação
 const PROTECTED_ROUTES = [
   '/area-cliente',
-  '/dashboard', 
+  '/dashboard',
   '/profile',
   '/settings',
   '/admin',
@@ -54,18 +54,9 @@ const PROTECTED_ROUTES = [
 ]
 
 // 🎯 Rotas sensíveis que requerem verificação ABAC adicional
-const ADMIN_ROUTES = [
-  '/admin',
-  '/admin/users',
-  '/admin/settings',
-  '/admin/logs',
-  '/api/admin',
-]
+const ADMIN_ROUTES = ['/admin', '/admin/users', '/admin/settings', '/admin/logs', '/api/admin']
 
-const MODERATOR_ROUTES = [
-  '/moderation',
-  '/api/moderation',
-]
+const MODERATOR_ROUTES = ['/moderation', '/api/moderation']
 
 function isRouteMatch(pathname: string, routes: string[]): boolean {
   return routes.some(route => {
@@ -86,7 +77,7 @@ function checkABACAuthorization(
   try {
     // Para implementação completa futura do ABAC
     // Por enquanto, usamos uma lógica simplificada baseada em atributos do usuário
-    
+
     // Verificar se usuário está ativo
     if (!user.isActive) {
       return false
@@ -95,14 +86,18 @@ function checkABACAuthorization(
     // Lógica específica para diferentes recursos
     if (resource === 'admin') {
       // Admin requer atributos específicos
-      return user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
+      return (
+        user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
+      )
     }
-    
+
     if (resource === 'moderation') {
       // Moderação requer verificação de atributos de moderador
-      return user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
+      return (
+        user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
+      )
     }
-    
+
     // Para outras rotas protegidas, apenas verificar se está autenticado e ativo
     return true
   } catch (error) {
@@ -118,12 +113,11 @@ export default auth((req: NextRequest & { auth: any }) => {
   const ip = getClientIP(req)
   const userAgent = req.headers.get('user-agent') || 'Unknown'
   const method = req.method
-  
+
   // Executar middleware de logging se não for arquivo estático
-  const shouldLog = !pathname.startsWith('/_next/') && 
-                   !pathname.includes('.') && 
-                   pathname !== '/favicon.ico'
-  
+  const shouldLog =
+    !pathname.startsWith('/_next/') && !pathname.includes('.') && pathname !== '/favicon.ico'
+
   if (shouldLog) {
     // Log estruturado do request
     structuredLogger.http(`${method} ${pathname}`, {
@@ -137,7 +131,7 @@ export default auth((req: NextRequest & { auth: any }) => {
       userEmail: session?.user?.email,
     })
   }
-  
+
   // 📝 Log para debugging (apenas em desenvolvimento)
   if (process.env.NODE_ENV === 'development') {
     console.log(`[Middleware] ${method} ${pathname} - User: ${session?.user?.email || 'Anonymous'}`)
@@ -166,7 +160,7 @@ export default auth((req: NextRequest & { auth: any }) => {
       })
       return NextResponse.redirect(new URL('/area-cliente', req.url))
     }
-    
+
     // Log performance para rota pública
     if (shouldLog) {
       setTimeout(() => {
@@ -179,7 +173,7 @@ export default auth((req: NextRequest & { auth: any }) => {
         })
       }, 0)
     }
-    
+
     return NextResponse.next()
   }
 
@@ -193,7 +187,7 @@ export default auth((req: NextRequest & { auth: any }) => {
         method,
         reason: 'no_session',
       })
-      
+
       const signInUrl = new URL('/auth/signin', req.url)
       signInUrl.searchParams.set('callbackUrl', pathname)
       return NextResponse.redirect(signInUrl)
@@ -219,7 +213,7 @@ export default auth((req: NextRequest & { auth: any }) => {
         endpoint: pathname,
         method,
       })
-      
+
       if (!hasAdminAccess) {
         structuredLogger.security('Insufficient admin privileges - ABAC denied', 'high', {
           userId: session.user?.id,
@@ -241,7 +235,7 @@ export default auth((req: NextRequest & { auth: any }) => {
         endpoint: pathname,
         method,
       })
-      
+
       if (!hasModeratorAccess) {
         structuredLogger.security('Insufficient moderator privileges - ABAC denied', 'medium', {
           userId: session.user?.id,
@@ -266,7 +260,7 @@ export default auth((req: NextRequest & { auth: any }) => {
       method,
       authorizationMethod: 'ABAC',
     })
-    
+
     // Log performance para rota protegida
     if (shouldLog) {
       setTimeout(() => {

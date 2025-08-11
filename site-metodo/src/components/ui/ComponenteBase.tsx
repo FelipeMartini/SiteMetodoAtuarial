@@ -1,4 +1,3 @@
-
 /**
  * ComponenteBase
  * -----------------------------------------------------------------------------
@@ -19,39 +18,36 @@
  * @see https://ui.shadcn.com/docs/components/card
  * @see https://motion.dev/docs/react
  */
-"use client";
-import * as React from "react";
-import { cva } from "class-variance-authority";
-import { motion, HTMLMotionProps } from "framer-motion";
-import { cn } from "@/lib/utils";
+'use client'
+import * as React from 'react'
+import { cva } from 'class-variance-authority'
+import { motion, HTMLMotionProps } from 'framer-motion'
+import { cn } from '@/lib/utils'
 
 // Variantes e tamanhos padronizados, seguindo tokens globais do projeto
-const componenteBaseVariants = cva(
-  "rounded-xl p-4 shadow-lg transition-all duration-300",
-  {
-    variants: {
-      variant: {
-        default: "bg-card text-card-foreground",
-        accent: "bg-accent text-accent-foreground",
-      },
-      size: {
-        sm: "text-sm py-2 px-3",
-        md: "text-base py-3 px-5",
-        lg: "text-lg py-4 px-7",
-      },
+const componenteBaseVariants = cva('rounded-xl p-4 shadow-lg transition-all duration-300', {
+  variants: {
+    variant: {
+      default: 'bg-card text-card-foreground',
+      accent: 'bg-accent text-accent-foreground',
     },
-    defaultVariants: {
-      variant: "default",
-      size: "md",
+    size: {
+      sm: 'text-sm py-2 px-3',
+      md: 'text-base py-3 px-5',
+      lg: 'text-lg py-4 px-7',
     },
-  }
-);
+  },
+  defaultVariants: {
+    variant: 'default',
+    size: 'md',
+  },
+})
 
-export interface ComponenteBaseProps extends HTMLMotionProps<"div"> {
-  variant?: "default" | "accent";
-  size?: "sm" | "md" | "lg";
-  className?: string;
-  children?: React.ReactNode;
+export interface ComponenteBaseProps extends HTMLMotionProps<'div'> {
+  variant?: 'default' | 'accent'
+  size?: 'sm' | 'md' | 'lg'
+  className?: string
+  children?: React.ReactNode
 }
 
 /**
@@ -70,11 +66,11 @@ export const ComponenteBase = React.forwardRef<HTMLDivElement, ComponenteBasePro
       className={cn(componenteBaseVariants({ variant, size, className }))}
       initial={{ opacity: 0, y: 16 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.22, type: "spring", bounce: 0.18 }}
+      transition={{ duration: 0.22, type: 'spring', bounce: 0.18 }}
       {...props}
     >
       {children}
     </motion.div>
   )
-);
-ComponenteBase.displayName = "ComponenteBase";
+)
+ComponenteBase.displayName = 'ComponenteBase'

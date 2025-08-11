@@ -5,6 +5,7 @@ applyTo: '**'
 # Mapeamento de Jornadas Principais do Usuário – Área Cliente
 
 ## Objetivo
+
 Documentar as principais jornadas do usuário final na área cliente, servindo de referência para arquitetura, UX e implementação incremental.
 
 ## Jornadas Principais
@@ -41,10 +42,12 @@ Documentar as principais jornadas do usuário final na área cliente, servindo d
    - Mensagens acessíveis (aria-live)
 
 ## Observações
+
 - Todas as jornadas devem ser acessíveis, responsivas e seguir o design system (shadcn/ui).
 - Preferir hooks dedicados para cada domínio (ex: useCurrentUser, useSessions, useMfaStatus).
 - Mensageria unificada para feedbacks.
 - Billing pode ser implementado em fase futura, mas a arquitetura deve prever expansão.
 
 ---
+
 Atualize este documento conforme novas jornadas forem identificadas ou alteradas.

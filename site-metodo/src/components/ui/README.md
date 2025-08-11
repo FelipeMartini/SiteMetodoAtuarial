@@ -1,9 +1,11 @@
 # Componentes UI (Design System)
 
 ## Objetivo
+
 Centralizar e documentar todos os componentes reutilizáveis do projeto, seguindo o padrão shadcn/ui e tokens de design customizados.
 
 ## Componentes Essenciais
+
 - Button
 - Card
 - Table
@@ -27,13 +29,15 @@ npx shadcn-ui@latest add <componente>
 ```
 
 ## Exemplo de uso
-```tsx
-import { Button } from "@/components/ui/button";
 
-<Button variant="primary">Salvar</Button>
+```tsx
+import { Button } from '@/components/ui/button'
+
+;<Button variant='primary'>Salvar</Button>
 ```
 
 ## Checklist de Design System
+
 - [ ] Todos os componentes possuem documentação de props
 - [ ] Exemplos de uso para cada componente
 - [ ] Tokens de design aplicados (cores, espaçamentos)

@@ -1,5 +1,4 @@
+'use client'
+export const dynamic = 'force-dynamic'
 
-"use client";
-export const dynamic = "force-dynamic";
-
-export { default } from "./PageDashboardAdmin";
+export { default } from './PageDashboardAdmin'

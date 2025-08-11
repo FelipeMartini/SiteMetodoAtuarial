@@ -5,118 +5,118 @@
  */
 
 export interface Theme {
-  name: string;
+  name: string
   colors: {
     // Background colors
-    background: string;
-    surface: string;
-    surfaceVariant: string;
-    backgroundSecondary: string;
-    backgroundTertiary: string;
+    background: string
+    surface: string
+    surfaceVariant: string
+    backgroundSecondary: string
+    backgroundTertiary: string
 
     // Text colors
-    text: string;
-    textSecondary: string;
-    textDisabled: string;
-    textTertiary: string;
-    textInverted: string;
+    text: string
+    textSecondary: string
+    textDisabled: string
+    textTertiary: string
+    textInverted: string
 
     // Primary colors
-    primary: string;
-    primaryHover: string;
-    primaryActive: string;
-    onPrimary: string;
+    primary: string
+    primaryHover: string
+    primaryActive: string
+    onPrimary: string
 
     // Secondary colors
-    secondary: string;
-    secondaryHover: string;
-    secondaryActive: string;
-    onSecondary: string;
+    secondary: string
+    secondaryHover: string
+    secondaryActive: string
+    onSecondary: string
 
     // Border and outline colors
-    border: string;
-    borderFocus: string;
-    borderHover: string;
-    outline: string;
+    border: string
+    borderFocus: string
+    borderHover: string
+    outline: string
 
     // Status colors
-    error: string;
-    errorHover: string;
-    errorBackground: string;
-    onError: string;
-    warning: string;
-    warningBackground: string;
-    success: string;
-    successBackground: string;
-    info: string;
+    error: string
+    errorHover: string
+    errorBackground: string
+    onError: string
+    warning: string
+    warningBackground: string
+    success: string
+    successBackground: string
+    info: string
 
     // Shadows
-    shadow: string;
-    shadowHover: string;
-  };
+    shadow: string
+    shadowHover: string
+  }
 
   // Spacing (espaçamentos)
   spacing: {
-    xs: string;
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-    xxl: string;
-  };
+    xs: string
+    sm: string
+    md: string
+    lg: string
+    xl: string
+    xxl: string
+  }
 
   // Border Radius (bordas)
   borderRadius: {
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-    full: string;
-  };
+    sm: string
+    md: string
+    lg: string
+    xl: string
+    full: string
+  }
 
   // Typography (tipografia)
   typography: {
-    fontFamily: string;
+    fontFamily: string
     fontSize: {
-      xs: string;
-      sm: string;
-      base: string;
-      lg: string;
-      xl: string;
-      xxl: string;
-      '2xl': string;
-      '3xl': string;
-      '4xl': string;
-      '5xl': string;
-    };
+      xs: string
+      sm: string
+      base: string
+      lg: string
+      xl: string
+      xxl: string
+      '2xl': string
+      '3xl': string
+      '4xl': string
+      '5xl': string
+    }
     fontWeight: {
-      light: number;
-      normal: number;
-      medium: number;
-      semibold: number;
-      bold: number;
-    };
+      light: number
+      normal: number
+      medium: number
+      semibold: number
+      bold: number
+    }
     lineHeight: {
-      tight: number;
-      normal: number;
-      relaxed: number;
-    };
-  };
+      tight: number
+      normal: number
+      relaxed: number
+    }
+  }
 
   // Transitions (animações)
   transitions: {
-    fast: string;
-    normal: string;
-    slow: string;
-  };
+    fast: string
+    normal: string
+    slow: string
+  }
 
   // Shadows (sombras)
   shadows: {
-    sm: string;
-    md: string;
-    lg: string;
-    xl: string;
-  };
+    sm: string
+    md: string
+    lg: string
+    xl: string
+  }
 }
 
 // Light Theme
@@ -182,7 +182,8 @@ export const lightTheme: Theme = {
   },
 
   typography: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
@@ -221,7 +222,7 @@ export const lightTheme: Theme = {
     lg: '0 10px 15px rgba(0, 0, 0, 0.1)',
     xl: '0 25px 50px rgba(0, 0, 0, 0.25)',
   },
-};
+}
 
 // Dark Theme
 export const darkTheme: Theme = {
@@ -286,7 +287,8 @@ export const darkTheme: Theme = {
   },
 
   typography: {
-    fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+    fontFamily:
+      '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
     fontSize: {
       xs: '0.75rem',
       sm: '0.875rem',
@@ -325,26 +327,26 @@ export const darkTheme: Theme = {
     lg: '0 10px 15px rgba(0, 0, 0, 0.2)',
     xl: '0 25px 50px rgba(0, 0, 0, 0.4)',
   },
-};
+}
 
 // Theme Names Type
-export type ThemeName = 'light' | 'dark';
+export type ThemeName = 'light' | 'dark'
 
 // Available Themes
-export const themes: Theme[] = [lightTheme, darkTheme];
+export const themes: Theme[] = [lightTheme, darkTheme]
 
 // Default Theme
-export const defaultTheme = lightTheme;
+export const defaultTheme = lightTheme
 
 // Helper Functions
 export const getThemeByName = (name: ThemeName): Theme => {
-  return themes.find(theme => theme.name === name) || defaultTheme;
-};
+  return themes.find(theme => theme.name === name) || defaultTheme
+}
 
 export const getNextTheme = (currentName: ThemeName): Theme => {
-  const currentIndex = themes.findIndex(theme => theme.name === currentName);
-  const nextIndex = (currentIndex + 1) % themes.length;
-  return themes[nextIndex];
-};
+  const currentIndex = themes.findIndex(theme => theme.name === currentName)
+  const nextIndex = (currentIndex + 1) % themes.length
+  return themes[nextIndex]
+}
 
-export const availableThemes = themes;
+export const availableThemes = themes

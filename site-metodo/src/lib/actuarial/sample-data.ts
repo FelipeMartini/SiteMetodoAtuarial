@@ -3,7 +3,7 @@
  * Baseado em dados reais das tábuas BR-EMS e AT-2000
  */
 
-import { MortalityTable } from './calculations';
+import { MortalityTable } from './calculations'
 
 /**
  * Tabela de mortalidade brasileira simplificada (BR-EMS adaptada)
@@ -11,7 +11,8 @@ import { MortalityTable } from './calculations';
  */
 export const BR_EMS_MALE_2020: MortalityTable = {
   name: 'BR-EMS-2020-MALE',
-  description: 'Tábua de Mortalidade Brasileira - Experiência de Mercado de Seguros 2020 - Masculina',
+  description:
+    'Tábua de Mortalidade Brasileira - Experiência de Mercado de Seguros 2020 - Masculina',
   country: 'Brasil',
   year: 2020,
   gender: 'male',
@@ -23,7 +24,7 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 22, qx: 0.001831 },
     { age: 23, qx: 0.001912 },
     { age: 24, qx: 0.001995 },
-    { age: 25, qx: 0.002080 },
+    { age: 25, qx: 0.00208 },
     { age: 26, qx: 0.002167 },
     { age: 27, qx: 0.002257 },
     { age: 28, qx: 0.002349 },
@@ -31,7 +32,7 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 30, qx: 0.002541 },
     { age: 31, qx: 0.002641 },
     { age: 32, qx: 0.002744 },
-    { age: 33, qx: 0.002850 },
+    { age: 33, qx: 0.00285 },
     { age: 34, qx: 0.002959 },
     { age: 35, qx: 0.003071 },
     { age: 36, qx: 0.003187 },
@@ -40,7 +41,7 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 39, qx: 0.003556 },
     { age: 40, qx: 0.003686 },
     { age: 41, qx: 0.003821 },
-    { age: 42, qx: 0.003960 },
+    { age: 42, qx: 0.00396 },
     { age: 43, qx: 0.004104 },
     { age: 44, qx: 0.004252 },
     { age: 45, qx: 0.004405 },
@@ -51,7 +52,7 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 50, qx: 0.005247 },
     { age: 51, qx: 0.005432 },
     { age: 52, qx: 0.005623 },
-    { age: 53, qx: 0.005820 },
+    { age: 53, qx: 0.00582 },
     { age: 54, qx: 0.006024 },
     { age: 55, qx: 0.006234 },
     { age: 56, qx: 0.006451 },
@@ -71,7 +72,7 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 70, qx: 0.010353 },
     { age: 71, qx: 0.010704 },
     { age: 72, qx: 0.011066 },
-    { age: 73, qx: 0.011440 },
+    { age: 73, qx: 0.01144 },
     { age: 74, qx: 0.011825 },
     { age: 75, qx: 0.012223 },
     { age: 76, qx: 0.012633 },
@@ -88,8 +89,8 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 87, qx: 0.018066 },
     { age: 88, qx: 0.018653 },
     { age: 89, qx: 0.019258 },
-    { age: 90, qx: 0.019880 },
-    { age: 91, qx: 0.020520 },
+    { age: 90, qx: 0.01988 },
+    { age: 91, qx: 0.02052 },
     { age: 92, qx: 0.021179 },
     { age: 93, qx: 0.021857 },
     { age: 94, qx: 0.022555 },
@@ -98,27 +99,28 @@ export const BR_EMS_MALE_2020: MortalityTable = {
     { age: 97, qx: 0.024772 },
     { age: 98, qx: 0.025554 },
     { age: 99, qx: 0.026358 },
-    { age: 100, qx: 1.000000 }
-  ]
-};
+    { age: 100, qx: 1.0 },
+  ],
+}
 
 export const BR_EMS_FEMALE_2020: MortalityTable = {
   name: 'BR-EMS-2020-FEMALE',
-  description: 'Tábua de Mortalidade Brasileira - Experiência de Mercado de Seguros 2020 - Feminina',
+  description:
+    'Tábua de Mortalidade Brasileira - Experiência de Mercado de Seguros 2020 - Feminina',
   country: 'Brasil',
   year: 2020,
   gender: 'female',
   entries: [
     { age: 18, qx: 0.000687 },
     { age: 19, qx: 0.000708 },
-    { age: 20, qx: 0.000730 },
+    { age: 20, qx: 0.00073 },
     { age: 21, qx: 0.000752 },
     { age: 22, qx: 0.000775 },
     { age: 23, qx: 0.000799 },
     { age: 24, qx: 0.000823 },
     { age: 25, qx: 0.000848 },
     { age: 26, qx: 0.000873 },
-    { age: 27, qx: 0.000900 },
+    { age: 27, qx: 0.0009 },
     { age: 28, qx: 0.000927 },
     { age: 29, qx: 0.000955 },
     { age: 30, qx: 0.000984 },
@@ -126,15 +128,15 @@ export const BR_EMS_FEMALE_2020: MortalityTable = {
     { age: 32, qx: 0.001044 },
     { age: 33, qx: 0.001075 },
     { age: 34, qx: 0.001107 },
-    { age: 35, qx: 0.001140 },
+    { age: 35, qx: 0.00114 },
     { age: 36, qx: 0.001174 },
     { age: 37, qx: 0.001209 },
     { age: 38, qx: 0.001245 },
     { age: 39, qx: 0.001282 },
-    { age: 40, qx: 0.001320 },
+    { age: 40, qx: 0.00132 },
     { age: 41, qx: 0.001359 },
     { age: 42, qx: 0.001399 },
-    { age: 43, qx: 0.001440 },
+    { age: 43, qx: 0.00144 },
     { age: 44, qx: 0.001483 },
     { age: 45, qx: 0.001527 },
     { age: 46, qx: 0.001572 },
@@ -143,11 +145,11 @@ export const BR_EMS_FEMALE_2020: MortalityTable = {
     { age: 49, qx: 0.001714 },
     { age: 50, qx: 0.001765 },
     { age: 51, qx: 0.001817 },
-    { age: 52, qx: 0.001870 },
+    { age: 52, qx: 0.00187 },
     { age: 53, qx: 0.001925 },
     { age: 54, qx: 0.001982 },
-    { age: 55, qx: 0.002040 },
-    { age: 56, qx: 0.002100 },
+    { age: 55, qx: 0.00204 },
+    { age: 56, qx: 0.0021 },
     { age: 57, qx: 0.002162 },
     { age: 58, qx: 0.002226 },
     { age: 59, qx: 0.002291 },
@@ -160,7 +162,7 @@ export const BR_EMS_FEMALE_2020: MortalityTable = {
     { age: 66, qx: 0.002806 },
     { age: 67, qx: 0.002888 },
     { age: 68, qx: 0.002973 },
-    { age: 69, qx: 0.003060 },
+    { age: 69, qx: 0.00306 },
     { age: 70, qx: 0.003149 },
     { age: 71, qx: 0.003241 },
     { age: 72, qx: 0.003336 },
@@ -187,13 +189,13 @@ export const BR_EMS_FEMALE_2020: MortalityTable = {
     { age: 93, qx: 0.006079 },
     { age: 94, qx: 0.006254 },
     { age: 95, qx: 0.006434 },
-    { age: 96, qx: 0.006620 },
+    { age: 96, qx: 0.00662 },
     { age: 97, qx: 0.006811 },
     { age: 98, qx: 0.007008 },
     { age: 99, qx: 0.007211 },
-    { age: 100, qx: 1.000000 }
-  ]
-};
+    { age: 100, qx: 1.0 },
+  ],
+}
 
 /**
  * Tabela de mortalidade para invalidez (simplificada)
@@ -205,91 +207,91 @@ export const BR_DISABILITY_2020: MortalityTable = {
   year: 2020,
   gender: 'unisex',
   entries: [
-    { age: 18, qx: 0.002500 },
-    { age: 19, qx: 0.002550 },
-    { age: 20, qx: 0.002600 },
-    { age: 21, qx: 0.002650 },
-    { age: 22, qx: 0.002700 },
-    { age: 23, qx: 0.002750 },
-    { age: 24, qx: 0.002800 },
-    { age: 25, qx: 0.002850 },
-    { age: 26, qx: 0.002900 },
-    { age: 27, qx: 0.002950 },
-    { age: 28, qx: 0.003000 },
-    { age: 29, qx: 0.003050 },
-    { age: 30, qx: 0.003100 },
-    { age: 31, qx: 0.003200 },
-    { age: 32, qx: 0.003300 },
-    { age: 33, qx: 0.003400 },
-    { age: 34, qx: 0.003500 },
-    { age: 35, qx: 0.003600 },
-    { age: 36, qx: 0.003750 },
-    { age: 37, qx: 0.003900 },
-    { age: 38, qx: 0.004050 },
-    { age: 39, qx: 0.004200 },
-    { age: 40, qx: 0.004350 },
-    { age: 41, qx: 0.004550 },
-    { age: 42, qx: 0.004750 },
-    { age: 43, qx: 0.004950 },
-    { age: 44, qx: 0.005150 },
-    { age: 45, qx: 0.005350 },
-    { age: 46, qx: 0.005600 },
-    { age: 47, qx: 0.005850 },
-    { age: 48, qx: 0.006100 },
-    { age: 49, qx: 0.006350 },
-    { age: 50, qx: 0.006600 },
-    { age: 51, qx: 0.006900 },
-    { age: 52, qx: 0.007200 },
-    { age: 53, qx: 0.007500 },
-    { age: 54, qx: 0.007800 },
-    { age: 55, qx: 0.008100 },
-    { age: 56, qx: 0.008450 },
-    { age: 57, qx: 0.008800 },
-    { age: 58, qx: 0.009150 },
-    { age: 59, qx: 0.009500 },
-    { age: 60, qx: 0.009850 },
-    { age: 61, qx: 0.010250 },
-    { age: 62, qx: 0.010650 },
-    { age: 63, qx: 0.011050 },
-    { age: 64, qx: 0.011450 },
-    { age: 65, qx: 0.011850 },
-    { age: 66, qx: 0.012300 },
-    { age: 67, qx: 0.012750 },
-    { age: 68, qx: 0.013200 },
-    { age: 69, qx: 0.013650 },
-    { age: 70, qx: 0.014100 },
-    { age: 71, qx: 0.014600 },
-    { age: 72, qx: 0.015100 },
-    { age: 73, qx: 0.015600 },
-    { age: 74, qx: 0.016100 },
-    { age: 75, qx: 0.016600 },
-    { age: 76, qx: 0.017150 },
-    { age: 77, qx: 0.017700 },
-    { age: 78, qx: 0.018250 },
-    { age: 79, qx: 0.018800 },
-    { age: 80, qx: 0.019350 },
-    { age: 81, qx: 0.019950 },
-    { age: 82, qx: 0.020550 },
-    { age: 83, qx: 0.021150 },
-    { age: 84, qx: 0.021750 },
-    { age: 85, qx: 0.022350 },
-    { age: 86, qx: 0.023000 },
-    { age: 87, qx: 0.023650 },
-    { age: 88, qx: 0.024300 },
-    { age: 89, qx: 0.024950 },
-    { age: 90, qx: 0.025600 },
-    { age: 91, qx: 0.026300 },
-    { age: 92, qx: 0.027000 },
-    { age: 93, qx: 0.027700 },
-    { age: 94, qx: 0.028400 },
-    { age: 95, qx: 0.029100 },
-    { age: 96, qx: 0.029850 },
-    { age: 97, qx: 0.030600 },
-    { age: 98, qx: 0.031350 },
-    { age: 99, qx: 0.032100 },
-    { age: 100, qx: 1.000000 }
-  ]
-};
+    { age: 18, qx: 0.0025 },
+    { age: 19, qx: 0.00255 },
+    { age: 20, qx: 0.0026 },
+    { age: 21, qx: 0.00265 },
+    { age: 22, qx: 0.0027 },
+    { age: 23, qx: 0.00275 },
+    { age: 24, qx: 0.0028 },
+    { age: 25, qx: 0.00285 },
+    { age: 26, qx: 0.0029 },
+    { age: 27, qx: 0.00295 },
+    { age: 28, qx: 0.003 },
+    { age: 29, qx: 0.00305 },
+    { age: 30, qx: 0.0031 },
+    { age: 31, qx: 0.0032 },
+    { age: 32, qx: 0.0033 },
+    { age: 33, qx: 0.0034 },
+    { age: 34, qx: 0.0035 },
+    { age: 35, qx: 0.0036 },
+    { age: 36, qx: 0.00375 },
+    { age: 37, qx: 0.0039 },
+    { age: 38, qx: 0.00405 },
+    { age: 39, qx: 0.0042 },
+    { age: 40, qx: 0.00435 },
+    { age: 41, qx: 0.00455 },
+    { age: 42, qx: 0.00475 },
+    { age: 43, qx: 0.00495 },
+    { age: 44, qx: 0.00515 },
+    { age: 45, qx: 0.00535 },
+    { age: 46, qx: 0.0056 },
+    { age: 47, qx: 0.00585 },
+    { age: 48, qx: 0.0061 },
+    { age: 49, qx: 0.00635 },
+    { age: 50, qx: 0.0066 },
+    { age: 51, qx: 0.0069 },
+    { age: 52, qx: 0.0072 },
+    { age: 53, qx: 0.0075 },
+    { age: 54, qx: 0.0078 },
+    { age: 55, qx: 0.0081 },
+    { age: 56, qx: 0.00845 },
+    { age: 57, qx: 0.0088 },
+    { age: 58, qx: 0.00915 },
+    { age: 59, qx: 0.0095 },
+    { age: 60, qx: 0.00985 },
+    { age: 61, qx: 0.01025 },
+    { age: 62, qx: 0.01065 },
+    { age: 63, qx: 0.01105 },
+    { age: 64, qx: 0.01145 },
+    { age: 65, qx: 0.01185 },
+    { age: 66, qx: 0.0123 },
+    { age: 67, qx: 0.01275 },
+    { age: 68, qx: 0.0132 },
+    { age: 69, qx: 0.01365 },
+    { age: 70, qx: 0.0141 },
+    { age: 71, qx: 0.0146 },
+    { age: 72, qx: 0.0151 },
+    { age: 73, qx: 0.0156 },
+    { age: 74, qx: 0.0161 },
+    { age: 75, qx: 0.0166 },
+    { age: 76, qx: 0.01715 },
+    { age: 77, qx: 0.0177 },
+    { age: 78, qx: 0.01825 },
+    { age: 79, qx: 0.0188 },
+    { age: 80, qx: 0.01935 },
+    { age: 81, qx: 0.01995 },
+    { age: 82, qx: 0.02055 },
+    { age: 83, qx: 0.02115 },
+    { age: 84, qx: 0.02175 },
+    { age: 85, qx: 0.02235 },
+    { age: 86, qx: 0.023 },
+    { age: 87, qx: 0.02365 },
+    { age: 88, qx: 0.0243 },
+    { age: 89, qx: 0.02495 },
+    { age: 90, qx: 0.0256 },
+    { age: 91, qx: 0.0263 },
+    { age: 92, qx: 0.027 },
+    { age: 93, qx: 0.0277 },
+    { age: 94, qx: 0.0284 },
+    { age: 95, qx: 0.0291 },
+    { age: 96, qx: 0.02985 },
+    { age: 97, qx: 0.0306 },
+    { age: 98, qx: 0.03135 },
+    { age: 99, qx: 0.0321 },
+    { age: 100, qx: 1.0 },
+  ],
+}
 
 /**
  * Exemplo de dados para teste de cálculos
@@ -300,8 +302,8 @@ export const EXAMPLE_LIFE_INSURANCE = {
   premiumPaymentPeriod: 20,
   interestRate: 0.06,
   mortalityTable: BR_EMS_MALE_2020,
-  loading: 0.15
-};
+  loading: 0.15,
+}
 
 export const EXAMPLE_ANNUITY = {
   age: 65,
@@ -309,28 +311,24 @@ export const EXAMPLE_ANNUITY = {
   paymentFrequency: 12,
   interestRate: 0.05,
   mortalityTable: BR_EMS_FEMALE_2020,
-  immediateStart: true
-};
+  immediateStart: true,
+}
 
 /**
  * Lista de todas as tabelas disponíveis
  */
-export const AVAILABLE_TABLES = [
-  BR_EMS_MALE_2020,
-  BR_EMS_FEMALE_2020,
-  BR_DISABILITY_2020
-];
+export const AVAILABLE_TABLES = [BR_EMS_MALE_2020, BR_EMS_FEMALE_2020, BR_DISABILITY_2020]
 
 /**
  * Função utilitária para obter uma tabela por nome
  */
 export function getTableByName(name: string): MortalityTable | undefined {
-  return AVAILABLE_TABLES.find(table => table.name === name);
+  return AVAILABLE_TABLES.find(table => table.name === name)
 }
 
 /**
  * Função para obter tabelas por país
  */
 export function getTablesByCountry(country: string): MortalityTable[] {
-  return AVAILABLE_TABLES.filter(table => table.country.toLowerCase() === country.toLowerCase());
+  return AVAILABLE_TABLES.filter(table => table.country.toLowerCase() === country.toLowerCase())
 }

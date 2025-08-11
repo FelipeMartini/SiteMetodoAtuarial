@@ -3,6 +3,7 @@
 ## 1. Diagnóstico do Projeto Atual (site-metodo)
 
 ### Componentes Existentes
+
 - **Dashboard Stats**: Cards de métricas (usuários, sessões, status, etc.)
 - **Tabela de Usuários**: Busca, filtros, ações em massa, badges de roles, exportação CSV/Excel
 - **DataTableBase**: Headless, TanStack Table, sorting, filtros, persistência de preferências, exportação CSV/Excel, seleção em lote
@@ -12,6 +13,7 @@
 - **Acessibilidade**: Uso de roles, aria-labels, containers semânticos
 
 ### Pontos Fortes
+
 - Estrutura modular e reutilizável
 - Uso de TanStack Table (moderno)
 - Exportação de dados já implementada
@@ -20,6 +22,7 @@
 - Autenticação moderna (Auth.js v5)
 
 ### Pontos a Melhorar/Expandir
+
 - Navegação lateral (sidebar) mais rica e responsiva
 - Microinterações e feedback visual
 - Dark mode aprimorado
@@ -37,6 +40,7 @@
 ## 2. Tendências e Melhores Práticas 2025 (Pesquisa Web)
 
 ### UI/UX e Design
+
 - **Modo escuro e claro nativo** (Material Design, iMasters 2025)
 - **Neumorfismo e realismo digital** (com acessibilidade)
 - **Microinterações avançadas** (feedback visual, animações)
@@ -48,6 +52,7 @@
 - **Mobile-first e responsividade total**
 
 ### Funcionalidades e Recursos
+
 - **Sidebar colapsável e menus contextuais**
 - **Cards/widgets dinâmicos** (drag & drop, reordenação)
 - **Tabelas avançadas**: filtros, ordenação, seleção múltipla, agrupamento, edição inline, exportação (CSV, Excel, PDF)
@@ -61,6 +66,7 @@
 - **Suporte a múltiplos idiomas**
 
 ### Tecnologias e Dependências Modernas
+
 - **Next.js 15+**
 - **TailwindCSS 4+**
 - **TanStack Table** (já usado)
@@ -79,12 +85,14 @@
 ## 3. Plano de Implementação e Adaptação
 
 ### 3.1. Navegação e Layout
+
 - [ ] Sidebar colapsável, responsiva, com agrupamento de menus e ícones
 - [ ] Topbar com busca global, perfil, notificações
 - [ ] Suporte a dark/light mode (com toggle)
 - [ ] Layout adaptativo (mobile/tablet/desktop)
 
 ### 3.2. Tabelas e Visualização de Dados
+
 - [ ] Edição inline e seleção em lote
 - [ ] Agrupamento e ordenação avançada
 - [ ] Exportação: CSV, Excel, PDF, Google Sheets
@@ -92,6 +100,7 @@
 - [ ] Estados vazios/erro ilustrados
 
 ### 3.3. Experiência do Usuário
+
 - [ ] Microinterações (hover, loading, feedback)
 - [ ] Tooltips/contexto e onboarding
 - [ ] Personalização de widgets/cards
@@ -99,10 +108,12 @@
 - [ ] Internacionalização (i18next)
 
 ### 3.4. Segurança e Permissões
+
 - [ ] Perfis e permissões granularizadas (admin, manager, user, etc.)
 - [ ] Logs de auditoria e histórico de ações
 
 ### 3.5. Dependências e Stack
+
 - [ ] Atualizar TailwindCSS, shadcn/ui, TanStack Table, SheetJS
 - [ ] Adicionar Chart.js/ApexCharts/ECharts
 - [ ] Adicionar Framer Motion (animações)
@@ -112,6 +123,7 @@
 ---
 
 ## 4. Impacto e Considerações
+
 - **Refatoração de componentes de navegação e layout**
 - **Adaptação de tabelas para recursos avançados**
 - **Possível migração/expansão de hooks de autenticação/permissão**
@@ -122,6 +134,7 @@
 ---
 
 ## 5. Referências e Inspirações
+
 - [Next.js Admin Templates 2025](https://nextjstemplates.com/blog/admin-dashboard-templates)
 - [BootstrapDash – Admin Templates 2025](https://www.bootstrapdash.com/blog/free-simple-admin-panel-templates)
 - [Colorlib – Free Admin Dashboards](https://colorlib.com/wp/free-bootstrap-admin-dashboard-templates/)

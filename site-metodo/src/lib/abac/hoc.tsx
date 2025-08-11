@@ -1,9 +1,9 @@
-'use client';
+'use client'
 
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
-import { checkClientPermission } from './client';
+import { useSession } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import { checkClientPermission } from './client'
 // import { AuthorizationError } from './types';
 
 /**
@@ -11,12 +11,12 @@ import { checkClientPermission } from './client';
  */
 
 export interface WithABACOptions {
-  requiredAction?: string;
-  resource?: string;
-  roles?: string[];
-  redirectTo?: string;
-  fallback?: React.ComponentType;
-  onUnauthorized?: () => void;
+  requiredAction?: string
+  resource?: string
+  roles?: string[]
+  redirectTo?: string
+  fallback?: React.ComponentType
+  onUnauthorized?: () => void
 }
 
 /**
@@ -32,115 +32,115 @@ export function withABAC<T extends object>(
     roles = [],
     redirectTo = '/unauthorized',
     fallback: Fallback,
-    onUnauthorized
-  } = options;
+    onUnauthorized,
+  } = options
 
   return function ProtectedComponent(props: T) {
-    const { data: session, status } = useSession();
-    const router = useRouter();
-    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
+    const { data: session, status } = useSession()
+    const router = useRouter()
+    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
+    const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
       async function checkAuthorization() {
-        if (status === 'loading') return;
+        if (status === 'loading') return
 
         if (!session?.user?.email) {
-          setIsAuthorized(false);
-          setIsLoading(false);
-          return;
+          setIsAuthorized(false)
+          setIsLoading(false)
+          return
         }
 
         try {
           // If specific roles are required, check them first
           if (roles.length > 0) {
-            const userRole = (session.user as { role?: string }).role || 'user';
+            const userRole = (session.user as { role?: string }).role || 'user'
             if (!roles.includes(userRole)) {
-              setIsAuthorized(false);
-              setIsLoading(false);
-              return;
+              setIsAuthorized(false)
+              setIsLoading(false)
+              return
             }
           }
 
           // Check ABAC permissions
-          const currentResource = resource || window.location.pathname;
+          const currentResource = resource || window.location.pathname
           const hasPermission = await checkClientPermission(
             session.user.email,
             currentResource,
             requiredAction
-          );
+          )
 
-          setIsAuthorized(hasPermission);
+          setIsAuthorized(hasPermission)
         } catch (_error) {
-          console.error('Authorization check failed:', error);
-          setIsAuthorized(false);
+          console.error('Authorization check failed:', error)
+          setIsAuthorized(false)
         } finally {
-          setIsLoading(false);
+          setIsLoading(false)
         }
       }
 
-      checkAuthorization();
-    }, [session, status]);
+      checkAuthorization()
+    }, [session, status])
 
     useEffect(() => {
       if (isAuthorized === false && !isLoading) {
         if (onUnauthorized) {
-          onUnauthorized();
+          onUnauthorized()
         } else if (redirectTo) {
-          router.push(redirectTo);
+          router.push(redirectTo)
         }
       }
-    }, [isAuthorized, isLoading, router]);
+    }, [isAuthorized, isLoading, router])
 
     // Show loading state
     if (isLoading || status === 'loading') {
-      return <LoadingComponent />;
+      return <LoadingComponent />
     }
 
     // Show unauthorized state
     if (isAuthorized === false) {
       if (Fallback) {
-        return <Fallback />;
+        return <Fallback />
       }
-      return <UnauthorizedComponent />;
+      return <UnauthorizedComponent />
     }
 
     // Render protected component
-    return <WrappedComponent {...props} />;
-  };
+    return <WrappedComponent {...props} />
+  }
 }
 
 /**
  * Hook for checking permissions in components
  */
 export function usePermission(resource: string, action: string = 'read') {
-  const { data: session } = useSession();
-  const [hasPermission, setHasPermission] = useState<boolean | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const { data: session } = useSession()
+  const [hasPermission, setHasPermission] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
     async function checkAuth() {
       if (!session?.user?.email) {
-        setHasPermission(false);
-        setIsLoading(false);
-        return;
+        setHasPermission(false)
+        setIsLoading(false)
+        return
       }
 
       try {
-        const result = await checkClientPermission(session.user.email, resource, action);
-        setHasPermission(result);
+        const result = await checkClientPermission(session.user.email, resource, action)
+        setHasPermission(result)
       } catch (_error) {
-        console.error('Permission check error:', error);
-        setHasPermission(false);
+        console.error('Permission check error:', error)
+        setHasPermission(false)
       } finally {
-        setIsLoading(false);
+        setIsLoading(false)
       }
     }
 
-    checkAuth();
-  }, [session, resource, action]);
+    checkAuth()
+  }, [session, resource, action])
 
-  return { hasPermission, isLoading };
+  return { hasPermission, isLoading }
 }
 
 /**
@@ -152,63 +152,63 @@ export function PermissionGate({
   roles = [],
   children,
   fallback = null,
-  loading = <LoadingComponent />
+  loading = <LoadingComponent />,
 }: {
-  resource: string;
-  action?: string;
-  roles?: string[];
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-  loading?: React.ReactNode;
+  resource: string
+  action?: string
+  roles?: string[]
+  children: React.ReactNode
+  fallback?: React.ReactNode
+  loading?: React.ReactNode
 }) {
-  const { data: session } = useSession();
-  const { hasPermission, isLoading } = usePermission(resource, action);
+  const { data: session } = useSession()
+  const { hasPermission, isLoading } = usePermission(resource, action)
 
   if (isLoading) {
-    return <>{loading}</>;
+    return <>{loading}</>
   }
 
   if (!session?.user) {
-    return <>{fallback}</>;
+    return <>{fallback}</>
   }
 
   // Check roles if specified
   if (roles.length > 0) {
-    const userRole = (session.user as { role?: string }).role || 'user';
+    const userRole = (session.user as { role?: string }).role || 'user'
     if (!roles.includes(userRole)) {
-      return <>{fallback}</>;
+      return <>{fallback}</>
     }
   }
 
   // Check ABAC permissions
   if (!hasPermission) {
-    return <>{fallback}</>;
+    return <>{fallback}</>
   }
 
-  return <>{children}</>;
+  return <>{children}</>
 }
 
 /**
  * Hook for checking if user has specific role
  */
 export function useRole() {
-  const { data: session } = useSession();
-  
+  const { data: session } = useSession()
+
   const hasRole = (role: string): boolean => {
-    if (!session?.user) return false;
-    const userRole = (session.user as { role?: string }).role || 'user';
-    return userRole === role;
-  };
+    if (!session?.user) return false
+    const userRole = (session.user as { role?: string }).role || 'user'
+    return userRole === role
+  }
 
   const hasAnyRole = (roles: string[]): boolean => {
-    if (!session?.user) return false;
-    const userRole = (session.user as { role?: string }).role || 'user';
-    return roles.includes(userRole);
-  };
+    if (!session?.user) return false
+    const userRole = (session.user as { role?: string }).role || 'user'
+    return roles.includes(userRole)
+  }
 
-  const isAdmin = (): boolean => hasRole('admin');
-  const isModerator = (): boolean => hasRole('moderator');
-  const isUser = (): boolean => hasRole('user');
+  const isAdmin = (): boolean => hasRole('admin')
+  const isModerator = (): boolean => hasRole('moderator')
+  const isUser = (): boolean => hasRole('user')
 
   return {
     hasRole,
@@ -216,8 +216,8 @@ export function useRole() {
     isAdmin,
     isModerator,
     isUser,
-    role: (session?.user as { role?: string })?.role || 'guest'
-  };
+    role: (session?.user as { role?: string })?.role || 'guest',
+  }
 }
 
 /**
@@ -225,11 +225,11 @@ export function useRole() {
  */
 function LoadingComponent() {
   return (
-    <div className="flex items-center justify-center min-h-[200px]">
-      <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      <span className="ml-2">Verificando permissões...</span>
+    <div className='flex items-center justify-center min-h-[200px]'>
+      <div className='animate-spin rounded-full h-8 w-8 border-b-2 border-primary'></div>
+      <span className='ml-2'>Verificando permissões...</span>
     </div>
-  );
+  )
 }
 
 /**
@@ -237,20 +237,21 @@ function LoadingComponent() {
  */
 function UnauthorizedComponent() {
   return (
-    <div className="flex flex-col items-center justify-center min-h-[400px] space-y-4">
-      <div className="text-6xl">🔒</div>
-      <h1 className="text-2xl font-bold text-gray-900">Acesso Negado</h1>
-      <p className="text-gray-600 text-center max-w-md">
-        Você não tem permissão para acessar esta página. Entre em contato com o administrador se acredita que isso é um erro.
+    <div className='flex flex-col items-center justify-center min-h-[400px] space-y-4'>
+      <div className='text-6xl'>🔒</div>
+      <h1 className='text-2xl font-bold text-gray-900'>Acesso Negado</h1>
+      <p className='text-gray-600 text-center max-w-md'>
+        Você não tem permissão para acessar esta página. Entre em contato com o administrador se
+        acredita que isso é um erro.
       </p>
       <button
         onClick={() => window.history.back()}
-        className="px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors"
+        className='px-4 py-2 bg-primary text-white rounded-md hover:bg-primary/90 transition-colors'
       >
         Voltar
       </button>
     </div>
-  );
+  )
 }
 
 /**
@@ -261,68 +262,68 @@ export function ABACProtectedPage({
   requiredAction = 'read',
   resource,
   roles = [],
-  redirectTo = '/unauthorized'
+  redirectTo = '/unauthorized',
 }: {
-  children: React.ReactNode;
-  requiredAction?: string;
-  resource?: string;
-  roles?: string[];
-  redirectTo?: string;
+  children: React.ReactNode
+  requiredAction?: string
+  resource?: string
+  roles?: string[]
+  redirectTo?: string
 }) {
-  const { data: session, status } = useSession();
-  const router = useRouter();
-  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null);
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
 
   useEffect(() => {
     async function checkAuth() {
-      if (status === 'loading') return;
+      if (status === 'loading') return
 
       if (!session?.user?.email) {
-        router.push('/login');
-        return;
+        router.push('/login')
+        return
       }
 
       try {
         // Check roles
         if (roles.length > 0) {
-          const userRole = (session.user as { role?: string }).role || 'user';
+          const userRole = (session.user as { role?: string }).role || 'user'
           if (!roles.includes(userRole)) {
-            setIsAuthorized(false);
-            return;
+            setIsAuthorized(false)
+            return
           }
         }
 
         // Check ABAC permissions
-        const currentResource = resource || window.location.pathname;
+        const currentResource = resource || window.location.pathname
         const hasPermission = await checkClientPermission(
           session.user.email,
           currentResource,
           requiredAction
-        );
+        )
 
-        setIsAuthorized(hasPermission);
+        setIsAuthorized(hasPermission)
       } catch (_error) {
-        console.error('Authorization failed:', error);
-        setIsAuthorized(false);
+        console.error('Authorization failed:', error)
+        setIsAuthorized(false)
       }
     }
 
-    checkAuth();
-  }, [session, status, resource, requiredAction, roles, router]);
+    checkAuth()
+  }, [session, status, resource, requiredAction, roles, router])
 
   useEffect(() => {
     if (isAuthorized === false) {
-      router.push(redirectTo);
+      router.push(redirectTo)
     }
-  }, [isAuthorized, router, redirectTo]);
+  }, [isAuthorized, router, redirectTo])
 
   if (status === 'loading' || isAuthorized === null) {
-    return <LoadingComponent />;
+    return <LoadingComponent />
   }
 
   if (isAuthorized === false) {
-    return null; // Will redirect
+    return null // Will redirect
   }
 
-  return <>{children}</>;
+  return <>{children}</>
 }

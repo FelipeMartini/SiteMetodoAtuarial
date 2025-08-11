@@ -1,27 +1,27 @@
 /**
  * 🔧 Prisma Client Singleton Pattern
- * 
+ *
  * Implementação profissional para evitar múltiplas instâncias
  * do PrismaClient durante desenvolvimento e garantir performance
  * otimizada em produção.
- * 
+ *
  * @see https://authjs.dev/getting-started/adapters/prisma
  */
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
 const globalForPrisma = globalThis as unknown as {
-  prisma: PrismaClient | undefined;
-};
+  prisma: PrismaClient | undefined
+}
 
 export const prisma =
   globalForPrisma.prisma ??
   new PrismaClient({
     log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
     errorFormat: 'pretty',
-  });
+  })
 
 if (process.env.NODE_ENV !== 'production') {
-  globalForPrisma.prisma = prisma;
+  globalForPrisma.prisma = prisma
 }
 
 /**
@@ -29,7 +29,7 @@ if (process.env.NODE_ENV !== 'production') {
  * Útil em testes e durante shutdown da aplicação
  */
 export async function disconnectPrisma() {
-  await prisma.$disconnect();
+  await prisma.$disconnect()
 }
 
 /**
@@ -38,16 +38,16 @@ export async function disconnectPrisma() {
  */
 export async function checkDatabaseConnection() {
   try {
-    await prisma.$connect();
-    console.log('✅ Database connection successful');
-    return true;
+    await prisma.$connect()
+    console.log('✅ Database connection successful')
+    return true
   } catch (_error) {
-    console.error('❌ Database connection failed:', error);
-    return false;
+    console.error('❌ Database connection failed:', error)
+    return false
   }
 }
 
 // Compatibilidade com código existente
-export { prisma as db };
+export { prisma as db }
 
-export default prisma;
+export default prisma

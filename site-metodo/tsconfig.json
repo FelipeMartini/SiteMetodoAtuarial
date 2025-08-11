@@ -1,11 +1,7 @@
 {
   "compilerOptions": {
     "target": "ES2017",
-    "lib": [
-      "dom",
-      "dom.iterable",
-      "esnext"
-    ],
+    "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": true,
@@ -26,11 +22,7 @@
       }
     ],
     "strictNullChecks": true,
-    "types": [
-      "node",
-      "react",
-      "react-dom"
-    ],
+    "types": ["node", "react", "react-dom"],
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"],
@@ -39,17 +31,6 @@
       "@mui/styled-engine": ["node_modules/@mui/styled-engine-sc"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "types/**/*.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules",
-    ".next",
-    "build",
-    "dist"
-  ]
+  "include": ["next-env.d.ts", ".next/types/**/*.ts", "types/**/*.d.ts", "**/*.ts", "**/*.tsx"],
+  "exclude": ["node_modules", ".next", "build", "dist"]
 }

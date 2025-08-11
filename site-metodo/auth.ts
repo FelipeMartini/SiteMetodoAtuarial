@@ -1,19 +1,19 @@
-import NextAuth from "next-auth"
-import { PrismaAdapter } from "@auth/prisma-adapter"
-import GoogleProvider from "next-auth/providers/google"
-import MicrosoftEntraID from "next-auth/providers/microsoft-entra-id"
-import DiscordProvider from "next-auth/providers/discord"
-import FacebookProvider from "next-auth/providers/facebook"
-import AppleProvider from "next-auth/providers/apple"
-import Credentials from "next-auth/providers/credentials"
-import bcryptjs from "bcryptjs"
-import { signInSchema } from "./src/lib/validation"
-import { prisma } from "./src/lib/prisma"
-import { migrateAccessLevelToRoles } from "./src/lib/auth/authRoles"
+import NextAuth from 'next-auth'
+import { PrismaAdapter } from '@auth/prisma-adapter'
+import GoogleProvider from 'next-auth/providers/google'
+import MicrosoftEntraID from 'next-auth/providers/microsoft-entra-id'
+import DiscordProvider from 'next-auth/providers/discord'
+import FacebookProvider from 'next-auth/providers/facebook'
+import AppleProvider from 'next-auth/providers/apple'
+import Credentials from 'next-auth/providers/credentials'
+import bcryptjs from 'bcryptjs'
+import { signInSchema } from './src/lib/validation'
+import { prisma } from './src/lib/prisma'
+import { migrateAccessLevelToRoles } from './src/lib/auth/authRoles'
 
 /**
  * 🚀 Auth.js v5 - Configuração Profissional e Completa
- * 
+ *
  * ✨ IMPLEMENTAÇÃO ENTERPRISE-GRADE:
  * ✅ 5 Provedores OAuth: Google, Microsoft, Discord, Facebook, Apple
  * ✅ Database sessions para TODOS os providers (OAuth + Credentials)
@@ -22,39 +22,39 @@ import { migrateAccessLevelToRoles } from "./src/lib/auth/authRoles"
  * ✅ Auditoria e logs de segurança completos
  * ✅ Validação com Zod para credentials
  * ✅ Performance otimizada com Prisma singleton
- * 
+ *
  * @see https://authjs.dev/getting-started/adapters/prisma
  */
 
 // Definição de roles do sistema (compatibilidade)
 export const SYSTEM_ROLES = {
   ADMIN: 'admin',
-  STAFF: 'staff', 
+  STAFF: 'staff',
   USER: 'user',
-  GUEST: 'guest'
+  GUEST: 'guest',
 } as const
 
-export type SystemRole = typeof SYSTEM_ROLES[keyof typeof SYSTEM_ROLES]
+export type SystemRole = (typeof SYSTEM_ROLES)[keyof typeof SYSTEM_ROLES]
 
 // Mapeamento de accessLevel para roles (compatibilidade legada)
 export function mapAccessLevelToRole(accessLevel: number): string[] {
-  if (accessLevel >= 100) return ['admin']      // Admin completo
-  if (accessLevel >= 50) return ['staff']       // Staff/Moderador
-  if (accessLevel >= 1) return ['user']         // Usuário padrão
-  return []                                      // Guest (não autenticado)
+  if (accessLevel >= 100) return ['admin'] // Admin completo
+  if (accessLevel >= 50) return ['staff'] // Staff/Moderador
+  if (accessLevel >= 1) return ['user'] // Usuário padrão
+  return [] // Guest (não autenticado)
 }
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  debug: process.env.NODE_ENV === "development",
-  
+  debug: process.env.NODE_ENV === 'development',
+
   // 🎯 DATABASE SESSIONS PARA TODOS OS PROVIDERS
   adapter: PrismaAdapter(prisma),
-  session: { 
-    strategy: "database",
+  session: {
+    strategy: 'database',
     maxAge: 30 * 24 * 60 * 60, // 30 dias
-    updateAge: 24 * 60 * 60,   // Update a cada 24h
+    updateAge: 24 * 60 * 60, // Update a cada 24h
   },
-  
+
   providers: [
     // === 🌐 GOOGLE OAUTH PROVIDER ===
     GoogleProvider({
@@ -63,13 +63,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
       authorization: {
         params: {
-          prompt: "consent",
-          access_type: "offline",
-          response_type: "code",
+          prompt: 'consent',
+          access_type: 'offline',
+          response_type: 'code',
         },
       },
     }),
-    
+
     // === 🏢 MICROSOFT ENTRA ID PROVIDER ===
     MicrosoftEntraID({
       clientId: process.env.AUTH_MICROSOFT_ENTRA_ID_ID!,
@@ -77,21 +77,21 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       issuer: process.env.AUTH_MICROSOFT_ENTRA_ID_ISSUER!,
       allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
-    
+
     // === 🎮 DISCORD OAUTH PROVIDER ===
     DiscordProvider({
       clientId: process.env.AUTH_DISCORD_ID!,
       clientSecret: process.env.AUTH_DISCORD_SECRET!,
       allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
-    
+
     // === 📘 FACEBOOK OAUTH PROVIDER ===
     FacebookProvider({
       clientId: process.env.AUTH_FACEBOOK_ID!,
       clientSecret: process.env.AUTH_FACEBOOK_SECRET!,
       allowDangerousEmailAccountLinking: process.env.NODE_ENV === 'development',
     }),
-    
+
     // === 🍎 APPLE OAUTH PROVIDER ===
     AppleProvider({
       clientId: process.env.AUTH_APPLE_ID!,
@@ -101,17 +101,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     // === 🔐 CREDENTIALS PROVIDER (DATABASE SESSIONS) ===
     Credentials({
-      name: "credentials",
+      name: 'credentials',
       credentials: {
-        email: { 
-          label: "Email", 
-          type: "email",
-          placeholder: "admin@test.com" 
+        email: {
+          label: 'Email',
+          type: 'email',
+          placeholder: 'admin@test.com',
         },
-        password: { 
-          label: "Password", 
-          type: "password",
-          placeholder: "123456" 
+        password: {
+          label: 'Password',
+          type: 'password',
+          placeholder: '123456',
         },
       },
       async authorize(credentials) {
@@ -131,32 +131,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               isActive: true,
               image: true,
               emailVerified: true,
-            }
+            },
           })
 
           if (!user || !user.password) {
-            console.log("[Auth] ❌ User not found or no password:", email)
+            console.log('[Auth] ❌ User not found or no password:', email)
             return null
           }
 
           if (!user.isActive) {
-            console.log("[Auth] ❌ User is inactive:", email)
+            console.log('[Auth] ❌ User is inactive:', email)
             return null
           }
 
           // Verificar senha com bcrypt
           const isPasswordValid = await bcryptjs.compare(password, user.password)
           if (!isPasswordValid) {
-            console.log("[Auth] ❌ Invalid password for:", email)
+            console.log('[Auth] ❌ Invalid password for:', email)
             return null
           }
 
-          console.log("[Auth] ✅ Successful credentials login for:", email)
+          console.log('[Auth] ✅ Successful credentials login for:', email)
 
           // Auditoria: registrar login
           await prisma.user.update({
             where: { id: user.id },
-            data: { lastLogin: new Date() }
+            data: { lastLogin: new Date() },
           })
 
           // Retornar objeto do usuário para Auth.js v5
@@ -171,7 +171,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             emailVerified: user.emailVerified,
           }
         } catch (error) {
-          console.error("[Auth] ❌ Credentials authorization error:", error)
+          console.error('[Auth] ❌ Credentials authorization error:', error)
           return null
         }
       },
@@ -186,7 +186,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   callbacks: {
     // 🔄 Session callback - enriquece session com dados do banco
     async session({ session, user }) {
-      console.log("[Auth] 📊 Session callback for:", user?.email)
+      console.log('[Auth] 📊 Session callback for:', user?.email)
 
       if (session.user && user) {
         try {
@@ -203,7 +203,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               emailVerified: true,
               createdAt: true,
               lastLogin: true,
-            }
+            },
           })
 
           if (dbUser) {
@@ -219,7 +219,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             }
 
             extendedUser.id = dbUser.id
-            extendedUser.email = dbUser.email || ""
+            extendedUser.email = dbUser.email || ''
             extendedUser.name = dbUser.name
             extendedUser.image = dbUser.image
             extendedUser.accessLevel = dbUser.accessLevel // Manter compatibilidade
@@ -229,27 +229,32 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             extendedUser.createdAt = dbUser.createdAt
             extendedUser.lastLogin = dbUser.lastLogin
 
-            console.log("[Auth] ✅ Session enriched for user:", dbUser.email, "roles:", extendedUser.role)
+            console.log(
+              '[Auth] ✅ Session enriched for user:',
+              dbUser.email,
+              'roles:',
+              extendedUser.role
+            )
           }
         } catch (error) {
-          console.error("[Auth] ❌ Error enriching session:", error)
+          console.error('[Auth] ❌ Error enriching session:', error)
         }
       }
-      
+
       return session
     },
 
     // 🔐 SignIn callback - validação e criação de usuários OAuth
     async signIn({ user, account, profile }) {
-      console.log("[Auth] 🔑 SignIn callback:", { 
-        user: user?.email, 
+      console.log('[Auth] 🔑 SignIn callback:', {
+        user: user?.email,
         provider: account?.provider,
-        isOAuth: account?.provider !== "credentials"
+        isOAuth: account?.provider !== 'credentials',
       })
-      
+
       try {
         // Para OAuth providers, verificar/criar usuário no banco
-        if (account?.provider !== "credentials") {
+        if (account?.provider !== 'credentials') {
           const existingUser = await prisma.user.findUnique({
             where: { email: user.email! },
             select: {
@@ -259,7 +264,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
               accessLevel: true,
               name: true,
               image: true,
-            }
+            },
           })
 
           // Se usuário não existe, criar um novo
@@ -267,30 +272,30 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             const newUser = await prisma.user.create({
               data: {
                 email: user.email!,
-                name: user.name || "",
+                name: user.name || '',
                 image: user.image,
                 emailVerified: new Date(),
                 accessLevel: 1, // Usuário padrão
                 isActive: true,
                 lastLogin: new Date(),
-              }
+              },
             })
-            
-            console.log("[Auth] ✅ New OAuth user created:", {
+
+            console.log('[Auth] ✅ New OAuth user created:', {
               email: user.email,
               provider: account?.provider,
-              id: newUser.id
+              id: newUser.id,
             })
-            
+
             // Atualizar user object com ID correto
             user.id = newUser.id
           } else {
             // Verificar se usuário está ativo
             if (!existingUser.isActive) {
-              console.log("[Auth] ❌ OAuth user is inactive:", user.email)
+              console.log('[Auth] ❌ OAuth user is inactive:', user.email)
               return false
             }
-            
+
             // Atualizar dados do usuário existente
             await prisma.user.update({
               where: { email: user.email! },
@@ -299,15 +304,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 name: user.name || existingUser.name,
                 image: user.image || existingUser.image,
                 emailVerified: user.email ? new Date() : null,
-              }
+              },
             })
-            
-            console.log("[Auth] ✅ OAuth user updated:", {
+
+            console.log('[Auth] ✅ OAuth user updated:', {
               email: user.email,
               provider: account?.provider,
-              role: mapAccessLevelToRole(existingUser.accessLevel)
+              role: mapAccessLevelToRole(existingUser.accessLevel),
             })
-            
+
             // Atualizar user object com ID correto
             user.id = existingUser.id
           }
@@ -315,36 +320,36 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           // Para Credentials, verificar se usuário ainda está ativo
           const dbUser = await prisma.user.findUnique({
             where: { id: user.id! },
-            select: { isActive: true, accessLevel: true }
+            select: { isActive: true, accessLevel: true },
           })
-          
+
           if (!dbUser?.isActive) {
-            console.log("[Auth] ❌ Credentials user is inactive:", user.email)
+            console.log('[Auth] ❌ Credentials user is inactive:', user.email)
             return false
           }
-          
-          console.log("[Auth] ✅ Credentials user validated:", {
+
+          console.log('[Auth] ✅ Credentials user validated:', {
             email: user.email,
-            role: mapAccessLevelToRole(dbUser.accessLevel)
+            role: mapAccessLevelToRole(dbUser.accessLevel),
           })
         }
-        
+
         return true
       } catch (error) {
-        console.error("[Auth] ❌ SignIn callback error:", error)
+        console.error('[Auth] ❌ SignIn callback error:', error)
         return false
       }
     },
 
     // 🔀 Redirect callback - redirecionamento seguro pós-login
     async redirect({ url, baseUrl }) {
-      console.log("[Auth] 🔀 Redirect callback:", { url, baseUrl })
-      
+      console.log('[Auth] 🔀 Redirect callback:', { url, baseUrl })
+
       // Redirecionamento seguro
-      if (url.startsWith("/")) return `${baseUrl}${url}`
+      if (url.startsWith('/')) return `${baseUrl}${url}`
       else if (new URL(url).origin === baseUrl) return url
       return `${baseUrl}/area-cliente`
-    }
+    },
   },
 
   // 📊 Events - Auditoria e logs de sistema
@@ -352,9 +357,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     async signIn({ user, account, profile, isNewUser }) {
       const provider = account?.provider || 'unknown'
       const userInfo = `${user.email} (ID: ${user.id})`
-      
-      console.log(`[Auth] ✅ User signed in: ${userInfo} via ${provider}${isNewUser ? ' (NEW USER)' : ''}`)
-      
+
+      console.log(
+        `[Auth] ✅ User signed in: ${userInfo} via ${provider}${isNewUser ? ' (NEW USER)' : ''}`
+      )
+
       // TODO: Implementar logging em tabela de auditoria
       // await prisma.auditLog.create({
       //   data: {
@@ -366,29 +373,29 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       //   }
       // })
     },
-    
+
     async signOut() {
       console.log(`[Auth] 👋 User signed out`)
     },
-    
+
     async createUser({ user }) {
       console.log(`[Auth] 👤 New user created: ${user.email} (ID: ${user.id})`)
     },
-    
+
     async updateUser({ user }) {
       console.log(`[Auth] 🔄 User updated: ${user.email} (ID: ${user.id})`)
     },
-    
+
     async linkAccount({ user, account, profile }) {
       console.log(`[Auth] 🔗 Account linked: ${account.provider} → ${user.email}`)
     },
-    
+
     async session({ session, token }) {
       // Log de acesso à session para debug (se necessário)
-      if (process.env.AUTH_DEBUG === "true") {
+      if (process.env.AUTH_DEBUG === 'true') {
         console.log(`[Auth] 📊 Session accessed: ${session?.user?.email}`)
       }
-    }
+    },
   },
 })
 
