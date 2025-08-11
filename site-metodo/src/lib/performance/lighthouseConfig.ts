@@ -297,10 +297,11 @@ export function evaluateMetrics(metrics: any, thresholds: any) {
   // Avaliar scores das categorias
   Object.entries(thresholds).forEach(([category, threshold]) => {
     const score = metrics.scores[category];
-    if (score >= threshold) {
+    const thresholdNum = Number(threshold);
+    if (score >= thresholdNum) {
       evaluation.passed++;
       evaluation.details[category] = 'passed';
-    } else if (score >= threshold - 10) {
+    } else if (score >= thresholdNum - 10) {
       evaluation.warnings++;
       evaluation.details[category] = 'warning';
     } else {
@@ -360,9 +361,8 @@ export function generatePerformanceReport(results: any[]) {
   });
   
   Object.keys(report.summary.averageScores).forEach(key => {
-    report.summary.averageScores[key] = Math.round(
-      report.summary.averageScores[key] / results.length
-    );
+    const scores = report.summary.averageScores as any;
+    scores[key] = Math.round(scores[key] / results.length);
   });
   
   // Gerar recomendações baseadas nos problemas mais comuns
