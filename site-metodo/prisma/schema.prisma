@@ -18,7 +18,7 @@ model User {
   
   // 🔐 Sistema de autorização unificado
   accessLevel   Int       @default(1)          // Compatibilidade: mantém sistema legado
-  role          UserRole  @default(USER)       // Novo: sistema de roles moderno
+  roleType      UserRoleType @default(USER)    // Novo: sistema de roles moderno
   isActive      Boolean   @default(true)
   
   // 📊 Metadados e auditoria
@@ -34,6 +34,9 @@ model User {
   sessions      Session[]
   authenticators Authenticator[]
   
+  // 🔐 Sistema ABAC - Relacionamentos
+  userRoles     UserRole[]
+  
   // 🔐 TOTP/MFA (preservado do sistema existente)
   totpSecret    String?   @map("totp_secret")
   mfaEnabled    Boolean   @default(false)     // Flag MFA ativo
@@ -42,13 +45,13 @@ model User {
   auditLogs     AuditLog[]
   
   @@index([email])
-  @@index([role])
+  @@index([roleType])
   @@index([isActive])
   @@index([accessLevel])
 }
 
-// 🎭 Enum de roles do sistema (substitui accessLevel gradualmente)
-enum UserRole {
+// 🎭 Enum de tipos de roles do sistema (substitui accessLevel gradualmente)
+enum UserRoleType {
   GUEST       // Visitante (accessLevel 0)
   USER        // Usuário padrão (accessLevel 1-49)
   MODERATOR   // Moderador (accessLevel 50-99)
@@ -166,4 +169,99 @@ enum AuditAction {
   SESSION_DELETE
   ACCOUNT_LINK
   ACCOUNT_UNLINK
+}
+
+// 🔐 Sistema ABAC/Casbin - Roles
+model Role {
+  id          String @id @default(cuid())
+  name        String @unique
+  description String?
+  attributes  String? // JSON com atributos do role
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relacionamentos
+  userRoles   UserRole[]
+  
+  @@index([name])
+}
+
+// 🔗 Relacionamento usuário-role (many-to-many)
+model UserRole {
+  id     String @id @default(cuid())
+  userId String
+  roleId String
+  
+  // Metadados
+  assignedAt DateTime @default(now())
+  assignedBy String?  // ID do usuário que atribuiu o role
+  expiresAt  DateTime? // Role temporário
+  isActive   Boolean @default(true)
+  
+  // Relacionamentos
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  
+  @@unique([userId, roleId])
+  @@index([userId])
+  @@index([roleId])
+  @@index([isActive])
+}
+
+// 🛡️ Políticas de autorização ABAC
+model AuthorizationPolicy {
+  id         String @id @default(cuid())
+  subject    String // Usuário, role ou atributo
+  object     String // Recurso ou padrão de recurso
+  action     String // Ação permitida
+  effect     PolicyEffect @default(allow)
+  conditions String? // Condições ABAC em formato JSON
+  description String?
+  isActive   Boolean @default(true)
+  
+  // Metadados
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  createdBy  String? // ID do usuário que criou a política
+  
+  @@index([subject])
+  @@index([object])
+  @@index([action])
+  @@index([effect])
+  @@index([isActive])
+}
+
+// 📊 Enum para efeito das políticas
+enum PolicyEffect {
+  allow
+  deny
+}
+
+// 📈 Logs de acesso e autorização
+model AccessLog {
+  id         String @id @default(cuid())
+  userId     String?
+  resource   String
+  action     String
+  result     AccessResult
+  reason     String? // Motivo da decisão
+  policies   String? // JSON com políticas aplicadas
+  context    String? // JSON com contexto da requisição
+  
+  // Metadados de request
+  ipAddress  String?
+  userAgent  String?
+  timestamp  DateTime @default(now())
+  
+  @@index([userId])
+  @@index([resource])
+  @@index([action])
+  @@index([result])
+  @@index([timestamp])
+}
+
+// 🎯 Enum para resultado de acesso
+enum AccessResult {
+  allow
+  deny
 }
