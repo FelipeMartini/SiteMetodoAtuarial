@@ -282,13 +282,27 @@ export async function prefetchWithRetry(
  */
 export function getRoutePriority(route: string, userRole?: string): 'high' | 'medium' | 'low' {
   // Rotas críticas têm prioridade alta
-  if (CRITICAL_ROUTES.includes(route as any)) {
+  const criticalRoutes = CRITICAL_ROUTES as readonly string[];
+  if (criticalRoutes.includes(route)) {
     return 'high';
   }
   
   // Rotas baseadas em role têm prioridade média
-  if (userRole && ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES]?.includes(route as string as any)) {
-    return 'medium';
+  if (userRole) {
+    switch (userRole) {
+      case 'ADMIN':
+        if (ROLE_BASED_ROUTES.ADMIN.includes(route as any)) return 'medium';
+        break;
+      case 'MODERATOR':
+        if (ROLE_BASED_ROUTES.MODERATOR.includes(route as any)) return 'medium';
+        break;
+      case 'USER':
+        if (ROLE_BASED_ROUTES.USER.includes(route as any)) return 'medium';
+        break;
+      case 'GUEST':
+        if (ROLE_BASED_ROUTES.GUEST.includes(route as any)) return 'medium';
+        break;
+    }
   }
   
   // Outras rotas têm prioridade baixa
