@@ -61,7 +61,7 @@ interface ApiMetrics {
 
 interface TestResults {
   testType: string;
-  results: any;
+  results: Record<string, unknown>;
   timestamp: string;
   message: string;
 }

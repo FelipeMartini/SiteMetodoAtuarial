@@ -249,9 +249,8 @@ export async function addToBackgroundSync(url: string, options: RequestInit): Pr
 
   // Registrar para background sync (se disponível)
   try {
-    // @ts-expect-error - Background Sync API pode não estar tipada corretamente
-    if ('sync' in registration && registration.sync) {
-      await registration.sync.register('background-sync');
+    if ('sync' in registration && (registration as any).sync) {
+      await (registration as any).sync.register('background-sync');
     }
   } catch (error) {
     console.warn('Background Sync não disponível:', error);

@@ -18,6 +18,8 @@ const LogFiltersSchema = z.object({
   export: z.string().optional(),
 })
 
+type LogFilters = z.infer<typeof LogFiltersSchema>
+
 export async function GET(request: NextRequest) {
   try {
     // Verificar autenticação e permissões
@@ -51,7 +53,7 @@ export async function GET(request: NextRequest) {
     // Buscar logs
     const result = await auditService.searchLogs({
       userId: filters.userId,
-      action: filters.action as any,
+      action: filters.action,
       startDate: filters.startDate,
       endDate: filters.endDate,
       success: filters.success,
@@ -100,7 +102,7 @@ export async function GET(request: NextRequest) {
   }
 }
 
-async function handleExport(filters: any, userId: string) {
+async function handleExport(filters: LogFilters, userId: string) {
   try {
     // Buscar todos os logs (sem paginação para export)
     const result = await auditService.searchLogs({
