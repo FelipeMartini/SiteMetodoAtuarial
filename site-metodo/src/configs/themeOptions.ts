@@ -1,8 +1,8 @@
 // Exemplo de themeOptions tipado
 export interface ThemeOption {
-	name: string;
-	value: string;
-	description?: string;
+  name: string
+  value: string
+  description?: string
 }
-const themeOptions: ThemeOption[] = [];
-export default themeOptions;
+const themeOptions: ThemeOption[] = []
+export default themeOptions

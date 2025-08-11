@@ -16,10 +16,12 @@ export interface AuthorizedUser {
  * @param requiredRole - Role mínimo necessário
  * @returns Usuário autorizado ou null
  */
-export async function checkApiAuthorization(requiredRole: UserRoleType = UserRoleType.USER): Promise<AuthorizedUser | null> {
+export async function checkApiAuthorization(
+  requiredRole: UserRoleType = UserRoleType.USER
+): Promise<AuthorizedUser | null> {
   try {
     const session = await auth()
-    
+
     if (!session?.user?.id) {
       return null
     }
@@ -27,7 +29,7 @@ export async function checkApiAuthorization(requiredRole: UserRoleType = UserRol
     // Buscar dados completos do usuário
     const { PrismaClient } = await import('@prisma/client')
     const prisma = new PrismaClient()
-    
+
     const user = await prisma.user.findUnique({
       where: { id: session.user.id },
       select: {
@@ -36,7 +38,7 @@ export async function checkApiAuthorization(requiredRole: UserRoleType = UserRol
         name: true,
         roleType: true,
         isActive: true,
-      }
+      },
     })
 
     if (!user || !user.isActive) {

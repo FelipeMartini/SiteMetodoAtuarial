@@ -3,48 +3,26 @@
  * Melhora navegação através de prefetch inteligente
  */
 
-import { useRouter } from 'next/router';
-import Link from 'next/link';
-import { useEffect, useState, useCallback, memo } from 'react';
+import { useRouter } from 'next/router'
+import Link from 'next/link'
+import { useEffect, useState, useCallback, memo } from 'react'
 
 // === CONFIGURAÇÕES DE PREFETCH ===
 
 /**
  * Rotas críticas que devem ser sempre pré-carregadas
  */
-export const CRITICAL_ROUTES = [
-  '/',
-  '/auth/login',
-  '/dashboard',
-  '/perfil',
-] as const;
+export const CRITICAL_ROUTES = ['/', '/auth/login', '/dashboard', '/perfil'] as const
 
 /**
  * Rotas baseadas em role que devem ser pré-carregadas condicionalmente
  */
 export const ROLE_BASED_ROUTES = {
-  ADMIN: [
-    '/admin/dashboard',
-    '/admin/usuarios',
-    '/admin/auditoria',
-    '/admin/configuracoes',
-  ],
-  MODERATOR: [
-    '/moderador/dashboard',
-    '/moderador/usuarios',
-    '/moderador/relatorios',
-  ],
-  USER: [
-    '/usuario/dashboard',
-    '/usuario/calculadoras',
-    '/usuario/historico',
-  ],
-  GUEST: [
-    '/publico/sobre',
-    '/publico/calculadoras',
-    '/auth/registro',
-  ],
-} as const;
+  ADMIN: ['/admin/dashboard', '/admin/usuarios', '/admin/auditoria', '/admin/configuracoes'],
+  MODERATOR: ['/moderador/dashboard', '/moderador/usuarios', '/moderador/relatorios'],
+  USER: ['/usuario/dashboard', '/usuario/calculadoras', '/usuario/historico'],
+  GUEST: ['/publico/sobre', '/publico/calculadoras', '/auth/registro'],
+} as const
 
 /**
  * Configuração de prefetch por tipo de rota
@@ -66,7 +44,7 @@ export const PREFETCH_CONFIG = {
     priority: 'low' as const,
     delay: 2000, // 2 segundos após load
   },
-} as const;
+} as const
 
 // === HOOKS CUSTOMIZADOS ===
 
@@ -74,94 +52,103 @@ export const PREFETCH_CONFIG = {
  * Hook para prefetch inteligente baseado no role do usuário
  */
 export function useSmartPrefetch(userRole?: string) {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-    if (!userRole) return;
+    if (!userRole) return
 
     // Prefetch rotas críticas imediatamente
     CRITICAL_ROUTES.forEach(route => {
-      router.prefetch(route);
-    });
+      router.prefetch(route)
+    })
 
     // Prefetch rotas baseadas em role com delay
     setTimeout(() => {
-      const roleRoutes = ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES];
+      const roleRoutes = ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES]
       if (roleRoutes) {
         roleRoutes.forEach(route => {
-          router.prefetch(route);
-        });
+          router.prefetch(route)
+        })
       }
-    }, PREFETCH_CONFIG.background.delay);
-  }, [userRole, router]);
+    }, PREFETCH_CONFIG.background.delay)
+  }, [userRole, router])
 
   return {
-    prefetchRoute: useCallback((route: string) => {
-      router.prefetch(route);
-    }, [router]),
-  };
+    prefetchRoute: useCallback(
+      (route: string) => {
+        router.prefetch(route)
+      },
+      [router]
+    ),
+  }
 }
 
 /**
  * Hook para prefetch baseado em hover
  */
 export function useHoverPrefetch() {
-  const router = useRouter();
-  const [prefetchedRoutes, setPrefetchedRoutes] = useState<Set<string>>(new Set());
+  const router = useRouter()
+  const [prefetchedRoutes, setPrefetchedRoutes] = useState<Set<string>>(new Set())
 
-  const handleHover = useCallback((route: string) => {
-    if (prefetchedRoutes.has(route)) return;
+  const handleHover = useCallback(
+    (route: string) => {
+      if (prefetchedRoutes.has(route)) return
 
-    setTimeout(() => {
-      router.prefetch(route);
-      setPrefetchedRoutes(prev => new Set([...prev, route]));
-    }, PREFETCH_CONFIG.onHover.delay);
-  }, [router, prefetchedRoutes]);
+      setTimeout(() => {
+        router.prefetch(route)
+        setPrefetchedRoutes(prev => new Set([...prev, route]))
+      }, PREFETCH_CONFIG.onHover.delay)
+    },
+    [router, prefetchedRoutes]
+  )
 
-  return { handleHover };
+  return { handleHover }
 }
 
 /**
  * Hook para prefetch baseado em visibilidade
  */
 export function useVisibilityPrefetch(route: string) {
-  const router = useRouter();
-  const [hasPrefetched, setHasPrefetched] = useState(false);
+  const router = useRouter()
+  const [hasPrefetched, setHasPrefetched] = useState(false)
 
-  const ref = useCallback((node: HTMLElement | null) => {
-    if (!node || hasPrefetched) return;
+  const ref = useCallback(
+    (node: HTMLElement | null) => {
+      if (!node || hasPrefetched) return
 
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            router.prefetch(route);
-            setHasPrefetched(true);
-          }, PREFETCH_CONFIG.onVisible.delay);
-          observer.disconnect();
+      const observer = new IntersectionObserver(
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => {
+              router.prefetch(route)
+              setHasPrefetched(true)
+            }, PREFETCH_CONFIG.onVisible.delay)
+            observer.disconnect()
+          }
+        },
+        {
+          rootMargin: '100px', // Prefetch quando elemento está 100px de aparecer
+          threshold: 0.1,
         }
-      },
-      {
-        rootMargin: '100px', // Prefetch quando elemento está 100px de aparecer
-        threshold: 0.1,
-      }
-    );
+      )
 
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [route, router, hasPrefetched]);
+      observer.observe(node)
+      return () => observer.disconnect()
+    },
+    [route, router, hasPrefetched]
+  )
 
-  return { ref };
+  return { ref }
 }
 
 // === COMPONENTES OTIMIZADOS ===
 
 interface SmartLinkProps {
-  href: string;
-  children: React.ReactNode;
-  prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none';
-  className?: string;
-  [key: string]: Record<string, unknown>;
+  href: string
+  children: React.ReactNode
+  prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none'
+  className?: string
+  [key: string]: Record<string, unknown>
 }
 
 /**
@@ -174,62 +161,62 @@ export const SmartLink = memo(function SmartLink({
   className,
   ...props
 }: SmartLinkProps) {
-  const { handleHover } = useHoverPrefetch();
-  const { ref } = useVisibilityPrefetch(href);
+  const { handleHover } = useHoverPrefetch()
+  const { ref } = useVisibilityPrefetch(href)
 
   const linkProps: Record<string, unknown> = {
     href,
     className,
     ...props,
-  };
+  }
 
   // Configurar prefetch baseado na estratégia
   switch (prefetchStrategy) {
     case 'immediate':
-      linkProps.prefetch = true;
-      break;
+      linkProps.prefetch = true
+      break
     case 'hover':
-      linkProps.onMouseEnter = () => handleHover(href);
-      linkProps.prefetch = false;
-      break;
+      linkProps.onMouseEnter = () => handleHover(href)
+      linkProps.prefetch = false
+      break
     case 'visible':
-      linkProps.ref = ref;
-      linkProps.prefetch = false;
-      break;
+      linkProps.ref = ref
+      linkProps.prefetch = false
+      break
     case 'none':
-      linkProps.prefetch = false;
-      break;
+      linkProps.prefetch = false
+      break
   }
 
-  return <Link {...linkProps}>{children}</Link>;
-});
+  return <Link {...linkProps}>{children}</Link>
+})
 
 /**
  * Navegação com prefetch inteligente
  */
 interface SmartNavigationProps {
-  userRole?: string;
-  className?: string;
+  userRole?: string
+  className?: string
 }
 
 export const SmartNavigation = memo(function SmartNavigation({
   userRole,
   className = '',
 }: SmartNavigationProps) {
-  useSmartPrefetch(userRole);
+  useSmartPrefetch(userRole)
 
   const navigationItems = [
     { href: '/', label: 'Início', strategy: 'immediate' as const },
     { href: '/dashboard', label: 'Dashboard', strategy: 'hover' as const },
     { href: '/perfil', label: 'Perfil', strategy: 'hover' as const },
-  ];
+  ]
 
   // Adicionar itens baseados em role
   if (userRole === 'ADMIN') {
     navigationItems.push(
       { href: '/admin/dashboard', label: 'Admin', strategy: 'hover' as const },
       { href: '/admin/usuarios', label: 'Usuários', strategy: 'hover' as const }
-    );
+    )
   }
 
   return (
@@ -239,14 +226,14 @@ export const SmartNavigation = memo(function SmartNavigation({
           key={href}
           href={href}
           prefetchStrategy={strategy}
-          className="hover:text-blue-600 transition-colors"
+          className='hover:text-blue-600 transition-colors'
         >
           {label}
         </SmartLink>
       ))}
     </nav>
-  );
-});
+  )
+})
 
 // === UTILITÁRIOS ===
 
@@ -260,21 +247,21 @@ export async function prefetchWithRetry(
 ): Promise<boolean> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await router.prefetch(route);
-      return true;
+      await router.prefetch(route)
+      return true
     } catch (_error) {
-      console.warn(`Prefetch failed for ${route}, attempt ${attempt}:`, error);
-      
+      console.warn(`Prefetch failed for ${route}, attempt ${attempt}:`, error)
+
       if (attempt === maxRetries) {
-        return false;
+        return false
       }
-      
+
       // Exponential backoff
-      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000));
+      await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000))
     }
   }
-  
-  return false;
+
+  return false
 }
 
 /**
@@ -282,31 +269,31 @@ export async function prefetchWithRetry(
  */
 export function getRoutePriority(route: string, userRole?: string): 'high' | 'medium' | 'low' {
   // Rotas críticas têm prioridade alta
-  const criticalRoutes = CRITICAL_ROUTES as readonly string[];
+  const criticalRoutes = CRITICAL_ROUTES as readonly string[]
   if (criticalRoutes.includes(route)) {
-    return 'high';
+    return 'high'
   }
-  
+
   // Rotas baseadas em role têm prioridade média
   if (userRole) {
     switch (userRole) {
       case 'ADMIN':
-        if (ROLE_BASED_ROUTES.ADMIN.includes(route as any)) return 'medium';
-        break;
+        if (ROLE_BASED_ROUTES.ADMIN.includes(route as any)) return 'medium'
+        break
       case 'MODERATOR':
-        if (ROLE_BASED_ROUTES.MODERATOR.includes(route as any)) return 'medium';
-        break;
+        if (ROLE_BASED_ROUTES.MODERATOR.includes(route as any)) return 'medium'
+        break
       case 'USER':
-        if (ROLE_BASED_ROUTES.USER.includes(route as any)) return 'medium';
-        break;
+        if (ROLE_BASED_ROUTES.USER.includes(route as any)) return 'medium'
+        break
       case 'GUEST':
-        if (ROLE_BASED_ROUTES.GUEST.includes(route as any)) return 'medium';
-        break;
+        if (ROLE_BASED_ROUTES.GUEST.includes(route as any)) return 'medium'
+        break
     }
   }
-  
+
   // Outras rotas têm prioridade baixa
-  return 'low';
+  return 'low'
 }
 
 /**
@@ -318,25 +305,26 @@ export async function batchPrefetch(
   userRole?: string
 ): Promise<void> {
   // Separar rotas por prioridade
-  const routesByPriority = routes.reduce((acc, route) => {
-    const priority = getRoutePriority(route, userRole);
-    if (!acc[priority]) acc[priority] = [];
-    acc[priority].push(route);
-    return acc;
-  }, {} as Record<string, string[]>);
+  const routesByPriority = routes.reduce(
+    (acc, route) => {
+      const priority = getRoutePriority(route, userRole)
+      if (!acc[priority]) acc[priority] = []
+      acc[priority].push(route)
+      return acc
+    },
+    {} as Record<string, string[]>
+  )
 
   // Prefetch em ordem de prioridade
   for (const priority of ['high', 'medium', 'low'] as const) {
-    const routesToPrefetch = routesByPriority[priority] || [];
-    
+    const routesToPrefetch = routesByPriority[priority] || []
+
     // Prefetch em paralelo dentro da mesma prioridade
-    await Promise.allSettled(
-      routesToPrefetch.map(route => prefetchWithRetry(router, route))
-    );
-    
+    await Promise.allSettled(routesToPrefetch.map(route => prefetchWithRetry(router, route)))
+
     // Pequeno delay entre prioridades
     if (routesToPrefetch.length > 0 && priority !== 'low') {
-      await new Promise(resolve => setTimeout(resolve, 100));
+      await new Promise(resolve => setTimeout(resolve, 100))
     }
   }
 }
@@ -345,33 +333,33 @@ export async function batchPrefetch(
  * Detectar conexão lenta e ajustar prefetch
  */
 export function useConnectionAwarePrefetch() {
-  const [shouldPrefetch, setShouldPrefetch] = useState(true);
+  const [shouldPrefetch, setShouldPrefetch] = useState(true)
 
   useEffect(() => {
-    if (!('connection' in navigator)) return;
+    if (!('connection' in navigator)) return
 
-    const connection = (navigator as any).connection;
-    
+    const connection = (navigator as any).connection
+
     // Desabilitar prefetch em conexões lentas
-    const isSlowConnection = 
+    const isSlowConnection =
       connection.effectiveType === 'slow-2g' ||
       connection.effectiveType === '2g' ||
-      connection.saveData;
+      connection.saveData
 
-    setShouldPrefetch(!isSlowConnection);
+    setShouldPrefetch(!isSlowConnection)
 
     const handleChange = () => {
-      const isCurrentlySlow = 
+      const isCurrentlySlow =
         connection.effectiveType === 'slow-2g' ||
         connection.effectiveType === '2g' ||
-        connection.saveData;
-      
-      setShouldPrefetch(!isCurrentlySlow);
-    };
+        connection.saveData
 
-    connection.addEventListener('change', handleChange);
-    return () => connection.removeEventListener('change', handleChange);
-  }, []);
+      setShouldPrefetch(!isCurrentlySlow)
+    }
 
-  return shouldPrefetch;
+    connection.addEventListener('change', handleChange)
+    return () => connection.removeEventListener('change', handleChange)
+  }, [])
+
+  return shouldPrefetch
 }

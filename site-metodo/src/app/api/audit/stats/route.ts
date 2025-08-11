@@ -55,10 +55,7 @@ export async function GET(request: NextRequest) {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })
-    
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
+
+    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

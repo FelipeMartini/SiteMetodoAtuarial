@@ -7,7 +7,14 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { AvatarCustom } from '@/components/ui/avatar-custom'
 import { Checkbox } from '@/components/ui/checkbox'
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator } from '@/components/ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+} from '@/components/ui/dropdown-menu'
 import { toast } from 'sonner'
 import { salvarExcel } from './data-table/exportExcel'
 import { salvarCsv } from './data-table/exportCsv'
@@ -51,9 +58,9 @@ function UsersTable() {
   // Dados mockados - em produção viriam de API
   const usuarios: Usuario[] = [
     {
-      id: "1",
-      name: "Felipe Martini",
-      email: "felipemartinii@gmail.com",
+      id: '1',
+      name: 'Felipe Martini',
+      email: 'felipemartinii@gmail.com',
       roleType: UserRoleType.ADMIN,
       isActive: true,
       createdAt: new Date(),
@@ -62,9 +69,9 @@ function UsersTable() {
       image: null,
     },
     {
-      id: "2",
-      name: "João Silva",
-      email: "joao@exemplo.com",
+      id: '2',
+      name: 'João Silva',
+      email: 'joao@exemplo.com',
       roleType: UserRoleType.USER,
       isActive: true,
       createdAt: new Date(),
@@ -73,9 +80,9 @@ function UsersTable() {
       image: null,
     },
     {
-      id: "3",
-      name: "Maria Santos",
-      email: "maria@exemplo.com", 
+      id: '3',
+      name: 'Maria Santos',
+      email: 'maria@exemplo.com',
       roleType: UserRoleType.MODERATOR,
       isActive: false,
       createdAt: new Date(),
@@ -87,11 +94,15 @@ function UsersTable() {
 
   const getRoleBadgeColor = (role: string[]) => {
     const primaryRole = role[0]?.toUpperCase()
-    switch(primaryRole) {
-      case 'ADMIN': return 'destructive'
-      case 'MODERATOR': return 'default'
-      case 'PREMIUM': return 'secondary'
-      default: return 'outline'
+    switch (primaryRole) {
+      case 'ADMIN':
+        return 'destructive'
+      case 'MODERATOR':
+        return 'default'
+      case 'PREMIUM':
+        return 'secondary'
+      default:
+        return 'outline'
     }
   }
 
@@ -101,7 +112,7 @@ function UsersTable() {
 
   const formatLastLogin = (lastLogin?: Date | null) => {
     if (!lastLogin) return 'Nunca'
-    
+
     const now = new Date()
     const diff = now.getTime() - lastLogin.getTime()
     const minutes = Math.floor(diff / (1000 * 60))
@@ -113,10 +124,10 @@ function UsersTable() {
     return `${days}d atrás`
   }
 
-
   const filteredUsers = usuarios.filter(user => {
-    const matchesSearch = (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
+    const matchesSearch =
+      user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      user.email?.toLowerCase().includes(searchTerm.toLowerCase())
     const matchesRole = filterRole === 'all' || user.role.includes(filterRole)
     return matchesSearch && matchesRole
   })
@@ -145,12 +156,17 @@ function UsersTable() {
     }))
 
   // Exportação Excel/PDF
-  const handleExport = async (tipo: 'excel' | 'pdf', modo: 'todos' | 'selecionados' | 'um', usuario?: Usuario) => {
+  const handleExport = async (
+    tipo: 'excel' | 'pdf',
+    modo: 'todos' | 'selecionados' | 'um',
+    usuario?: Usuario
+  ) => {
     setExportLoading(true)
     try {
       let dados: Usuario[] = []
       if (modo === 'todos') dados = filteredUsers
-      else if (modo === 'selecionados') dados = filteredUsers.filter(u => selecionados.includes(u.id))
+      else if (modo === 'selecionados')
+        dados = filteredUsers.filter(u => selecionados.includes(u.id))
       else if (modo === 'um' && usuario) dados = [usuario]
       if (!dados.length) {
         toast.warning('Nenhum usuário selecionado para exportar')
@@ -174,7 +190,7 @@ function UsersTable() {
 
   // Seleção múltipla
   const toggleSelecionado = (id: string) => {
-    setSelecionados((prev) => prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id])
+    setSelecionados(prev => (prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id]))
   }
   const todosSelecionados = filteredUsers.length > 0 && selecionados.length === filteredUsers.length
   const toggleSelecionarTodos = () => {
@@ -185,176 +201,294 @@ function UsersTable() {
   return (
     <Card>
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className='flex items-center justify-between'>
           <div>
-            <CardTitle className="flex items-center gap-2">
-              <Shield className="h-5 w-5" />
+            <CardTitle className='flex items-center gap-2'>
+              <Shield className='h-5 w-5' />
               Gerenciar Usuários
             </CardTitle>
-            <CardDescription>
-              Visualize e gerencie todos os usuários do sistema
-            </CardDescription>
+            <CardDescription>Visualize e gerencie todos os usuários do sistema</CardDescription>
           </div>
-          <div className="flex items-center gap-2">
+          <div className='flex items-center gap-2'>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="outline" size="sm" disabled={exportLoading} className="flex items-center gap-2 px-3 font-semibold">
-                  <Download className="h-4 w-4 text-green-600" />
+                <Button
+                  variant='outline'
+                  size='sm'
+                  disabled={exportLoading}
+                  className='flex items-center gap-2 px-3 font-semibold'
+                >
+                  <Download className='h-4 w-4 text-green-600' />
                   <span>Exportar</span>
                 </Button>
               </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="min-w-[220px]">
-                <DropdownMenuLabel className="font-bold text-base">Exportar usuários</DropdownMenuLabel>
+              <DropdownMenuContent align='end' className='min-w-[220px]'>
+                <DropdownMenuLabel className='font-bold text-base'>
+                  Exportar usuários
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleExport('excel', 'todos')} disabled={exportLoading} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-green-600"><rect x="2" y="2" width="20" height="20" rx="4" fill="#22c55e"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">XLS</text></svg>
+                <DropdownMenuItem
+                  onClick={() => handleExport('excel', 'todos')}
+                  disabled={exportLoading}
+                  className='flex items-center gap-2'
+                >
+                  <svg
+                    width='18'
+                    height='18'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    className='text-green-600'
+                  >
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#22c55e' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      XLS
+                    </text>
+                  </svg>
                   <span>Excel (todos)</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleExport('excel', 'selecionados')} disabled={exportLoading} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="text-green-600"><rect x="2" y="2" width="20" height="20" rx="4" fill="#22c55e"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">XLS</text></svg>
+                <DropdownMenuItem
+                  onClick={() => handleExport('excel', 'selecionados')}
+                  disabled={exportLoading}
+                  className='flex items-center gap-2'
+                >
+                  <svg
+                    width='18'
+                    height='18'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    className='text-green-600'
+                  >
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#22c55e' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      XLS
+                    </text>
+                  </svg>
                   <span>Excel (selecionados)</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => handleExport('pdf', 'todos')} disabled={exportLoading} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#ef4444"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">PDF</text></svg>
+                <DropdownMenuItem
+                  onClick={() => handleExport('pdf', 'todos')}
+                  disabled={exportLoading}
+                  className='flex items-center gap-2'
+                >
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none'>
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#ef4444' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      PDF
+                    </text>
+                  </svg>
                   <span>PDF (todos)</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => handleExport('pdf', 'selecionados')} disabled={exportLoading} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#ef4444"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">PDF</text></svg>
+                <DropdownMenuItem
+                  onClick={() => handleExport('pdf', 'selecionados')}
+                  disabled={exportLoading}
+                  className='flex items-center gap-2'
+                >
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none'>
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#ef4444' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      PDF
+                    </text>
+                  </svg>
                   <span>PDF (selecionados)</span>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => salvarCsv(mapUsuariosParaExport(filteredUsers), 'usuarios')} disabled={exportLoading} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#f59e42"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">CSV</text></svg>
+                <DropdownMenuItem
+                  onClick={() => salvarCsv(mapUsuariosParaExport(filteredUsers), 'usuarios')}
+                  disabled={exportLoading}
+                  className='flex items-center gap-2'
+                >
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none'>
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#f59e42' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      CSV
+                    </text>
+                  </svg>
                   <span>CSV (todos)</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => salvarCsv(mapUsuariosParaExport(filteredUsers.filter(u => selecionados.includes(u.id))), 'usuarios')} disabled={exportLoading || selecionados.length === 0} className="flex items-center gap-2">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" fill="#f59e42"/><text x="50%" y="60%" textAnchor="middle" fill="white" fontSize="11" fontWeight="bold" dy=".3em">CSV</text></svg>
+                <DropdownMenuItem
+                  onClick={() =>
+                    salvarCsv(
+                      mapUsuariosParaExport(filteredUsers.filter(u => selecionados.includes(u.id))),
+                      'usuarios'
+                    )
+                  }
+                  disabled={exportLoading || selecionados.length === 0}
+                  className='flex items-center gap-2'
+                >
+                  <svg width='18' height='18' viewBox='0 0 24 24' fill='none'>
+                    <rect x='2' y='2' width='20' height='20' rx='4' fill='#f59e42' />
+                    <text
+                      x='50%'
+                      y='60%'
+                      textAnchor='middle'
+                      fill='white'
+                      fontSize='11'
+                      fontWeight='bold'
+                      dy='.3em'
+                    >
+                      CSV
+                    </text>
+                  </svg>
                   <span>CSV (selecionados)</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-            <Button size="sm">
-              <Plus className="h-4 w-4 mr-2" />
+            <Button size='sm'>
+              <Plus className='h-4 w-4 mr-2' />
               Novo Usuário
             </Button>
           </div>
         </div>
 
         {/* Filtros e Busca */}
-        <div className="flex items-center gap-4 mt-4">
-          <div className="relative flex-1 max-w-sm">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+        <div className='flex items-center gap-4 mt-4'>
+          <div className='relative flex-1 max-w-sm'>
+            <Search className='absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground' />
             <Input
-              placeholder="Buscar usuários..."
+              placeholder='Buscar usuários...'
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              className="pl-10"
+              onChange={e => setSearchTerm(e.target.value)}
+              className='pl-10'
             />
           </div>
           <select
             value={filterRole}
-            onChange={(e) => setFilterRole(e.target.value)}
-            className="border border-border rounded-md px-3 py-2 text-sm bg-background"
+            onChange={e => setFilterRole(e.target.value)}
+            className='border border-border rounded-md px-3 py-2 text-sm bg-background'
           >
-            <option value="all">Todas as funções</option>
-            <option value="admin">Admin</option>
-            <option value="moderator">Moderador</option>
-            <option value="user">Usuário</option>
+            <option value='all'>Todas as funções</option>
+            <option value='admin'>Admin</option>
+            <option value='moderator'>Moderador</option>
+            <option value='user'>Usuário</option>
           </select>
         </div>
       </CardHeader>
 
       <CardContent>
-        <div className="rounded-md border">
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
+        <div className='rounded-md border'>
+          <div className='overflow-x-auto'>
+            <table className='w-full text-sm'>
               <thead>
-                <tr className="border-b bg-muted/50">
-                  <th className="p-4">
+                <tr className='border-b bg-muted/50'>
+                  <th className='p-4'>
                     <Checkbox
                       checked={todosSelecionados}
                       onCheckedChange={toggleSelecionarTodos}
-                      aria-label="Selecionar todos"
+                      aria-label='Selecionar todos'
                     />
                   </th>
-                  <th className="text-left p-4 font-medium">Usuário</th>
-                  <th className="text-left p-4 font-medium">Função</th>
-                  <th className="text-left p-4 font-medium">Status</th>
-                  <th className="text-left p-4 font-medium">Último Acesso</th>
-                  <th className="text-left p-4 font-medium">Nível</th>
-                  <th className="text-left p-4 font-medium">Ações</th>
+                  <th className='text-left p-4 font-medium'>Usuário</th>
+                  <th className='text-left p-4 font-medium'>Função</th>
+                  <th className='text-left p-4 font-medium'>Status</th>
+                  <th className='text-left p-4 font-medium'>Último Acesso</th>
+                  <th className='text-left p-4 font-medium'>Nível</th>
+                  <th className='text-left p-4 font-medium'>Ações</th>
                 </tr>
               </thead>
               <tbody>
-                {filteredUsers.map((user) => (
-                  <tr key={user.id} className="border-b hover:bg-muted/25 transition-colors">
-                    <td className="p-4">
+                {filteredUsers.map(user => (
+                  <tr key={user.id} className='border-b hover:bg-muted/25 transition-colors'>
+                    <td className='p-4'>
                       <Checkbox
                         checked={selecionados.includes(user.id)}
                         onCheckedChange={() => toggleSelecionado(user.id)}
                         aria-label={`Selecionar usuário ${user.name || user.email}`}
                       />
                     </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-3">
+                    <td className='p-4'>
+                      <div className='flex items-center gap-3'>
                         <AvatarCustom
                           src={user.image}
                           name={user.name || undefined}
                           email={user.email || undefined}
-                          size="sm"
+                          size='sm'
                         />
                         <div>
-                          <div className="font-medium">
-                            {user.name || 'Sem nome'}
-                          </div>
-                          <div className="text-muted-foreground text-xs">
-                            {user.email}
-                          </div>
+                          <div className='font-medium'>{user.name || 'Sem nome'}</div>
+                          <div className='text-muted-foreground text-xs'>{user.email}</div>
                         </div>
                       </div>
                     </td>
-                    <td className="p-4">
+                    <td className='p-4'>
                       <Badge variant={getRoleBadgeColor(user.role)}>
                         {user.role[0]?.toUpperCase() || 'USER'}
                       </Badge>
                     </td>
-                    <td className="p-4">
+                    <td className='p-4'>
                       <Badge variant={getStatusBadgeColor(user.isActive)}>
                         {user.isActive ? 'Ativo' : 'Inativo'}
                       </Badge>
                     </td>
-                    <td className="p-4 text-muted-foreground">
-                      {formatLastLogin(user.lastLogin)}
+                    <td className='p-4 text-muted-foreground'>{formatLastLogin(user.lastLogin)}</td>
+                    <td className='p-4'>
+                      <span className='font-mono text-sm'>{getRoleTypeLabel(user.roleType)}</span>
                     </td>
-                    <td className="p-4">
-                      <span className="font-mono text-sm">
-                        {getRoleTypeLabel(user.roleType)}
-                      </span>
-                    </td>
-                    <td className="p-4">
-                      <div className="flex items-center gap-2">
+                    <td className='p-4'>
+                      <div className='flex items-center gap-2'>
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="ghost" size="sm">
-                              <MoreHorizontal className="h-4 w-4" />
+                            <Button variant='ghost' size='sm'>
+                              <MoreHorizontal className='h-4 w-4' />
                             </Button>
                           </DropdownMenuTrigger>
-                          <DropdownMenuContent align="end">
+                          <DropdownMenuContent align='end'>
                             <DropdownMenuLabel>Ações</DropdownMenuLabel>
-                            <DropdownMenuItem onClick={() => handleExport('excel', 'um', user)} disabled={exportLoading}>
+                            <DropdownMenuItem
+                              onClick={() => handleExport('excel', 'um', user)}
+                              disabled={exportLoading}
+                            >
                               Exportar Excel (este)
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => handleExport('pdf', 'um', user)} disabled={exportLoading}>
+                            <DropdownMenuItem
+                              onClick={() => handleExport('pdf', 'um', user)}
+                              disabled={exportLoading}
+                            >
                               Exportar PDF (este)
                             </DropdownMenuItem>
                             <DropdownMenuSeparator />
-                            <DropdownMenuItem disabled>
-                              Editar
-                            </DropdownMenuItem>
-                            <DropdownMenuItem disabled>
-                              Excluir
-                            </DropdownMenuItem>
+                            <DropdownMenuItem disabled>Editar</DropdownMenuItem>
+                            <DropdownMenuItem disabled>Excluir</DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
                       </div>
@@ -366,25 +500,23 @@ function UsersTable() {
           </div>
 
           {filteredUsers.length === 0 && (
-            <div className="text-center py-8 text-muted-foreground">
-              Nenhum usuário encontrado
-            </div>
+            <div className='text-center py-8 text-muted-foreground'>Nenhum usuário encontrado</div>
           )}
         </div>
 
         {/* Paginação */}
-        <div className="flex items-center justify-between mt-4">
-          <div className="text-sm text-muted-foreground">
+        <div className='flex items-center justify-between mt-4'>
+          <div className='text-sm text-muted-foreground'>
             Mostrando {filteredUsers.length} de {usuarios.length} usuários
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" disabled>
+          <div className='flex items-center gap-2'>
+            <Button variant='outline' size='sm' disabled>
               Anterior
             </Button>
-            <Button variant="outline" size="sm">
+            <Button variant='outline' size='sm'>
               1
             </Button>
-            <Button variant="outline" size="sm" disabled>
+            <Button variant='outline' size='sm' disabled>
               Próximo
             </Button>
           </div>

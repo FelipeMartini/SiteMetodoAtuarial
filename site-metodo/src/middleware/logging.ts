@@ -19,7 +19,7 @@ export function createLoggingMiddleware() {
   return async (request: NextRequest) => {
     const startTime = Date.now()
     const requestId = crypto.randomUUID()
-    
+
     // Extrair informações do request
     const ip = getClientIP(request)
     const userAgent = request.headers.get('user-agent') || undefined
@@ -48,10 +48,10 @@ export function createLoggingMiddleware() {
 
     // Proceder com o request
     const response = NextResponse.next()
-    
+
     // Adicionar header de request ID para tracking
     response.headers.set('x-request-id', requestId)
-    
+
     // Log do final do request (será executado após a resposta)
     setTimeout(() => {
       const endTime = Date.now()
@@ -126,17 +126,17 @@ function getClientIP(request: NextRequest): string {
 export function createAuditMiddleware() {
   return async (request: NextRequest) => {
     const pathname = new URL(request.url).pathname
-    
+
     // Apenas auditar APIs críticas
     const shouldAudit = shouldAuditEndpoint(pathname, request.method)
-    
+
     if (shouldAudit) {
       const ip = getClientIP(request)
       const userAgent = request.headers.get('user-agent') || undefined
-      
+
       // TODO: Extrair userId do token/session quando implementado
       // const userId = await getUserIdFromRequest(request)
-      
+
       structuredLogger.audit(`API ${request.method} ${pathname}`, {
         ip,
         userAgent,
@@ -158,13 +158,7 @@ function shouldAuditEndpoint(pathname: string, method: string): boolean {
   }
 
   // Auditar endpoints específicos de leitura sensível
-  const sensitiveEndpoints = [
-    '/api/users',
-    '/api/admin',
-    '/api/auth',
-    '/api/abac',
-    '/api/audit',
-  ]
+  const sensitiveEndpoints = ['/api/users', '/api/admin', '/api/auth', '/api/abac', '/api/audit']
 
   return sensitiveEndpoints.some(endpoint => pathname.startsWith(endpoint))
 }
@@ -172,24 +166,24 @@ function shouldAuditEndpoint(pathname: string, method: string): boolean {
 // Middleware para rate limiting básico
 export function createRateLimitMiddleware() {
   const requests = new Map<string, { count: number; resetTime: number }>()
-  
+
   return async (request: NextRequest) => {
     const ip = getClientIP(request)
     const now = Date.now()
     const windowMs = 60 * 1000 // 1 minuto
     const maxRequests = 100 // máximo por minuto
-    
+
     const key = `${ip}:${Math.floor(now / windowMs)}`
     const current = requests.get(key) || { count: 0, resetTime: now + windowMs }
-    
+
     current.count++
     requests.set(key, current)
-    
+
     // Limpar entradas antigas
     if (now > current.resetTime) {
       requests.delete(key)
     }
-    
+
     // Verificar limite
     if (current.count > maxRequests) {
       structuredLogger.warn(`Rate limit exceeded for IP: ${ip}`, {
@@ -198,15 +192,15 @@ export function createRateLimitMiddleware() {
         maxRequests,
         endpoint: new URL(request.url).pathname,
       })
-      
-      return new NextResponse('Too Many Requests', { 
+
+      return new NextResponse('Too Many Requests', {
         status: 429,
         headers: {
           'Retry-After': Math.ceil((current.resetTime - now) / 1000).toString(),
         },
       })
     }
-    
+
     return NextResponse.next()
   }
 }
@@ -216,7 +210,7 @@ export function createComprehensiveMiddleware() {
   const loggingMiddleware = createLoggingMiddleware()
   const auditMiddleware = createAuditMiddleware()
   const rateLimitMiddleware = createRateLimitMiddleware()
-  
+
   return async (request: NextRequest) => {
     try {
       // 1. Rate limiting primeiro
@@ -224,13 +218,13 @@ export function createComprehensiveMiddleware() {
       if (rateLimitResponse.status === 429) {
         return rateLimitResponse
       }
-      
+
       // 2. Logging
       const loggingResponse = await loggingMiddleware(request)
-      
+
       // 3. Auditoria
       await auditMiddleware(request)
-      
+
       return loggingResponse
     } catch (_error) {
       structuredLogger.error('Middleware error', error, {
@@ -239,7 +233,7 @@ export function createComprehensiveMiddleware() {
         method: request.method,
         endpoint: new URL(request.url).pathname,
       })
-      
+
       return NextResponse.next()
     }
   }

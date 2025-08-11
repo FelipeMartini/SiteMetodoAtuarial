@@ -1,5 +1,5 @@
-@import "tailwindcss";
-@import "../styles/cursor-global.css";
+@import 'tailwindcss';
+@import '../styles/cursor-global.css';
 
 /* Fix Next.js error overlay interference in development */
 .nextjs-toast-errors-parent {
@@ -22,26 +22,26 @@ nextjs-portal {
     --popover-foreground: 222.2 84% 4.9%;
 
     /* Primary brand colors - Azul profissional */
-  --primary: 228 94% 62%;
-  --primary-foreground: 0 0% 100%;
+    --primary: 228 94% 62%;
+    --primary-foreground: 0 0% 100%;
 
     /* Secondary colors - Cinza elegante */
-  --secondary: 210 32% 96%;
-  --secondary-foreground: 222.2 84% 4.9%;
+    --secondary: 210 32% 96%;
+    --secondary-foreground: 222.2 84% 4.9%;
 
     /* Muted colors - Interface suave */
-  --muted: 210 32% 96%;
-  --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 210 32% 96%;
+    --muted-foreground: 215.4 16.3% 46.9%;
 
     /* Accent colors - Destaque sutil */
-  --accent: 280 65% 92%;
-  --accent-foreground: 222.2 84% 4.9%;
+    --accent: 280 65% 92%;
+    --accent-foreground: 222.2 84% 4.9%;
 
     /* Status colors */
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-  --warning: 38 92% 54%;
-  --warning-foreground: 48 96% 89%;
+    --warning: 38 92% 54%;
+    --warning-foreground: 48 96% 89%;
     --success: 160 84% 39%;
     --success-foreground: 0 0% 100%;
 
@@ -58,14 +58,14 @@ nextjs-portal {
     --chart-5: 340 75% 55%;
 
     /* Border radius personalizado */
-  --radius: 1.1rem;
+    --radius: 1.1rem;
 
     /* Shadows customizadas */
-  --shadow-sm: 0 2px 8px 0 rgb(0 0 0 / 0.06);
-  --shadow: 0 4px 12px 0 rgb(0 0 0 / 0.10), 0 2px 8px -2px rgb(0 0 0 / 0.08);
-  --shadow-md: 0 8px 24px -2px rgb(0 0 0 / 0.12), 0 4px 16px -4px rgb(0 0 0 / 0.10);
-  --shadow-lg: 0 16px 32px -4px rgb(0 0 0 / 0.14), 0 8px 20px -8px rgb(0 0 0 / 0.12);
-  --shadow-xl: 0 32px 64px -8px rgb(0 0 0 / 0.16), 0 16px 40px -12px rgb(0 0 0 / 0.14);
+    --shadow-sm: 0 2px 8px 0 rgb(0 0 0 / 0.06);
+    --shadow: 0 4px 12px 0 rgb(0 0 0 / 0.1), 0 2px 8px -2px rgb(0 0 0 / 0.08);
+    --shadow-md: 0 8px 24px -2px rgb(0 0 0 / 0.12), 0 4px 16px -4px rgb(0 0 0 / 0.1);
+    --shadow-lg: 0 16px 32px -4px rgb(0 0 0 / 0.14), 0 8px 20px -8px rgb(0 0 0 / 0.12);
+    --shadow-xl: 0 32px 64px -8px rgb(0 0 0 / 0.16), 0 16px 40px -12px rgb(0 0 0 / 0.14);
   }
 
   .dark {
@@ -123,7 +123,6 @@ nextjs-portal {
 }
 
 @layer base {
-
   /* Removido @apply border-border; pois não é suportado neste contexto */
   * {
     border-color: hsl(var(--border));
@@ -135,7 +134,9 @@ nextjs-portal {
     font-family: var(--font-sans, sans-serif);
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-feature-settings: "rlig" 1, "calt" 1;
+    font-feature-settings:
+      'rlig' 1,
+      'calt' 1;
   }
 
   /* Smooth transitions para mudanças de tema */
@@ -190,7 +191,6 @@ nextjs-portal {
 }
 
 @layer components {
-
   /* Button variants customizados */
   .btn-gradient {
     background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.8));
@@ -199,7 +199,11 @@ nextjs-portal {
   }
 
   .btn-gradient:hover {
-    background-image: linear-gradient(to right, hsl(var(--primary) / 0.9), hsl(var(--primary) / 0.7));
+    background-image: linear-gradient(
+      to right,
+      hsl(var(--primary) / 0.9),
+      hsl(var(--primary) / 0.7)
+    );
   }
 
   /* Card variants */
@@ -208,7 +212,9 @@ nextjs-portal {
   }
 
   .card-hover:hover {
-    box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.1),
+      0 4px 6px -4px rgb(0 0 0 / 0.1);
     transform: translateY(-4px);
   }
 
@@ -221,7 +227,6 @@ nextjs-portal {
 }
 
 @layer utilities {
-
   /* Text gradients */
   .text-gradient {
     background-image: linear-gradient(to right, hsl(var(--primary)), hsl(var(--primary) / 0.7));

@@ -13,6 +13,7 @@ npx tailwindcss init -p
 ```
 
 Adicione os paths do projeto no `tailwind.config.js`:
+
 ```js
 content: [
   "./src/**/*.{js,ts,jsx,tsx,mdx}",

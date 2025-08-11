@@ -10,11 +10,26 @@ import { AuditAction } from '@prisma/client'
 const LogFiltersSchema = z.object({
   userId: z.string().optional(),
   action: z.string().optional(),
-  startDate: z.string().optional().transform(str => str ? new Date(str) : undefined),
-  endDate: z.string().optional().transform(str => str ? new Date(str) : undefined),
-  success: z.string().optional().transform(str => str === 'true' ? true : str === 'false' ? false : undefined),
-  limit: z.string().optional().transform(str => str ? parseInt(str) : 50),
-  offset: z.string().optional().transform(str => str ? parseInt(str) : 0),
+  startDate: z
+    .string()
+    .optional()
+    .transform(str => (str ? new Date(str) : undefined)),
+  endDate: z
+    .string()
+    .optional()
+    .transform(str => (str ? new Date(str) : undefined)),
+  success: z
+    .string()
+    .optional()
+    .transform(str => (str === 'true' ? true : str === 'false' ? false : undefined)),
+  limit: z
+    .string()
+    .optional()
+    .transform(str => (str ? parseInt(str) : 50)),
+  offset: z
+    .string()
+    .optional()
+    .transform(str => (str ? parseInt(str) : 0)),
   search: z.string().optional(),
   export: z.string().optional(),
 })
@@ -43,7 +58,7 @@ export async function GET(request: NextRequest) {
     // Extrair e validar parâmetros
     const searchParams = request.nextUrl.searchParams
     const rawFilters = Object.fromEntries(searchParams.entries())
-    
+
     const filters = LogFiltersSchema.parse(rawFilters)
 
     // Verificar se é export
@@ -66,12 +81,13 @@ export async function GET(request: NextRequest) {
     let filteredLogs = result.logs
     if (filters.search) {
       const searchTerm = filters.search.toLowerCase()
-      filteredLogs = result.logs.filter(log => 
-        log.action.toLowerCase().includes(searchTerm) ||
-        log.target?.toLowerCase().includes(searchTerm) ||
-        log.user?.name?.toLowerCase().includes(searchTerm) ||
-        log.user?.email?.toLowerCase().includes(searchTerm) ||
-        log.ipAddress?.includes(searchTerm)
+      filteredLogs = result.logs.filter(
+        log =>
+          log.action.toLowerCase().includes(searchTerm) ||
+          log.target?.toLowerCase().includes(searchTerm) ||
+          log.user?.name?.toLowerCase().includes(searchTerm) ||
+          log.user?.email?.toLowerCase().includes(searchTerm) ||
+          log.ipAddress?.includes(searchTerm)
       )
     }
 
@@ -95,11 +111,8 @@ export async function GET(request: NextRequest) {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })
-    
-    return NextResponse.json(
-      { error: 'Erro interno do servidor' },
-      { status: 500 }
-    )
+
+    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
 
@@ -127,21 +140,23 @@ async function handleExport(filters: LogFilters, userId: string) {
       'IP',
       'User Agent',
       'Status',
-      'Detalhes'
+      'Detalhes',
     ].join(',')
 
-    const csvRows = result.logs.map(log => [
-      log.id,
-      new Date(log.createdAt).toISOString(),
-      log.user?.name || 'Sistema',
-      log.user?.email || '',
-      log.action,
-      log.target || '',
-      log.ipAddress || '',
-      log.userAgent ? `"${log.userAgent.replace(/"/g, '""')}"` : '',
-      log.success ? 'Sucesso' : 'Falha',
-      log.details ? `"${JSON.stringify(log.details).replace(/"/g, '""')}"` : ''
-    ].join(','))
+    const csvRows = result.logs.map(log =>
+      [
+        log.id,
+        new Date(log.createdAt).toISOString(),
+        log.user?.name || 'Sistema',
+        log.user?.email || '',
+        log.action,
+        log.target || '',
+        log.ipAddress || '',
+        log.userAgent ? `"${log.userAgent.replace(/"/g, '""')}"` : '',
+        log.success ? 'Sucesso' : 'Falha',
+        log.details ? `"${JSON.stringify(log.details).replace(/"/g, '""')}"` : '',
+      ].join(',')
+    )
 
     const csvContent = [csvHeaders, ...csvRows].join('\n')
 
@@ -160,9 +175,6 @@ async function handleExport(filters: LogFilters, userId: string) {
     })
   } catch (_error) {
     structuredLogger.error('Error exporting audit logs', error as Error, { userId })
-    return NextResponse.json(
-      { error: 'Erro ao exportar logs' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Erro ao exportar logs' }, { status: 500 })
   }
 }

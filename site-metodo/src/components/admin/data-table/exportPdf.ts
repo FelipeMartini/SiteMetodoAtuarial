@@ -27,7 +27,7 @@ export async function exportarUsuariosParaPdf(
 
   // Cabeçalho
   let x = margin
-  colunas.forEach((col) => {
+  colunas.forEach(col => {
     page.drawText(col.label, {
       x,
       y,
@@ -40,9 +40,9 @@ export async function exportarUsuariosParaPdf(
   y -= rowHeight
 
   // Linhas
-  usuarios.forEach((usuario) => {
+  usuarios.forEach(usuario => {
     x = margin
-    colunas.forEach((col) => {
+    colunas.forEach(col => {
       const valor = usuario[col.key] !== undefined ? String(usuario[col.key]) : ''
       page.drawText(valor, {
         x,

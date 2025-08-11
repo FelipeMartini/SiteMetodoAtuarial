@@ -32,7 +32,8 @@ export const LIGHTHOUSE_CONFIG = {
       deviceScaleFactor: 2,
       disabled: false,
     },
-    emulatedUserAgent: 'Mozilla/5.0 (Linux; Android 7.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36',
+    emulatedUserAgent:
+      'Mozilla/5.0 (Linux; Android 7.0; Moto G (4)) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/98.0.4758.87 Mobile Safari/537.36',
   },
   audits: [
     // Performance
@@ -43,7 +44,7 @@ export const LIGHTHOUSE_CONFIG = {
     'interactive',
     'cumulative-layout-shift',
     'total-blocking-time',
-    
+
     // SEO
     'meta-description',
     'http-status-code',
@@ -52,7 +53,7 @@ export const LIGHTHOUSE_CONFIG = {
     'is-crawlable',
     'robots-txt',
     'image-alt',
-    
+
     // Accessibility
     'aria-allowed-attr',
     'aria-hidden-body',
@@ -86,7 +87,7 @@ export const LIGHTHOUSE_CONFIG = {
     'th-has-data-cells',
     'valid-lang',
     'video-caption',
-    
+
     // Best Practices
     'appcache-manifest',
     'charset',
@@ -122,7 +123,7 @@ export const LIGHTHOUSE_CONFIG = {
       weight: 1,
     },
   },
-};
+}
 
 /**
  * URLs críticas para testar
@@ -172,7 +173,7 @@ export const CRITICAL_PAGES = [
       seo: 80,
     },
   },
-] as const;
+] as const
 
 // === MÉTRICAS CORE WEB VITALS ===
 
@@ -182,39 +183,39 @@ export const CRITICAL_PAGES = [
 export const CORE_WEB_VITALS_THRESHOLDS = {
   // Largest Contentful Paint (LCP)
   lcp: {
-    good: 2500,      // <= 2.5s
+    good: 2500, // <= 2.5s
     needsImprovement: 4000, // 2.5s - 4.0s
     // poor: > 4.0s
   },
-  
+
   // First Input Delay (FID)
   fid: {
-    good: 100,       // <= 100ms
-    needsImprovement: 300,  // 100ms - 300ms
+    good: 100, // <= 100ms
+    needsImprovement: 300, // 100ms - 300ms
     // poor: > 300ms
   },
-  
+
   // Cumulative Layout Shift (CLS)
   cls: {
-    good: 0.1,       // <= 0.1
+    good: 0.1, // <= 0.1
     needsImprovement: 0.25, // 0.1 - 0.25
     // poor: > 0.25
   },
-  
+
   // First Contentful Paint (FCP)
   fcp: {
-    good: 1800,      // <= 1.8s
+    good: 1800, // <= 1.8s
     needsImprovement: 3000, // 1.8s - 3.0s
     // poor: > 3.0s
   },
-  
+
   // Total Blocking Time (TBT)
   tbt: {
-    good: 200,       // <= 200ms
-    needsImprovement: 600,  // 200ms - 600ms
+    good: 200, // <= 200ms
+    needsImprovement: 600, // 200ms - 600ms
     // poor: > 600ms
   },
-} as const;
+} as const
 
 // === FUNÇÕES DE ANÁLISE ===
 
@@ -222,17 +223,17 @@ export const CORE_WEB_VITALS_THRESHOLDS = {
  * Analisa resultado do Lighthouse
  */
 export function analyzeLighthouseResult(result: Record<string, unknown>) {
-  const { lhr } = result;
-  const { audits, categories } = lhr;
-  
+  const { lhr } = result
+  const { audits, categories } = lhr
+
   // Scores das categorias
   const scores = {
     performance: Math.round(categories.performance.score * 100),
     accessibility: Math.round(categories.accessibility.score * 100),
     bestPractices: Math.round(categories['best-practices'].score * 100),
     seo: Math.round(categories.seo.score * 100),
-  };
-  
+  }
+
   // Core Web Vitals
   const coreWebVitals = {
     lcp: audits['largest-contentful-paint']?.numericValue || 0,
@@ -240,37 +241,38 @@ export function analyzeLighthouseResult(result: Record<string, unknown>) {
     cls: audits['cumulative-layout-shift']?.numericValue || 0,
     fcp: audits['first-contentful-paint']?.numericValue || 0,
     tbt: audits['total-blocking-time']?.numericValue || 0,
-  };
-  
+  }
+
   // Performance metrics
   const performanceMetrics = {
     speedIndex: audits['speed-index']?.numericValue || 0,
     interactive: audits['interactive']?.numericValue || 0,
     firstMeaningfulPaint: audits['first-meaningful-paint']?.numericValue || 0,
-  };
-  
+  }
+
   // Opportunities (melhorias de performance)
   const opportunities = Object.values(audits)
-    .filter((audit: Record<string, unknown>) => 
-      audit.scoreDisplayMode === 'numeric' &&
-      audit.score !== null &&
-      audit.score < 1 &&
-      audit.details?.overallSavingsMs > 100
+    .filter(
+      (audit: Record<string, unknown>) =>
+        audit.scoreDisplayMode === 'numeric' &&
+        audit.score !== null &&
+        audit.score < 1 &&
+        audit.details?.overallSavingsMs > 100
     )
-    .sort((a: Record<string, unknown>, b: Record<string, unknown>) => 
-      b.details.overallSavingsMs - a.details.overallSavingsMs
+    .sort(
+      (a: Record<string, unknown>, b: Record<string, unknown>) =>
+        b.details.overallSavingsMs - a.details.overallSavingsMs
     )
-    .slice(0, 10);
-  
+    .slice(0, 10)
+
   // Diagnostics (problemas gerais)
   const diagnostics = Object.values(audits)
-    .filter((audit: Record<string, unknown>) => 
-      audit.scoreDisplayMode === 'informative' &&
-      audit.score !== null &&
-      audit.score < 1
+    .filter(
+      (audit: Record<string, unknown>) =>
+        audit.scoreDisplayMode === 'informative' && audit.score !== null && audit.score < 1
     )
-    .slice(0, 10);
-  
+    .slice(0, 10)
+
   return {
     url: lhr.finalUrl,
     timestamp: lhr.fetchTime,
@@ -280,52 +282,55 @@ export function analyzeLighthouseResult(result: Record<string, unknown>) {
     opportunities,
     diagnostics,
     runtime: lhr.timing?.total || 0,
-  };
+  }
 }
 
 /**
  * Avalia se métricas estão dentro dos thresholds
  */
-export function evaluateMetrics(metrics: Record<string, unknown>, thresholds: Record<string, unknown>) {
+export function evaluateMetrics(
+  metrics: Record<string, unknown>,
+  thresholds: Record<string, unknown>
+) {
   const evaluation = {
     passed: 0,
     failed: 0,
     warnings: 0,
     details: {} as Record<string, string>,
-  };
-  
+  }
+
   // Avaliar scores das categorias
   Object.entries(thresholds).forEach(([category, threshold]) => {
-    const score = metrics.scores[category];
-    const thresholdNum = Number(threshold);
+    const score = metrics.scores[category]
+    const thresholdNum = Number(threshold)
     if (score >= thresholdNum) {
-      evaluation.passed++;
-      evaluation.details[category] = 'passed';
+      evaluation.passed++
+      evaluation.details[category] = 'passed'
     } else if (score >= thresholdNum - 10) {
-      evaluation.warnings++;
-      evaluation.details[category] = 'warning';
+      evaluation.warnings++
+      evaluation.details[category] = 'warning'
     } else {
-      evaluation.failed++;
-      evaluation.details[category] = 'failed';
+      evaluation.failed++
+      evaluation.details[category] = 'failed'
     }
-  });
-  
+  })
+
   // Avaliar Core Web Vitals
   Object.entries(CORE_WEB_VITALS_THRESHOLDS).forEach(([metric, thresholds]) => {
-    const value = metrics.coreWebVitals[metric];
-    
+    const value = metrics.coreWebVitals[metric]
+
     if (value <= thresholds.good) {
-      evaluation.details[`cwv-${metric}`] = 'good';
+      evaluation.details[`cwv-${metric}`] = 'good'
     } else if (value <= thresholds.needsImprovement) {
-      evaluation.details[`cwv-${metric}`] = 'needs-improvement';
-      evaluation.warnings++;
+      evaluation.details[`cwv-${metric}`] = 'needs-improvement'
+      evaluation.warnings++
     } else {
-      evaluation.details[`cwv-${metric}`] = 'poor';
-      evaluation.failed++;
+      evaluation.details[`cwv-${metric}`] = 'poor'
+      evaluation.failed++
     }
-  });
-  
-  return evaluation;
+  })
+
+  return evaluation
 }
 
 /**
@@ -350,41 +355,41 @@ export function generatePerformanceReport(results: Record<string, unknown>[]) {
     },
     pages: results,
     recommendations: [] as string[],
-  };
-  
+  }
+
   // Calcular médias
   results.forEach(result => {
-    report.summary.averageScores.performance += result.scores.performance;
-    report.summary.averageScores.accessibility += result.scores.accessibility;
-    report.summary.averageScores.bestPractices += result.scores.bestPractices;
-    report.summary.averageScores.seo += result.scores.seo;
-  });
-  
+    report.summary.averageScores.performance += result.scores.performance
+    report.summary.averageScores.accessibility += result.scores.accessibility
+    report.summary.averageScores.bestPractices += result.scores.bestPractices
+    report.summary.averageScores.seo += result.scores.seo
+  })
+
   Object.keys(report.summary.averageScores).forEach(key => {
-    const scores = report.summary.averageScores as any;
-    scores[key] = Math.round(scores[key] / results.length);
-  });
-  
+    const scores = report.summary.averageScores as any
+    scores[key] = Math.round(scores[key] / results.length)
+  })
+
   // Gerar recomendações baseadas nos problemas mais comuns
-  const commonIssues = new Map();
-  
+  const commonIssues = new Map()
+
   results.forEach(result => {
     result.opportunities.forEach((opportunity: Record<string, unknown>) => {
-      const count = commonIssues.get(opportunity.title) || 0;
-      commonIssues.set(opportunity.title, count + 1);
-    });
-  });
-  
+      const count = commonIssues.get(opportunity.title) || 0
+      commonIssues.set(opportunity.title, count + 1)
+    })
+  })
+
   // Top 5 problemas mais comuns
   const topIssues = Array.from(commonIssues.entries())
     .sort((a, b) => b[1] - a[1])
-    .slice(0, 5);
-  
-  report.recommendations = topIssues.map(([issue, count]) => 
-    `${issue} (presente em ${count}/${results.length} páginas)`
-  );
-  
-  return report;
+    .slice(0, 5)
+
+  report.recommendations = topIssues.map(
+    ([issue, count]) => `${issue} (presente em ${count}/${results.length} páginas)`
+  )
+
+  return report
 }
 
 // === INTEGRAÇÃO COM CI/CD ===
@@ -404,13 +409,13 @@ export const CI_CONFIG = {
     formFactor: 'desktop', // Desktop é mais estável para CI
     onlyCategories: ['performance', 'accessibility'],
   },
-  
+
   // Thresholds mais permissivos para CI
   thresholds: {
     performance: 70,
     accessibility: 90,
   },
-  
+
   // Budget de performance
   budgets: [
     {
@@ -430,20 +435,20 @@ export const CI_CONFIG = {
       budget: 1000, // 1MB
     },
   ],
-};
+}
 
 /**
  * Valida se resultado passa nos critérios de CI
  */
 export function validateCIResult(result: Record<string, unknown>): boolean {
-  const analysis = analyzeLighthouseResult(result);
-  
+  const analysis = analyzeLighthouseResult(result)
+
   return (
     analysis.scores.performance >= CI_CONFIG.thresholds.performance &&
     analysis.scores.accessibility >= CI_CONFIG.thresholds.accessibility &&
     analysis.coreWebVitals.lcp <= CORE_WEB_VITALS_THRESHOLDS.lcp.needsImprovement &&
     analysis.coreWebVitals.cls <= CORE_WEB_VITALS_THRESHOLDS.cls.needsImprovement
-  );
+  )
 }
 
 // === MONITORAMENTO CONTÍNUO ===
@@ -454,21 +459,21 @@ export function validateCIResult(result: Record<string, unknown>): boolean {
 export const MONITORING_CONFIG = {
   // Frequência de execução
   schedule: {
-    daily: '0 2 * * *',    // 2:00 AM todos os dias
-    weekly: '0 2 * * 1',   // 2:00 AM segunda-feira
-    monthly: '0 2 1 * *',  // 2:00 AM primeiro dia do mês
+    daily: '0 2 * * *', // 2:00 AM todos os dias
+    weekly: '0 2 * * 1', // 2:00 AM segunda-feira
+    monthly: '0 2 1 * *', // 2:00 AM primeiro dia do mês
   },
-  
+
   // Alertas
   alerts: {
-    performanceDrop: 10,   // Alerta se performance cair 10 pontos
+    performanceDrop: 10, // Alerta se performance cair 10 pontos
     accessibilityIssue: 5, // Alerta se acessibilidade cair 5 pontos
     coreWebVitalsRegression: true, // Alerta para regressão em CWV
   },
-  
+
   // Retenção de dados
   retention: {
-    detailed: 30,  // 30 dias de dados detalhados
-    summary: 365,  // 1 ano de resumos
+    detailed: 30, // 30 dias de dados detalhados
+    summary: 365, // 1 ano de resumos
   },
-};
+}

@@ -6,12 +6,11 @@ import { getClientIP } from '@/lib/utils/ip'
 export async function GET(request: NextRequest) {
   try {
     const health = await monitoring.checkSystemHealth()
-    
-    // Determinar status code baseado na saúde
-    const statusCode = health.status === 'healthy' ? 200 : 
-                      health.status === 'degraded' ? 200 : 503
 
-        // Log do health check
+    // Determinar status code baseado na saúde
+    const statusCode = health.status === 'healthy' ? 200 : health.status === 'degraded' ? 200 : 503
+
+    // Log do health check
     structuredLogger.http('Health check accessed', {
       ip: getClientIP(request),
       userAgent: request.headers.get('user-agent') || 'Unknown',
@@ -24,12 +23,12 @@ export async function GET(request: NextRequest) {
     structuredLogger.error('Health check failed', error as Error, {
       ip: getClientIP(request),
     })
-    
+
     return NextResponse.json(
-      { 
+      {
         status: 'unhealthy',
         error: 'Health check failed',
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       },
       { status: 503 }
     )

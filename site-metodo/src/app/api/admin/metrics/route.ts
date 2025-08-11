@@ -4,21 +4,27 @@ import { prisma } from '@/lib/prisma'
 
 export async function GET() {
   const session = await auth()
-  if (!session || !session.user) return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
-  if ((session.user.accessLevel ?? 0) < 100) return NextResponse.json({ error: 'Sem permissão' }, { status: 403 })
+  if (!session || !session.user)
+    return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
+  if ((session.user.accessLevel ?? 0) < 100)
+    return NextResponse.json({ error: 'Sem permissão' }, { status: 403 })
 
   const now = new Date()
   const sevenDaysAgo = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000)
 
   interface AuditLog {
-    id: string;
-    action: string;
-    target?: string | null;
-    createdAt: Date;
-    user?: { id: string; email?: string | null; name?: string | null };
+    id: string
+    action: string
+    target?: string | null
+    createdAt: Date
+    user?: { id: string; email?: string | null; name?: string | null }
   }
   interface AuditModel {
-    findMany: (args: { orderBy: { createdAt: 'desc' }; take: number; include: { user: { select: { id: true; email: true; name: true } } } }) => Promise<AuditLog[]>
+    findMany: (args: {
+      orderBy: { createdAt: 'desc' }
+      take: number
+      include: { user: { select: { id: true; email: true; name: true } } }
+    }) => Promise<AuditLog[]>
     count: () => Promise<number>
   }
   const auditModel = (prisma as unknown as { auditLog?: AuditModel }).auditLog
@@ -32,7 +38,11 @@ export async function GET() {
 
   const [lastAudit, auditCount] = auditModel
     ? await Promise.all([
-        auditModel.findMany({ orderBy: { createdAt: 'desc' }, take: 10, include: { user: { select: { id: true, email: true, name: true } } } }),
+        auditModel.findMany({
+          orderBy: { createdAt: 'desc' },
+          take: 10,
+          include: { user: { select: { id: true, email: true, name: true } } },
+        }),
         auditModel.count(),
       ])
     : [[], 0]

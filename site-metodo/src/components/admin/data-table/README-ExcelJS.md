@@ -20,7 +20,7 @@ import { salvarExcel } from '@/components/admin/data-table/exportExcel'
 const dados = [
   { nome: 'João', idade: 30, cidade: 'São Paulo' },
   { nome: 'Maria', idade: 25, cidade: 'Rio de Janeiro' },
-  { nome: 'Pedro', idade: 35, cidade: 'Belo Horizonte' }
+  { nome: 'Pedro', idade: 35, cidade: 'Belo Horizonte' },
 ]
 
 // Exportar com nome padrão da aba
@@ -45,21 +45,21 @@ A função `salvarExcel` agora suporta:
 
 ```typescript
 export async function salvarExcel(
-  linhas: Record<string, unknown>[],  // Dados para exportar
-  nomeBase: string,                   // Nome base do arquivo
-  nomeAba: string = 'Dados'          // Nome da aba (opcional)
+  linhas: Record<string, unknown>[], // Dados para exportar
+  nomeBase: string, // Nome base do arquivo
+  nomeAba: string = 'Dados' // Nome da aba (opcional)
 )
 ```
 
 ### 📊 Comparação de Performance
 
-| Métrica | xlsx (Antigo) | ExcelJS (Novo) |
-|---------|---------------|----------------|
-| Vulnerabilidades | 2 críticas | 0 |
-| Suporte TypeScript | Parcial | Nativo |
-| Formatação | Básica | Avançada |
-| Performance | Moderada | Alta |
-| Bundle size | ~500kb | ~300kb |
+| Métrica            | xlsx (Antigo) | ExcelJS (Novo) |
+| ------------------ | ------------- | -------------- |
+| Vulnerabilidades   | 2 críticas    | 0              |
+| Suporte TypeScript | Parcial       | Nativo         |
+| Formatação         | Básica        | Avançada       |
+| Performance        | Moderada      | Alta           |
+| Bundle size        | ~500kb        | ~300kb         |
 
 ### 🚀 Próximos Passos
 
@@ -76,7 +76,7 @@ export async function salvarExcel(
 // Em um componente React
 export function ExportarDados() {
   const [dados, setDados] = useState([])
-  
+
   const handleExportar = async () => {
     try {
       await salvarExcel(dados, 'meu-relatorio', 'Dados Principais')
@@ -86,7 +86,7 @@ export function ExportarDados() {
       console.error(error)
     }
   }
-  
+
   return (
     <Button onClick={handleExportar}>
       Exportar para Excel

@@ -1,4 +1,4 @@
-'use client';
+'use client'
 
 /**
  * Client-side ABAC utility functions
@@ -19,19 +19,19 @@ export async function checkClientPermission(
       body: JSON.stringify({
         userEmail,
         resource,
-        action
+        action,
       }),
-    });
+    })
 
     if (!response.ok) {
-      console.error('Permission check failed:', response.statusText);
-      return false;
+      console.error('Permission check failed:', response.statusText)
+      return false
     }
 
-    const data = await response.json();
-    return data.allowed || false;
+    const data = await response.json()
+    return data.allowed || false
   } catch (_error) {
-    console.error('Permission check error:', error);
-    return false;
+    console.error('Permission check error:', error)
+    return false
   }
 }

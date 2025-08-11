@@ -1,6 +1,6 @@
-"use client"
-import { useAcessosSemana } from "../hooks/useAcessosSemana"
-import { Card } from "@/components/ui/card"
+'use client'
+import { useAcessosSemana } from '../hooks/useAcessosSemana'
+import { Card } from '@/components/ui/card'
 import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -39,12 +39,12 @@ export function GraficoSimples() {
     },
   }
   return (
-    <Card className="p-4 bg-background/80 shadow rounded-xl">
-      <h2 className="font-bold text-lg mb-2 text-primary">Acessos da Semana</h2>
+    <Card className='p-4 bg-background/80 shadow rounded-xl'>
+      <h2 className='font-bold text-lg mb-2 text-primary'>Acessos da Semana</h2>
       {isLoading ? (
-        <div className="text-muted-foreground">Carregando...</div>
+        <div className='text-muted-foreground'>Carregando...</div>
       ) : error ? (
-        <div className="text-red-500">Erro ao carregar gráfico</div>
+        <div className='text-red-500'>Erro ao carregar gráfico</div>
       ) : (
         <Bar data={chartData} options={options} height={180} />
       )}

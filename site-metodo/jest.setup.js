@@ -16,41 +16,59 @@ global.fetch = jest.fn().mockImplementation((url, options) => {
   if (typeof url === 'string' && url.includes('/api/usuario/lista')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve({ usuarios: [{ id: '1', name: 'Admin', email: 'admin@site.com', accessLevel: 5, isActive: true, createdAt: '2023-01-01' }] })
-    });
+      json: () =>
+        Promise.resolve({
+          usuarios: [
+            {
+              id: '1',
+              name: 'Admin',
+              email: 'admin@site.com',
+              accessLevel: 5,
+              isActive: true,
+              createdAt: '2023-01-01',
+            },
+          ],
+        }),
+    })
   }
   // Login tradicional: sucesso
   if (typeof url === 'string' && url.includes('/api/auth/signin/credentials')) {
-    const body = options && options.body ? JSON.parse(options.body) : {};
+    const body = options && options.body ? JSON.parse(options.body) : {}
     if (body.email === 'cliente@teste.com' && body.password === '123456') {
       return Promise.resolve({
         ok: true,
-        json: () => Promise.resolve({ user: { id: '1', email: body.email, accessLevel: 1, name: 'Cliente' } })
-      });
+        json: () =>
+          Promise.resolve({
+            user: { id: '1', email: body.email, accessLevel: 1, name: 'Cliente' },
+          }),
+      })
     }
     // Login tradicional: erro
     return Promise.resolve({
       ok: false,
-      json: () => Promise.resolve({ error: 'Credenciais inválidas' })
-    });
+      json: () => Promise.resolve({ error: 'Credenciais inválidas' }),
+    })
   }
   // Sessão autenticada
   if (typeof url === 'string' && url.includes('/api/auth/session')) {
     return Promise.resolve({
       ok: true,
-      json: () => Promise.resolve({ user: { id: '1', email: 'cliente@teste.com', accessLevel: 1, name: 'Cliente' } })
-    });
+      json: () =>
+        Promise.resolve({
+          user: { id: '1', email: 'cliente@teste.com', accessLevel: 1, name: 'Cliente' },
+        }),
+    })
   }
   // Logout
   if (typeof url === 'string' && url.includes('/api/auth/signout')) {
-    return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
+    return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
   }
   // Default
-  return Promise.resolve({ ok: true, json: () => Promise.resolve({}) });
-});
+  return Promise.resolve({ ok: true, json: () => Promise.resolve({}) })
+})
 
 // Importa os matchers do Testing Library para habilitar 'toBeInTheDocument' e outros
-require('@testing-library/jest-dom');
+require('@testing-library/jest-dom')
 
 // Polyfill TextEncoder/TextDecoder exigidos por @auth/core (usa jose internamente)
 const { TextEncoder, TextDecoder } = require('util')
@@ -71,7 +89,14 @@ try {
 
 // Polyfill Request / Response / Headers via @whatwg-node/fetch (mais completo para Auth.js)
 try {
-  const { Request, Response, Headers, FormData, File, fetch: whatwgFetch } = require('@whatwg-node/fetch')
+  const {
+    Request,
+    Response,
+    Headers,
+    FormData,
+    File,
+    fetch: whatwgFetch,
+  } = require('@whatwg-node/fetch')
   if (!global.Request) global.Request = Request
   if (!global.Response) global.Response = Response
   if (!global.Headers) global.Headers = Headers
@@ -80,7 +105,10 @@ try {
   if (!global.fetch) global.fetch = whatwgFetch
 } catch (e) {
   // eslint-disable-next-line no-console
-  console.warn('[jest.setup] Não foi possível polyfill Request/Response via @whatwg-node/fetch:', e?.message)
+  console.warn(
+    '[jest.setup] Não foi possível polyfill Request/Response via @whatwg-node/fetch:',
+    e?.message
+  )
 }
 
 // Polyfill webcrypto (crypto.subtle) necessário para geração de CSRF e hashes no Auth.js

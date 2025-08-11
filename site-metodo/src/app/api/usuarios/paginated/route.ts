@@ -28,7 +28,14 @@ export async function GET(req: NextRequest) {
       skip: page * pageSize,
       take: pageSize,
       orderBy: { createdAt: 'desc' },
-      select: { id: true, name: true, email: true, accessLevel: true, isActive: true, createdAt: true },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        accessLevel: true,
+        isActive: true,
+        createdAt: true,
+      },
     }),
   ])
 

@@ -140,7 +140,7 @@
     "postrelease": "git push --follow-tags origin main",
     "test": "jest --passWithNoTests",
     "studio": "prisma studio --schema=./prisma/schema.prisma",
-    "prepare": "husky install"
+    "prepare": "husky"
   },
   "lint-staged": {
     "*.{ts,tsx,js,jsx}": [

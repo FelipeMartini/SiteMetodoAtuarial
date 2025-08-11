@@ -1,50 +1,50 @@
-import webpush from 'web-push';
-import { PrismaClient } from '@prisma/client';
-import { NotificationData, NotificationPriority } from '@/types/notifications';
-import { simpleLogger } from '@/lib/simple-logger';
+import webpush from 'web-push'
+import { PrismaClient } from '@prisma/client'
+import { NotificationData, NotificationPriority } from '@/types/notifications'
+import { simpleLogger } from '@/lib/simple-logger'
 
 /**
  * Serviço de Push Notifications para navegadores
  * Suporte para notificações web push usando Web Push Protocol
  */
 export class PushNotificationService {
-  private prisma: PrismaClient;
+  private prisma: PrismaClient
   private vapidKeys: {
-    publicKey: string;
-    privateKey: string;
-    subject: string;
-  };
+    publicKey: string
+    privateKey: string
+    subject: string
+  }
 
   constructor(prisma: PrismaClient, config: PushConfig) {
-    this.prisma = prisma;
+    this.prisma = prisma
     this.vapidKeys = {
       publicKey: config.vapidPublicKey,
       privateKey: config.vapidPrivateKey,
-      subject: config.subject
-    };
+      subject: config.subject,
+    }
 
-    this.initializeWebPush();
+    this.initializeWebPush()
   }
 
   /**
    * Registra subscription de push notification
    */
   async registerSubscription(
-    userId: string, 
+    userId: string,
     subscription: {
-      endpoint: string;
+      endpoint: string
       keys: {
-        p256dh: string;
-        auth: string;
-      };
+        p256dh: string
+        auth: string
+      }
     },
     userAgent?: string
   ): Promise<string> {
     try {
       // Verifica se subscription já existe
       const existing = await this.prisma.pushSubscription.findUnique({
-        where: { endpoint: subscription.endpoint }
-      });
+        where: { endpoint: subscription.endpoint },
+      })
 
       if (existing) {
         // Atualiza subscription existente
@@ -55,16 +55,16 @@ export class PushNotificationService {
             p256dh: subscription.keys.p256dh,
             auth: subscription.keys.auth,
             userAgent,
-            isActive: true
-          }
-        });
+            isActive: true,
+          },
+        })
 
-        simpleLogger.info('Push subscription atualizada', { 
-          userId, 
-          endpoint: this.maskEndpoint(subscription.endpoint) 
-        });
+        simpleLogger.info('Push subscription atualizada', {
+          userId,
+          endpoint: this.maskEndpoint(subscription.endpoint),
+        })
 
-        return existing.id;
+        return existing.id
       } else {
         // Cria nova subscription
         const created = await this.prisma.pushSubscription.create({
@@ -74,20 +74,20 @@ export class PushNotificationService {
             p256dh: subscription.keys.p256dh,
             auth: subscription.keys.auth,
             userAgent,
-            isActive: true
-          }
-        });
+            isActive: true,
+          },
+        })
 
-        simpleLogger.info('Nova push subscription registrada', { 
-          userId, 
-          subscriptionId: created.id 
-        });
+        simpleLogger.info('Nova push subscription registrada', {
+          userId,
+          subscriptionId: created.id,
+        })
 
-        return created.id;
+        return created.id
       }
     } catch (_error) {
-      simpleLogger.error('Erro ao registrar push subscription', { error, userId });
-      throw error;
+      simpleLogger.error('Erro ao registrar push subscription', { error, userId })
+      throw error
     }
   }
 
@@ -98,15 +98,15 @@ export class PushNotificationService {
     try {
       await this.prisma.pushSubscription.update({
         where: { endpoint },
-        data: { isActive: false }
-      });
+        data: { isActive: false },
+      })
 
-      simpleLogger.info('Push subscription removida', { 
-        endpoint: this.maskEndpoint(endpoint) 
-      });
+      simpleLogger.info('Push subscription removida', {
+        endpoint: this.maskEndpoint(endpoint),
+      })
     } catch (_error) {
-      simpleLogger.error('Erro ao remover subscription', { error, endpoint });
-      throw error;
+      simpleLogger.error('Erro ao remover subscription', { error, endpoint })
+      throw error
     }
   }
 
@@ -118,20 +118,20 @@ export class PushNotificationService {
       const subscriptions = await this.prisma.pushSubscription.findMany({
         where: {
           userId,
-          isActive: true
-        }
-      });
+          isActive: true,
+        },
+      })
 
       if (subscriptions.length === 0) {
-        simpleLogger.warn('Nenhuma subscription ativa encontrada', { userId });
-        return false;
+        simpleLogger.warn('Nenhuma subscription ativa encontrada', { userId })
+        return false
       }
 
-      const payload = this.createPushPayload(notification);
-      const options = this.getPushOptions(notification.priority);
+      const payload = this.createPushPayload(notification)
+      const options = this.getPushOptions(notification.priority)
 
-      let sent = 0;
-      const failedSubscriptions: string[] = [];
+      let sent = 0
+      const failedSubscriptions: string[] = []
 
       for (const subscription of subscriptions) {
         try {
@@ -139,47 +139,47 @@ export class PushNotificationService {
             endpoint: subscription.endpoint,
             keys: {
               p256dh: subscription.p256dh,
-              auth: subscription.auth
-            }
-          };
+              auth: subscription.auth,
+            },
+          }
 
-          await webpush.sendNotification(pushSubscription, payload, options);
-          sent++;
+          await webpush.sendNotification(pushSubscription, payload, options)
+          sent++
 
-          simpleLogger.debug('Push notification enviada', { 
-            userId, 
-            subscriptionId: subscription.id 
-          });
+          simpleLogger.debug('Push notification enviada', {
+            userId,
+            subscriptionId: subscription.id,
+          })
         } catch (error: Record<string, unknown>) {
-          simpleLogger.warn('Falha ao enviar push notification', { 
-            error: error.message, 
-            userId, 
-            subscriptionId: subscription.id 
-          });
+          simpleLogger.warn('Falha ao enviar push notification', {
+            error: error.message,
+            userId,
+            subscriptionId: subscription.id,
+          })
 
           // Se subscription é inválida, marca como inativa
           if (this.isSubscriptionInvalid(error)) {
-            failedSubscriptions.push(subscription.endpoint);
+            failedSubscriptions.push(subscription.endpoint)
           }
         }
       }
 
       // Remove subscriptions inválidas
       if (failedSubscriptions.length > 0) {
-        await this.markSubscriptionsInactive(failedSubscriptions);
+        await this.markSubscriptionsInactive(failedSubscriptions)
       }
 
-      simpleLogger.info('Push notifications enviadas', { 
-        userId, 
-        sent, 
+      simpleLogger.info('Push notifications enviadas', {
+        userId,
+        sent,
         total: subscriptions.length,
-        failed: failedSubscriptions.length 
-      });
+        failed: failedSubscriptions.length,
+      })
 
-      return sent > 0;
+      return sent > 0
     } catch (_error) {
-      simpleLogger.error('Erro ao enviar push notification', { error, userId });
-      return false;
+      simpleLogger.error('Erro ao enviar push notification', { error, userId })
+      return false
     }
   }
 
@@ -187,30 +187,30 @@ export class PushNotificationService {
    * Envia push notification para múltiplos usuários
    */
   async sendToUsers(userIds: string[], notification: NotificationData): Promise<number> {
-    let totalSent = 0;
+    let totalSent = 0
 
     // Processa em batches para evitar sobrecarga
-    const batchSize = 50;
-    
+    const batchSize = 50
+
     for (let i = 0; i < userIds.length; i += batchSize) {
-      const batch = userIds.slice(i, i + batchSize);
-      
-      const promises = batch.map(userId => this.sendToUser(userId, notification));
-      const results = await Promise.allSettled(promises);
-      
+      const batch = userIds.slice(i, i + batchSize)
+
+      const promises = batch.map(userId => this.sendToUser(userId, notification))
+      const results = await Promise.allSettled(promises)
+
       results.forEach(result => {
         if (result.status === 'fulfilled' && result.value) {
-          totalSent++;
+          totalSent++
         }
-      });
+      })
 
       // Pausa entre batches
       if (i + batchSize < userIds.length) {
-        await new Promise(resolve => setTimeout(resolve, 100));
+        await new Promise(resolve => setTimeout(resolve, 100))
       }
     }
 
-    return totalSent;
+    return totalSent
   }
 
   /**
@@ -227,19 +227,19 @@ export class PushNotificationService {
       title: 'Teste de Push Notification',
       message: 'Esta é uma notificação de teste enviada em ' + new Date().toLocaleString(),
       createdAt: new Date(),
-      updatedAt: new Date()
-    };
+      updatedAt: new Date(),
+    }
 
-    return await this.sendToUser(userId, testNotification);
+    return await this.sendToUser(userId, testNotification)
   }
 
   /**
    * Obtém estatísticas de push notifications
    */
   async getStats(): Promise<{
-    totalSubscriptions: number;
-    activeSubscriptions: number;
-    subscriptionsByUser: number;
+    totalSubscriptions: number
+    activeSubscriptions: number
+    subscriptionsByUser: number
   }> {
     try {
       const [total, active, byUser] = await Promise.all([
@@ -248,22 +248,22 @@ export class PushNotificationService {
         this.prisma.pushSubscription.groupBy({
           by: ['userId'],
           where: { isActive: true },
-          _count: { userId: true }
-        })
-      ]);
+          _count: { userId: true },
+        }),
+      ])
 
       return {
         totalSubscriptions: total,
         activeSubscriptions: active,
-        subscriptionsByUser: byUser.length
-      };
+        subscriptionsByUser: byUser.length,
+      }
     } catch (_error) {
-      simpleLogger.error('Erro ao obter estatísticas push', { error });
+      simpleLogger.error('Erro ao obter estatísticas push', { error })
       return {
         totalSubscriptions: 0,
         activeSubscriptions: 0,
-        subscriptionsByUser: 0
-      };
+        subscriptionsByUser: 0,
+      }
     }
   }
 
@@ -278,17 +278,17 @@ export class PushNotificationService {
           id: true,
           endpoint: true,
           userAgent: true,
-          createdAt: true
-        }
-      });
+          createdAt: true,
+        },
+      })
 
       return subscriptions.map(sub => ({
         ...sub,
-        endpoint: this.maskEndpoint(sub.endpoint)
-      }));
+        endpoint: this.maskEndpoint(sub.endpoint),
+      }))
     } catch (_error) {
-      simpleLogger.error('Erro ao listar subscriptions do usuário', { error, userId });
-      return [];
+      simpleLogger.error('Erro ao listar subscriptions do usuário', { error, userId })
+      return []
     }
   }
 
@@ -296,7 +296,7 @@ export class PushNotificationService {
    * Gera chaves VAPID
    */
   static generateVapidKeys() {
-    return webpush.generateVAPIDKeys();
+    return webpush.generateVAPIDKeys()
   }
 
   /**
@@ -308,12 +308,12 @@ export class PushNotificationService {
         this.vapidKeys.subject,
         this.vapidKeys.publicKey,
         this.vapidKeys.privateKey
-      );
+      )
 
-      simpleLogger.info('Web Push configurado com sucesso');
+      simpleLogger.info('Web Push configurado com sucesso')
     } catch (_error) {
-      simpleLogger.error('Erro ao configurar Web Push', { error });
-      throw error;
+      simpleLogger.error('Erro ao configurar Web Push', { error })
+      throw error
     }
   }
 
@@ -329,25 +329,25 @@ export class PushNotificationService {
       data: {
         notificationId: notification.id,
         url: '/',
-        ...notification.data
+        ...notification.data,
       },
       actions: [
         {
           action: 'view',
-          title: 'Visualizar'
+          title: 'Visualizar',
         },
         {
           action: 'dismiss',
-          title: 'Descartar'
-        }
+          title: 'Descartar',
+        },
       ],
       tag: notification.type,
       requireInteraction: notification.priority === NotificationPriority.URGENT,
       silent: notification.priority === NotificationPriority.LOW,
-      timestamp: notification.createdAt.getTime()
-    };
+      timestamp: notification.createdAt.getTime(),
+    }
 
-    return JSON.stringify(payload);
+    return JSON.stringify(payload)
   }
 
   /**
@@ -356,36 +356,38 @@ export class PushNotificationService {
   private getPushOptions(priority: NotificationPriority) {
     const options: Record<string, unknown> = {
       TTL: 86400, // 24 horas
-      headers: {}
-    };
+      headers: {},
+    }
 
     switch (priority) {
       case NotificationPriority.URGENT:
-        options.urgency = 'high';
-        options.TTL = 3600; // 1 hora
-        break;
+        options.urgency = 'high'
+        options.TTL = 3600 // 1 hora
+        break
       case NotificationPriority.HIGH:
-        options.urgency = 'normal';
-        break;
+        options.urgency = 'normal'
+        break
       case NotificationPriority.LOW:
-        options.urgency = 'low';
-        options.TTL = 604800; // 7 dias
-        break;
+        options.urgency = 'low'
+        options.TTL = 604800 // 7 dias
+        break
       default:
-        options.urgency = 'normal';
+        options.urgency = 'normal'
     }
 
-    return options;
+    return options
   }
 
   /**
    * Verifica se erro indica subscription inválida
    */
   private isSubscriptionInvalid(error: Record<string, unknown>): boolean {
-    const invalidCodes = [410, 404, 400];
-    return invalidCodes.includes(error.statusCode) || 
-           error.message?.includes('invalid') ||
-           error.message?.includes('expired');
+    const invalidCodes = [410, 404, 400]
+    return (
+      invalidCodes.includes(error.statusCode) ||
+      error.message?.includes('invalid') ||
+      error.message?.includes('expired')
+    )
   }
 
   /**
@@ -395,14 +397,14 @@ export class PushNotificationService {
     try {
       await this.prisma.pushSubscription.updateMany({
         where: { endpoint: { in: endpoints } },
-        data: { isActive: false }
-      });
+        data: { isActive: false },
+      })
 
-      simpleLogger.info('Subscriptions inválidas marcadas como inativas', { 
-        count: endpoints.length 
-      });
+      simpleLogger.info('Subscriptions inválidas marcadas como inativas', {
+        count: endpoints.length,
+      })
     } catch (_error) {
-      simpleLogger.error('Erro ao marcar subscriptions como inativas', { error });
+      simpleLogger.error('Erro ao marcar subscriptions como inativas', { error })
     }
   }
 
@@ -411,25 +413,25 @@ export class PushNotificationService {
    */
   private maskEndpoint(endpoint: string): string {
     try {
-      const url = new URL(endpoint);
-      return `${url.origin}/*****`;
+      const url = new URL(endpoint)
+      return `${url.origin}/*****`
     } catch {
-      return endpoint.substring(0, 20) + '*****';
+      return endpoint.substring(0, 20) + '*****'
     }
   }
 }
 
 // Interface para configuração
 export interface PushConfig {
-  vapidPublicKey: string;
-  vapidPrivateKey: string;
-  subject: string; // mailto:email@domain.com ou https://domain.com
+  vapidPublicKey: string
+  vapidPrivateKey: string
+  subject: string // mailto:email@domain.com ou https://domain.com
 }
 
 // Factory function
 export function createPushNotificationService(config: PushConfig): PushNotificationService {
-  const prisma = new PrismaClient();
-  return new PushNotificationService(prisma, config);
+  const prisma = new PrismaClient()
+  return new PushNotificationService(prisma, config)
 }
 
 // Cliente para subscription no frontend
@@ -438,7 +440,7 @@ export const pushNotificationClient = {
    * Verifica se push notifications são suportadas
    */
   isSupported(): boolean {
-    return 'serviceWorker' in navigator && 'PushManager' in window;
+    return 'serviceWorker' in navigator && 'PushManager' in window
   },
 
   /**
@@ -446,10 +448,10 @@ export const pushNotificationClient = {
    */
   async requestPermission(): Promise<NotificationPermission> {
     if (!this.isSupported()) {
-      throw new Error('Push notifications não suportadas');
+      throw new Error('Push notifications não suportadas')
     }
 
-    return await Notification.requestPermission();
+    return await Notification.requestPermission()
   },
 
   /**
@@ -458,26 +460,26 @@ export const pushNotificationClient = {
   async subscribe(vapidPublicKey: string): Promise<PushSubscription | null> {
     try {
       if (!this.isSupported()) {
-        throw new Error('Push notifications não suportadas');
+        throw new Error('Push notifications não suportadas')
       }
 
-      const permission = await this.requestPermission();
+      const permission = await this.requestPermission()
       if (permission !== 'granted') {
-        throw new Error('Permissão negada para notificações');
+        throw new Error('Permissão negada para notificações')
       }
 
-      const registration = await navigator.serviceWorker.register('/sw.js');
-      await navigator.serviceWorker.ready;
+      const registration = await navigator.serviceWorker.register('/sw.js')
+      await navigator.serviceWorker.ready
 
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey) as BufferSource
-      });
+        applicationServerKey: this.urlBase64ToUint8Array(vapidPublicKey) as BufferSource,
+      })
 
-      return subscription;
+      return subscription
     } catch (_error) {
-      console.error('Erro ao subscrever push notifications:', error);
-      return null;
+      console.error('Erro ao subscrever push notifications:', error)
+      return null
     }
   },
 
@@ -486,17 +488,17 @@ export const pushNotificationClient = {
    */
   async unsubscribe(): Promise<boolean> {
     try {
-      const registration = await navigator.serviceWorker.getRegistration();
+      const registration = await navigator.serviceWorker.getRegistration()
       if (registration) {
-        const subscription = await registration.pushManager.getSubscription();
+        const subscription = await registration.pushManager.getSubscription()
         if (subscription) {
-          return await subscription.unsubscribe();
+          return await subscription.unsubscribe()
         }
       }
-      return true;
+      return true
     } catch (_error) {
-      console.error('Erro ao cancelar subscription:', error);
-      return false;
+      console.error('Erro ao cancelar subscription:', error)
+      return false
     }
   },
 
@@ -504,17 +506,15 @@ export const pushNotificationClient = {
    * Converte VAPID key para Uint8Array
    */
   urlBase64ToUint8Array(base64String: string): Uint8Array {
-    const padding = '='.repeat((4 - base64String.length % 4) % 4);
-    const base64 = (base64String + padding)
-      .replace(/-/g, '+')
-      .replace(/_/g, '/');
+    const padding = '='.repeat((4 - (base64String.length % 4)) % 4)
+    const base64 = (base64String + padding).replace(/-/g, '+').replace(/_/g, '/')
 
-    const rawData = window.atob(base64);
-    const outputArray = new Uint8Array(rawData.length);
+    const rawData = window.atob(base64)
+    const outputArray = new Uint8Array(rawData.length)
 
     for (let i = 0; i < rawData.length; ++i) {
-      outputArray[i] = rawData.charCodeAt(i);
+      outputArray[i] = rawData.charCodeAt(i)
     }
-    return outputArray;
-  }
-};
+    return outputArray
+  },
+}

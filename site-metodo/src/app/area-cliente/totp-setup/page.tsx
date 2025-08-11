@@ -1,84 +1,88 @@
-"use client";
-import { useState } from "react";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Alert } from "@/components/ui/alert";
-import Image from 'next/image';
+'use client'
+import { useState } from 'react'
+import { Input } from '@/components/ui/input'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Alert } from '@/components/ui/alert'
+import Image from 'next/image'
 
 export default function TotpSetup() {
-  const [qr, setQr] = useState<string | null>(null);
-  const [token, setToken] = useState("");
-  const [status, setStatus] = useState<string | null>(null);
-  const [erro, setErro] = useState<string | null>(null);
-  const [step, setStep] = useState<"setup" | "verify" | "done">("setup");
+  const [qr, setQr] = useState<string | null>(null)
+  const [token, setToken] = useState('')
+  const [status, setStatus] = useState<string | null>(null)
+  const [erro, setErro] = useState<string | null>(null)
+  const [step, setStep] = useState<'setup' | 'verify' | 'done'>('setup')
 
   // Inicia setup TOTP
   const handleSetup = async () => {
-    setErro(null);
-    setStatus(null);
-    const res = await fetch("/api/auth/totp-setup", { method: "POST" });
-    const data = await res.json();
+    setErro(null)
+    setStatus(null)
+    const res = await fetch('/api/auth/totp-setup', { method: 'POST' })
+    const data = await res.json()
     if (!res.ok) {
-      setErro(data.error || "Erro ao gerar QR code.");
-      return;
+      setErro(data.error || 'Erro ao gerar QR code.')
+      return
     }
-    setQr(data.qr);
-    setStep("verify");
-  };
+    setQr(data.qr)
+    setStep('verify')
+  }
 
   // Verifica código TOTP
   const handleVerify = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setErro(null);
-    setStatus(null);
-    const res = await fetch("/api/auth/totp-verify", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token })
-    });
-    const data = await res.json();
+    e.preventDefault()
+    setErro(null)
+    setStatus(null)
+    const res = await fetch('/api/auth/totp-verify', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ token }),
+    })
+    const data = await res.json()
     if (!res.ok || !data.ok) {
-      setErro(data.error || "Token inválido.");
-      return;
+      setErro(data.error || 'Token inválido.')
+      return
     }
-    setStatus("MFA ativado com sucesso!");
-    setStep("done");
-  };
+    setStatus('MFA ativado com sucesso!')
+    setStep('done')
+  }
 
   return (
-    <Card className="max-w-md mx-auto mt-8">
+    <Card className='max-w-md mx-auto mt-8'>
       <CardHeader>
         <CardTitle>Ativar Autenticação em 2 Fatores (TOTP)</CardTitle>
       </CardHeader>
       <CardContent>
-        {step === "setup" && (
-          <Button onClick={handleSetup} className="w-full">Gerar QR Code</Button>
+        {step === 'setup' && (
+          <Button onClick={handleSetup} className='w-full'>
+            Gerar QR Code
+          </Button>
         )}
-    {step === "verify" && qr && (
-          <div className="flex flex-col items-center gap-4">
-      <Image src={qr} alt="QR Code MFA" width={160} height={160} className="w-40 h-40" />
-            <form onSubmit={handleVerify} className="w-full flex flex-col gap-2">
+        {step === 'verify' && qr && (
+          <div className='flex flex-col items-center gap-4'>
+            <Image src={qr} alt='QR Code MFA' width={160} height={160} className='w-40 h-40' />
+            <form onSubmit={handleVerify} className='w-full flex flex-col gap-2'>
               <Input
-                type="text"
-                placeholder="Digite o código do app"
+                type='text'
+                placeholder='Digite o código do app'
                 value={token}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setToken(e.target.value)}
                 maxLength={6}
                 minLength={6}
                 required
               />
-              <Button type="submit" className="w-full">Verificar</Button>
+              <Button type='submit' className='w-full'>
+                Verificar
+              </Button>
             </form>
           </div>
         )}
-        {step === "done" && status && (
-          <Alert className="border-green-500/60 text-green-600 dark:text-green-400 bg-green-50/70 dark:bg-green-950/30">
+        {step === 'done' && status && (
+          <Alert className='border-green-500/60 text-green-600 dark:text-green-400 bg-green-50/70 dark:bg-green-950/30'>
             {status}
           </Alert>
         )}
-        {erro && <Alert variant="destructive">{erro}</Alert>}
+        {erro && <Alert variant='destructive'>{erro}</Alert>}
       </CardContent>
     </Card>
-  );
+  )
 }

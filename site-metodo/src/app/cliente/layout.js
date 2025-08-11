@@ -1,3 +1,3 @@
-import ClienteLayout from "./layout"
+import ClienteLayout from './layout'
 
 export default ClienteLayout

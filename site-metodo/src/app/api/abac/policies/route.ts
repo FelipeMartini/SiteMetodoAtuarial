@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { getEnforcer } from '@/lib/abac/enforcer';
-import { withABACAuthorization } from '@/lib/abac/middleware';
-import { z } from 'zod';
+import { NextRequest, NextResponse } from 'next/server'
+import { getEnforcer } from '@/lib/abac/enforcer'
+import { withABACAuthorization } from '@/lib/abac/middleware'
+import { z } from 'zod'
 
 /**
  * API Routes for ABAC Policy Management
@@ -12,8 +12,8 @@ const PolicySchema = z.object({
   object: z.string(),
   action: z.string(),
   effect: z.enum(['allow', 'deny']).default('allow'),
-  conditions: z.string().optional()
-});
+  conditions: z.string().optional(),
+})
 
 // const RoleAssignmentSchema = z.object({
 //   userEmail: z.string().email(),
@@ -25,19 +25,16 @@ const PolicySchema = z.object({
  */
 export async function GET(): Promise<NextResponse> {
   try {
-    const enforcer = await getEnforcer();
-    const policies = await enforcer.getAllPolicies();
-    
+    const enforcer = await getEnforcer()
+    const policies = await enforcer.getAllPolicies()
+
     return NextResponse.json({
       success: true,
-      data: policies
-    });
+      data: policies,
+    })
   } catch (_error) {
-    console.error('Error fetching policies:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to fetch policies' },
-      { status: 500 }
-    );
+    console.error('Error fetching policies:', error)
+    return NextResponse.json({ success: false, error: 'Failed to fetch policies' }, { status: 500 })
   }
 }
 
@@ -46,10 +43,10 @@ export async function GET(): Promise<NextResponse> {
  */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json();
-    const validatedData = PolicySchema.parse(body);
-    
-    const enforcer = await getEnforcer();
+    const body = await request.json()
+    const validatedData = PolicySchema.parse(body)
+
+    const enforcer = await getEnforcer()
     const added = await enforcer.addPolicy({
       id: `policy_${Date.now()}`,
       subject: validatedData.subject,
@@ -59,33 +56,27 @@ export async function POST(request: NextRequest) {
       conditions: validatedData.conditions,
       description: `Policy for ${validatedData.subject} to ${validatedData.action} ${validatedData.object}`,
       createdAt: new Date(),
-      updatedAt: new Date()
-    });
+      updatedAt: new Date(),
+    })
 
     if (added) {
       return NextResponse.json({
         success: true,
-        message: 'Policy added successfully'
-      });
+        message: 'Policy added successfully',
+      })
     } else {
-      return NextResponse.json(
-        { success: false, error: 'Failed to add policy' },
-        { status: 400 }
-      );
+      return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 400 })
     }
   } catch (_error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },
         { status: 400 }
-      );
+      )
     }
-    
-    console.error('Error adding policy:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to add policy' },
-      { status: 500 }
-    );
+
+    console.error('Error adding policy:', error)
+    return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 500 })
   }
 }
 
@@ -94,10 +85,10 @@ export async function POST(request: NextRequest) {
  */
 export async function DELETE(request: NextRequest) {
   try {
-    const body = await request.json();
-    const validatedData = PolicySchema.parse(body);
-    
-    const enforcer = await getEnforcer();
+    const body = await request.json()
+    const validatedData = PolicySchema.parse(body)
+
+    const enforcer = await getEnforcer()
     const removed = await enforcer.removePolicy({
       id: `policy_temp`,
       subject: validatedData.subject,
@@ -106,37 +97,31 @@ export async function DELETE(request: NextRequest) {
       effect: validatedData.effect,
       description: '',
       createdAt: new Date(),
-      updatedAt: new Date()
-    });
+      updatedAt: new Date(),
+    })
 
     if (removed) {
       return NextResponse.json({
         success: true,
-        message: 'Policy removed successfully'
-      });
+        message: 'Policy removed successfully',
+      })
     } else {
-      return NextResponse.json(
-        { success: false, error: 'Policy not found' },
-        { status: 404 }
-      );
+      return NextResponse.json({ success: false, error: 'Policy not found' }, { status: 404 })
     }
   } catch (_error) {
     if (error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: error.issues },
         { status: 400 }
-      );
+      )
     }
-    
-    console.error('Error removing policy:', error);
-    return NextResponse.json(
-      { success: false, error: 'Failed to remove policy' },
-      { status: 500 }
-    );
+
+    console.error('Error removing policy:', error)
+    return NextResponse.json({ success: false, error: 'Failed to remove policy' }, { status: 500 })
   }
 }
 
 // Protect all endpoints with admin authorization
-export const protectedGET = withABACAuthorization(GET, 'read');
-export const protectedPOST = withABACAuthorization(POST, 'write');
-export const protectedDELETE = withABACAuthorization(DELETE, 'delete');
+export const protectedGET = withABACAuthorization(GET, 'read')
+export const protectedPOST = withABACAuthorization(POST, 'write')
+export const protectedDELETE = withABACAuthorization(DELETE, 'delete')

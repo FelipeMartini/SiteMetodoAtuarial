@@ -1,6 +1,7 @@
 # Dependências do Projeto CRUD/Admin
 
 ## UI e Estilo
+
 - shadcn/ui
 - @radix-ui/react-slot
 - lucide-react
@@ -9,31 +10,39 @@
 - autoprefixer
 
 ## Animação
+
 - framer-motion
 
 ## Formulário/Validação
+
 - react-hook-form
 - zod
 
 ## Estado
+
 - zustand
 
 ## Dados
+
 - @tanstack/react-query
 
 ## ORM
+
 - prisma
 - @prisma/client
 
 ## Autenticação
+
 - @auth/core (Auth.js v5)
 
 ## Testes
+
 - jest
 - @testing-library/react
 - cypress
 
 ## Lint/Qualidade
+
 - eslint
 - prettier
 - cspell
@@ -41,6 +50,7 @@
 - commitlint
 
 ## Segurança
+
 - helmet
 - rate-limiter-flexible
 - cors

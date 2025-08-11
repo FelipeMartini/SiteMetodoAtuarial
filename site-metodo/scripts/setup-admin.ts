@@ -4,28 +4,28 @@
  * Garante que felipemartinii@gmail.com tenha accessLevel 100 (admin)
  */
 
-import { PrismaClient } from '@prisma/client';
-import bcryptjs from 'bcryptjs';
+import { PrismaClient } from '@prisma/client'
+import bcryptjs from 'bcryptjs'
 
-const prisma = new PrismaClient();
+const prisma = new PrismaClient()
 
 async function setupAdminUser() {
   try {
-    console.log('🔧 Configurando usuário admin...');
-    
-    const adminEmail = 'felipemartinii@gmail.com';
-    
+    console.log('🔧 Configurando usuário admin...')
+
+    const adminEmail = 'felipemartinii@gmail.com'
+
     // Buscar ou criar usuário admin
     let adminUser = await prisma.user.findUnique({
-      where: { email: adminEmail }
-    });
-    
+      where: { email: adminEmail },
+    })
+
     if (!adminUser) {
-      console.log('📝 Criando usuário admin...');
-      
+      console.log('📝 Criando usuário admin...')
+
       // Hash da senha padrão
-      const hashedPassword = await bcryptjs.hash('123456', 12);
-      
+      const hashedPassword = await bcryptjs.hash('123456', 12)
+
       adminUser = await prisma.user.create({
         data: {
           email: adminEmail,
@@ -37,13 +37,13 @@ async function setupAdminUser() {
           emailVerified: new Date(),
           createdAt: new Date(),
           lastLogin: new Date(),
-        }
-      });
-      
-      console.log('✅ Usuário admin criado com sucesso!');
+        },
+      })
+
+      console.log('✅ Usuário admin criado com sucesso!')
     } else {
-      console.log('📋 Usuário admin encontrado, verificando configuração...');
-      
+      console.log('📋 Usuário admin encontrado, verificando configuração...')
+
       // Atualizar para garantir que está como admin
       await prisma.user.update({
         where: { email: adminEmail },
@@ -52,12 +52,12 @@ async function setupAdminUser() {
           roleType: 'ADMIN',
           isActive: true,
           name: adminUser.name || 'Felipe Martini',
-        }
-      });
-      
-      console.log('✅ Usuário admin atualizado com sucesso!');
+        },
+      })
+
+      console.log('✅ Usuário admin atualizado com sucesso!')
     }
-    
+
     // Verificar configuração final
     const finalUser = await prisma.user.findUnique({
       where: { email: adminEmail },
@@ -68,20 +68,19 @@ async function setupAdminUser() {
         accessLevel: true,
         roleType: true,
         isActive: true,
-      }
-    });
-    
-    console.log('🎯 Configuração final do usuário admin:');
-    console.log(JSON.stringify(finalUser, null, 2));
-    
-    console.log('🚀 Script concluído com sucesso!');
-    
+      },
+    })
+
+    console.log('🎯 Configuração final do usuário admin:')
+    console.log(JSON.stringify(finalUser, null, 2))
+
+    console.log('🚀 Script concluído com sucesso!')
   } catch (error) {
-    console.error('❌ Erro ao configurar usuário admin:', error);
+    console.error('❌ Erro ao configurar usuário admin:', error)
   } finally {
-    await prisma.$disconnect();
+    await prisma.$disconnect()
   }
 }
 
 // Executar script
-setupAdminUser();
+setupAdminUser()

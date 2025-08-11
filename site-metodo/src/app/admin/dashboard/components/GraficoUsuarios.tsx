@@ -1,5 +1,5 @@
-"use client"
-import { Card } from "@/components/ui/card"
+'use client'
+import { Card } from '@/components/ui/card'
 import { Bar } from 'react-chartjs-2'
 import {
   Chart as ChartJS,
@@ -10,16 +10,20 @@ import {
   Tooltip,
   Legend,
 } from 'chart.js'
-import { useUsuarios } from "../hooks/useUsuarios"
+import { useUsuarios } from '../hooks/useUsuarios'
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend)
 
-interface UsuarioResumo { role: string }
+interface UsuarioResumo {
+  role: string
+}
 export function GraficoUsuarios() {
   const { data, isLoading, error } = useUsuarios()
   // Simulação: contar usuários por role
-  const roles = ["admin", "editor", "viewer"]
-  const contagem = roles.map(role => data?.filter((u: UsuarioResumo) => u.role === role).length || 0)
+  const roles = ['admin', 'editor', 'viewer']
+  const contagem = roles.map(
+    role => data?.filter((u: UsuarioResumo) => u.role === role).length || 0
+  )
   const chartData = {
     labels: roles,
     datasets: [
@@ -43,12 +47,12 @@ export function GraficoUsuarios() {
     },
   }
   return (
-    <Card className="p-4 bg-background/80 shadow rounded-xl">
-      <h2 className="font-bold text-lg mb-2 text-primary">Usuários por Permissão</h2>
+    <Card className='p-4 bg-background/80 shadow rounded-xl'>
+      <h2 className='font-bold text-lg mb-2 text-primary'>Usuários por Permissão</h2>
       {isLoading ? (
-        <div className="text-muted-foreground">Carregando...</div>
+        <div className='text-muted-foreground'>Carregando...</div>
       ) : error ? (
-        <div className="text-red-500">Erro ao carregar gráfico</div>
+        <div className='text-red-500'>Erro ao carregar gráfico</div>
       ) : (
         <Bar data={chartData} options={options} height={180} />
       )}

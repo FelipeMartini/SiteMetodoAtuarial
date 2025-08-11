@@ -5,7 +5,7 @@ export const emailValidation = {
     value: /^\S+@\S+$/i,
     message: 'Digite um email válido',
   },
-};
+}
 
 export const passwordValidation = {
   required: 'Senha é obrigatória',
@@ -13,13 +13,12 @@ export const passwordValidation = {
     value: 6,
     message: 'Senha deve ter pelo menos 6 caracteres',
   },
-};
+}
 
 export const confirmPasswordValidation = (password: string) => ({
   required: 'Confirme sua senha',
-  validate: (value: string) =>
-    value === password || 'Senhas não coincidem',
-});
+  validate: (value: string) => value === password || 'Senhas não coincidem',
+})
 
 export const nameValidation = {
   required: 'Nome é obrigatório',
@@ -27,4 +26,4 @@ export const nameValidation = {
     value: 2,
     message: 'Nome deve ter pelo menos 2 caracteres',
   },
-};
+}

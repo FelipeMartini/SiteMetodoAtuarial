@@ -1,5 +1,5 @@
-"use client"
-import { useEffect, useState, ReactNode } from "react"
+'use client'
+import { useEffect, useState, ReactNode } from 'react'
 
 export function ClientOnly({ children }: { children: ReactNode }) {
   const [mounted, setMounted] = useState(false)

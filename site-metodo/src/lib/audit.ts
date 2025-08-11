@@ -79,7 +79,7 @@ export class AuditService {
    */
   async logAuth(
     action: 'LOGIN_SUCCESS' | 'LOGIN_FAILED' | 'LOGOUT' | 'SIGNUP',
-    context: AuditContext & { 
+    context: AuditContext & {
       email?: string
       provider?: string
       reason?: string
@@ -119,7 +119,13 @@ export class AuditService {
    * Logs de administração de usuários
    */
   async logUserManagement(
-    action: 'USER_CREATE' | 'USER_UPDATE' | 'USER_DELETE' | 'USER_ACTIVATE' | 'USER_DEACTIVATE' | 'ROLE_CHANGE',
+    action:
+      | 'USER_CREATE'
+      | 'USER_UPDATE'
+      | 'USER_DELETE'
+      | 'USER_ACTIVATE'
+      | 'USER_DEACTIVATE'
+      | 'ROLE_CHANGE',
     context: AuditContext & {
       targetUserId: string
       targetEmail?: string
@@ -154,9 +160,14 @@ export class AuditService {
           })
           break
         case 'USER_UPDATE':
-          auditLogger.userUpdated(context.performedBy, context.targetUserId, context.changes || {}, {
-            ip: context.ip,
-          })
+          auditLogger.userUpdated(
+            context.performedBy,
+            context.targetUserId,
+            context.changes || {},
+            {
+              ip: context.ip,
+            }
+          )
           break
         case 'USER_DELETE':
           auditLogger.userDeleted(context.performedBy, context.targetUserId, {
@@ -197,14 +208,14 @@ export class AuditService {
         ip,
         data: data ? JSON.stringify(data) : undefined,
         timestamp: new Date().toISOString(),
-      });
+      })
 
       // Log específico de auditoria se necessário
       if (userId) {
-        auditLogger.apiAccess(userId, method, endpoint, { ip, data });
+        auditLogger.apiAccess(userId, method, endpoint, { ip, data })
       }
     } catch (_error) {
-      console.error('Erro ao registrar acesso à API:', error);
+      console.error('Erro ao registrar acesso à API:', error)
     }
   }
 
@@ -338,7 +349,7 @@ export class AuditService {
     if (filters.userId) where.userId = filters.userId
     if (filters.action) where.action = filters.action
     if (filters.success !== undefined) where.success = filters.success
-    
+
     if (filters.startDate || filters.endDate) {
       where.createdAt = {}
       if (filters.startDate) where.createdAt.gte = filters.startDate
@@ -391,34 +402,29 @@ export class AuditService {
         break
     }
 
-    const [
-      totalLogs,
-      successfulActions,
-      failedActions,
-      uniqueUsers,
-      actionsByType,
-    ] = await Promise.all([
-      prisma.auditLog.count({
-        where: { createdAt: { gte: startDate } },
-      }),
-      prisma.auditLog.count({
-        where: { createdAt: { gte: startDate }, success: true },
-      }),
-      prisma.auditLog.count({
-        where: { createdAt: { gte: startDate }, success: false },
-      }),
-      prisma.auditLog.groupBy({
-        by: ['userId'],
-        where: { createdAt: { gte: startDate }, userId: { not: null } },
-        _count: true,
-      }),
-      prisma.auditLog.groupBy({
-        by: ['action'],
-        where: { createdAt: { gte: startDate } },
-        _count: true,
-        orderBy: { _count: { action: 'desc' } },
-      }),
-    ])
+    const [totalLogs, successfulActions, failedActions, uniqueUsers, actionsByType] =
+      await Promise.all([
+        prisma.auditLog.count({
+          where: { createdAt: { gte: startDate } },
+        }),
+        prisma.auditLog.count({
+          where: { createdAt: { gte: startDate }, success: true },
+        }),
+        prisma.auditLog.count({
+          where: { createdAt: { gte: startDate }, success: false },
+        }),
+        prisma.auditLog.groupBy({
+          by: ['userId'],
+          where: { createdAt: { gte: startDate }, userId: { not: null } },
+          _count: true,
+        }),
+        prisma.auditLog.groupBy({
+          by: ['action'],
+          where: { createdAt: { gte: startDate } },
+          _count: true,
+          orderBy: { _count: { action: 'desc' } },
+        }),
+      ])
 
     return {
       period,
@@ -442,40 +448,73 @@ export const auditService = AuditService.getInstance()
 // Helpers para casos comuns
 export const audit = {
   // Autenticação
-  loginSuccess: (userId: string, context: Omit<AuditContext, 'userId'> & { email?: string; provider?: string }) =>
-    auditService.logAuth('LOGIN_SUCCESS', { ...context, userId }),
-  
+  loginSuccess: (
+    userId: string,
+    context: Omit<AuditContext, 'userId'> & { email?: string; provider?: string }
+  ) => auditService.logAuth('LOGIN_SUCCESS', { ...context, userId }),
+
   loginFailed: (context: AuditContext & { email?: string; reason?: string }) =>
     auditService.logAuth('LOGIN_FAILED', context),
-  
+
   logout: (userId: string, context: Omit<AuditContext, 'userId'>) =>
     auditService.logAuth('LOGOUT', { ...context, userId }),
-  
+
   signup: (userId: string, context: Omit<AuditContext, 'userId'> & { email?: string }) =>
     auditService.logAuth('SIGNUP', { ...context, userId }),
 
   // Administração
-  userCreated: (performedBy: string, targetUserId: string, context: AuditContext & { targetEmail?: string }) =>
-    auditService.logUserManagement('USER_CREATE', { ...context, performedBy, targetUserId }),
-  
-  userUpdated: (performedBy: string, targetUserId: string, changes: Record<string, any>, context: AuditContext) =>
-    auditService.logUserManagement('USER_UPDATE', { ...context, performedBy, targetUserId, changes }),
-  
+  userCreated: (
+    performedBy: string,
+    targetUserId: string,
+    context: AuditContext & { targetEmail?: string }
+  ) => auditService.logUserManagement('USER_CREATE', { ...context, performedBy, targetUserId }),
+
+  userUpdated: (
+    performedBy: string,
+    targetUserId: string,
+    changes: Record<string, any>,
+    context: AuditContext
+  ) =>
+    auditService.logUserManagement('USER_UPDATE', {
+      ...context,
+      performedBy,
+      targetUserId,
+      changes,
+    }),
+
   userDeleted: (performedBy: string, targetUserId: string, context: AuditContext) =>
     auditService.logUserManagement('USER_DELETE', { ...context, performedBy, targetUserId }),
-  
-  roleChanged: (performedBy: string, targetUserId: string, fromRole: string, toRole: string, context: AuditContext) =>
-    auditService.logUserManagement('ROLE_CHANGE', { ...context, performedBy, targetUserId, fromRole, toRole }),
+
+  roleChanged: (
+    performedBy: string,
+    targetUserId: string,
+    fromRole: string,
+    toRole: string,
+    context: AuditContext
+  ) =>
+    auditService.logUserManagement('ROLE_CHANGE', {
+      ...context,
+      performedBy,
+      targetUserId,
+      fromRole,
+      toRole,
+    }),
 
   // Segurança
-  suspiciousActivity: (event: string, context: AuditContext & { details?: Record<string, unknown> }) =>
-    auditService.logSecurity(event, 'high', context),
-  
+  suspiciousActivity: (
+    event: string,
+    context: AuditContext & { details?: Record<string, unknown> }
+  ) => auditService.logSecurity(event, 'high', context),
+
   accessDenied: (resource: string, context: AuditContext) =>
     auditService.logSecurity('access_denied', 'medium', { ...context, resource }),
-  
+
   dataExport: (userId: string, dataType: string, context: Omit<AuditContext, 'userId'>) =>
-    auditService.logSecurity('data_export', 'medium', { ...context, userId, details: { dataType } }),
+    auditService.logSecurity('data_export', 'medium', {
+      ...context,
+      userId,
+      details: { dataType },
+    }),
 }
 
 export default auditService

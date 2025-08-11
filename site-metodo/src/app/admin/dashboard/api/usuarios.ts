@@ -1,4 +1,3 @@
-
 import { NextRequest, NextResponse } from 'next/server'
 import { usuarioSchema } from './schemas'
 import { rateLimit } from '../../../../lib/rateLimit'
@@ -12,7 +11,11 @@ function requireAuth(req: NextRequest) {
   return { id: 1, nome: 'Felipe', role: 'admin' }
 }
 
-interface UsuarioAutenticado { id: number; nome: string; role: string }
+interface UsuarioAutenticado {
+  id: number
+  nome: string
+  role: string
+}
 function requireRole(user: UsuarioAutenticado | null, role: string) {
   return !!user && user.role === role
 }
@@ -44,19 +47,24 @@ export async function GET(req: NextRequest) {
   // Rate limit
   await rateLimit(req, 'usuarios-get')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   return withSecurityHeaders(NextResponse.json(usuarios))
 }
 
 export async function POST(req: NextRequest) {
   await rateLimit(req, 'usuarios-post')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   const body = await req.json()
   const parse = usuarioSchema.safeParse(body)
-  if (!parse.success) return withSecurityHeaders(NextResponse.json({ error: parse.error.flatten() }, { status: 400 }))
+  if (!parse.success)
+    return withSecurityHeaders(NextResponse.json({ error: parse.error.flatten() }, { status: 400 }))
   const novo = { ...parse.data, id: usuarios.length + 1 }
   usuarios.push(novo)
   return withSecurityHeaders(NextResponse.json(novo, { status: 201 }))
@@ -65,13 +73,19 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   await rateLimit(req, 'usuarios-put')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   const body = await req.json()
   const parse = usuarioSchema.safeParse(body)
-  if (!parse.success) return withSecurityHeaders(NextResponse.json({ error: parse.error.flatten() }, { status: 400 }))
+  if (!parse.success)
+    return withSecurityHeaders(NextResponse.json({ error: parse.error.flatten() }, { status: 400 }))
   const idx = usuarios.findIndex(u => u.id === body.id)
-  if (idx === -1) return withSecurityHeaders(NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 }))
+  if (idx === -1)
+    return withSecurityHeaders(
+      NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
+    )
   usuarios[idx] = { ...usuarios[idx], ...parse.data }
   return withSecurityHeaders(NextResponse.json(usuarios[idx]))
 }
@@ -79,11 +93,16 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   await rateLimit(req, 'usuarios-delete')
   const user = requireAuth(req)
-  if (!user) return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
-  if (!requireRole(user, 'admin')) return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
+  if (!user)
+    return withSecurityHeaders(NextResponse.json({ error: 'Não autenticado' }, { status: 401 }))
+  if (!requireRole(user, 'admin'))
+    return withSecurityHeaders(NextResponse.json({ error: 'Sem permissão' }, { status: 403 }))
   const { id } = await req.json()
   const idx = usuarios.findIndex(u => u.id === id)
-  if (idx === -1) return withSecurityHeaders(NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 }))
+  if (idx === -1)
+    return withSecurityHeaders(
+      NextResponse.json({ error: 'Usuário não encontrado' }, { status: 404 })
+    )
   const removido = usuarios.splice(idx, 1)[0]
   return withSecurityHeaders(NextResponse.json(removido))
 }

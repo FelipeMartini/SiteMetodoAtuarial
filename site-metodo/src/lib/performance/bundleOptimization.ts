@@ -3,7 +3,7 @@
  * Reduz o tamanho do bundle e melhora a performance
  */
 
-import React from 'react';
+import React from 'react'
 
 // === OTIMIZAÇÕES DE IMPORT ===
 
@@ -33,28 +33,28 @@ export function dynamicImportWithRetry<T>(
   return new Promise((resolve, reject) => {
     importFn()
       .then(resolve)
-      .catch((error) => {
+      .catch(error => {
         if (retries > 0) {
           setTimeout(() => {
             dynamicImportWithRetry(importFn, retries - 1, delay)
               .then(resolve)
-              .catch(reject);
-          }, delay);
+              .catch(reject)
+          }, delay)
         } else {
-          reject(error);
+          reject(error)
         }
-      });
-  });
+      })
+  })
 }
 
 /**
  * Preload de módulos críticos
  */
 export function preloadModule(modulePath: string) {
-  const link = document.createElement('link');
-  link.rel = 'modulepreload';
-  link.href = modulePath;
-  document.head.appendChild(link);
+  const link = document.createElement('link')
+  link.rel = 'modulepreload'
+  link.href = modulePath
+  document.head.appendChild(link)
 }
 
 /**
@@ -64,14 +64,14 @@ export function lazyWithPreload<T extends React.ComponentType<any>>(
   importFn: () => Promise<{ default: T }>,
   shouldPreload = false
 ) {
-  const LazyComponent = React.lazy(importFn);
-  
+  const LazyComponent = React.lazy(importFn)
+
   if (shouldPreload) {
     // Preload após o componente ser definido
-    setTimeout(importFn, 100);
+    setTimeout(importFn, 100)
   }
-  
-  return LazyComponent;
+
+  return LazyComponent
 }
 
 // === TREE SHAKING HELPERS ===
@@ -79,7 +79,7 @@ export function lazyWithPreload<T extends React.ComponentType<any>>(
 /**
  * Marca funções como side-effect-free para tree shaking
  */
-export const PURE = /*#__PURE__*/ Symbol('PURE');
+export const PURE = /*#__PURE__*/ Symbol('PURE')
 
 /**
  * Wrapper para bibliotecas que não fazem tree shaking automaticamente
@@ -88,15 +88,15 @@ export function createTreeShakableExport<T>(
   module: T,
   exportMap: Record<string, keyof T>
 ): Partial<T> {
-  const result: Partial<T> = {};
-  
+  const result: Partial<T> = {}
+
   Object.entries(exportMap).forEach(([exportName, moduleKey]) => {
     if (module[moduleKey]) {
-      (result as any)[exportName] = module[moduleKey];
+      ;(result as any)[exportName] = module[moduleKey]
     }
-  });
-  
-  return result;
+  })
+
+  return result
 }
 
 // === CÓDIGO SPLITTING STRATEGIES ===
@@ -107,19 +107,19 @@ export function createTreeShakableExport<T>(
 export const ROUTE_CHUNKS = {
   // Chunk para área pública (homepage, login, etc)
   public: ['/', '/login', '/criar-conta', '/sobre', '/contato'],
-  
+
   // Chunk para área do cliente
   client: ['/area-cliente', '/area-cliente/perfil'],
-  
+
   // Chunk para área administrativa (carregamento sob demanda)
   admin: ['/admin', '/admin/dashboard', '/admin/usuarios'],
-  
+
   // Chunk para funcionalidades específicas
   calculations: ['/area-cliente/calculos-atuariais'],
-  
+
   // Chunk para auditoria e logs
-  audit: ['/admin/auditoria', '/admin/logs']
-} as const;
+  audit: ['/admin/auditoria', '/admin/logs'],
+} as const
 
 /**
  * Determina qual chunk uma rota deve usar
@@ -127,8 +127,8 @@ export const ROUTE_CHUNKS = {
 export function getChunkForRoute(pathname: string): keyof typeof ROUTE_CHUNKS | 'default' {
   for (const [chunkName, routes] of Object.entries(ROUTE_CHUNKS)) {
     if (routes.some(route => pathname.startsWith(route))) {
-      return chunkName as keyof typeof ROUTE_CHUNKS;
+      return chunkName as keyof typeof ROUTE_CHUNKS
     }
   }
-  return 'default';
+  return 'default'
 }

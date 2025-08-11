@@ -1,75 +1,76 @@
-'use client';
+'use client'
 
 // Core API infrastructure
-export { 
-  ApiClient, 
-  createApiClient, 
+export {
+  ApiClient,
+  createApiClient,
   clients,
   type ApiResponse,
   type ApiError,
   type ApiClientConfig,
   type RequestOptions,
-} from './client';
+} from './client'
 
-export { 
+export {
   ApiCache,
   apiCache,
   cached,
   type CacheOptions,
   type CacheEntry,
   type CacheStats,
-} from './cache';
+} from './cache'
 
-export { 
+export {
   SimpleApiMonitor as ApiMonitor,
   apiMonitor,
   type EndpointMetrics as ApiMetrics,
   type EndpointMetrics as ApiEndpoint,
   type SystemMetrics,
   type HealthCheckResult,
-} from './monitor-simple';
+} from './monitor-simple'
 
 // Import para export default
-import { ApiClient } from './client';
-import { ApiCache } from './cache';
-import { SimpleApiMonitor } from './monitor-simple';
-import { cepService } from './services/cep';
-import { exchangeService } from './services/exchange';
+import { ApiClient } from './client'
+import { ApiCache } from './cache'
+import { SimpleApiMonitor } from './monitor-simple'
+import { cepService } from './services/cep'
+import { exchangeService } from './services/exchange'
 // Import apiMonitor to use in monitored function
-import { apiMonitor } from './monitor-simple';
-import { apiCache } from './cache';
+import { apiMonitor } from './monitor-simple'
+import { apiCache } from './cache'
 
 // Compatibility function for monitored decorator
 export function monitored(name: string) {
-  return function(target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
-    const original = descriptor.value;
-    descriptor.value = async function(...args: Record<string, unknown>[]) {
-      const start = Date.now();
+  return function (
+    target: Record<string, unknown>,
+    propertyKey: string,
+    descriptor: PropertyDescriptor
+  ) {
+    const original = descriptor.value
+    descriptor.value = async function (...args: Record<string, unknown>[]) {
+      const start = Date.now()
       try {
-        const result = await original.apply(this, args);
-        apiMonitor.recordRequest(name, Date.now() - start, true);
-        return result;
+        const result = await original.apply(this, args)
+        apiMonitor.recordRequest(name, Date.now() - start, true)
+        return result
       } catch (_error) {
-        apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message);
-        throw error;
+        apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message)
+        throw error
       }
-    };
-    return descriptor;
-  };
+    }
+    return descriptor
+  }
 }
 
 // API Services
+export { CepService, cepService, type CepError } from './services/cep'
 export {
-  CepService,
-  cepService,
-  type CepError,
-} from './services/cep';export { 
   ExchangeService,
   exchangeService,
   type ExchangeRates,
   type CurrencyConversion,
   type CurrencyInfo,
-} from './services/exchange';
+} from './services/exchange'
 
 // Utility functions and constants
 export const API_CONSTANTS = {
@@ -78,7 +79,7 @@ export const API_CONSTANTS = {
   DEFAULT_CACHE_TTL: 300, // 5 minutes
   MAX_RATE_LIMIT_RPM: 60,
   CIRCUIT_BREAKER_THRESHOLD: 5,
-} as const;
+} as const
 
 // Common API patterns and helpers
 export class ApiHelpers {
@@ -92,7 +93,7 @@ export class ApiHelpers {
       status,
       code,
       timestamp: new Date().toISOString(),
-    };
+    }
   }
 
   /**
@@ -104,17 +105,17 @@ export class ApiHelpers {
       data,
       message,
       timestamp: new Date().toISOString(),
-    };
+    }
   }
 
   /**
    * Validate required environment variables for API integrations
    */
   static validateEnvironment(requiredVars: string[]): void {
-    const missing = requiredVars.filter(varName => !process.env[varName]);
-    
+    const missing = requiredVars.filter(varName => !process.env[varName])
+
     if (missing.length > 0) {
-      throw new Error(`Missing required environment variables: ${missing.join(', ')}`);
+      throw new Error(`Missing required environment variables: ${missing.join(', ')}`)
     }
   }
 
@@ -122,7 +123,7 @@ export class ApiHelpers {
    * Create a delay function for rate limiting
    */
   static delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   /**
@@ -133,47 +134,47 @@ export class ApiHelpers {
     retries: number = 3,
     baseDelay: number = 1000
   ): Promise<T> {
-    let lastError: Error;
+    let lastError: Error
 
     for (let i = 0; i <= retries; i++) {
       try {
-        return await fn();
+        return await fn()
       } catch (_error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error');
-        
+        lastError = error instanceof Error ? error : new Error('Unknown error')
+
         if (i === retries) {
-          throw lastError;
+          throw lastError
         }
 
         // Exponential backoff with jitter
-        const delay = baseDelay * Math.pow(2, i) + Math.random() * 1000;
-        await this.delay(delay);
+        const delay = baseDelay * Math.pow(2, i) + Math.random() * 1000
+        await this.delay(delay)
       }
     }
 
-    throw lastError!;
+    throw lastError!
   }
 
   /**
    * Format bytes to human readable string
    */
   static formatBytes(bytes: number, decimals: number = 2): string {
-    if (bytes === 0) return '0 Bytes';
+    if (bytes === 0) return '0 Bytes'
 
-    const k = 1024;
-    const dm = decimals < 0 ? 0 : decimals;
-    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const k = 1024
+    const dm = decimals < 0 ? 0 : decimals
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB']
 
-    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    const i = Math.floor(Math.log(bytes) / Math.log(k))
 
-    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i]
   }
 
   /**
    * Generate a unique request ID
    */
   static generateRequestId(): string {
-    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    return `req_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
   }
 
   /**
@@ -181,10 +182,10 @@ export class ApiHelpers {
    */
   static validateUrl(url: string): boolean {
     try {
-      new URL(url);
-      return true;
+      new URL(url)
+      return true
     } catch {
-      return false;
+      return false
     }
   }
 
@@ -193,9 +194,9 @@ export class ApiHelpers {
    */
   static extractDomain(url: string): string {
     try {
-      return new URL(url).hostname;
+      return new URL(url).hostname
     } catch {
-      return 'unknown';
+      return 'unknown'
     }
   }
 
@@ -203,14 +204,14 @@ export class ApiHelpers {
    * Check if code is running in browser
    */
   static isBrowser(): boolean {
-    return typeof window !== 'undefined';
+    return typeof window !== 'undefined'
   }
 
   /**
    * Check if code is running on server
    */
   static isServer(): boolean {
-    return typeof window === 'undefined';
+    return typeof window === 'undefined'
   }
 }
 
@@ -220,61 +221,63 @@ export class ApiHealthChecker {
    * Perform health checks on all registered APIs
    */
   static async checkAllApis(): Promise<{
-    healthy: number;
-    unhealthy: number;
-    total: number;
+    healthy: number
+    unhealthy: number
+    total: number
     details: Array<{
-      name: string;
-      status: 'healthy' | 'unhealthy';
-      responseTime: number;
-      error?: string;
-    }>;
+      name: string
+      status: 'healthy' | 'unhealthy'
+      responseTime: number
+      error?: string
+    }>
   }> {
-    const endpoints = apiMonitor.getAllMetrics();
+    const endpoints = apiMonitor.getAllMetrics()
     const results = await Promise.allSettled(
-      endpoints.map(async (endpoint) => {
-        const result = await apiMonitor.healthCheck(endpoint.name);
+      endpoints.map(async endpoint => {
+        const result = await apiMonitor.healthCheck(endpoint.name)
         return {
           name: endpoint.name,
-          status: result.healthy ? 'healthy' as const : 'unhealthy' as const,
+          status: result.healthy ? ('healthy' as const) : ('unhealthy' as const),
           responseTime: result.responseTime,
           error: result.error,
-        };
+        }
       })
-    );
+    )
 
-    const details = results.map(result => 
-      result.status === 'fulfilled' ? result.value : {
-        name: 'unknown',
-        status: 'unhealthy' as const,
-        responseTime: 0,
-        error: 'Health check failed',
-      }
-    );
+    const details = results.map(result =>
+      result.status === 'fulfilled'
+        ? result.value
+        : {
+            name: 'unknown',
+            status: 'unhealthy' as const,
+            responseTime: 0,
+            error: 'Health check failed',
+          }
+    )
 
-    const healthy = details.filter(d => d.status === 'healthy').length;
-    const unhealthy = details.length - healthy;
+    const healthy = details.filter(d => d.status === 'healthy').length
+    const unhealthy = details.length - healthy
 
     return {
       healthy,
       unhealthy,
       total: details.length,
       details,
-    };
+    }
   }
 
   /**
    * Get system-wide API statistics
    */
   static getSystemStats() {
-    const systemMetrics = apiMonitor.getSystemMetrics();
-    const cacheStats = apiCache.normal.getStats();
+    const systemMetrics = apiMonitor.getSystemMetrics()
+    const cacheStats = apiCache.normal.getStats()
 
     return {
       apis: systemMetrics,
       cache: cacheStats,
       timestamp: new Date().toISOString(),
-    };
+    }
   }
 }
 
@@ -283,13 +286,17 @@ if (typeof window !== 'undefined') {
   // Only register in browser environment
   try {
     // Register common Brazilian APIs for monitoring
-    apiMonitor.registerEndpoint('viacep', 'https://viacep.com.br/ws/01001000/json/', 'GET');
-    apiMonitor.registerEndpoint('brasilapi', 'https://brasilapi.com.br/api/cep/v1/01001000', 'GET');
-    apiMonitor.registerEndpoint('exchangerate', 'https://api.exchangerate-api.com/v4/latest/USD', 'GET');
-    
-    console.log('✅ API monitoring endpoints registered successfully');
+    apiMonitor.registerEndpoint('viacep', 'https://viacep.com.br/ws/01001000/json/', 'GET')
+    apiMonitor.registerEndpoint('brasilapi', 'https://brasilapi.com.br/api/cep/v1/01001000', 'GET')
+    apiMonitor.registerEndpoint(
+      'exchangerate',
+      'https://api.exchangerate-api.com/v4/latest/USD',
+      'GET'
+    )
+
+    console.log('✅ API monitoring endpoints registered successfully')
   } catch (_error) {
-    console.warn('⚠️ Failed to register API monitoring endpoints:', error);
+    console.warn('⚠️ Failed to register API monitoring endpoints:', error)
   }
 }
 
@@ -327,7 +334,7 @@ export const DEFAULT_CONFIGS = {
     enableCache: true,
     enableRateLimit: true,
   },
-} as const;
+} as const
 
 const apiExports = {
   ApiClient,
@@ -339,6 +346,6 @@ const apiExports = {
   exchangeService,
   apiMonitor,
   apiCache,
-};
+}
 
-export default apiExports;
+export default apiExports

@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '@prisma/client'
 
 /**
  * Custom Prisma Adapter for Casbin
@@ -6,10 +6,10 @@ import { PrismaClient } from '@prisma/client';
  */
 
 export class CustomPrismaAdapter {
-  private prisma: PrismaClient;
+  private prisma: PrismaClient
 
   constructor(prisma: PrismaClient) {
-    this.prisma = prisma;
+    this.prisma = prisma
   }
 
   /**
@@ -20,48 +20,38 @@ export class CustomPrismaAdapter {
       // Buscar políticas da tabela de políticas
       const policies = await this.prisma.authorizationPolicy.findMany({
         where: { isActive: true },
-        orderBy: { id: 'asc' }
-      });
+        orderBy: { id: 'asc' },
+      })
 
       // Buscar roles
       const roles = await this.prisma.userRole.findMany({
         where: { isActive: true },
         include: {
           user: true,
-          role: true
-        }
-      });
+          role: true,
+        },
+      })
 
-      const policyLines: string[][] = [];
+      const policyLines: string[][] = []
 
       // Converter políticas para formato Casbin
       policies.forEach((policy: Record<string, unknown>) => {
-        const line = [
-          'p',
-          policy.subject,
-          policy.object,
-          policy.action,
-          policy.effect
-        ];
+        const line = ['p', policy.subject, policy.object, policy.action, policy.effect]
         if (policy.conditions) {
-          line.push(policy.conditions);
+          line.push(policy.conditions)
         }
-        policyLines.push(line);
-      });
+        policyLines.push(line)
+      })
 
       // Converter roles para formato Casbin
       roles.forEach((userRole: Record<string, unknown>) => {
-        policyLines.push([
-          'g',
-          userRole.user.email,
-          userRole.role.name
-        ]);
-      });
+        policyLines.push(['g', userRole.user.email, userRole.role.name])
+      })
 
-      return policyLines;
+      return policyLines
     } catch (_error) {
-      console.error('Error loading policies:', error);
-      return [];
+      console.error('Error loading policies:', error)
+      return []
     }
   }
 
@@ -71,8 +61,8 @@ export class CustomPrismaAdapter {
   async savePolicy(policyLines: string[][]): Promise<void> {
     try {
       // Limpar políticas existentes
-      await this.prisma.authorizationPolicy.deleteMany({});
-      await this.prisma.userRole.deleteMany({});
+      await this.prisma.authorizationPolicy.deleteMany({})
+      await this.prisma.userRole.deleteMany({})
 
       for (const line of policyLines) {
         if (line[0] === 'p') {
@@ -83,31 +73,31 @@ export class CustomPrismaAdapter {
               object: line[2],
               action: line[3],
               effect: line[4] as 'allow' | 'deny',
-              conditions: line[5] || null
-            }
-          });
+              conditions: line[5] || null,
+            },
+          })
         } else if (line[0] === 'g') {
           // Atribuição de role
-          const userEmail = line[1];
-          const roleName = line[2];
+          const userEmail = line[1]
+          const roleName = line[2]
 
           // Buscar usuário
           const user = await this.prisma.user.findUnique({
-            where: { email: userEmail }
-          });
+            where: { email: userEmail },
+          })
 
           // Buscar ou criar role
           let role = await this.prisma.role.findUnique({
-            where: { name: roleName }
-          });
+            where: { name: roleName },
+          })
 
           if (!role) {
             role = await this.prisma.role.create({
               data: {
                 name: roleName,
-                description: `Auto-created role: ${roleName}`
-              }
-            });
+                description: `Auto-created role: ${roleName}`,
+              },
+            })
           }
 
           if (user) {
@@ -116,25 +106,25 @@ export class CustomPrismaAdapter {
               where: {
                 userId_roleId: {
                   userId: user.id,
-                  roleId: role.id
-                }
-              }
-            });
+                  roleId: role.id,
+                },
+              },
+            })
 
             if (!existingUserRole) {
               await this.prisma.userRole.create({
                 data: {
                   userId: user.id,
-                  roleId: role.id
-                }
-              });
+                  roleId: role.id,
+                },
+              })
             }
           }
         }
       }
     } catch (_error) {
-      console.error('Error saving policies:', error);
-      throw error;
+      console.error('Error saving policies:', error)
+      throw error
     }
   }
 
@@ -149,28 +139,28 @@ export class CustomPrismaAdapter {
           object: rule[1],
           action: rule[2],
           effect: (rule[3] || 'allow') as 'allow' | 'deny',
-          conditions: rule[4] || null
-        }
-      });
+          conditions: rule[4] || null,
+        },
+      })
     } else if (ptype === 'g') {
-      const userEmail = rule[0];
-      const roleName = rule[1];
+      const userEmail = rule[0]
+      const roleName = rule[1]
 
       const user = await this.prisma.user.findUnique({
-        where: { email: userEmail }
-      });
+        where: { email: userEmail },
+      })
 
       let role = await this.prisma.role.findUnique({
-        where: { name: roleName }
-      });
+        where: { name: roleName },
+      })
 
       if (!role) {
         role = await this.prisma.role.create({
           data: {
             name: roleName,
-            description: `Auto-created role: ${roleName}`
-          }
-        });
+            description: `Auto-created role: ${roleName}`,
+          },
+        })
       }
 
       if (user) {
@@ -178,15 +168,15 @@ export class CustomPrismaAdapter {
           where: {
             userId_roleId: {
               userId: user.id,
-              roleId: role.id
-            }
+              roleId: role.id,
+            },
           },
           update: {},
           create: {
             userId: user.id,
-            roleId: role.id
-          }
-        });
+            roleId: role.id,
+          },
+        })
       }
     }
   }
@@ -201,28 +191,28 @@ export class CustomPrismaAdapter {
           subject: rule[0],
           object: rule[1],
           action: rule[2],
-          effect: (rule[3] || 'allow') as 'allow' | 'deny'
-        }
-      });
+          effect: (rule[3] || 'allow') as 'allow' | 'deny',
+        },
+      })
     } else if (ptype === 'g') {
-      const userEmail = rule[0];
-      const roleName = rule[1];
+      const userEmail = rule[0]
+      const roleName = rule[1]
 
       const user = await this.prisma.user.findUnique({
-        where: { email: userEmail }
-      });
+        where: { email: userEmail },
+      })
 
       const role = await this.prisma.role.findUnique({
-        where: { name: roleName }
-      });
+        where: { name: roleName },
+      })
 
       if (user && role) {
         await this.prisma.userRole.deleteMany({
           where: {
             userId: user.id,
-            roleId: role.id
-          }
-        });
+            roleId: role.id,
+          },
+        })
       }
     }
   }
@@ -237,29 +227,29 @@ export class CustomPrismaAdapter {
     ...fieldValues: string[]
   ): Promise<void> {
     if (ptype === 'p') {
-      const whereClause: Record<string, unknown> = {};
-      
+      const whereClause: Record<string, unknown> = {}
+
       fieldValues.forEach((value, index) => {
-        const actualIndex = fieldIndex + index;
+        const actualIndex = fieldIndex + index
         switch (actualIndex) {
           case 0:
-            whereClause.subject = value;
-            break;
+            whereClause.subject = value
+            break
           case 1:
-            whereClause.object = value;
-            break;
+            whereClause.object = value
+            break
           case 2:
-            whereClause.action = value;
-            break;
+            whereClause.action = value
+            break
           case 3:
-            whereClause.effect = value;
-            break;
+            whereClause.effect = value
+            break
         }
-      });
+      })
 
       await this.prisma.authorizationPolicy.deleteMany({
-        where: whereClause
-      });
+        where: whereClause,
+      })
     }
   }
 }

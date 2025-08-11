@@ -115,12 +115,7 @@ export class MonitoringService {
   /**
    * Registrar query de banco de dados
    */
-  recordDatabaseQuery(
-    operation: string,
-    table: string,
-    duration: number,
-    success: boolean
-  ): void {
+  recordDatabaseQuery(operation: string, table: string, duration: number, success: boolean): void {
     this.recordMetric({
       name: `database.${operation.toLowerCase()}.${table}`,
       value: duration,
@@ -146,7 +141,7 @@ export class MonitoringService {
     }
   ): void {
     const severity = context?.severity || 'medium'
-    
+
     this.recordMetric({
       name: 'errors.count',
       value: 1,
@@ -193,7 +188,8 @@ export class MonitoringService {
 
       // Armazenar histórico
       this.healthChecks.push(health)
-      if (this.healthChecks.length > 288) { // 24 horas (5min intervals)
+      if (this.healthChecks.length > 288) {
+        // 24 horas (5min intervals)
         this.healthChecks.shift()
       }
 
@@ -208,7 +204,9 @@ export class MonitoringService {
 
       return health
     } catch (_error) {
-      simpleLogger.error('Health check failed', { error: error instanceof Error ? error.message : String(error) })
+      simpleLogger.error('Health check failed', {
+        error: error instanceof Error ? error.message : String(error),
+      })
       return {
         status: 'unhealthy',
         uptime: process.uptime(),
@@ -293,8 +291,9 @@ export class MonitoringService {
       const recentErrors = errorMetrics.filter(
         m => m.timestamp >= new Date(Date.now() - 5 * 60 * 1000) // últimos 5 min
       )
-      
-      if (recentErrors.length > 10) { // Mais de 10 erros em 5 min
+
+      if (recentErrors.length > 10) {
+        // Mais de 10 erros em 5 min
         simpleLogger.error('High error rate detected', {
           errorCount: recentErrors.length,
           timeWindow: '5 minutes',
@@ -311,7 +310,7 @@ export class MonitoringService {
     const usage = process.memoryUsage()
     const total = usage.heapTotal
     const used = usage.heapUsed
-    
+
     return {
       used,
       total,
@@ -329,9 +328,9 @@ export class MonitoringService {
     try {
       const { prisma } = await import('./prisma')
       const start = Date.now()
-      
+
       await prisma.$queryRaw`SELECT 1`
-      
+
       const responseTime = Date.now() - start
       return {
         status: 'connected',
@@ -349,9 +348,12 @@ export class MonitoringService {
    */
   private startBackgroundCollection(): void {
     // Health check a cada 5 minutos
-    setInterval(() => {
-      this.checkSystemHealth().catch(console.error)
-    }, 5 * 60 * 1000)
+    setInterval(
+      () => {
+        this.checkSystemHealth().catch(console.error)
+      },
+      5 * 60 * 1000
+    )
 
     // Métricas de sistema a cada minuto
     setInterval(() => {
@@ -402,14 +404,9 @@ export function withMonitoring<T extends (...args: Record<string, unknown>[]) =>
       throw err
     } finally {
       const duration = Date.now() - start
-      
+
       // Registrar métrica de API
-      monitoring.recordApiResponse(
-        endpoint,
-        options?.operation || 'REQUEST',
-        statusCode,
-        duration
-      )
+      monitoring.recordApiResponse(endpoint, options?.operation || 'REQUEST', statusCode, duration)
 
       // Registrar erro se houver
       if (error) {

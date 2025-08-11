@@ -1,11 +1,11 @@
 'use client'
 
-import { 
-  BarChart3, 
-  Settings, 
-  Users, 
-  FileText, 
-  Shield, 
+import {
+  BarChart3,
+  Settings,
+  Users,
+  FileText,
+  Shield,
   Activity,
   Database,
   Bell,
@@ -17,7 +17,7 @@ import {
   ChevronRight,
   Home,
   Calculator,
-  Wallet
+  Wallet,
 } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -38,16 +38,12 @@ import {
   SidebarMenuSubItem,
   SidebarMenuBadge,
 } from '@/components/ui/sidebar'
-import { 
-  Collapsible,
-  CollapsibleContent,
-  CollapsibleTrigger 
-} from '@/components/ui/collapsible'
-import { 
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible'
+import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger 
+  DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar'
 import { useSession, signOut } from 'next-auth/react'
@@ -99,7 +95,7 @@ const adminMenuItems: AdminMenuItem[] = [
       },
       {
         title: 'Permissões',
-        url: '/admin/usuarios/permissoes', 
+        url: '/admin/usuarios/permissoes',
         icon: Shield,
       },
       {
@@ -217,15 +213,15 @@ export function AdminSidebar() {
   }
 
   return (
-    <Sidebar variant="inset" className="border-r">
-      <SidebarHeader className="p-4">
-        <div className="flex items-center space-x-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-            <Calculator className="h-4 w-4" />
+    <Sidebar variant='inset' className='border-r'>
+      <SidebarHeader className='p-4'>
+        <div className='flex items-center space-x-2'>
+          <div className='flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground'>
+            <Calculator className='h-4 w-4' />
           </div>
-          <div className="flex flex-col">
-            <h1 className="text-sm font-semibold">Admin Dashboard</h1>
-            <p className="text-xs text-muted-foreground">Método Atuarial</p>
+          <div className='flex flex-col'>
+            <h1 className='text-sm font-semibold'>Admin Dashboard</h1>
+            <p className='text-xs text-muted-foreground'>Método Atuarial</p>
           </div>
         </div>
       </SidebarHeader>
@@ -235,33 +231,31 @@ export function AdminSidebar() {
           <SidebarGroupLabel>Menu Principal</SidebarGroupLabel>
           <SidebarGroupContent>
             <SidebarMenu>
-              {adminMenuItems.map((item) => (
+              {adminMenuItems.map(item => (
                 <div key={item.title}>
                   {hasSubItems(item) ? (
-                    <Collapsible className="group/collapsible">
+                    <Collapsible className='group/collapsible'>
                       <SidebarMenuItem>
                         <CollapsibleTrigger asChild>
-                          <SidebarMenuButton className="w-full">
-                            <item.icon className="h-4 w-4" />
+                          <SidebarMenuButton className='w-full'>
+                            <item.icon className='h-4 w-4' />
                             <span>{item.title}</span>
                             {'badge' in item && item.badge && (
-                              <SidebarMenuBadge className="ml-auto">
-                                {item.badge}
-                              </SidebarMenuBadge>
+                              <SidebarMenuBadge className='ml-auto'>{item.badge}</SidebarMenuBadge>
                             )}
-                            <ChevronRight className="ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90" />
+                            <ChevronRight className='ml-auto transition-transform group-data-[state=open]/collapsible:rotate-90' />
                           </SidebarMenuButton>
                         </CollapsibleTrigger>
                         <CollapsibleContent>
                           <SidebarMenuSub>
-                            {item.items.map((subItem) => (
+                            {item.items.map(subItem => (
                               <SidebarMenuSubItem key={subItem.title}>
                                 <SidebarMenuSubButton asChild isActive={isActiveUrl(subItem.url)}>
                                   <Link href={subItem.url}>
-                                    <subItem.icon className="h-4 w-4" />
+                                    <subItem.icon className='h-4 w-4' />
                                     <span>{subItem.title}</span>
                                     {'badge' in subItem && subItem.badge && (
-                                      <SidebarMenuBadge className="ml-auto">
+                                      <SidebarMenuBadge className='ml-auto'>
                                         {subItem.badge}
                                       </SidebarMenuBadge>
                                     )}
@@ -275,14 +269,15 @@ export function AdminSidebar() {
                     </Collapsible>
                   ) : (
                     <SidebarMenuItem>
-                      <SidebarMenuButton asChild isActive={isActiveUrl((item as SimpleMenuItem).url)}>
+                      <SidebarMenuButton
+                        asChild
+                        isActive={isActiveUrl((item as SimpleMenuItem).url)}
+                      >
                         <Link href={(item as SimpleMenuItem).url}>
-                          <item.icon className="h-4 w-4" />
+                          <item.icon className='h-4 w-4' />
                           <span>{item.title}</span>
                           {'badge' in item && item.badge && (
-                            <SidebarMenuBadge className="ml-auto">
-                              {item.badge}
-                            </SidebarMenuBadge>
+                            <SidebarMenuBadge className='ml-auto'>{item.badge}</SidebarMenuBadge>
                           )}
                         </Link>
                       </SidebarMenuButton>
@@ -295,71 +290,69 @@ export function AdminSidebar() {
         </SidebarGroup>
       </SidebarContent>
 
-      <SidebarFooter className="p-4">
+      <SidebarFooter className='p-4'>
         <SidebarMenu>
           <SidebarMenuItem>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <SidebarMenuButton 
-                  size="lg"
-                  className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
+                <SidebarMenuButton
+                  size='lg'
+                  className='data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground'
                 >
-                  <Avatar className="h-8 w-8 rounded-lg">
-                    <AvatarImage 
-                      src={session?.user?.image || ''} 
-                      alt={session?.user?.name || 'Admin'} 
+                  <Avatar className='h-8 w-8 rounded-lg'>
+                    <AvatarImage
+                      src={session?.user?.image || ''}
+                      alt={session?.user?.name || 'Admin'}
                     />
-                    <AvatarFallback className="rounded-lg">
+                    <AvatarFallback className='rounded-lg'>
                       {session?.user?.name?.charAt(0) || 'A'}
                     </AvatarFallback>
                   </Avatar>
-                  <div className="grid flex-1 text-left text-sm leading-tight">
-                    <span className="truncate font-semibold">
-                      {session?.user?.name || 'Admin'}
-                    </span>
-                    <span className="truncate text-xs text-muted-foreground">
+                  <div className='grid flex-1 text-left text-sm leading-tight'>
+                    <span className='truncate font-semibold'>{session?.user?.name || 'Admin'}</span>
+                    <span className='truncate text-xs text-muted-foreground'>
                       {session?.user?.email || 'admin@metodoatuarial.com'}
                     </span>
                   </div>
                   <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className="ml-auto size-4"
+                    xmlns='http://www.w3.org/2000/svg'
+                    width='16'
+                    height='16'
+                    viewBox='0 0 24 24'
+                    fill='none'
+                    stroke='currentColor'
+                    strokeWidth='2'
+                    strokeLinecap='round'
+                    strokeLinejoin='round'
+                    className='ml-auto size-4'
                   >
-                    <path d="m6 9 6 6 6-6" />
+                    <path d='m6 9 6 6 6-6' />
                   </svg>
                 </SidebarMenuButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent
-                className="w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg"
-                side="bottom"
-                align="end"
+                className='w-[--radix-dropdown-menu-trigger-width] min-w-56 rounded-lg'
+                side='bottom'
+                align='end'
                 sideOffset={4}
               >
                 <DropdownMenuItem asChild>
-                  <Link href="/area-cliente/perfil">
-                    <Settings className="mr-2 h-4 w-4" />
+                  <Link href='/area-cliente/perfil'>
+                    <Settings className='mr-2 h-4 w-4' />
                     Configurações da Conta
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild>
-                  <Link href="/admin/configuracoes">
-                    <Shield className="mr-2 h-4 w-4" />
+                  <Link href='/admin/configuracoes'>
+                    <Shield className='mr-2 h-4 w-4' />
                     Configurações do Sistema
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem 
+                <DropdownMenuItem
                   onClick={() => signOut({ redirectTo: '/' })}
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                  className='text-red-600 hover:text-red-700 hover:bg-red-50'
                 >
-                  <Activity className="mr-2 h-4 w-4" />
+                  <Activity className='mr-2 h-4 w-4' />
                   Sair
                 </DropdownMenuItem>
               </DropdownMenuContent>
