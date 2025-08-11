@@ -84,9 +84,9 @@ export async function GET(request: NextRequest) {
 
     // Log do acesso às métricas
     structuredLogger.audit('METRICS_ACCESSED', {
-      performedBy: session.user.id,
+      performedBy: session.user.id || '',
       ip: getClientIP(request),
-      userAgent: request.headers.get('user-agent'),
+      userAgent: request.headers.get('user-agent') || 'Unknown',
       metricCount: Object.keys(metricsData).length,
       timeRange: params.timeRange,
     })
@@ -101,7 +101,7 @@ export async function GET(request: NextRequest) {
       availableMetrics,
     })
   } catch (error) {
-    structuredLogger.error('Error fetching metrics', error, {
+    structuredLogger.error('Error fetching metrics', error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })

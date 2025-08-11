@@ -223,24 +223,7 @@ applyTo: '**'
 - [ ] Coverage reports
 - [ ] CI/CD pipeline
 
-## 🎯 RESUMO GERAL:
-- **Concluídas**: 8/13 tarefas (62% do projeto)
-- **Dark Mode & Mobile**: Sistema responsivo funcionando
-- **Páginas**: Portal completo com páginas institucionais e legais
-- **Build**: Limpo e sem erros
-- **Próximo foco**: Documentação técnica (Tarefa 9)
-- [x] Integração com shadcn/ui components
-- [x] Build TypeScript sem erros
-- [x] Navegação integrada no sidebar
-- [x] Responsividade móvel
-- [x] Persistência de dados local
-
-**Status**: MÓDULO ATUARIAL 100% FUNCIONAL E PRONTO PARA USO!
-**Próxima Fase**: Implementação do sistema ABAC/Casbin
-
-
-
-- [ ] **Task 14:** VERIFICAR PORQUE FOI OCULTADO A JANELA DE ERRO DO WEBPACK, NAO É PARA SER OCULTADA, MOSTRE ELA NOVAMENTE, EU QUER É RESOLVER O ERRO DE SOBREPOSIÇÃO DE ESTILO GLOBAL QUE ESTA OCORRENDO PARA QUE A JANELA DE ERRO DO WEBPECK POSSSA SER VISTA E O ERRO DELA ANALISADO, E COPIADO, ELA DEVE FUNCIONAR PERFEITA MENTE E CONSEGUIR SER VIASUALIZADA, PESQUISE NO GOOGLE O PROBLEMA É QUE ELA NAO TA DANDO PARA SER VISUALIZADA PORQUE TA TENDO ALGUM ESTILO SENDO SOBREPOSTO NELA RESOLVA E ANALISE DE FORMA PROFUNDA PARA QUE O WEBPACK FUNCIONE PERFEITAMENTE.
+- [ ] **Task 14:** VERIFICAR PORQUE FOI OCULTADO A JANELA DE ERRO DO WEBPACK, NAO É PARA SER OCULTADA, MOSTRE ELA NOVAMENTE, EU QUER É RESOLVER O ERRO DE SOBREPOSIÇÃO DE ESTILO GLOBAL QUE ESTA OCORRENDO PARA QUE A JANELA DE ERRO DO WEBPECK netx.js POSSSA SER VISTA E O ERRO DELA ANALISADO, E COPIADO, ELA DEVE FUNCIONAR PERFEITA MENTE E CONSEGUIR SER VIASUALIZADA, PESQUISE NO GOOGLE O PROBLEMA É QUE ELA NAO TA DANDO PARA SER VISUALIZADA PORQUE TA TENDO ALGUM ESTILO SENDO SOBREPOSTO NELA RESOLVA E ANALISE DE FORMA PROFUNDA PARA QUE O WEBPACK FUNCIONE PERFEITAMENTE. (e principalmente alterar nosso projeto para trocar dependencias e usos do xlsx para ExcelJS, na esqueça de revisar todos locais que eh utilizado para alterar de maneira completa analise profunda)
 - [ ] **Task 15:** Entrar na pagina de gestao do sistema ABAC e conferir se tem permissão pois usuario felipemartinii@gmail.com tem acesso e aparece que nao tem permissão, certificar-se de que o acesso para esse usuario sempre sera permidido, mesmo se o banco de dados for restaurado acesso maximo a esse usuario, e confira se a proteção de link e acesso para pagina admin dashboard, ja esta utilizando ABAC puro.
 - [ ] **Task 16:** REVISAR TODO SISTEMA DE ABAC E ENDPOINT PROFUNDAMENTE E CONSULTAR FONTES OFICIAIS E VER SE NAO RESTA MAIS NADA DE SISTEMA HYBRIDO COM RBAC E ESTAMOS COM ABAC PURO CONSULTE A DOCUMENTAÇÂO DO CASBIN docs oficiais e git hub e exemplos de iplementaççao e garanta que nosso sistema esta seguindo as praticas mais modernas de abac puro, pois estou estranhando ainda termos acbac direto na tabela de usuarios isso deveria eu acho q ser tudo independende no abac puro, analise porque temos no banco de dados rolestype e roles, e depois temos uma tabela a parte com roles e types tambem revise todos campos de nossa tabela e certifique-se de que seguimos o padrao e praticas recomendada para CABIN PURO NAO HIBRIDO e readeque todo nosso sistema para o padrao como se estivesse instalando do zero, reorganize tudo nao se esqueça que tem q estar adaptado a auth.js puro, nosso sistema de gestao de sessão global, analise a fundo e revise o sistema de seccçao global e garanta que o CABIN esteja de acordo.
 - [ ] **Task 17:** revise todos arquivos e pastas dos diretorio site-metodo e garanta que nao ha pastas ou arquivos em branco ou marcados como deletados remova tudo que nao estiver sendo usado, faça uma limpeza profunda eliminando todos residuos de quaisquer alteração, dai execute a tarefa limpea geral e rode o build novamente para garantir que nao á mais nenhum erro nem de build nem de lint nem de tipagem, remova todos warnings e alertas completamente.
