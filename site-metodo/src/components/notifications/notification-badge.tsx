@@ -20,7 +20,7 @@ interface NotificationBadgeProps {
   dot?: boolean;
   size?: 'sm' | 'md' | 'lg';
   className?: string;
-  onNotificationClick?: (notification: any) => void;
+  onNotificationClick?: (notification: Record<string, unknown>) => void;
 }
 
 export function NotificationBadge({

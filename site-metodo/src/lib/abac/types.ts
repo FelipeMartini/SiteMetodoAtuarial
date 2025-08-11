@@ -29,7 +29,7 @@ export interface Context {
   device?: string;
   ip?: string;
   userAgent?: string;
-  [key: string]: any;
+  [key: string]: Record<string, unknown>;
 }
 
 export interface PolicyRule {
@@ -112,8 +112,8 @@ export interface AuthorizedRoute {
 
 export interface AuthorizationMiddlewareConfig {
   enforcer: Enforcer;
-  getUserFromRequest: (request: any) => Promise<Subject | null>;
-  onUnauthorized?: (request: any, response: any) => void;
+  getUserFromRequest: (request: Record<string, unknown>) => Promise<Subject | null>;
+  onUnauthorized?: (request: Record<string, unknown>, response: Record<string, unknown>) => void;
   routes: AuthorizedRoute[];
 }
 
@@ -159,7 +159,7 @@ export class AuthorizationError extends Error {
   constructor(
     message: string,
     public code: string,
-    public details?: any
+    public details?: Record<string, unknown>
   ) {
     super(message);
     this.name = 'AuthorizationError';

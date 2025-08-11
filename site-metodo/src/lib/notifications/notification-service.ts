@@ -130,7 +130,7 @@ export class NotificationService {
    */
   async searchNotifications(filter: NotificationFilter): Promise<NotificationSearchResult> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
 
       if (filter.userId) where.userId = filter.userId;
       if (filter.types?.length) where.type = { in: filter.types };
@@ -363,7 +363,7 @@ export class NotificationService {
    */
   async getStats(userId?: string, dateFrom?: Date, dateTo?: Date): Promise<NotificationStats> {
     try {
-      const where: any = {};
+      const where: Record<string, unknown> = {};
       if (userId) where.userId = userId;
       if (dateFrom || dateTo) {
         where.createdAt = {};
@@ -545,7 +545,7 @@ export class NotificationService {
   /**
    * Mapeia dados do Prisma para interface NotificationData
    */
-  private mapToNotificationData(notification: any): NotificationData {
+  private mapToNotificationData(notification: Record<string, unknown>): NotificationData {
     return {
       id: notification.id,
       userId: notification.userId,

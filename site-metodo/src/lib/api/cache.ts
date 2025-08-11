@@ -244,7 +244,7 @@ export class ApiCache {
   /**
    * Estimate size of data in bytes
    */
-  private estimateSize(data: any): number {
+  private estimateSize(data: Record<string, unknown>): number {
     try {
       return JSON.stringify(data).length * 2; // UTF-16 approximation
     } catch {
@@ -301,13 +301,13 @@ export function cached(
   cacheInstance: ApiCache = apiCache.normal
 ) {
   return function (
-    target: any,
+    target: Record<string, unknown>,
     propertyKey: string,
     descriptor: PropertyDescriptor
   ) {
     const originalMethod = descriptor.value;
 
-    descriptor.value = async function (...args: any[]) {
+    descriptor.value = async function (...args: Record<string, unknown>[]) {
       const cacheKey = ApiCache.createKey(`${target.constructor.name}.${propertyKey}`, args);
       
       // Try to get from cache first

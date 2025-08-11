@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     }
 
     const notificationService = getNotificationService();
-    let result: any = {};
+    let result: Record<string, unknown> = {};
 
     switch (action) {
       case 'mark_all_as_read':

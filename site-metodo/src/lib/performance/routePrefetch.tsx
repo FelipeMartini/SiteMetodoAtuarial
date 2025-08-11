@@ -161,7 +161,7 @@ interface SmartLinkProps {
   children: React.ReactNode;
   prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none';
   className?: string;
-  [key: string]: any;
+  [key: string]: Record<string, unknown>;
 }
 
 /**
@@ -177,7 +177,7 @@ export const SmartLink = memo(function SmartLink({
   const { handleHover } = useHoverPrefetch();
   const { ref } = useVisibilityPrefetch(href);
 
-  const linkProps: any = {
+  const linkProps: Record<string, unknown> = {
     href,
     className,
     ...props,
@@ -254,7 +254,7 @@ export const SmartNavigation = memo(function SmartNavigation({
  * Prefetch manual de rota com retry
  */
 export async function prefetchWithRetry(
-  router: any,
+  router: Record<string, unknown>,
   route: string,
   maxRetries = 3
 ): Promise<boolean> {
@@ -313,7 +313,7 @@ export function getRoutePriority(route: string, userRole?: string): 'high' | 'me
  * Prefetch em batch com priorização
  */
 export async function batchPrefetch(
-  router: any,
+  router: Record<string, unknown>,
   routes: string[],
   userRole?: string
 ): Promise<void> {

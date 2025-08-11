@@ -15,7 +15,7 @@ export const queryClient = new QueryClient({
       // Manter em background por 10 minutos
       gcTime: 10 * 60 * 1000,
       // Retry em caso de erro
-      retry: (failureCount, error: any) => {
+      retry: (failureCount, error: Record<string, unknown>) => {
         // Não retry em erros 4xx (client errors)
         if (error?.status >= 400 && error?.status < 500) {
           return false;
@@ -106,9 +106,9 @@ export const QUERY_KEYS = {
  * Hook para dados com cache otimista
  */
 export function useOptimisticCache<T>(
-  queryKey: any[],
+  queryKey: Record<string, unknown>[],
   fetcher: () => Promise<T>,
-  options: any = {}
+  options: Record<string, unknown> = {}
 ) {
   return {
     queryKey,

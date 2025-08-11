@@ -221,7 +221,7 @@ export const CORE_WEB_VITALS_THRESHOLDS = {
 /**
  * Analisa resultado do Lighthouse
  */
-export function analyzeLighthouseResult(result: any) {
+export function analyzeLighthouseResult(result: Record<string, unknown>) {
   const { lhr } = result;
   const { audits, categories } = lhr;
   
@@ -251,20 +251,20 @@ export function analyzeLighthouseResult(result: any) {
   
   // Opportunities (melhorias de performance)
   const opportunities = Object.values(audits)
-    .filter((audit: any) => 
+    .filter((audit: Record<string, unknown>) => 
       audit.scoreDisplayMode === 'numeric' &&
       audit.score !== null &&
       audit.score < 1 &&
       audit.details?.overallSavingsMs > 100
     )
-    .sort((a: any, b: any) => 
+    .sort((a: Record<string, unknown>, b: Record<string, unknown>) => 
       b.details.overallSavingsMs - a.details.overallSavingsMs
     )
     .slice(0, 10);
   
   // Diagnostics (problemas gerais)
   const diagnostics = Object.values(audits)
-    .filter((audit: any) => 
+    .filter((audit: Record<string, unknown>) => 
       audit.scoreDisplayMode === 'informative' &&
       audit.score !== null &&
       audit.score < 1
@@ -286,7 +286,7 @@ export function analyzeLighthouseResult(result: any) {
 /**
  * Avalia se métricas estão dentro dos thresholds
  */
-export function evaluateMetrics(metrics: any, thresholds: any) {
+export function evaluateMetrics(metrics: Record<string, unknown>, thresholds: Record<string, unknown>) {
   const evaluation = {
     passed: 0,
     failed: 0,
@@ -331,7 +331,7 @@ export function evaluateMetrics(metrics: any, thresholds: any) {
 /**
  * Gera relatório de performance
  */
-export function generatePerformanceReport(results: any[]) {
+export function generatePerformanceReport(results: Record<string, unknown>[]) {
   const report = {
     timestamp: new Date().toISOString(),
     summary: {
@@ -369,7 +369,7 @@ export function generatePerformanceReport(results: any[]) {
   const commonIssues = new Map();
   
   results.forEach(result => {
-    result.opportunities.forEach((opportunity: any) => {
+    result.opportunities.forEach((opportunity: Record<string, unknown>) => {
       const count = commonIssues.get(opportunity.title) || 0;
       commonIssues.set(opportunity.title, count + 1);
     });
@@ -435,7 +435,7 @@ export const CI_CONFIG = {
 /**
  * Valida se resultado passa nos critérios de CI
  */
-export function validateCIResult(result: any): boolean {
+export function validateCIResult(result: Record<string, unknown>): boolean {
   const analysis = analyzeLighthouseResult(result);
   
   return (

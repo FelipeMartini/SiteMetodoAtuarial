@@ -124,7 +124,7 @@ export interface LogMeta {
   action?: string
   resource?: string
   changes?: Record<string, any>
-  [key: string]: any
+  [key: string]: Record<string, unknown>
 }
 
 // Classe Logger estruturado

@@ -41,9 +41,9 @@ import { apiCache } from './cache';
 
 // Compatibility function for monitored decorator
 export function monitored(name: string) {
-  return function(target: any, propertyKey: string, descriptor: PropertyDescriptor) {
+  return function(target: Record<string, unknown>, propertyKey: string, descriptor: PropertyDescriptor) {
     const original = descriptor.value;
-    descriptor.value = async function(...args: any[]) {
+    descriptor.value = async function(...args: Record<string, unknown>[]) {
       const start = Date.now();
       try {
         const result = await original.apply(this, args);
@@ -329,7 +329,7 @@ export const DEFAULT_CONFIGS = {
   },
 } as const;
 
-export default {
+const apiExports = {
   ApiClient,
   ApiCache,
   ApiMonitor: SimpleApiMonitor,
@@ -340,3 +340,5 @@ export default {
   apiMonitor,
   apiCache,
 };
+
+export default apiExports;

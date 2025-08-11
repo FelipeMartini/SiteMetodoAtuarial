@@ -195,8 +195,8 @@ export class CepService {
       }
 
       return response.data
-        .filter((item: any) => !item.erro)
-        .map((item: any) => CepDataSchema.parse({
+        .filter((item: Record<string, unknown>) => !item.erro)
+        .map((item: Record<string, unknown>) => CepDataSchema.parse({
           cep: item.cep,
           logradouro: item.logradouro,
           complemento: item.complemento,

@@ -6,7 +6,7 @@ export interface AuditEntry {
   userId?: string
   action: AuditAction
   target?: string
-  details?: any
+  details?: Record<string, unknown>
   ipAddress?: string
   userAgent?: string
   success?: boolean
@@ -186,7 +186,7 @@ export class AuditService {
     method: string,
     endpoint: string,
     ip: string,
-    data?: any
+    data?: Record<string, unknown>
   ): Promise<void> {
     try {
       // Log estruturado
@@ -215,7 +215,7 @@ export class AuditService {
     event: string,
     severity: 'low' | 'medium' | 'high' | 'critical',
     context: AuditContext & {
-      details?: any
+      details?: Record<string, unknown>
       resource?: string
     }
   ): Promise<void> {
@@ -333,7 +333,7 @@ export class AuditService {
     limit?: number
     offset?: number
   }) {
-    const where: any = {}
+    const where: Record<string, unknown> = {}
 
     if (filters.userId) where.userId = filters.userId
     if (filters.action) where.action = filters.action
@@ -468,7 +468,7 @@ export const audit = {
     auditService.logUserManagement('ROLE_CHANGE', { ...context, performedBy, targetUserId, fromRole, toRole }),
 
   // Segurança
-  suspiciousActivity: (event: string, context: AuditContext & { details?: any }) =>
+  suspiciousActivity: (event: string, context: AuditContext & { details?: Record<string, unknown> }) =>
     auditService.logSecurity(event, 'high', context),
   
   accessDenied: (resource: string, context: AuditContext) =>

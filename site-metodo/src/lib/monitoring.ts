@@ -379,14 +379,14 @@ export class MonitoringService {
 export const monitoring = MonitoringService.getInstance()
 
 // Middleware para monitoramento automático de APIs
-export function withMonitoring<T extends (...args: any[]) => Promise<Response>>(
+export function withMonitoring<T extends (...args: Record<string, unknown>[]) => Promise<Response>>(
   handler: T,
   options?: {
     endpoint?: string
     operation?: string
   }
 ): T {
-  return (async (...args: any[]) => {
+  return (async (...args: Record<string, unknown>[]) => {
     const start = Date.now()
     const endpoint = options?.endpoint || 'unknown'
     let statusCode = 200

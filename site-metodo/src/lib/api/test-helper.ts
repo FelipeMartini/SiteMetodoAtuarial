@@ -18,9 +18,9 @@ export class ApiTestHelper {
     const providers = ['viacep', 'brasilapi', 'awesomeapi'] as const;
     
     const results = {
-      individual: [] as any[],
+      individual: [] as unknown[],
       bulk: null as any,
-      validation: [] as any[],
+      validation: [] as unknown[],
     };
 
     // Teste individual por provedor
@@ -106,9 +106,9 @@ export class ApiTestHelper {
     const providers = ['exchangerate-api', 'awesomeapi'] as const;
     
     const results = {
-      rates: [] as any[],
-      conversions: [] as any[],
-      trends: [] as any[],
+      rates: [] as unknown[],
+      conversions: [] as unknown[],
+      trends: [] as unknown[],
     };
 
     // Teste de taxas por provedor
@@ -215,8 +215,8 @@ export class ApiTestHelper {
     console.log('🧪 Testando sistema de monitoramento...');
     
     const results = {
-      registration: [] as any[],
-      healthChecks: [] as any[],
+      registration: [] as unknown[],
+      healthChecks: [] as unknown[],
       metrics: null as any,
       cache: null as any,
     };
@@ -366,11 +366,11 @@ export class ApiTestHelper {
     results.summary.duration = endTime - startTime;
     
     // Contar sucessos e falhas
-    const countResults = (obj: any): { success: number; failed: number } => {
+    const countResults = (obj: Record<string, unknown>): { success: number; failed: number } => {
       let success = 0;
       let failed = 0;
       
-      const traverse = (item: any) => {
+      const traverse = (item: Record<string, unknown>) => {
         if (Array.isArray(item)) {
           item.forEach(traverse);
         } else if (item && typeof item === 'object') {
