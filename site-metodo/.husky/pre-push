@@ -1,4 +1,23 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
+# Run full quality check before push
+echo "🧹 Running quality checks before push..."
+
+# Run linting
+echo "🔍 Running ESLint..."
+npm run lint
+
+# Run formatting check
+echo "💅 Checking code formatting..."
+npm run format:check
+
+# Run type checking
+echo "🔍 Running TypeScript type check..."
+npm run type-check
+
+# Run tests
+echo "🧪 Running tests..."
 npm test
+
+echo "✅ All quality checks passed!"

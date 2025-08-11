@@ -1,4 +1,8 @@
 #!/bin/sh
 . "$(dirname "$0")/_/husky.sh"
 
-npm run lint
+# Run lint-staged to lint and format only staged files
+npx lint-staged
+
+# Run type checking
+npm run type-check
