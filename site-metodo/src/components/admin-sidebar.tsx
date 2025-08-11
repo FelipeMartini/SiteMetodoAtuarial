@@ -112,21 +112,21 @@ const adminMenuItems: AdminMenuItem[] = [
   {
     title: 'Cálculos Atuariais',
     icon: Calculator,
-    badge: 'Beta',
+    badge: 'Novo',
     items: [
       {
-        title: 'Importar Dados',
-        url: '/admin/calculos/importar',
+        title: 'Calculadora',
+        url: '/area-cliente/calculos-atuariais',
+        icon: Calculator,
+      },
+      {
+        title: 'Tabelas de Mortalidade',
+        url: '/area-cliente/calculos-atuariais',
         icon: Database,
       },
       {
-        title: 'Tabelas Atuariais',
-        url: '/admin/calculos/tabelas',
-        icon: FileText,
-      },
-      {
         title: 'Relatórios',
-        url: '/admin/calculos/relatorios',
+        url: '/area-cliente/calculos-atuariais',
         icon: TrendingUp,
       },
     ],
