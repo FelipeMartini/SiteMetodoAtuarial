@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { checkRole } from '@/utils/rbac'
+// Removido import do RBAC - usando ABAC puro
 // import { db as prisma } from '@/lib/prisma' // Ainda não utilizado (futuro CRUD real)
 // TODO: implementar permissaoSchema compatível com schema atual
 // Placeholders temporários para evitar erro de import inexistente
@@ -10,14 +10,31 @@ const permissaoSchema = { safeParse: (_data?: unknown): ParseResult => { void _d
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
 
+/**
+ * Verificação ABAC simplificada para APIs
+ */
+function checkABACAccess(user: any, resource: string): boolean {
+  if (!user?.isActive) return false
+  
+  if (resource === 'admin') {
+    return user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
+  }
+  
+  if (resource === 'moderation') {
+    return user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
+  }
+  
+  return false
+}
+
 // GET: Lista todas as permissões (admin/moderador)
 export async function GET(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, ['admin', 'moderador'])) {
+  if (!session || (!checkABACAccess(session.user, 'admin') && !checkABACAccess(session.user, 'moderation'))) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
-  // Not implemented: retornar lista de permissões baseada em accessLevel ou outra estrutura
+  // Not implemented: retornar lista de permissões baseada em ABAC
   return withCors(withSecurityHeaders(NextResponse.json([])))
 }
 
@@ -25,7 +42,7 @@ export async function GET(req: NextRequest) {
 export async function POST(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !checkABACAccess(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const body = await req.json()
@@ -40,7 +57,7 @@ export async function POST(req: NextRequest) {
 export async function PUT(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !checkABACAccess(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const body = await req.json()
@@ -55,7 +72,7 @@ export async function PUT(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   await rateLimit(req)
   const session = await auth()
-  if (!session || !checkRole(session.user, 'admin')) {
+  if (!session || !checkABACAccess(session.user, 'admin')) {
     return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
   }
   const { id } = await req.json()

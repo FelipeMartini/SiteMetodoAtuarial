@@ -6,8 +6,6 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { AvatarCustom } from '@/components/ui/avatar-custom'
-import { getRoleTypeLabel, getRoleTypeDisplayValue } from '@/lib/abac/roleMapping'
-import { UserRoleType } from '@prisma/client'
 import { 
   User, 
   Activity, 
@@ -22,6 +20,7 @@ import {
 /**
  * Widget moderno de dashboard do usuário
  * Exibe resumo das atividades e informações importantes
+ * Atualizado para sistema ABAC puro
  */
 export function DashboardUsuarioWidget() {
   const { data: session } = useSession()
@@ -39,20 +38,18 @@ export function DashboardUsuarioWidget() {
   }
 
   const user = session.user
-  const roleType = (session.user as any)?.roleType || UserRoleType.USER
-  const displayValue = getRoleTypeDisplayValue(roleType)
 
-  const getRoleDisplayName = () => {
-    return getRoleTypeLabel(roleType)
+  const getUserTypeDisplay = () => {
+    // Determinar tipo de usuário baseado em atributos (ABAC)
+    if (user.email?.includes('@admin')) return 'Administrador'
+    if (user.email?.includes('@mod')) return 'Moderador'
+    return 'Usuário'
   }
 
-  const getRoleBadgeColor = () => {
-    switch(roleType) {
-      case UserRoleType.ADMIN: return 'destructive'
-      case UserRoleType.MODERATOR: return 'default' 
-      case UserRoleType.USER: return 'secondary'
-      default: return 'outline'
-    }
+  const getUserBadgeColor = () => {
+    if (user.email?.includes('@admin')) return 'destructive'
+    if (user.email?.includes('@mod')) return 'default'
+    return 'secondary'
   }
 
   return (
@@ -76,8 +73,8 @@ export function DashboardUsuarioWidget() {
                 </CardTitle>
                 <CardDescription className="flex items-center gap-2">
                   Bem-vindo de volta à sua área
-                  <Badge variant={getRoleBadgeColor()} className="ml-2">
-                    {getRoleDisplayName()}
+                  <Badge variant={getUserBadgeColor()} className="ml-2">
+                    {getUserTypeDisplay()}
                   </Badge>
                 </CardDescription>
               </div>
@@ -130,7 +127,7 @@ export function DashboardUsuarioWidget() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{displayValue}</div>
+            <div className="text-2xl font-bold">{getUserTypeDisplay()}</div>
             <p className="text-xs text-muted-foreground">
               Permissões ativas
             </p>

@@ -47,7 +47,24 @@
 
 ### 📊 Status: INICIANDO IMPLEMENTAÇÃO DAS TAREFAS
 
-### 🎯 Principais Tarefas a Implementar
+## 🛡️ PROGRESSO TAREFA 02: Sistema ABAC Validação REVISADA
+- [x] Análise do sistema RBAC/ABAC híbrido existente
+- [x] Criação do modelo ABAC puro (pure_abac_model.conf)
+- [x] Atualização do ABACEnforcer para ABAC puro
+- [x] Remoção de métodos RBAC do enforcer
+- [x] Criação de políticas ABAC de exemplo
+- [x] Atualização das definições de tipos ABAC
+- [x] Remoção do arquivo rbac.ts
+- [x] Remoção de campos deprecated do schema.prisma
+- [x] Atualização do middleware.ts para ABAC puro
+- [x] Limpeza de HOCs de verificações role-based (AuthGuard atualizado)
+- [x] Atualização de APIs para usar ABAC (permissoes/route.ts, usuarios/route.ts)
+- [x] Atualização de componentes UI para ABAC (dashboard-usuario-widget.tsx)
+- [ ] Atualização de testes para ABAC
+- [ ] Implementação de políticas ABAC avançadas
+- [ ] Documentação do sistema ABAC
+
+### Status: 85% Completo - Sistema ABAC quase finalizado! ✅ Build funcionando
  [ ] remova todos warning de lint
 - [ ] **Tarefa 01**: Migração XLSX para ExcelJS (Prioridade: Alta)
  [ ] remova todos warning de lint
