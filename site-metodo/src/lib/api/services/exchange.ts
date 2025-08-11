@@ -226,7 +226,7 @@ export class ExchangeService {
       `/daily/${baseCurrency}-${targetCurrency}/${days}`
     );
 
-    return response.data.map((item: any) => ({
+    return response.data.map((item: Record<string, unknown>) => ({
       date: item.timestamp,
       rate: parseFloat(item.bid),
     }));

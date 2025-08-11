@@ -150,7 +150,7 @@ export class PushNotificationService {
             userId, 
             subscriptionId: subscription.id 
           });
-        } catch (error: any) {
+        } catch (error: Record<string, unknown>) {
           simpleLogger.warn('Falha ao enviar push notification', { 
             error: error.message, 
             userId, 
@@ -354,7 +354,7 @@ export class PushNotificationService {
    * Obtém opções de push baseadas na prioridade
    */
   private getPushOptions(priority: NotificationPriority) {
-    const options: any = {
+    const options: Record<string, unknown> = {
       TTL: 86400, // 24 horas
       headers: {}
     };
@@ -381,7 +381,7 @@ export class PushNotificationService {
   /**
    * Verifica se erro indica subscription inválida
    */
-  private isSubscriptionInvalid(error: any): boolean {
+  private isSubscriptionInvalid(error: Record<string, unknown>): boolean {
     const invalidCodes = [410, 404, 400];
     return invalidCodes.includes(error.statusCode) || 
            error.message?.includes('invalid') ||

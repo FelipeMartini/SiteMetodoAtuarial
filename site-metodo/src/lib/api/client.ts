@@ -22,7 +22,7 @@ export interface ApiError {
   message: string;
   status: number;
   code?: string;
-  details?: any;
+  details?: Record<string, unknown>;
   timestamp: string;
 }
 
@@ -235,7 +235,7 @@ export class ApiClient {
 
   async post<T = any>(
     url: string, 
-    data?: any, 
+    data?: Record<string, unknown>, 
     options: RequestOptions = {}
   ): Promise<ApiResponse<T>> {
     await this.checkRateLimit();
@@ -254,7 +254,7 @@ export class ApiClient {
 
   async put<T = any>(
     url: string, 
-    data?: any, 
+    data?: Record<string, unknown>, 
     options: RequestOptions = {}
   ): Promise<ApiResponse<T>> {
     await this.checkRateLimit();
@@ -291,7 +291,7 @@ export class ApiClient {
 
   async patch<T = any>(
     url: string, 
-    data?: any, 
+    data?: Record<string, unknown>, 
     options: RequestOptions = {}
   ): Promise<ApiResponse<T>> {
     await this.checkRateLimit();

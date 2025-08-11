@@ -16,7 +16,6 @@ import {
   XCircle,
   RefreshCw,
   Download,
-  TrendingUp,
   Clock,
   Cpu,
   HardDrive,
@@ -72,6 +71,7 @@ export default function MonitoringDashboard() {
   const [data, setData] = useState<MonitoringData | null>(null)
   const [loading, setLoading] = useState(true)
   const [autoRefresh, setAutoRefresh] = useState(false)
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [refreshInterval, setRefreshInterval] = useState(30000) // 30 segundos
   const { toast } = useToast()
 

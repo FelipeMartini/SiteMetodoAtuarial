@@ -209,7 +209,7 @@ export class EmailService {
    */
   async listTemplates(category?: string): Promise<EmailTemplate[]> {
     try {
-      const where: any = { isActive: true };
+      const where: Record<string, unknown> = { isActive: true };
       if (category) where.category = category;
 
       const templates = await this.prisma.emailTemplate.findMany({

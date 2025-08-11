@@ -265,7 +265,7 @@ export class CepService {
     }
 
     // Validate and format all results
-    return response.data.map((item: any) => {
+    return response.data.map((item: Record<string, unknown>) => {
       const validated = CepSchema.parse(item);
       validated.cep = this.addCepMask(validated.cep);
       return validated;

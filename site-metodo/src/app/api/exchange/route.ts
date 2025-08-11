@@ -25,9 +25,7 @@ const TrendRequestSchema = z.object({
   days: z.number().int().min(1).max(365).optional().default(30),
 });
 
-type RateQuery = z.infer<typeof RateQuerySchema>;
 type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
-type TrendRequest = z.infer<typeof TrendRequestSchema>;
 
 interface ExchangeApiResponse {
   success: boolean;

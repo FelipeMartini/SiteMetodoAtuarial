@@ -20,7 +20,7 @@ export async function GET(request: NextRequest) {
 
     console.log(`🧪 Iniciando teste de APIs: ${testType}`);
     
-    let results: any = {};
+    let results: Record<string, unknown> = {};
 
     switch (testType) {
       case 'cep':

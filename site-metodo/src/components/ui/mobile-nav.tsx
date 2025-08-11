@@ -81,7 +81,7 @@ const navigation: NavItem[] = [
 ]
 
 interface MobileNavProps {
-  session?: any
+  session?: Record<string, unknown>
   onLogout?: () => void
 }
 

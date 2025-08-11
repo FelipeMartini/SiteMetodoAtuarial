@@ -10,7 +10,7 @@ import { apiMonitor } from './monitor-simple';
 /**
  * Helper para adicionar cache a métodos de classe
  */
-export function withCache<T extends (...args: any[]) => Promise<any>>(
+export function withCache<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   ttl: number,
   keyGenerator?: (...args: Parameters<T>) => string
@@ -37,7 +37,7 @@ export function withCache<T extends (...args: any[]) => Promise<any>>(
 /**
  * Helper para adicionar monitoramento a métodos de classe
  */
-export function withMonitoring<T extends (...args: any[]) => Promise<any>>(
+export function withMonitoring<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   endpointName: string
 ): T {
@@ -64,7 +64,7 @@ export function withMonitoring<T extends (...args: any[]) => Promise<any>>(
 /**
  * Helper combinado para cache + monitoramento
  */
-export function withCacheAndMonitoring<T extends (...args: any[]) => Promise<any>>(
+export function withCacheAndMonitoring<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   options: {
     cacheTtl: number;
@@ -79,7 +79,7 @@ export function withCacheAndMonitoring<T extends (...args: any[]) => Promise<any
 /**
  * Decorator simples para rate limiting
  */
-export function withRateLimit<T extends (...args: any[]) => Promise<any>>(
+export function withRateLimit<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   maxRequests: number,
   windowMs: number
@@ -109,7 +109,7 @@ export function withRateLimit<T extends (...args: any[]) => Promise<any>>(
 /**
  * Helper para retry automático
  */
-export function withRetry<T extends (...args: any[]) => Promise<any>>(
+export function withRetry<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   maxRetries: number = 3,
   delayMs: number = 1000
@@ -140,7 +140,7 @@ export function withRetry<T extends (...args: any[]) => Promise<any>>(
 /**
  * Helper para timeout
  */
-export function withTimeout<T extends (...args: any[]) => Promise<any>>(
+export function withTimeout<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   timeoutMs: number
 ): T {
@@ -157,7 +157,7 @@ export function withTimeout<T extends (...args: any[]) => Promise<any>>(
 /**
  * Helper completo que combina todas as funcionalidades
  */
-export function withFullEnhancement<T extends (...args: any[]) => Promise<any>>(
+export function withFullEnhancement<T extends (...args: Record<string, unknown>[]) => Promise<any>>(
   fn: T,
   options: {
     cache?: { ttl: number; keyGenerator?: (...args: Parameters<T>) => string };

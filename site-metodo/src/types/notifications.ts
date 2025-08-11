@@ -180,7 +180,7 @@ export interface EmailAttachment {
 // Interfaces para WebSocket
 export interface WebSocketMessage {
   type: 'notification' | 'ping' | 'pong' | 'status';
-  data?: any;
+  data?: Record<string, unknown>;
   timestamp: number;
 }
 

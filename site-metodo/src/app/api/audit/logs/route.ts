@@ -4,6 +4,7 @@ import { auditService } from '@/lib/audit'
 import { structuredLogger } from '@/lib/logger'
 import { getClientIP } from '@/lib/utils/ip'
 import { z } from 'zod'
+import { AuditAction } from '@prisma/client'
 
 // Schema para validação dos filtros
 const LogFiltersSchema = z.object({
@@ -53,7 +54,7 @@ export async function GET(request: NextRequest) {
     // Buscar logs
     const result = await auditService.searchLogs({
       userId: filters.userId,
-      action: filters.action,
+      action: filters.action as AuditAction,
       startDate: filters.startDate,
       endDate: filters.endDate,
       success: filters.success,

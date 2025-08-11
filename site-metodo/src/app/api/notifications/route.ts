@@ -33,10 +33,10 @@ export async function GET(request: NextRequest) {
     // Monta filtros da query string
     const filter: NotificationFilter = {
       userId: session.user.id,
-      types: searchParams.get('types')?.split(',') as any[],
-      channels: searchParams.get('channels')?.split(',') as any[],
-      statuses: searchParams.get('statuses')?.split(',') as any[],
-      priorities: searchParams.get('priorities')?.split(',') as any[],
+      types: searchParams.get('types')?.split(',') as unknown[],
+      channels: searchParams.get('channels')?.split(',') as unknown[],
+      statuses: searchParams.get('statuses')?.split(',') as unknown[],
+      priorities: searchParams.get('priorities')?.split(',') as unknown[],
       unreadOnly: searchParams.get('unreadOnly') === 'true',
       search: searchParams.get('search') || undefined,
       limit: parseInt(searchParams.get('limit') || '50'),
