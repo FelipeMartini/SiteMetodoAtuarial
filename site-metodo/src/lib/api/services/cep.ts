@@ -3,10 +3,11 @@
 import { z } from 'zod';
 import { ApiClient, createApiClient } from '../client';
 import { cached, apiCache } from '../cache';
-import { monitored, apiMonitor } from '../monitor-simple';
+import { monitored } from '../index';
+import { apiMonitor } from '../monitor-simple';
 
 // Type definitions for CEP API
-export interface  async searchByLocation(uf: string, city: string, street?: string): Promise<CepData[]> {pData {
+export interface CepData {
   cep: string;
   logradouro: string;
   complemento: string;

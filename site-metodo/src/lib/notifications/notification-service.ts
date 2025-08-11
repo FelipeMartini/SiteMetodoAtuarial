@@ -475,7 +475,6 @@ let notificationService: NotificationService | null = null;
 
 export function getNotificationService(): NotificationService {
   if (!notificationService) {
-    const { PrismaClient } = require('@prisma/client');
     const prisma = new PrismaClient();
     notificationService = new NotificationService(prisma);
   }

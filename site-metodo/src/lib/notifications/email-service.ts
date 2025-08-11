@@ -407,7 +407,6 @@ export interface EmailConfig {
 
 // Factory function
 export function createEmailService(config: EmailConfig): EmailService {
-  const { PrismaClient } = require('@prisma/client');
   const prisma = new PrismaClient();
   return new EmailService(config, prisma);
 }

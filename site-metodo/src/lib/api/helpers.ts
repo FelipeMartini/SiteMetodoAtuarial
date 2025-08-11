@@ -4,6 +4,7 @@
  */
 
 import { apiCache } from './cache';
+import { monitored } from './index';
 import { apiMonitor } from './monitor-simple';
 
 /**
