@@ -1,8 +1,11 @@
 ---
 applyTo: '**'
----
-
-# TAREFAS SECUNDÁRIAS - CHECKLIST DETALHADO
+--## TAREFA PRINCIPAL 3: Corrigir todos os erros de build
+- [x] 3.1. Executar build para identificar todos os erros atuais
+- [x] 3.2. Analisar relatório de erros de build
+- [x] 3.3. Corrigir erros de build um por um - **BUILD EXECUTADO COM SUCESSO!**
+- [x] 3.4. Verificar se não há mais erros de build
+- [x] 3.5. Marcar tarefa principal 3 como concluídaREFAS SECUNDÁRIAS - CHECKLIST DETALHADO
 
 ## TAREFA PRINCIPAL 1: Corrigir todos os erros de lint
 - [x] 1.1. Executar lint para identificar todos os erros atuais
@@ -23,15 +26,20 @@ applyTo: '**'
 - [ ] 3.2. Analisar relatório de erros de build
 - [ ] 3.3. Corrigir erros de build um por um
 - [ ] 3.4. Verificar se não há mais erros de build
+- [ ] 3.5 GARANTIR QUE NAO HAJA MAIS ERROS DE LINT NEM WARNINGS DE LINT E TYPESCRIPT
 - [ ] 3.5. Marcar tarefa principal 3 como concluída
 
 
-## TAREFA PRINCIPAL 4: Otimizar carregamento do menu superior
-- [ ] 4.1. Analisar o carregamento atual do menu superior
-- [ ] 4.2. Identificar gargalos de performance
-- [ ] 4.3. Implementar otimizações de carregamento
-- [ ] 4.4. Testar performance do menu superior
-- [ ] 4.5. Marcar tarefa principal 5 como concluída
+## TAREFA PRINCIPAL 4: Implementar sistema ABAC completo removendo accessLevel
+- [x] 4.1. Analisar todos os usos atuais de accessLevel no código
+- [ ] 4.2. Criar mapeamento de roleType para substituir accessLevel
+- [ ] 4.3. Atualizar components para usar roleType ao invés de accessLevel
+- [ ] 4.4. Atualizar APIs para usar sistema ABAC puro
+- [ ] 4.5. Atualizar tipos TypeScript para remover accessLevel
+- [ ] 4.6. Atualizar auth.ts para usar apenas roleType
+- [ ] 4.7. Criar script de migração de dados accessLevel -> roleType
+- [ ] 4.8. Testar sistema ABAC completamente funcional
+- [ ] 4.9. Marcar tarefa principal 4 como concluída
 
 ## TAREFA PRINCIPAL 5: Análise de performance e lazy loading
 - [ ] 5.1. Analisar performance geral do projeto
@@ -47,7 +55,7 @@ applyTo: '**'
 - [ ] 6.3. Corrigir disposição torta do layout
 - [ ] 6.4. Corrigir problema de zoom/deslocamento
 - [ ] 6.5. Testar correções em diferentes resoluções
-- [ ] 6.6. ARRUMAR TODOS ERROS DA PAGINA CALCULOS ATUARIAIS (ACESSE http://localhost:3000/area-cliente/calculos-atuariais E CONFIRA OS ERROS TODOS POIS PAGINA NAO CARREGA CONTINUE ATE QUE ELA CARREGUE PERFEITO E ARRUME OS ERROS DO WEBPACK POIS QUANDO DA O ERRO NAO SE CONSEGUE ABRIR A JANELA DO WEBPACK, A ALGUM CONFLITO ACREDITO QUE COM CSS GLOBAL OU ALGUMA OUTRA CONFIGURAÇÃO GLOBAL INTERFERINDO PARA QUE O RELATORIO DE ERROS DO WEBPACK DO NEXT.JS NAO POSSA SER ABERTO PORQUE FICA PEQUENINHO CONSULTE O GOOGLE SOBRE ESSE ERRO ESTUDE A FUNDO)
+- [ ] 6.6. ARRUMAR TODOS ERROS DA PAGINA CALCULOS ATUARIAIS (ACESSE http://localhost:3000/area-cliente/calculos-atuariais PELO NAVEGADOR DO VSCODE E CONFIRA OS ERROS TODOS POIS PAGINA NAO CARREGA CONTINUE ATE QUE ELA CARREGUE PERFEITO E ARRUME OS ERROS DO WEBPACK POIS QUANDO DA O ERRO NAO SE CONSEGUE ABRIR A JANELA DO WEBPACK, A ALGUM CONFLITO ACREDITO QUE COM CSS GLOBAL OU ALGUMA OUTRA CONFIGURAÇÃO GLOBAL INTERFERINDO PARA QUE O RELATORIO DE ERROS DO WEBPACK DO NEXT.JS NAO POSSA SER ABERTO PORQUE FICA PEQUENINHO CONSULTE O GOOGLE SOBRE ESSE ERRO ESTUDE A FUNDO)
 - [ ] 6.7. Marcar tarefa principal 7 como concluída
 
 ## TAREFA PRINCIPAL 7: Menu mobile - login vs criar conta
