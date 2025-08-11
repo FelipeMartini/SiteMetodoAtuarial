@@ -47,7 +47,8 @@ applyTo: '**'
 - [ ] 6.3. Corrigir disposição torta do layout
 - [ ] 6.4. Corrigir problema de zoom/deslocamento
 - [ ] 6.5. Testar correções em diferentes resoluções
-- [ ] 6.6. Marcar tarefa principal 7 como concluída
+- [ ] 6.6. ARRUMAR TODOS ERROS DA PAGINA CALCULOS ATUARIAIS (ACESSE http://localhost:3000/area-cliente/calculos-atuariais E CONFIRA OS ERROS TODOS POIS PAGINA NAO CARREGA CONTINUE ATE QUE ELA CARREGUE PERFEITO E ARRUME OS ERROS DO WEBPACK POIS QUANDO DA O ERRO NAO SE CONSEGUE ABRIR A JANELA DO WEBPACK, A ALGUM CONFLITO ACREDITO QUE COM CSS GLOBAL OU ALGUMA OUTRA CONFIGURAÇÃO GLOBAL INTERFERINDO PARA QUE O RELATORIO DE ERROS DO WEBPACK DO NEXT.JS NAO POSSA SER ABERTO PORQUE FICA PEQUENINHO CONSULTE O GOOGLE SOBRE ESSE ERRO ESTUDE A FUNDO)
+- [ ] 6.7. Marcar tarefa principal 7 como concluída
 
 ## TAREFA PRINCIPAL 7: Menu mobile - login vs criar conta
 - [ ] 7.1. Analisar comportamento atual do menu mobile
