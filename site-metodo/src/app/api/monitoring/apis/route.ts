@@ -172,7 +172,7 @@ async function handleHealthCheck(endpointName?: string) {
           name: endpoint.name,
           healthy: false,
           responseTime: 0,
-          error: error instanceof Error ? _error.message : 'Unknown error',
+          error: _error instanceof Error ? _error.message : 'Unknown error',
         }
       }
     })
@@ -283,7 +283,7 @@ async function handleRegisterEndpoint(endpoint: { name: string; url: string; met
     return NextResponse.json(
       {
         error: 'Failed to register endpoint',
-        details: error instanceof Error ? _error.message : 'Unknown error',
+        details: _error instanceof Error ? _error.message : 'Unknown error',
       },
       { status: 500 }
     )
@@ -329,7 +329,7 @@ async function handleRecordMetric(metric: {
     return NextResponse.json(
       {
         error: 'Failed to record metric',
-        details: error instanceof Error ? _error.message : 'Unknown error',
+        details: _error instanceof Error ? _error.message : 'Unknown error',
       },
       { status: 500 }
     )
