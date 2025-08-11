@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
 
     // Verificar se é export
     if (filters.export) {
-      return await handleExport(filters, session.user.id)
+      return await handleExport(filters, session.user.id || '')
     }
 
     // Buscar logs
@@ -74,9 +74,9 @@ export async function GET(request: NextRequest) {
 
     // Log do acesso aos logs de auditoria
     structuredLogger.audit('AUDIT_LOGS_ACCESSED', {
-      performedBy: session.user.id,
+      performedBy: session.user.id || '',
       ip: getClientIP(request),
-      userAgent: request.headers.get('user-agent'),
+      userAgent: request.headers.get('user-agent') || 'Unknown',
       filters: filters,
       resultCount: filteredLogs.length,
     })
@@ -88,7 +88,7 @@ export async function GET(request: NextRequest) {
       hasMore: result.hasMore,
     })
   } catch (error) {
-    structuredLogger.error('Error fetching audit logs', error, {
+    structuredLogger.error('Error fetching audit logs', error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })
@@ -152,7 +152,7 @@ async function handleExport(filters: any, userId: string) {
       },
     })
   } catch (error) {
-    structuredLogger.error('Error exporting audit logs', error, { userId })
+    structuredLogger.error('Error exporting audit logs', error as Error, { userId })
     return NextResponse.json(
       { error: 'Erro ao exportar logs' },
       { status: 500 }

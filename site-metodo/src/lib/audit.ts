@@ -66,7 +66,7 @@ export class AuditService {
       })
     } catch (error) {
       // Falha na auditoria é crítica, mas não deve quebrar a aplicação
-      structuredLogger.error('Failed to create audit log', error, {
+      structuredLogger.error('Failed to create audit log', error as Error, {
         action: entry.action,
         userId: entry.userId,
         target: entry.target,

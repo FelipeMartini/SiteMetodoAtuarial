@@ -93,7 +93,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
     if (href === "/") {
       return pathname === "/"
     }
-    return pathname.startsWith(href)
+    return pathname?.startsWith(href) || false
   }
 
   return (

@@ -40,9 +40,9 @@ export async function GET(request: NextRequest) {
 
     // Log do acesso às estatísticas
     structuredLogger.audit('AUDIT_STATS_ACCESSED', {
-      performedBy: session.user.id,
+      performedBy: session.user.id || '',
       ip: getClientIP(request),
-      userAgent: request.headers.get('user-agent'),
+      userAgent: request.headers.get('user-agent') || 'Unknown',
       period: params.period,
     })
 
@@ -51,7 +51,7 @@ export async function GET(request: NextRequest) {
       stats,
     })
   } catch (error) {
-    structuredLogger.error('Error fetching audit stats', error, {
+    structuredLogger.error('Error fetching audit stats', error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),
     })

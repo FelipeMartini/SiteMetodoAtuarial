@@ -14,7 +14,7 @@ import {
   AlertTriangle, 
   CheckCircle, 
   XCircle,
-  Refresh,
+  RefreshCw,
   Download,
   TrendingUp,
   Clock,
@@ -203,7 +203,7 @@ export default function MonitoringDashboard() {
         <h3 className="text-lg font-semibold">Dados não disponíveis</h3>
         <p className="text-gray-600 mb-4">Não foi possível carregar os dados de monitoramento.</p>
         <Button onClick={fetchData}>
-          <Refresh className="h-4 w-4 mr-2" />
+          <RefreshCw className="h-4 w-4 mr-2" />
           Tentar novamente
         </Button>
       </div>
@@ -231,7 +231,7 @@ export default function MonitoringDashboard() {
             Auto-refresh
           </Button>
           <Button variant="outline" onClick={fetchData}>
-            <Refresh className="h-4 w-4 mr-2" />
+            <RefreshCw className="h-4 w-4 mr-2" />
             Atualizar
           </Button>
           <Button variant="outline" onClick={() => exportMetrics('json')}>

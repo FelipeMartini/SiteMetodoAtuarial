@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { monitoring } from '@/lib/monitoring'
 import { structuredLogger } from '@/lib/logger'
+import { getClientIP } from '@/lib/utils/ip'
 
 export async function GET(request: NextRequest) {
   try {
@@ -10,19 +11,18 @@ export async function GET(request: NextRequest) {
     const statusCode = health.status === 'healthy' ? 200 : 
                       health.status === 'degraded' ? 200 : 503
 
-    // Log do health check
+        // Log do health check
     structuredLogger.http('Health check accessed', {
-      ip: request.ip,
-      userAgent: request.headers.get('user-agent'),
+      ip: getClientIP(request),
+      userAgent: request.headers.get('user-agent') || 'Unknown',
       systemStatus: health.status,
       uptime: health.uptime,
-      memoryUsage: health.memory.percentage,
     })
 
     return NextResponse.json(health, { status: statusCode })
   } catch (error) {
-    structuredLogger.error('Health check failed', error, {
-      ip: request.ip,
+    structuredLogger.error('Health check failed', error as Error, {
+      ip: getClientIP(request),
     })
     
     return NextResponse.json(

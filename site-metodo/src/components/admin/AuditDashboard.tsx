@@ -451,7 +451,7 @@ export function AuditDashboard() {
               <CardTitle>Período de Análise</CardTitle>
             </CardHeader>
             <CardContent>
-              <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+              <Select value={selectedPeriod} onValueChange={(value: 'day' | 'week' | 'month') => setSelectedPeriod(value)}>
                 <SelectTrigger className="w-48">
                   <SelectValue />
                 </SelectTrigger>
