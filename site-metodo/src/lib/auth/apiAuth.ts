@@ -1,21 +1,22 @@
 import { auth } from '../../../auth'
-import { mapAccessLevelToRole } from '../../../auth'
+import { getRoleTypeLabel, hasRequiredRole } from '@/lib/abac/roleMapping'
+import { UserRoleType } from '@prisma/client'
 
 export interface AuthorizedUser {
   id: string
   email: string | null
   name: string | null
-  accessLevel: number
+  roleType: UserRoleType
   role: string[]
   isActive: boolean
 }
 
 /**
- * Verifica autorização em APIs
- * @param requiredRoles - Roles necessários (admin, staff, user)
+ * Verifica autorização em APIs usando sistema ABAC
+ * @param requiredRole - Role mínimo necessário
  * @returns Usuário autorizado ou null
  */
-export async function checkApiAuthorization(requiredRoles: string[] = ['user']): Promise<AuthorizedUser | null> {
+export async function checkApiAuthorization(requiredRole: UserRoleType = UserRoleType.USER): Promise<AuthorizedUser | null> {
   try {
     const session = await auth()
     
@@ -33,7 +34,7 @@ export async function checkApiAuthorization(requiredRoles: string[] = ['user']):
         id: true,
         email: true,
         name: true,
-        accessLevel: true,
+        roleType: true,
         isActive: true,
       }
     })
@@ -42,12 +43,8 @@ export async function checkApiAuthorization(requiredRoles: string[] = ['user']):
       return null
     }
 
-    const userRoles = mapAccessLevelToRole(user.accessLevel)
-    
-    // Verificar se usuário tem pelo menos uma das roles necessárias
-    const hasRequiredRole = requiredRoles.some(role => userRoles.includes(role))
-    
-    if (!hasRequiredRole) {
+    // Verificar se usuário tem o role necessário ou superior
+    if (!hasRequiredRole(user.roleType, requiredRole)) {
       return null
     }
 
@@ -55,8 +52,8 @@ export async function checkApiAuthorization(requiredRoles: string[] = ['user']):
       id: user.id,
       email: user.email,
       name: user.name,
-      accessLevel: user.accessLevel,
-      role: userRoles,
+      roleType: user.roleType,
+      role: [getRoleTypeLabel(user.roleType)],
       isActive: user.isActive,
     }
   } catch (error) {

@@ -1,0 +1,308 @@
+/**
+ * Utilitários para gerenciar Service Worker
+ * Registra e controla o Service Worker no client-side
+ */
+
+// === REGISTRO DO SERVICE WORKER ===
+
+/**
+ * Registra o Service Worker
+ */
+export async function registerServiceWorker(): Promise<ServiceWorkerRegistration | null> {
+  if (typeof window === 'undefined' || !('serviceWorker' in navigator)) {
+    console.log('Service Worker não suportado');
+    return null;
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.register('/sw.js');
+    
+    console.log('Service Worker registrado:', registration);
+    
+    // Verificar atualizações
+    registration.addEventListener('updatefound', () => {
+      const newWorker = registration.installing;
+      if (newWorker) {
+        newWorker.addEventListener('statechange', () => {
+          if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+            // Nova versão disponível
+            showUpdateNotification();
+          }
+        });
+      }
+    });
+    
+    return registration;
+  } catch (error) {
+    console.error('Erro ao registrar Service Worker:', error);
+    return null;
+  }
+}
+
+/**
+ * Desregistra o Service Worker
+ */
+export async function unregisterServiceWorker(): Promise<boolean> {
+  if (!('serviceWorker' in navigator)) {
+    return false;
+  }
+
+  try {
+    const registration = await navigator.serviceWorker.getRegistration();
+    if (registration) {
+      const result = await registration.unregister();
+      console.log('Service Worker desregistrado:', result);
+      return result;
+    }
+    return false;
+  } catch (error) {
+    console.error('Erro ao desregistrar Service Worker:', error);
+    return false;
+  }
+}
+
+// === CONTROLE DE CACHE ===
+
+/**
+ * Limpa todo o cache do Service Worker
+ */
+export async function clearServiceWorkerCache(): Promise<void> {
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
+
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (registration && registration.active) {
+    registration.active.postMessage({ type: 'CLEAR_CACHE' });
+  }
+}
+
+/**
+ * Força atualização do Service Worker
+ */
+export async function updateServiceWorker(): Promise<void> {
+  if (!('serviceWorker' in navigator)) {
+    return;
+  }
+
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (registration) {
+    await registration.update();
+    
+    // Se há um worker waiting, ativa ele imediatamente
+    if (registration.waiting) {
+      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+    }
+  }
+}
+
+// === NOTIFICAÇÕES ===
+
+/**
+ * Mostra notificação de atualização disponível
+ */
+function showUpdateNotification(): void {
+  // Você pode integrar com seu sistema de toast/notification
+  if (confirm('Nova versão disponível. Atualizar agora?')) {
+    updateServiceWorker().then(() => {
+      window.location.reload();
+    });
+  }
+}
+
+/**
+ * Solicita permissão para notificações push
+ */
+export async function requestNotificationPermission(): Promise<NotificationPermission> {
+  if (!('Notification' in window)) {
+    console.log('Notificações não suportadas');
+    return 'denied';
+  }
+
+  if (Notification.permission === 'granted') {
+    return 'granted';
+  }
+
+  if (Notification.permission === 'denied') {
+    return 'denied';
+  }
+
+  const permission = await Notification.requestPermission();
+  return permission;
+}
+
+/**
+ * Registra para push notifications
+ */
+export async function subscribeToPushNotifications(): Promise<PushSubscription | null> {
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) {
+    console.error('Service Worker não registrado');
+    return null;
+  }
+
+  try {
+    const subscription = await registration.pushManager.subscribe({
+      userVisibleOnly: true,
+      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+    });
+
+    // Enviar subscription para o servidor
+    await fetch('/api/push/subscribe', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(subscription),
+    });
+
+    return subscription;
+  } catch (error) {
+    console.error('Erro ao se inscrever para push notifications:', error);
+    return null;
+  }
+}
+
+// === STATUS DO SERVICE WORKER ===
+
+/**
+ * Verifica se o app está rodando offline
+ */
+export function isOffline(): boolean {
+  return !navigator.onLine;
+}
+
+/**
+ * Hook para monitorar status online/offline
+ */
+export function useOnlineStatus() {
+  const [isOnline, setIsOnline] = useState(navigator.onLine);
+
+  useEffect(() => {
+    const handleOnline = () => setIsOnline(true);
+    const handleOffline = () => setIsOnline(false);
+
+    window.addEventListener('online', handleOnline);
+    window.addEventListener('offline', handleOffline);
+
+    return () => {
+      window.removeEventListener('online', handleOnline);
+      window.removeEventListener('offline', handleOffline);
+    };
+  }, []);
+
+  return isOnline;
+}
+
+/**
+ * Hook para status do Service Worker
+ */
+export function useServiceWorkerStatus() {
+  const [status, setStatus] = useState<'loading' | 'ready' | 'error' | 'unsupported'>('loading');
+  const [registration, setRegistration] = useState<ServiceWorkerRegistration | null>(null);
+
+  useEffect(() => {
+    if (!('serviceWorker' in navigator)) {
+      setStatus('unsupported');
+      return;
+    }
+
+    registerServiceWorker()
+      .then(reg => {
+        setRegistration(reg);
+        setStatus(reg ? 'ready' : 'error');
+      })
+      .catch(() => {
+        setStatus('error');
+      });
+  }, []);
+
+  return {
+    status,
+    registration,
+    clearCache: clearServiceWorkerCache,
+    update: updateServiceWorker,
+  };
+}
+
+// === BACKGROUND SYNC ===
+
+/**
+ * Adiciona ação para sync em background
+ */
+export async function addToBackgroundSync(url: string, options: RequestInit): Promise<void> {
+  if (!('serviceWorker' in navigator) || !('sync' in window.ServiceWorkerRegistration.prototype)) {
+    console.log('Background Sync não suportado');
+    return;
+  }
+
+  const registration = await navigator.serviceWorker.getRegistration();
+  if (!registration) {
+    console.error('Service Worker não registrado');
+    return;
+  }
+
+  // Armazenar request para sync posterior
+  const cache = await caches.open('offline-actions');
+  const request = new Request(url, options);
+  await cache.put(request, new Response(JSON.stringify(options.body)));
+
+  // Registrar para background sync
+  await registration.sync.register('background-sync');
+}
+
+// === CACHE MANUAL ===
+
+/**
+ * Pré-cache recursos importantes
+ */
+export async function precacheResources(urls: string[]): Promise<void> {
+  if (!('caches' in window)) {
+    console.log('Cache API não suportada');
+    return;
+  }
+
+  const cache = await caches.open('manual-precache');
+  
+  try {
+    await cache.addAll(urls);
+    console.log('Recursos pré-cached:', urls);
+  } catch (error) {
+    console.error('Erro ao pré-cachear recursos:', error);
+  }
+}
+
+/**
+ * Verifica se recurso está em cache
+ */
+export async function isResourceCached(url: string): Promise<boolean> {
+  if (!('caches' in window)) {
+    return false;
+  }
+
+  const response = await caches.match(url);
+  return !!response;
+}
+
+// === INICIALIZAÇÃO ===
+
+/**
+ * Inicializa todas as funcionalidades do Service Worker
+ */
+export async function initializeServiceWorker(): Promise<void> {
+  // Registrar Service Worker
+  await registerServiceWorker();
+  
+  // Solicitar permissão para notificações (se usuário logado)
+  if (localStorage.getItem('user-token')) {
+    await requestNotificationPermission();
+  }
+  
+  // Pré-cache recursos críticos
+  await precacheResources([
+    '/',
+    '/dashboard',
+    '/perfil',
+    '/manifest.json',
+  ]);
+  
+  console.log('Service Worker inicializado');
+}

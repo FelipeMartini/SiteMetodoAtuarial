@@ -1,13 +1,14 @@
 import { NextResponse } from 'next/server';
 import { checkApiAuthorization } from '@/lib/auth/apiAuth';
 import { db } from '@/lib/prisma';
+import { UserRoleType } from '@prisma/client';
 
-// API para listar todos os usuários (apenas admin/staff)
+// API para listar todos os usuários (apenas admin/moderator)
 export async function GET() {
-  const authorizedUser = await checkApiAuthorization(['admin', 'staff']);
+  const authorizedUser = await checkApiAuthorization(UserRoleType.MODERATOR);
   
   if (!authorizedUser) {
-    return NextResponse.json({ error: 'Acesso negado. Apenas administradores e staff.' }, { status: 403 });
+    return NextResponse.json({ error: 'Acesso negado. Apenas moderadores e administradores.' }, { status: 403 });
   }
 
   try {
@@ -17,7 +18,7 @@ export async function GET() {
         id: true,
         email: true,
         name: true,
-        accessLevel: true,
+        roleType: true,
         isActive: true,
         createdAt: true,
         lastLogin: true,

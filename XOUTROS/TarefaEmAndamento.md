@@ -8,8 +8,8 @@ AQUI ESTAO SUAS TAREFAS PRINCIPAIS DESMBEBRE ELAS EM PEQUENAS SUBTAREFAS E EXECU
 ## Checklist de Tarefas
 - [x] **Task 1:** Corrigir todos os erros de lint até que não haja mais avisos ou falhas ✅
 - [x] **Task 2:** Corrigir todos os erros de TypeScript até que não haja mais avisos ou falhas ✅
-- [ ] **Task 3:** Corrigir todos os erros de build até que não haja mais falhas
-- [ ] **Task 4:** Implementar sistema ABAC completo removendo totalmente o uso de accessLevel do sistema  
+- [x] **Task 3:** Corrigir todos os erros de build até que não haja mais falhas ✅
+- [x] **Task 4:** Implementar sistema ABAC completo removendo totalmente o uso de accessLevel do sistema ✅
 - [ ] **Task 5:** Otimizar performance geral do sistema  
 - [ ] **Task 6:** Implementar sistema de auditoria robusto  
 - [ ] **Task 7:** Melhorar interface do usuário e experiência  

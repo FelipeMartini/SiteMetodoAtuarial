@@ -6,6 +6,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { AvatarCustom } from '@/components/ui/avatar-custom'
+import { getRoleTypeLabel, getRoleTypeDisplayValue } from '@/lib/abac/roleMapping'
+import { UserRoleType } from '@prisma/client'
 import { 
   User, 
   Activity, 
@@ -37,20 +39,18 @@ export function DashboardUsuarioWidget() {
   }
 
   const user = session.user
-  const role = session.user?.role || 'USER'
-  const accessLevel = session.user?.accessLevel || 0
+  const roleType = (session.user as any)?.roleType || UserRoleType.USER
+  const displayValue = getRoleTypeDisplayValue(roleType)
 
   const getRoleDisplayName = () => {
-    const roleStr = Array.isArray(role) ? role[0] : (role || 'USER')
-    return roleStr.toUpperCase()
+    return getRoleTypeLabel(roleType)
   }
 
   const getRoleBadgeColor = () => {
-    const roleStr = Array.isArray(role) ? role[0] : (role || 'USER')
-    switch(roleStr.toUpperCase()) {
-      case 'ADMIN': return 'destructive'
-      case 'MODERATOR': return 'default' 
-      case 'PREMIUM': return 'secondary'
+    switch(roleType) {
+      case UserRoleType.ADMIN: return 'destructive'
+      case UserRoleType.MODERATOR: return 'default' 
+      case UserRoleType.USER: return 'secondary'
       default: return 'outline'
     }
   }
@@ -130,7 +130,7 @@ export function DashboardUsuarioWidget() {
             <Shield className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">{accessLevel}</div>
+            <div className="text-2xl font-bold">{displayValue}</div>
             <p className="text-xs text-muted-foreground">
               Permissões ativas
             </p>
