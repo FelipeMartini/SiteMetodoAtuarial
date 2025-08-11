@@ -6,7 +6,7 @@ Padronizar, automatizar e garantir a qualidade do código com ESLint, Prettier, 
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear configuração atual de lint e formatação**
   - Buscar arquivos `.eslintrc`, `.prettierrc`, scripts npm, hooks Husky, etc.
   - Referência: [Busca no GitHub por lint config](https://github.com/search?q=eslint+prettier+husky+lint-staged)

@@ -2,7 +2,7 @@ import winston from 'winston'
 import { format } from 'winston'
 import path from 'path'
 
-// Definir níveis de log customizados
+// Definir níveis de log
 const logLevels = {
   error: 0,
   warn: 1,
@@ -123,8 +123,8 @@ export interface LogMeta {
   error?: Error | string
   action?: string
   resource?: string
-  changes?: Record<string, any>
-  [key: string]: Record<string, unknown>
+  changes?: Record<string, unknown>
+  [key: string]: unknown
 }
 
 // Classe Logger estruturado

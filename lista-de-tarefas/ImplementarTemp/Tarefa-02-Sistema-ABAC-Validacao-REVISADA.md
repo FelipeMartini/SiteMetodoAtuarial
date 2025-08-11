@@ -6,7 +6,7 @@ Garantir que o sistema de autorização utilize exclusivamente ABAC (Attribute-B
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear todos os pontos de uso de autorização**
   - Buscar por `casbin`, `abac`, `rbac`, `policy`, `enforce`, role, acesslevel, banco de dados, revise afundo o banco de dados e remova qualquer inconsistencia e mantenha o padrao oficial, confira se o correto é roletype mesmo e se ja foi removido do banco acess level, e confira todas implicações e ajustes necessarios caso mexa no banco de dados mantenha tudo em sqlite etc.
   - Referência: [Busca no GitHub por Casbin](https://github.com/search?q=casbin)

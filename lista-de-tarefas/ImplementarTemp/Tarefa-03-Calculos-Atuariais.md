@@ -6,6 +6,7 @@ Implementar módulo completo de cálculos atuariais para análises financeiras e
 ## 🎯 Subtarefas
 
 ### 1. Estrutura Base dos Cálculos
+ [ ] remova todos warning de lint
 - [ ] Criar módulo de matemática atuarial
 - [ ] Implementar funções de valor presente
 - [ ] Criar cálculos de valor futuro

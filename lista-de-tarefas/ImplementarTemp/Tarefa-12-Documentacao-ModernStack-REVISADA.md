@@ -6,7 +6,7 @@ Padronizar, modernizar e enriquecer toda a documentação do projeto, utilizando
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear toda a documentação existente**
   - Buscar por arquivos `.md`, `.mdx`, Storybook, TypeDoc, Swagger, etc.
   - Referência: [Busca no GitHub por documentação](https://github.com/search?q=mdx+storybook+typedoc+swagger)

@@ -6,7 +6,7 @@ Refatorar o back-end para garantir APIs modernas, seguras, performáticas e bem 
 ---
 
 ## Checklist Detalhado
-
+ [ ] remova todos warning de lint
 - [ ] **Mapear endpoints e serviços**
   - Buscar por rotas, controllers, serviços, middlewares, etc.
   - Referência: [Busca no GitHub por nextjs api](https://github.com/search?q=nextjs+api)

@@ -6,6 +6,7 @@ Realizar limpeza completa do código, eliminando warnings, melhorando qualidade 
 ## 🎯 Subtarefas
 
 ### 1. Eliminação de Warnings ESLint
+ [ ] remova todos warning de lint
 - [x] **Imports não utilizados** - Em progresso
 - [ ] **Variáveis não utilizadas** - Remover todas
 - [ ] **Unexpected any** - Substituir por tipos específicos  
