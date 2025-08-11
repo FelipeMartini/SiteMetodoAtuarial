@@ -1,6 +1,6 @@
 /**
- * Service Worker para cache offline e performance
- * Melhora experiência do usuário em conexões instáveis
+ * Service Worker para cache offline, performance e push notifications
+ * Melhora experiência do usuário em conexões instáveis e habilita notificações
  */
 
 // === CONFIGURAÇÕES DE CACHE ===
@@ -8,6 +8,7 @@
 const CACHE_NAME = 'metodo-atuarial-v1';
 const STATIC_CACHE_NAME = 'metodo-static-v1';
 const DYNAMIC_CACHE_NAME = 'metodo-dynamic-v1';
+const NOTIFICATION_CACHE_NAME = 'metodo-notifications-v1';
 const API_CACHE_NAME = 'metodo-api-v1';
 
 // Recursos estáticos para cache
@@ -300,3 +301,163 @@ setInterval(async () => {
     }
   }
 }, 60 * 60 * 1000); // A cada hora
+
+// === PUSH NOTIFICATIONS ===
+
+// Escuta por push notifications
+self.addEventListener('push', (event) => {
+  console.log('Push notification recebida:', event);
+
+  if (!event.data) {
+    console.log('Push notification sem dados');
+    return;
+  }
+
+  try {
+    const data = event.data.json();
+    console.log('Dados da push notification:', data);
+
+    const options = {
+      body: data.body || 'Nova notificação',
+      icon: data.icon || '/icons/notification-icon.png',
+      badge: data.badge || '/icons/notification-badge.png',
+      image: data.image,
+      data: data.data || {},
+      actions: data.actions || [
+        {
+          action: 'view',
+          title: 'Visualizar',
+          icon: '/icons/view-icon.png'
+        },
+        {
+          action: 'dismiss',
+          title: 'Descartar',
+          icon: '/icons/dismiss-icon.png'
+        }
+      ],
+      tag: data.tag || 'notification',
+      requireInteraction: data.requireInteraction || false,
+      silent: data.silent || false,
+      timestamp: data.timestamp || Date.now(),
+      vibrate: data.vibrate || [200, 100, 200],
+      dir: 'ltr',
+      lang: 'pt-BR'
+    };
+
+    event.waitUntil(
+      self.registration.showNotification(data.title || 'Notificação', options)
+    );
+  } catch (error) {
+    console.error('Erro ao processar push notification:', error);
+    
+    // Fallback para notificação simples
+    event.waitUntil(
+      self.registration.showNotification('Nova Notificação', {
+        body: 'Você tem uma nova notificação',
+        icon: '/icons/notification-icon.png',
+        badge: '/icons/notification-badge.png'
+      })
+    );
+  }
+});
+
+// Escuta cliques na notificação
+self.addEventListener('notificationclick', (event) => {
+  console.log('Clique na notificação:', event);
+
+  event.notification.close();
+
+  const action = event.action;
+  const notificationData = event.notification.data || {};
+
+  if (action === 'dismiss') {
+    // Apenas fecha a notificação
+    return;
+  }
+
+  // Determina URL para abrir
+  let urlToOpen = '/';
+  
+  if (action === 'view' && notificationData.url) {
+    urlToOpen = notificationData.url;
+  } else if (notificationData.notificationId) {
+    urlToOpen = `/area-cliente?notification=${notificationData.notificationId}`;
+  }
+
+  event.waitUntil(
+    clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+      // Verifica se já existe uma janela com a URL
+      for (const client of clientList) {
+        if (client.url.includes(urlToOpen) && 'focus' in client) {
+          return client.focus();
+        }
+      }
+
+      // Se não existe, abre nova janela
+      if (clients.openWindow) {
+        return clients.openWindow(urlToOpen);
+      }
+    })
+  );
+
+  // Envia evento para o cliente sobre o clique
+  if (notificationData.notificationId) {
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        clientList.forEach((client) => {
+          client.postMessage({
+            type: 'NOTIFICATION_CLICKED',
+            notificationId: notificationData.notificationId,
+            action: action
+          });
+        });
+      })
+    );
+  }
+});
+
+// Escuta fechamento da notificação
+self.addEventListener('notificationclose', (event) => {
+  console.log('Notificação fechada:', event);
+
+  const notificationData = event.notification.data || {};
+
+  // Envia evento para o cliente sobre o fechamento
+  if (notificationData.notificationId) {
+    event.waitUntil(
+      clients.matchAll().then((clientList) => {
+        clientList.forEach((client) => {
+          client.postMessage({
+            type: 'NOTIFICATION_CLOSED',
+            notificationId: notificationData.notificationId
+          });
+        });
+      })
+    );
+  }
+});
+
+// Sincronização em background para notificações
+self.addEventListener('sync', (event) => {
+  console.log('Background sync:', event.tag);
+
+  if (event.tag === 'background-sync-notifications') {
+    event.waitUntil(syncNotifications());
+  }
+});
+
+// Função para sincronizar notificações offline
+async function syncNotifications() {
+  try {
+    console.log('Sincronizando notificações em background...');
+    
+    const response = await fetch('/api/notifications?offline=true');
+    if (response.ok) {
+      const data = await response.json();
+      // Processar notificações perdidas enquanto offline
+      console.log('Notificações sincronizadas:', data);
+    }
+  } catch (error) {
+    console.error('Erro na sincronização de notificações:', error);
+  }
+}
