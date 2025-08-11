@@ -25,6 +25,24 @@ const TrendRequestSchema = z.object({
   days: z.number().int().min(1).max(365).optional().default(30),
 });
 
+type RateQuery = z.infer<typeof RateQuerySchema>;
+type ConvertRequest = z.infer<typeof ConvertRequestSchema>;
+type TrendRequest = z.infer<typeof TrendRequestSchema>;
+
+interface ExchangeApiResponse {
+  success: boolean;
+  data: {
+    from: string;
+    to: string;
+    rate: number;
+    amount?: number;
+    convertedAmount?: number;
+    timestamp: string;
+    provider: string;
+  };
+  metadata?: Record<string, unknown>;
+}
+
 export async function GET(request: NextRequest) {
   const clientIp = getClientIP(request);
   const { searchParams } = new URL(request.url);
@@ -77,7 +95,7 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    const response: any = {
+    const response: ExchangeApiResponse = {
       success: true,
       data: {
         from: query.from,
@@ -248,7 +266,7 @@ async function handleGetTrends(request: NextRequest, clientIp: string) {
   });
 }
 
-async function handleConversion(body: any, clientIp: string) {
+async function handleConversion(body: ConvertRequest, clientIp: string) {
   const data = ConvertRequestSchema.parse(body);
 
   await auditService.logApiAccess(
@@ -295,7 +313,7 @@ async function handleConversion(body: any, clientIp: string) {
   });
 }
 
-async function handleBatchConversion(body: any, clientIp: string) {
+async function handleBatchConversion(body: { conversions: ConvertRequest[]; provider?: 'exchangerate-api' | 'awesomeapi' }, clientIp: string) {
   const schema = z.object({
     conversions: z.array(ConvertRequestSchema),
     provider: z.enum(['exchangerate-api', 'awesomeapi']).optional(),

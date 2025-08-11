@@ -12,6 +12,29 @@ const MetricsParamsSchema = z.object({
   format: z.enum(['json', 'prometheus']).default('json'),
 })
 
+type MetricsParams = z.infer<typeof MetricsParamsSchema>;
+
+interface MetricData {
+  avg: number;
+  min: number;
+  max: number;
+  count: number;
+  total?: number;
+  timestamp?: string;
+  p95?: number;
+  p99?: number;
+}
+
+interface HealthStatus {
+  status: string;
+  uptime: number;
+  memory: Record<string, number>;
+  cpu?: Record<string, number>;
+  database?: Record<string, unknown>;
+  lastChecked?: Date | string;
+  [key: string]: unknown;
+}
+
 export async function GET(request: NextRequest) {
   try {
     // Verificar autenticação e permissões
@@ -60,7 +83,7 @@ export async function GET(request: NextRequest) {
 
     // Obter todas as métricas disponíveis
     const availableMetrics = monitoring.getAllMetrics()
-    const metricsData: Record<string, any> = {}
+    const metricsData: Record<string, MetricData> = {}
 
     // Coletar dados agregados para todas as métricas
     for (const metricName of availableMetrics) {
@@ -76,7 +99,7 @@ export async function GET(request: NextRequest) {
 
     // Formato Prometheus
     if (params.format === 'prometheus') {
-      const prometheusMetrics = convertToPrometheus(metricsData, health)
+      const prometheusMetrics = convertToPrometheus(metricsData, health as unknown as HealthStatus)
       return new NextResponse(prometheusMetrics, {
         headers: { 'Content-Type': 'text/plain' },
       })
@@ -114,7 +137,7 @@ export async function GET(request: NextRequest) {
 }
 
 // Converter métricas para formato Prometheus
-function convertToPrometheus(metricsData: Record<string, any>, health: any): string {
+function convertToPrometheus(metricsData: Record<string, MetricData>, health: HealthStatus): string {
   const lines: string[] = []
 
   // Métricas de aplicação

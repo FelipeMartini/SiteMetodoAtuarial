@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -8,14 +8,10 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Badge } from '@/components/ui/badge'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table'
-import { Alert, AlertDescription } from '@/components/ui/alert'
 import { 
-  Shield, 
   Activity, 
-  AlertTriangle, 
   CheckCircle, 
   XCircle, 
-  Clock, 
   Filter,
   Download,
   RefreshCw,
@@ -34,7 +30,7 @@ interface AuditLog {
   userId?: string
   action: string
   target?: string
-  details?: any
+  details?: Record<string, unknown>
   ipAddress?: string
   userAgent?: string
   success: boolean
@@ -76,7 +72,7 @@ export function AuditDashboard() {
   const [selectedLog, setSelectedLog] = useState<AuditLog | null>(null)
 
   // Fetch logs
-  const fetchLogs = async () => {
+  const fetchLogs = useCallback(async () => {
     setLoading(true)
     try {
       const params = new URLSearchParams()
@@ -95,10 +91,10 @@ export function AuditDashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [filters])
 
   // Fetch stats
-  const fetchStats = async () => {
+  const fetchStats = useCallback(async () => {
     try {
       const response = await fetch(`/api/audit/stats?period=${selectedPeriod}`)
       const data = await response.json()
@@ -109,16 +105,16 @@ export function AuditDashboard() {
     } catch (error) {
       console.error('Error fetching stats:', error)
     }
-  }
+  }, [selectedPeriod])
 
   useEffect(() => {
     fetchLogs()
     fetchStats()
-  }, [])
+  }, [fetchLogs, fetchStats])
 
   useEffect(() => {
     fetchStats()
-  }, [selectedPeriod])
+  }, [fetchStats])
 
   const handleFilterChange = (key: string, value: string) => {
     setFilters(prev => ({ ...prev, [key]: value }))
