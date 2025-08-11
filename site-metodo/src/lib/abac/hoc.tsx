@@ -127,7 +127,7 @@ export function usePermission(resource: string, action: string = 'read') {
       }
 
       try {
-        const result = await checkPermission(session.user.email, resource, action);
+        const result = await checkClientPermission(session.user.email, resource, action);
         setHasPermission(result);
       } catch (error) {
         console.error('Permission check error:', error);
@@ -294,7 +294,7 @@ export function ABACProtectedPage({
 
         // Check ABAC permissions
         const currentResource = resource || window.location.pathname;
-        const hasPermission = await checkPermission(
+        const hasPermission = await checkClientPermission(
           session.user.email,
           currentResource,
           requiredAction

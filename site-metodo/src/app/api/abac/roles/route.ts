@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getEnforcer } from '@/lib/abac/enforcer';
 import { withABACAuthorization } from '@/lib/abac/middleware';
+import { prisma } from '@/lib/prisma';
 import { z } from 'zod';
 
 /**
@@ -40,8 +41,12 @@ export async function GET() {
 
     return NextResponse.json({
       success: true,
-      data: roleAssignments.map(assignment => ({
-        userEmail: assignment.user.email,
+      data: roleAssignments.map((assignment: {
+        user: { email: string | null; name: string | null };
+        role: { name: string };
+        assignedAt: Date;
+      }) => ({
+        userEmail: assignment.user.email || '',
         userName: assignment.user.name,
         roleName: assignment.role.name,
         assignedAt: assignment.assignedAt

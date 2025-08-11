@@ -32,7 +32,7 @@ async function setupAdminUser() {
           name: 'Felipe Martini',
           password: hashedPassword,
           accessLevel: 100, // Admin level
-          role: 'ADMIN',
+          roleType: 'ADMIN',
           isActive: true,
           emailVerified: new Date(),
           createdAt: new Date(),
@@ -49,7 +49,7 @@ async function setupAdminUser() {
         where: { email: adminEmail },
         data: {
           accessLevel: 100, // Garantir nível admin
-          role: 'ADMIN',
+          roleType: 'ADMIN',
           isActive: true,
           name: adminUser.name || 'Felipe Martini',
         }
@@ -66,7 +66,7 @@ async function setupAdminUser() {
         email: true,
         name: true,
         accessLevel: true,
-        role: true,
+        roleType: true,
         isActive: true,
       }
     });

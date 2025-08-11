@@ -267,7 +267,7 @@ export class AuditLogger {
           select: {
             email: true,
             name: true,
-            role: true,
+            roleType: true,
           },
         },
       },
