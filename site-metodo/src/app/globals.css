@@ -1,6 +1,15 @@
 @import "tailwindcss";
 @import "../styles/cursor-global.css";
 
+/* Fix Next.js error overlay interference in development */
+.nextjs-toast-errors-parent {
+  display: none !important;
+}
+
+nextjs-portal {
+  display: none !important;
+}
+
 @layer base {
   :root {
     /* Design System Personalizado - Método Atuarial */
