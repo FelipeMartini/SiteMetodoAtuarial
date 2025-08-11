@@ -9,8 +9,10 @@ const Rodape: React.FC = React.memo(function Rodape() {
       <div className="container mx-auto flex flex-wrap justify-between items-start gap-8 py-8">
         <section className="flex-1 min-w-[200px] mb-4">
           <h4 className="text-lg font-semibold mb-4">Institucional</h4>
+          <Link href="/sobre-nos" className="block text-primary hover:underline mb-2">Sobre Nós</Link>
           <Link href="/sobre" className="block text-primary hover:underline mb-2">Sobre</Link>
           <Link href="/servicos" className="block text-primary hover:underline mb-2">Serviços</Link>
+          <Link href="/documentacao" className="block text-primary hover:underline mb-2">Documentação</Link>
           <Link href="/contato" className="block text-primary hover:underline">Contato</Link>
         </section>
         <section className="flex-1 min-w-[200px] mb-4">
@@ -18,6 +20,11 @@ const Rodape: React.FC = React.memo(function Rodape() {
           <Link href="/area-cliente" className="block text-primary hover:underline mb-2">Área do Cliente</Link>
           <Link href="/criar-conta" className="block text-primary hover:underline mb-2">Criar Conta</Link>
           <Link href="/login" className="block text-primary hover:underline">Login</Link>
+        </section>
+        <section className="flex-1 min-w-[200px] mb-4">
+          <h4 className="text-lg font-semibold mb-4">Legal</h4>
+          <Link href="/termos-uso" className="block text-primary hover:underline mb-2">Termos de Uso</Link>
+          <Link href="/politica-privacidade" className="block text-primary hover:underline">Política de Privacidade</Link>
         </section>
         <section className="flex-1 min-w-[200px] mb-4">
           <h4 className="text-lg font-semibold mb-4">Redes Sociais</h4>
