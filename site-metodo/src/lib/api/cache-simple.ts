@@ -19,11 +19,11 @@ export interface CacheStats {
  * Sistema de cache simplificado para APIs
  */
 export class SimpleApiCache {
-  private cache: LRU<string, any>;
+  private cache: LRUCache<string, any>;
   private stats: CacheStats;
 
   constructor(maxSize: number = 1000) {
-    this.cache = new LRU({
+    this.cache = new LRUCache({
       max: maxSize,
       ttl: 1000 * 60 * 5, // 5 minutes default
     });
