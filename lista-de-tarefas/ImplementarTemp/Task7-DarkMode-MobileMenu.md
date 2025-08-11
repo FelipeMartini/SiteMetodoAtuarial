@@ -45,11 +45,11 @@
 - [ ] Testar em diferentes dispositivos
 - [ ] Ajustar espaçamentos mobile
 
-### 7.4 - Testes e Validação ⏳
-- [ ] Testar dark mode em todos os componentes
-- [ ] Testar menu mobile em diferentes páginas
-- [ ] Verificar acessibilidade (focus, keyboard nav)
-- [ ] Testar performance mobile
+### 7.4 - Testes e Validação ✅
+- [x] Testar dark mode em todos os componentes
+- [x] Testar menu mobile em diferentes páginas
+- [x] Verificar acessibilidade (focus, keyboard nav)
+- [x] Testar performance mobile
 
 
 

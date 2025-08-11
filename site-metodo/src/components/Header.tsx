@@ -3,6 +3,7 @@
 // Substitua ModeToggle por ThemeToggle para dark mode acessível
 import { ThemeToggle } from "@/components/ui/theme-toggle";
 import { MainNavigation } from "@/components/ui/main-navigation";
+import { MobileNav } from "@/components/ui/mobile-nav";
 import { Button } from "@/components/ui/button";
 import { useAuth } from '@/hooks/useAuth'
 import Link from "next/link"
@@ -32,8 +33,14 @@ export function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container flex h-16 items-center justify-between px-4 md:px-6">
-        {/* Logo e navegação */}
-        <div className="flex items-center gap-8">
+        {/* Menu Mobile + Logo */}
+        <div className="flex items-center gap-3">
+          {/* Menu Mobile - apenas em mobile */}
+          <div className="lg:hidden">
+            <MobileNav session={session} onLogout={handleLogout} />
+          </div>
+
+          {/* Logo */}
           <Link
             href="/"
             className="flex items-center space-x-2 transition-opacity hover:opacity-80"
@@ -47,7 +54,7 @@ export function Header() {
           </Link>
 
           {/* Navegação principal - apenas em desktop */}
-          <div className="hidden lg:block">
+          <div className="hidden lg:block ml-8">
             <MainNavigation />
           </div>
         </div>
@@ -61,14 +68,14 @@ export function Header() {
             </Button>
           ) : session?.user ? (
             <div className="flex items-center gap-3">
-              <Link href="/area-cliente">
+              <Link href="/area-cliente" className="hidden md:inline-flex">
                 <Button variant="secondary" size="sm">
                   Área Cliente
                 </Button>
               </Link>
               {/* Exibe Dashboard Admin só para roles admin ou staff */}
               {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && (
-                <Link href="/area-cliente/dashboard-admin">
+                <Link href="/area-cliente/dashboard-admin" className="hidden md:inline-flex">
                   <Button variant="destructive" size="sm">
                     Dashboard Admin
                   </Button>
@@ -77,18 +84,18 @@ export function Header() {
               <span className="hidden md:inline text-sm text-muted-foreground">
                 Olá, {session.user.name || session.user.email}
               </span>
-              <Button variant="ghost" size="sm" onClick={handleLogout}>
+              <Button variant="ghost" size="sm" onClick={handleLogout} className="hidden md:inline-flex">
                 Sair
               </Button>
             </div>
           ) : (
             <>
-              <Link href="/login">
-                <Button variant="ghost" size="sm" className="hidden md:inline-flex">
+              <Link href="/login" className="hidden md:inline-flex">
+                <Button variant="ghost" size="sm">
                   Entrar
                 </Button>
               </Link>
-              <Link href="/criar-conta">
+              <Link href="/criar-conta" className="hidden sm:inline-flex">
                 <Button size="sm" variant="default">
                   Criar Conta
                 </Button>

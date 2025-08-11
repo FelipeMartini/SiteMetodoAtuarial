@@ -182,18 +182,53 @@ export const MainNavigation: React.FC = () => {
           </NavigationMenuContent>
         </NavigationMenuItem>
 
-        {/* Sobre */}
+        {/* Empresa */}
         <NavigationMenuItem>
-          <Link href="/sobre">
-            <NavigationMenuLink
-              className={cn(
-                "group inline-flex h-10 w-max items-center justify-center rounded-md bg-background px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground focus:outline-none disabled:pointer-events-none disabled:opacity-50",
-                pathname === "/sobre" && "bg-accent text-accent-foreground"
-              )}
-            >
-              Sobre
-            </NavigationMenuLink>
-          </Link>
+          <NavigationMenuTrigger
+            className={cn(
+              pathname?.startsWith("/sobre") || pathname?.startsWith("/documentacao") 
+                ? "bg-accent text-accent-foreground" 
+                : ""
+            )}
+          >
+            Empresa
+          </NavigationMenuTrigger>
+          <NavigationMenuContent>
+            <div className="grid gap-3 p-4 md:w-[400px] lg:w-[500px] lg:grid-cols-[.75fr_1fr]">
+              <div className="row-span-3">
+                <NavigationMenuLink asChild>
+                  <Link
+                    className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                    href="/sobre-nos"
+                  >
+                    <Building className="h-6 w-6" />
+                    <div className="mb-2 mt-4 text-lg font-medium">
+                      Método Atuarial
+                    </div>
+                    <p className="text-sm leading-tight text-muted-foreground">
+                      Conheça nossa história, missão e valores. Mais de 15 anos transformando o mercado atuarial.
+                    </p>
+                  </Link>
+                </NavigationMenuLink>
+              </div>
+              <NavigationMenuLink asChild>
+                <Link href="/sobre" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="text-sm font-medium leading-none">Sobre Nós</div>
+                  <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                    Nossa trajetória e compromisso com a excelência
+                  </p>
+                </Link>
+              </NavigationMenuLink>
+              <NavigationMenuLink asChild>
+                <Link href="/documentacao" className="block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground">
+                  <div className="text-sm font-medium leading-none">Documentação</div>
+                  <p className="line-clamp-2 text-xs leading-snug text-muted-foreground">
+                    APIs, guias técnicos e recursos para desenvolvedores
+                  </p>
+                </Link>
+              </NavigationMenuLink>
+            </div>
+          </NavigationMenuContent>
         </NavigationMenuItem>
 
         {/* Contato */}
