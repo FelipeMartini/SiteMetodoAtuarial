@@ -14,15 +14,15 @@ import { salvarCsv } from './data-table/exportCsv'
 import { exportarUsuariosParaPdf } from './data-table/exportPdf'
 import { Search, MoreHorizontal, Download, Plus, Shield } from 'lucide-react'
 
-interface Usuario {
+import { getRoleTypeLabel } from '@/lib/abac/roleMapping'
+import { UserRoleType } from '@prisma/client'
+
+interface User {
   id: string
-  name?: string | null
-  email: string
-  image?: string | null
-  role: string[]
-  accessLevel: number
+  name: string | null
+  email: string | null
+  roleType: UserRoleType
   isActive: boolean
-  lastLogin?: Date | null
   createdAt: Date
 }
 
@@ -30,7 +30,19 @@ interface Usuario {
  * Tabela moderna de gerenciamento de usuários para admin
  * Inclui busca, filtros e ações em massa
  */
-export function AdminUsersTable() {
+interface Usuario {
+  id: string
+  name: string | null
+  email: string | null
+  roleType: UserRoleType
+  isActive: boolean
+  createdAt: Date
+  role: string[]
+  lastLogin?: Date
+  image?: string | null
+}
+
+function UsersTable() {
   const [searchTerm, setSearchTerm] = useState('')
   const [filterRole, setFilterRole] = useState<string>('all')
   const [selecionados, setSelecionados] = useState<string[]>([])
@@ -39,38 +51,38 @@ export function AdminUsersTable() {
   // Dados mockados - em produção viriam de API
   const usuarios: Usuario[] = [
     {
-      id: '1',
-      name: 'Felipe Martini',
-      email: 'felipemartinii@gmail.com',
-      image: null,
-      role: ['admin'],
-      accessLevel: 100,
+      id: "1",
+      name: "Felipe Martini",
+      email: "felipemartinii@gmail.com",
+      roleType: UserRoleType.ADMIN,
       isActive: true,
+      createdAt: new Date(),
+      role: ['Admin'],
       lastLogin: new Date(),
-      createdAt: new Date('2024-01-15')
+      image: null,
     },
     {
-      id: '2',
-      name: 'João Silva',
-      email: 'joao@example.com',
-      image: null,
-      role: ['user'],
-      accessLevel: 0,
+      id: "2",
+      name: "João Silva",
+      email: "joao@exemplo.com",
+      roleType: UserRoleType.USER,
       isActive: true,
-      lastLogin: new Date(Date.now() - 1000 * 60 * 30), // 30 min atrás
-      createdAt: new Date('2024-02-10')
+      createdAt: new Date(),
+      role: ['Usuário'],
+      lastLogin: new Date(),
+      image: null,
     },
     {
-      id: '3',
-      name: 'Maria Santos',
-      email: 'maria@example.com',
-      image: null,
-      role: ['moderator'],
-      accessLevel: 50,
+      id: "3",
+      name: "Maria Santos",
+      email: "maria@exemplo.com", 
+      roleType: UserRoleType.MODERATOR,
       isActive: false,
-      lastLogin: new Date(Date.now() - 1000 * 60 * 60 * 24 * 2), // 2 dias atrás
-      createdAt: new Date('2024-03-05')
-    }
+      createdAt: new Date(),
+      role: ['Moderador'],
+      lastLogin: new Date(),
+      image: null,
+    },
   ]
 
   const getRoleBadgeColor = (role: string[]) => {
@@ -103,8 +115,8 @@ export function AdminUsersTable() {
 
 
   const filteredUsers = usuarios.filter(user => {
-    const matchesSearch = user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase())
+    const matchesSearch = (user.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          user.email?.toLowerCase().includes(searchTerm.toLowerCase()))
     const matchesRole = filterRole === 'all' || user.role.includes(filterRole)
     return matchesSearch && matchesRole
   })
@@ -114,7 +126,7 @@ export function AdminUsersTable() {
     { key: 'name', label: 'Nome' },
     { key: 'email', label: 'Email' },
     { key: 'role', label: 'Função' },
-    { key: 'accessLevel', label: 'Nível' },
+    { key: 'roleType', label: 'Função' },
     { key: 'isActive', label: 'Ativo' },
     { key: 'lastLogin', label: 'Último Acesso' },
     { key: 'createdAt', label: 'Criado em' },
@@ -126,7 +138,7 @@ export function AdminUsersTable() {
       name: u.name || '',
       email: u.email,
       role: u.role.join(','),
-      accessLevel: u.accessLevel,
+      roleType: getRoleTypeLabel(u.roleType),
       isActive: u.isActive ? 'Ativo' : 'Inativo',
       lastLogin: u.lastLogin ? u.lastLogin.toLocaleString('pt-BR') : '',
       createdAt: u.createdAt.toLocaleDateString('pt-BR'),
@@ -289,7 +301,7 @@ export function AdminUsersTable() {
                         <AvatarCustom
                           src={user.image}
                           name={user.name || undefined}
-                          email={user.email}
+                          email={user.email || undefined}
                           size="sm"
                         />
                         <div>
@@ -317,7 +329,7 @@ export function AdminUsersTable() {
                     </td>
                     <td className="p-4">
                       <span className="font-mono text-sm">
-                        {user.accessLevel}
+                        {getRoleTypeLabel(user.roleType)}
                       </span>
                     </td>
                     <td className="p-4">
@@ -381,3 +393,6 @@ export function AdminUsersTable() {
     </Card>
   )
 }
+
+export default UsersTable
+export { UsersTable as AdminUsersTable }

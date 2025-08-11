@@ -1,10 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { checkApiAuthorization } from '@/lib/auth/apiAuth';
 import { db } from '@/lib/prisma';
+import { UserRoleType } from '@prisma/client';
 
-// API para editar dados do usuário (apenas admin/staff)
+// API para editar dados do usuário (apenas admin/moderator)
 export async function POST(req: NextRequest) {
-  const authorizedUser = await checkApiAuthorization(['admin', 'staff']);
+  // Verificar autorização
+  const authorizedUser = await checkApiAuthorization(UserRoleType.MODERATOR);
   
   if (!authorizedUser) {
     return NextResponse.json({ error: 'Acesso negado. Apenas administradores e staff.' }, { status: 403 });
