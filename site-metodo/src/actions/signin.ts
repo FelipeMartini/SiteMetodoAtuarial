@@ -50,13 +50,13 @@ export async function signInCredentials(
 
     // Melhor tratamento de erro para Auth.js v5
     if (_error instanceof Error) {
-      if (__error.message.includes('CredentialsSignin')) {
+      if (_error.message.includes('CredentialsSignin')) {
         return {
           status: 'error',
           errorMessage: 'Email ou senha incorretos.',
         }
       }
-      if (__error.message.includes('CallbackRouteError')) {
+      if (_error.message.includes('CallbackRouteError')) {
         return {
           status: 'error',
           errorMessage: 'Erro no processamento do login. Tente novamente.',
@@ -133,7 +133,7 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
     redirect(redirectUrl)
   } catch (_error) {
     // O redirect() do Next.js gera uma exceção NEXT_REDIRECT que é normal
-    if (_error instanceof Error && __error.message === 'NEXT_REDIRECT') {
+    if (_error instanceof Error && _error.message === 'NEXT_REDIRECT') {
       // Este é o comportamento esperado, não é um erro real
       throw _error // Re-throw para permitir o redirect
     }
@@ -142,13 +142,13 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
 
     // Melhor tratamento de erro para OAuth
     if (_error instanceof Error) {
-      if (__error.message.includes('OAuthSignin')) {
+      if (_error.message.includes('OAuthSignin')) {
         return {
           status: 'error',
           errorMessage: 'Erro na autenticação OAuth. Tente novamente.',
         } as const
       }
-      if (__error.message.includes('OAuthCallback')) {
+      if (_error.message.includes('OAuthCallback')) {
         return {
           status: 'error',
           errorMessage: 'Erro no callback OAuth. Verifique a configuração.',

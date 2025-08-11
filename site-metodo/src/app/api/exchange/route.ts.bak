@@ -104,14 +104,13 @@ export async function GET(request: NextRequest) {
         to: query.to,
         rate: rate,
         timestamp: new Date().toISOString(),
-        provider: 'exchange-api.fxratesapi.com',
       },
     }
 
     // Add conversion if amount was provided
     if (query.amount) {
       response.data.amount = query.amount
-      response.data.convertedAmount = query.amount * rate
+      response.data.converted = query.amount * rate
       response.data.formatted = {
         amount: new Intl.NumberFormat('pt-BR', {
           style: 'currency',
@@ -132,7 +131,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Parâmetros inválidos',
-          details: _error.issues.map(e => ({
+          details: error.issues.map(e => ({
             field: e.path.join('.'),
             message: e.message,
           })),
@@ -175,7 +174,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',
-          details: _error.issues,
+          details: error.issues,
         },
         { status: 400 }
       )

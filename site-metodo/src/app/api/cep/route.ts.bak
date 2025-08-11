@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Parâmetros inválidos',
-          details: _error.issues.map(e => ({
+          details: error.issues.map(e => ({
             field: e.path.join('.'),
             message: e.message,
           })),
@@ -151,7 +151,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',
-          details: _error.issues.map(e => ({
+          details: error.issues.map(e => ({
             field: e.path.join('.'),
             message: e.message,
           })),
@@ -211,7 +211,7 @@ export async function PATCH(request: NextRequest) {
       return NextResponse.json(
         {
           error: 'Dados da requisição inválidos',
-          details: _error.issues,
+          details: error.issues,
         },
         { status: 400 }
       )
