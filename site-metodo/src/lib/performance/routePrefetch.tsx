@@ -7,6 +7,29 @@ import { useRouter } from 'next/router'
 import Link from 'next/link'
 import { useEffect, useState, useCallback, memo } from 'react'
 
+// === INTERFACES ===
+
+// Interface para Network Connection API
+interface NetworkConnection {
+  effectiveType?: '2g' | '3g' | '4g' | 'slow-2g'
+  saveData?: boolean
+  downlink?: number
+  rtt?: number
+}
+
+// Extensão do Navigator para incluir connection
+interface NavigatorWithConnection extends Navigator {
+  connection?: NetworkConnection
+}
+
+// Props para SmartLink com extensibilidade
+interface SmartLinkProps extends React.ComponentProps<typeof Link> {
+  href: string
+  children: React.ReactNode
+  prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none'
+  className?: string
+}
+
 // === CONFIGURAÇÕES DE PREFETCH ===
 
 /**
