@@ -183,7 +183,7 @@ export class CepService {
 
         return result
       } catch (_error) {
-        lastError = error instanceof Error ? error : new Error('Erro desconhecido')
+        lastError = _error instanceof Error ? _error : new Error('Erro desconhecido')
         console.warn(`Falha ao consultar ${provider.name}:`, lastError.message)
         continue
       }
@@ -221,7 +221,7 @@ export class CepService {
         } catch (_error) {
           return {
             cep,
-            error: error instanceof Error ? _error.message : 'Erro desconhecido',
+            error: _error instanceof Error ? _error.message : 'Erro desconhecido',
           }
         }
       })

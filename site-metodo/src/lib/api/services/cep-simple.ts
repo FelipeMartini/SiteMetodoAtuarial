@@ -69,7 +69,7 @@ export class CepService {
           return result
         }
       } catch (_error) {
-        console.warn(`Falha no provedor ${providerMethod}:`, error)
+        console.warn(`Falha no provedor ${providerMethod}:`, _error)
         continue
       }
     }

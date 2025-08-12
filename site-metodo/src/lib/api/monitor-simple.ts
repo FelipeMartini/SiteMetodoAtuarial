@@ -177,7 +177,7 @@ export class SimpleApiMonitor {
       }
     } catch (_error) {
       const responseTime = Date.now() - startTime
-      const errorMessage = error instanceof Error ? _error.message : 'Unknown error'
+      const errorMessage = _error instanceof Error ? _error.message : 'Unknown error'
 
       this.recordRequest(endpointName, responseTime, false, errorMessage)
 

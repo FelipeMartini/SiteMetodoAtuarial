@@ -54,7 +54,7 @@ export function monitored(name: string) {
         apiMonitor.recordRequest(name, Date.now() - start, true)
         return result
       } catch (_error) {
-        apiMonitor.recordRequest(name, Date.now() - start, false, (error as Error).message)
+        apiMonitor.recordRequest(name, Date.now() - start, false, (_error as Error).message)
         throw _error
       }
     }
@@ -140,7 +140,7 @@ export class ApiHelpers {
       try {
         return await fn()
       } catch (_error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error')
+        lastError = _error instanceof Error ? _error : new Error('Unknown error')
 
         if (i === retries) {
           throw lastError
@@ -296,7 +296,7 @@ if (typeof window !== 'undefined') {
 
     console.log('✅ API monitoring endpoints registered successfully')
   } catch (_error) {
-    console.warn('⚠️ Failed to register API monitoring endpoints:', error)
+    console.warn('⚠️ Failed to register API monitoring endpoints:', _error)
   }
 }
 
