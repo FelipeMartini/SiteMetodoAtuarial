@@ -227,8 +227,9 @@ export function createComprehensiveMiddleware() {
 
       return loggingResponse
     } catch (_error) {
-      structuredLogger.error('Middleware error', {
-        error: String(_error),
+      structuredLogger.error('Middleware error')
+      console.error('Middleware error details:', {
+        message: String(_error),
         ip: getClientIP(request),
         userAgent: request.headers.get('user-agent') || undefined,
         method: request.method,

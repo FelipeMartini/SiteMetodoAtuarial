@@ -276,7 +276,7 @@ export class NotificationService {
       })
 
       // Registra evento
-      await this.createEvent(notificationId, userId, 'read', notification.channel as unknown, {})
+      await this.createEvent(notificationId, userId, 'read', notification.channel as any, {})
 
       simpleLogger.info(`Notificação marcada como lida`, {
         notificationId,

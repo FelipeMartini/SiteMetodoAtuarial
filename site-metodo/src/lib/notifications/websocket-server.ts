@@ -208,7 +208,7 @@ export class NotificationWebSocketServer {
 
     // Configura handlers da conexão
     ws.on('message', data => {
-      this.handleMessage(ws, _userId, Buffer.from(data as unknown))
+      this.handleMessage(ws, _userId, Buffer.from(data as any))
     })
 
     ws.on('close', () => {
@@ -221,9 +221,9 @@ export class NotificationWebSocketServer {
     })
 
     // Marca conexão como viva
-    ;(ws as unknown).isAlive = true
+    ;(ws as any).isAlive = true
     ws.on('pong', () => {
-      ;(ws as unknown).isAlive = true
+      ;(ws as any).isAlive = true
     })
 
     simpleLogger.info('Nova conexão WebSocket', {
@@ -364,12 +364,12 @@ export class NotificationWebSocketServer {
 
       for (const [userId, connections] of this.userConnections) {
         for (const ws of connections) {
-          if (!(ws as unknown).isAlive) {
+          if (!(ws as any).isAlive) {
             deadConnections.push(ws)
             continue
           }
 
-          ;(ws as unknown).isAlive = false
+          ;(ws as any).isAlive = false
           try {
             ws.ping()
           } catch (_error) {

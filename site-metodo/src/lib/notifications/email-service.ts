@@ -65,21 +65,21 @@ export class EmailService {
 
       for (const recipient of recipients) {
         const mailOptions = {
-          from: this.config.from,
+          from: process.env.SMTP_FROM || 'felipe@metodoatuarial.com.br',
           to: recipient,
           cc: emailData.cc,
           bcc: emailData.bcc,
           subject: emailData.subject,
           html: emailData.html,
           text: emailData.text,
-          attachments: emailData.attachments?.map(att => ({
+          attachments: emailData.attachments?.map((att: any) => ({
             filename: att.filename,
             content: att.content,
             contentType: att.contentType,
-            encoding: att.encoding as unknown,
+            encoding: att.encoding as string,
             cid: att.cid,
           })),
-          priority: this.mapPriorityToNodemailer(emailData.priority),
+          priority: (emailData.priority as 'low' | 'normal' | 'high') || 'normal',
         }
 
         await this.transporter.sendMail(mailOptions)
