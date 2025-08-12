@@ -12,6 +12,7 @@ import {
 import { NotificationCenter } from './notification-center'
 import { useUnreadCount } from '@/hooks/use-notifications'
 import { cn } from '@/lib/utils'
+import type { NotificationData } from '@/types/notifications'
 
 interface NotificationBadgeProps {
   userId: string
@@ -20,7 +21,7 @@ interface NotificationBadgeProps {
   dot?: boolean
   size?: 'sm' | 'md' | 'lg'
   className?: string
-  onNotificationClick?: (notification: Record<string, unknown>) => void
+  onNotificationClick?: (notification: NotificationData) => void
 }
 
 export function NotificationBadge({

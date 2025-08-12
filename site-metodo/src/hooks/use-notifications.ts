@@ -361,7 +361,7 @@ export function useUnreadCount(userId: string) {
           }
         }
       } catch (_error) {
-        console.warn('Erro ao buscar contagem:', error)
+        console.warn('Erro ao buscar contagem:', _error)
       } finally {
         setLoading(false)
       }

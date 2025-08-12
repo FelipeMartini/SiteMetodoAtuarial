@@ -51,7 +51,7 @@ export class ABACEnforcer implements Enforcer {
       throw new AuthorizationError(
         'Failed to initialize authorization system',
         'ENFORCER_INIT_FAILED',
-        error
+        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) }
       )
     }
   }
@@ -91,7 +91,7 @@ export class ABACEnforcer implements Enforcer {
         ...context,
         time: now,
         hour: now.getHours(),
-        attributes: context.attributes || {},
+        attributes: (context as any).attributes || {},
       }
 
       const startTime = Date.now()
@@ -109,7 +109,7 @@ export class ABACEnforcer implements Enforcer {
 
       // Log da decisão de autorização
       await this.logAccess({
-        userId: subject.id || subject.email,
+        userId: (subject as any).id || subject.email,
         resource: object.id,
         action: request.action,
         result: allowed ? 'allow' : 'deny',
@@ -124,7 +124,7 @@ export class ABACEnforcer implements Enforcer {
       throw new AuthorizationError(
         'ABAC authorization check failed',
         'AUTHORIZATION_FAILED',
-        _error
+        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) }
       )
     }
   }
@@ -294,7 +294,7 @@ export class ABACEnforcer implements Enforcer {
       console.log('Policies reloaded successfully')
     } catch (_error) {
       console.error('Error reloading policies:', _error)
-      throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error)
+      throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) })
     }
   }
 }
