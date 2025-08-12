@@ -244,7 +244,7 @@ export class CalculadoraAtuarial {
         metodologia: 'AT-2000 com juros compostos',
         tabelaMortalidade: 'AT-2000 (SUSEP)',
         dataCalculo: new Date(),
-        parametros: dados
+        parametros: dados as unknown as Record<string, unknown>
       }
     }
   }

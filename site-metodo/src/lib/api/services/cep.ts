@@ -101,7 +101,7 @@ export class CepService {
   private async lookupViaCep(cep: string): Promise<CepData> {
     const response = await this.viaCepClient.get(`/${cep}/json/`)
 
-    if (response.data.erro) {
+    if ((response.data as any)?.erro) {
       throw new Error('CEP não encontrado')
     }
 
@@ -115,14 +115,15 @@ export class CepService {
     const response = await this.brasilApiClient.get(`/cep/v1/${cep}`)
 
     // Convert BrasilAPI format to standard format
+    const apiData = response.data as any
     const data = {
-      cep: response.data.cep,
-      logradouro: response.data.street || '',
+      cep: apiData.cep,
+      logradouro: apiData.street || '',
       complemento: '',
-      bairro: response.data.district || '',
-      localidade: response.data.city || '',
-      uf: response.data.state || '',
-      ibge: response.data.city_ibge || '',
+      bairro: apiData.district || '',
+      localidade: apiData.city || '',
+      uf: apiData.state || '',
+      ibge: apiData.city_ibge || '',
       gia: '',
       ddd: '',
       siafi: '',
@@ -136,22 +137,23 @@ export class CepService {
    */
   private async lookupAwesomeApi(cep: string): Promise<CepData> {
     const response = await this.awesomeApiClient.get(`/json/${cep}`)
+    const apiData = response.data as any
 
-    if (response.data.status === 400) {
+    if (apiData.status === 400) {
       throw new Error('CEP não encontrado')
     }
 
     // Convert AwesomeAPI format to standard format
     const data = {
-      cep: response.data.cep,
-      logradouro: response.data.address || '',
+      cep: apiData.cep,
+      logradouro: apiData.address || '',
       complemento: '',
-      bairro: response.data.district || '',
-      localidade: response.data.city || '',
-      uf: response.data.state || '',
-      ibge: response.data.city_ibge || '',
+      bairro: apiData.district || '',
+      localidade: apiData.city || '',
+      uf: apiData.state || '',
+      ibge: apiData.city_ibge || '',
       gia: '',
-      ddd: response.data.ddd || '',
+      ddd: apiData.ddd || '',
       siafi: '',
     }
 

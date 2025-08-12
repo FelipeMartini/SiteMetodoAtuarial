@@ -185,7 +185,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setNotifications(prev =>
         prev.map(notification =>
           !notification.readAt
-            ? { ...notification, readAt: new Date(), status: 'read' as const }
+            ? { ...notification, readAt: new Date(), status: NotificationStatus.READ }
             : notification
         )
       )

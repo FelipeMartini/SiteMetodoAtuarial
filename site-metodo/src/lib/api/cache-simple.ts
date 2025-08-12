@@ -52,7 +52,7 @@ export class SimpleApiCache {
 
   set<T>(key: string, value: T, ttl?: number): void {
     const options = ttl ? { ttl: ttl * 1000 } : {}
-    this.cache.set(key, value, options)
+    this.cache.set(key, value as Record<string, unknown>, options)
     this.stats.sets++
     this.stats.size = this.cache.size
   }
