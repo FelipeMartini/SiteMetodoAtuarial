@@ -46,12 +46,12 @@ export class ABACEnforcer implements Enforcer {
       await this.enforcer.loadPolicy()
 
       console.log('ABAC Enforcer initialized successfully')
-    } catch {
-      console.error('Failed to initialize ABAC Enforcer:', "Unknown error")
+    } catch (_error) {
+      console.error('Failed to initialize ABAC Enforcer:', String(_error))
       throw new AuthorizationError(
         'Failed to initialize authorization system',
         'ENFORCER_INIT_FAILED',
-        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String) }
+        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) }
       )
     }
   }
@@ -119,12 +119,12 @@ export class ABACEnforcer implements Enforcer {
       })
 
       return result
-    } catch {
+    } catch (_error) {
       console.error('ABAC authorization error:')
       throw new AuthorizationError(
         'ABAC authorization check failed',
         'AUTHORIZATION_FAILED',
-        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String) }
+        _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) }
       )
     }
   }
@@ -148,8 +148,8 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return added
-    } catch {
-      console.error('Error adding policy:', "Unknown error")
+    } catch (_error) {
+      console.error('Error adding policy:', String(_error))
       return false
     }
   }
@@ -173,8 +173,8 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return removed
-    } catch {
-      console.error('Error removing policy:', "Unknown error")
+    } catch (_error) {
+      console.error('Error removing policy:', String(_error))
       return false
     }
   }
@@ -198,8 +198,8 @@ export class ABACEnforcer implements Enforcer {
         createdAt: new Date(),
         updatedAt: new Date(),
       }))
-    } catch {
-      console.error('Error getting policies:', "Unknown error")
+    } catch (_error) {
+      console.error('Error getting policies:', String(_error))
       return []
     }
   }
@@ -229,7 +229,7 @@ export class ABACEnforcer implements Enforcer {
           userAgent: logData.context?.userAgent,
         },
       })
-    } catch {
+    } catch (_error) {
       console.error('Error logging access:')
       // Não propagar erro de log para não afetar a autorização
     }
@@ -278,7 +278,7 @@ export class ABACEnforcer implements Enforcer {
 
       await this.enforcer!.savePolicy()
       console.log('Default ABAC policies initialized')
-    } catch {
+    } catch (_error) {
       console.error('Error initializing default policies:')
     }
   }
@@ -292,9 +292,9 @@ export class ABACEnforcer implements Enforcer {
     try {
       await this.enforcer!.loadPolicy()
       console.log('Policies reloaded successfully')
-    } catch {
+    } catch (_error) {
       console.error('Error reloading policies:')
-      throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String) })
+      throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) })
     }
   }
 }

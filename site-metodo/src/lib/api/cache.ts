@@ -249,7 +249,7 @@ export class ApiCache {
   private estimateSize(data: Record<string, unknown>): number {
     try {
       return JSON.stringify(data).length * 2 // UTF-16 approximation
-    } catch {
+    } catch (_error) {
       return 0
     }
   }

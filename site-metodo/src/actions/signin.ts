@@ -45,8 +45,8 @@ export async function signInCredentials(
         errorMessage: 'Falha na autenticação. Verifique suas credenciais.',
       }
     }
-  } catch {
-    console.error('[SignIn] Erro na autenticação credentials:', "Unknown error")
+  } catch (_error) {
+    console.error('[SignIn] Erro na autenticação credentials:', String(_error))
 
     // Melhor tratamento de erro para Auth.js v5
     if (_error instanceof Error) {
@@ -131,14 +131,14 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
     }
 
     redirect(redirectUrl)
-  } catch {
+  } catch (_error) {
     // O redirect() do Next.js gera uma exceção NEXT_REDIRECT que é normal
     if (_error instanceof Error && _error.message === 'NEXT_REDIRECT') {
       // Este é o comportamento esperado, não é um erro real
       throw _error // Re-throw para permitir o redirect
     }
 
-    console.error('[SignIn] Erro na autenticação OAuth:', "Unknown error")
+    console.error('[SignIn] Erro na autenticação OAuth:', String(_error))
 
     // Melhor tratamento de erro para OAuth
     if (_error instanceof Error) {
@@ -201,8 +201,8 @@ export async function signInEmail(
         errorMessage: 'Falha no envio do email de login',
       }
     }
-  } catch {
-    console.error('[SignIn] Erro no login por email:', "Unknown error")
+  } catch (_error) {
+    console.error('[SignIn] Erro no login por email:', String(_error))
     return {
       status: 'error',
       errorMessage: 'Falha no envio do email de login',

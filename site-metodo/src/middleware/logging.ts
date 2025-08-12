@@ -226,8 +226,9 @@ export function createComprehensiveMiddleware() {
       await auditMiddleware(request)
 
       return loggingResponse
-    } catch {
-      structuredLogger.error('Middleware error', String), {
+    } catch (_error) {
+      structuredLogger.error('Middleware error', {
+        error: String(_error),
         ip: getClientIP(request),
         userAgent: request.headers.get('user-agent') || undefined,
         method: request.method,

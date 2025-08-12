@@ -203,9 +203,9 @@ export class MonitoringService {
       })
 
       return health
-    } catch {
+    } catch (_error) {
       simpleLogger.error('Health check failed', {
-        error: _error instanceof Error ? _error.message : String),
+        error: _error instanceof Error ? _error.message : String(_error),
       })
       return {
         status: 'unhealthy',
@@ -336,7 +336,7 @@ export class MonitoringService {
         status: 'connected',
         responseTime,
       }
-    } catch {
+    } catch (_error) {
       return {
         status: 'disconnected',
       }

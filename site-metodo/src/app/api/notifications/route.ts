@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: result,
     })
-  } catch {
+  } catch (_error) {
     simpleLogger.error('Erro ao buscar notificações', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
         count: notificationIds.length,
       },
     })
-  } catch {
+  } catch (_error) {
     simpleLogger.error('Erro ao criar notificação', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }

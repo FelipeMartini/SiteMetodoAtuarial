@@ -110,7 +110,7 @@ function checkABACAuthorization(
     // Para outros recursos, verificar se está autenticado e ativo
     return true
   } catch (error: unknown) {
-    console.error('ABAC Authorization Error:', "Unknown error")
+    console.error('ABAC Authorization Error:', String(_error))
     return false
   }
 }
@@ -190,7 +190,7 @@ export function AuthGuard({
             },
             success: true,
           })
-          .catch(error => console.error('Audit log error:', "Unknown error"))
+          .catch(error => console.error('Audit log error:', String(_error)))
       }
 
       return
@@ -221,7 +221,7 @@ export function AuthGuard({
         },
         success: false,
       })
-      .catch(error => console.error('Audit log error:', "Unknown error"))
+      .catch(error => console.error('Audit log error:', String(_error)))
 
     // Chama callback se fornecido
     if (onUnauthorized) {

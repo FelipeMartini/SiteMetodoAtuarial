@@ -35,8 +35,8 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     })
 
     return registration
-  } catch {
-    console.error('Erro ao registrar Service Worker:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro ao registrar Service Worker:', String(_error))
     return null
   }
 }
@@ -57,8 +57,8 @@ export async function unregisterServiceWorker(): Promise<boolean> {
       return result
     }
     return false
-  } catch {
-    console.error('Erro ao desregistrar Service Worker:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro ao desregistrar Service Worker:', String(_error))
     return false
   }
 }
@@ -157,8 +157,8 @@ export async function subscribeToPushNotifications(): Promise<PushSubscription |
     })
 
     return subscription
-  } catch {
-    console.error('Erro ao se inscrever para push notifications:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro ao se inscrever para push notifications:', String(_error))
     return null
   }
 }
@@ -252,7 +252,7 @@ export async function addToBackgroundSync(url: string, options: RequestInit): Pr
     if ('sync' in registration && (registration as unknown).sync) {
       await (registration as unknown).sync.register('background-sync')
     }
-  } catch {
+  } catch (_error) {
     console.warn('Background Sync não disponível:')
   }
 }
@@ -273,8 +273,8 @@ export async function precacheResources(urls: string[]): Promise<void> {
   try {
     await cache.addAll(urls)
     console.log('Recursos pré-cached:', urls)
-  } catch {
-    console.error('Erro ao pré-cachear recursos:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro ao pré-cachear recursos:', String(_error))
   }
 }
 

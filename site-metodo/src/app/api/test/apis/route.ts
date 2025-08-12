@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
       timestamp: new Date().toISOString(),
       message: `Teste ${testType} executado com sucesso`,
     })
-  } catch {
-    console.error('Erro durante teste de APIs:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro durante teste de APIs:', String(_error))
 
     return NextResponse.json(
       {
@@ -103,8 +103,8 @@ export async function POST(request: NextRequest) {
           { status: 400 }
         )
     }
-  } catch {
-    console.error('Erro durante teste POST:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro durante teste POST:', String(_error))
 
     return NextResponse.json(
       {

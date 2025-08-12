@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
       data: { password: hash },
     })
     return NextResponse.json({ ok: true })
-  } catch {
+  } catch (_error) {
     return NextResponse.json({ error: 'Erro ao definir senha.' }, { status: 500 })
   }
 }

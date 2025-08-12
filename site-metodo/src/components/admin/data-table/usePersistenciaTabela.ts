@@ -10,7 +10,7 @@ export function carregarEstadoPersistido(ns: string): Partial<DataTableEstado> |
     const bruto = localStorage.getItem(chave(ns))
     if (!bruto) return null
     return JSON.parse(bruto)
-  } catch {
+  } catch (_error) {
     return null
   }
 }
@@ -34,7 +34,7 @@ export function usePersistenciaTabela(
       cacheRef.current = serializado
       try {
         localStorage.setItem(key, serializado)
-      } catch {}
+      } catch (_error) {}
     }
   }, [nsConfig, estado])
 }

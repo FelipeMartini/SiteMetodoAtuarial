@@ -27,8 +27,8 @@ export async function GET() {
       success: true,
       data: policies,
     })
-  } catch {
-    console.error('Error fetching policies:', "Unknown error")
+  } catch (_error) {
+    console.error('Error fetching policies:', String(_error))
     return NextResponse.json(
       {
         success: false,
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-  } catch {
+  } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -78,7 +78,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Error assigning policy:', "Unknown error")
+    console.error('Error assigning policy:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to assign policy' }, { status: 500 })
   }
 }
@@ -113,7 +113,7 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       )
     }
-  } catch {
+  } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -121,7 +121,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    console.error('Error removing policy:', "Unknown error")
+    console.error('Error removing policy:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to remove policy' }, { status: 500 })
   }
 }

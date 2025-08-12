@@ -76,8 +76,8 @@ export class NotificationService {
       }
 
       return notificationIds
-    } catch {
-      simpleLogger.error('Erro ao criar notificação', { error: String), request })
+    } catch (_error) {
+      simpleLogger.error('Erro ao criar notificação', { error: String(_error), request })
       throw _error
     }
   }
@@ -119,8 +119,8 @@ export class NotificationService {
       })
 
       return notificationIds
-    } catch {
-      simpleLogger.error('Erro ao criar notificações em lote', { error: String), request })
+    } catch (_error) {
+      simpleLogger.error('Erro ao criar notificações em lote', { error: String(_error), request })
       throw _error
     }
   }
@@ -253,8 +253,8 @@ export class NotificationService {
         hasMore,
         aggregations,
       }
-    } catch {
-      simpleLogger.error('Erro ao buscar notificações', { error: String), filter })
+    } catch (_error) {
+      simpleLogger.error('Erro ao buscar notificações', { error: String(_error), filter })
       throw _error
     }
   }
@@ -282,8 +282,8 @@ export class NotificationService {
         notificationId,
         userId,
       })
-    } catch {
-      simpleLogger.error('Erro ao marcar notificação como lida', { error: String), notificationId, userId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao marcar notificação como lida', { error: String(_error), notificationId, userId })
       throw _error
     }
   }
@@ -310,8 +310,8 @@ export class NotificationService {
       })
 
       return result.count
-    } catch {
-      simpleLogger.error('Erro ao marcar todas como lidas', { error: String), userId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao marcar todas como lidas', { error: String(_error), userId })
       throw _error
     }
   }
@@ -332,8 +332,8 @@ export class NotificationService {
         notificationId,
         userId,
       })
-    } catch {
-      simpleLogger.error('Erro ao deletar notificação', { error: String), notificationId, userId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao deletar notificação', { error: String(_error), notificationId, userId })
       throw _error
     }
   }
@@ -352,8 +352,8 @@ export class NotificationService {
           },
         },
       })
-    } catch {
-      simpleLogger.error('Erro ao obter contagem não lidas', { error: String), userId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao obter contagem não lidas', { error: String(_error), userId })
       return 0
     }
   }
@@ -467,8 +467,8 @@ export class NotificationService {
           end: dateTo || new Date(),
         },
       }
-    } catch {
-      simpleLogger.error('Erro ao obter estatísticas', { error: String), userId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao obter estatísticas', { error: String(_error), userId })
       throw _error
     }
   }
@@ -494,7 +494,7 @@ export class NotificationService {
 
       // Se não existe preferência, assume como habilitado
       return preference?.enabled ?? true
-    } catch {
+    } catch (_error) {
       simpleLogger.warn('Erro ao verificar preferência, assumindo habilitado', {
         _error,
         userId,
@@ -519,8 +519,8 @@ export class NotificationService {
           status: 'pending',
         },
       })
-    } catch {
-      simpleLogger.error('Erro ao adicionar à fila', { error: String), notificationId })
+    } catch (_error) {
+      simpleLogger.error('Erro ao adicionar à fila', { error: String(_error), notificationId })
       throw _error
     }
   }
@@ -545,7 +545,7 @@ export class NotificationService {
           metadata: JSON.stringify(metadata),
         },
       })
-    } catch {
+    } catch (_error) {
       simpleLogger.warn('Erro ao criar evento', { _error, notificationId, type })
     }
   }

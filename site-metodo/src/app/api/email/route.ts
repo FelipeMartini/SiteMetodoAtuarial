@@ -29,7 +29,7 @@ export async function POST(req: Request) {
     return new Response(JSON.stringify({ success: true, messageId: info.messageId }), {
       status: 200,
     })
-  } catch {
+  } catch (_error) {
     return new Response(
       JSON.stringify({ success: false, error: _error instanceof Error ? _error.message : _error }),
       { status: 500 }

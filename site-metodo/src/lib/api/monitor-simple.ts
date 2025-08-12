@@ -175,7 +175,7 @@ export class SimpleApiMonitor {
         responseTime,
         error: healthy ? undefined : `HTTP ${response.status}`,
       }
-    } catch {
+    } catch (_error) {
       const responseTime = Date.now() - startTime
       const errorMessage = _error instanceof Error ? _error.message : 'Unknown error'
 

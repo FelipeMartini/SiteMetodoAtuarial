@@ -63,8 +63,8 @@ export async function POST(request: NextRequest) {
       { message: 'Usuário criado com sucesso', user: userWithoutPassword },
       { status: 201 }
     )
-  } catch {
-    console.error('Erro de registro:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro de registro:', String(_error))
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }
 }

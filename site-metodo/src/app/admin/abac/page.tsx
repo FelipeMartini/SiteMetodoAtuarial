@@ -104,8 +104,8 @@ export default function ABACManagementPage() {
           variant: 'destructive',
         })
       }
-    } catch {
-      console.error('Error loading policies:', "Unknown error")
+    } catch (_error) {
+      console.error('Error loading policies:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -130,8 +130,8 @@ export default function ABACManagementPage() {
           variant: 'destructive',
         })
       }
-    } catch {
-      console.error('Error loading role assignments:', "Unknown error")
+    } catch (_error) {
+      console.error('Error loading role assignments:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -179,8 +179,8 @@ export default function ABACManagementPage() {
           variant: 'destructive',
         })
       }
-    } catch {
-      console.error('Error adding policy:', "Unknown error")
+    } catch (_error) {
+      console.error('Error adding policy:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -219,8 +219,8 @@ export default function ABACManagementPage() {
           variant: 'destructive',
         })
       }
-    } catch {
-      console.error('Error removing policy:', "Unknown error")
+    } catch (_error) {
+      console.error('Error removing policy:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',
@@ -259,8 +259,8 @@ export default function ABACManagementPage() {
           variant: 'destructive',
         })
       }
-    } catch {
-      console.error('Error adding role assignment:', "Unknown error")
+    } catch (_error) {
+      console.error('Error adding role assignment:', String(_error))
       toast({
         title: 'Erro',
         description: 'Erro ao conectar com o servidor',

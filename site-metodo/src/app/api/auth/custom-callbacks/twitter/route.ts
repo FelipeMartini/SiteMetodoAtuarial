@@ -11,7 +11,7 @@ export async function GET(request: NextRequest) {
   if (!state || !stateCookie || state !== stateCookie) {
     return NextResponse.redirect('/login?error=invalid_state')
   }
-  if ) {
+  if (_error) {
     return NextResponse.redirect('/login?error=oauth_error')
   }
   if (!code) {

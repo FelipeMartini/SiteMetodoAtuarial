@@ -191,7 +191,7 @@ export class ApiClient {
   ): Promise<T> {
     try {
       return await requestFn()
-    } catch {
+    } catch (_error) {
       if (retries <= 0) {
         throw _error
       }
@@ -323,7 +323,7 @@ export class ApiClient {
         healthy: true,
         latency: Date.now() - startTime,
       }
-    } catch {
+    } catch (_error) {
       return {
         healthy: false,
         latency: Date.now() - startTime,

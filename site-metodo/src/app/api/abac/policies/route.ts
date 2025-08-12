@@ -32,8 +32,8 @@ export async function GET(): Promise<NextResponse> {
       success: true,
       data: policies,
     })
-  } catch {
-    console.error('Error fetching policies:', "Unknown error")
+  } catch (_error) {
+    console.error('Error fetching policies:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to fetch policies' }, { status: 500 })
   }
 }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 400 })
     }
-  } catch {
+  } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -75,7 +75,7 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    console.error('Error adding policy:', "Unknown error")
+    console.error('Error adding policy:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 500 })
   }
 }
@@ -108,7 +108,7 @@ export async function DELETE(request: NextRequest) {
     } else {
       return NextResponse.json({ success: false, error: 'Policy not found' }, { status: 404 })
     }
-  } catch {
+  } catch (_error) {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -116,7 +116,7 @@ export async function DELETE(request: NextRequest) {
       )
     }
 
-    console.error('Error removing policy:', "Unknown error")
+    console.error('Error removing policy:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to remove policy' }, { status: 500 })
   }
 }
