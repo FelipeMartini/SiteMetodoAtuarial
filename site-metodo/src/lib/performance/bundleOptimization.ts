@@ -60,7 +60,7 @@ export function preloadModule(modulePath: string) {
 /**
  * Lazy loading com preload inteligente
  */
-export function lazyWithPreload<T extends React.ComponentType<any>>(
+export function lazyWithPreload<T extends React.ComponentType<Record<string, unknown>>>(
   importFn: () => Promise<{ default: T }>,
   shouldPreload = false
 ) {
@@ -92,7 +92,8 @@ export function createTreeShakableExport<T>(
 
   Object.entries(exportMap).forEach(([exportName, moduleKey]) => {
     if (module[moduleKey]) {
-      ;(result as any)[exportName] = module[moduleKey]
+      // Type assertion necessária para compatibilidade com Record genérico
+      ;(result as Record<string, unknown>)[exportName] = module[moduleKey]
     }
   })
 
