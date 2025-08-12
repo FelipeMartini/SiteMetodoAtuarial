@@ -66,7 +66,7 @@ export function useSmartPrefetch(userRole?: string) {
     setTimeout(() => {
       const roleRoutes = ROLE_BASED_ROUTES[userRole as keyof typeof ROLE_BASED_ROUTES]
       if (roleRoutes) {
-        roleRoutes.forEach(route => {
+        roleRoutes.forEach((route: string) => {
           router.prefetch(route)
         })
       }
@@ -247,15 +247,13 @@ export async function prefetchWithRetry(
 ): Promise<boolean> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await (router as any).prefetch(route)
+      await (router as { prefetch: (route: string) => Promise<void> }).prefetch(route)
       return true
-    } catch (_error) {
+    } catch {
       console.warn(`Prefetch failed for ${route}, attempt ${attempt}:`)
-
       if (attempt === maxRetries) {
         return false
       }
-
       // Exponential backoff
       await new Promise(resolve => setTimeout(resolve, Math.pow(2, attempt) * 1000))
     }
@@ -278,16 +276,16 @@ export function getRoutePriority(route: string, userRole?: string): 'high' | 'me
   if (userRole) {
     switch (userRole) {
       case 'ADMIN':
-        if (ROLE_BASED_ROUTES.ADMIN.includes(route as any)) return 'medium'
+        if (ROLE_BASED_ROUTES.ADMIN.includes(route as typeof ROLE_BASED_ROUTES.ADMIN[number])) return 'medium'
         break
       case 'MODERATOR':
-        if (ROLE_BASED_ROUTES.MODERATOR.includes(route as any)) return 'medium'
+        if (ROLE_BASED_ROUTES.MODERATOR.includes(route as typeof ROLE_BASED_ROUTES.MODERATOR[number])) return 'medium'
         break
       case 'USER':
-        if (ROLE_BASED_ROUTES.USER.includes(route as any)) return 'medium'
+        if (ROLE_BASED_ROUTES.USER.includes(route as typeof ROLE_BASED_ROUTES.USER[number])) return 'medium'
         break
       case 'GUEST':
-        if (ROLE_BASED_ROUTES.GUEST.includes(route as any)) return 'medium'
+        if (ROLE_BASED_ROUTES.GUEST.includes(route as typeof ROLE_BASED_ROUTES.GUEST[number])) return 'medium'
         break
     }
   }
@@ -320,7 +318,7 @@ export async function batchPrefetch(
     const routesToPrefetch = routesByPriority[priority] || []
 
     // Prefetch em paralelo dentro da mesma prioridade
-    await Promise.allSettled(routesToPrefetch.map(route => prefetchWithRetry(router, route)))
+  await Promise.allSettled(routesToPrefetch.map((route: string) => prefetchWithRetry(router, route)))
 
     // Pequeno delay entre prioridades
     if (routesToPrefetch.length > 0 && priority !== 'low') {
@@ -338,7 +336,7 @@ export function useConnectionAwarePrefetch() {
   useEffect(() => {
     if (!('connection' in navigator)) return
 
-    const connection = (navigator as any).connection
+  const connection = (navigator as Navigator & { connection?: any }).connection
 
     // Desabilitar prefetch em conexões lentas
     const isSlowConnection =
