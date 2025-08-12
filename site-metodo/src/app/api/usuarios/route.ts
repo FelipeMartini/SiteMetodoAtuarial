@@ -20,7 +20,7 @@ function checkABACAccess(user: { isActive?: boolean; email?: string | null; name
   }
 
   if (resource === 'moderation') {
-    return (
+    return !!(
       user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
     )
   }

@@ -70,7 +70,7 @@ export default function RelatoriosAtuariaisPage() {
     toast.success('Relatório exportado com sucesso!')
   }
 
-  const obterClassificacaoRisco = (sensibilidade: number): { nivel: string; cor: string; icon: JSX.Element } => {
+  const obterClassificacaoRisco = (sensibilidade: number): { nivel: string; cor: string; icon: React.ReactElement } => {
     const absValue = Math.abs(sensibilidade)
     
     if (absValue < 0.1) {

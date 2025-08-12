@@ -102,7 +102,7 @@ function checkABACAuthorization(
 
     if (resource === 'moderation') {
       // Moderação requer verificação de atributos de moderador
-      return (
+      return !!(
         user.email?.includes('@mod') || user.name?.includes('Mod') || user.email?.includes('@admin')
       )
     }
@@ -110,7 +110,7 @@ function checkABACAuthorization(
     // Para outros recursos, verificar se está autenticado e ativo
     return true
   } catch (error: unknown) {
-    console.error('ABAC Authorization Error:', String(_error))
+    console.error('ABAC Authorization Error:', String(error))
     return false
   }
 }
@@ -166,7 +166,7 @@ export function AuthGuard({
     }
 
     // Verifica permissões usando ABAC
-    const hasAccess = checkABACAuthorization(session?.user, action, requiredResource)
+    const hasAccess = checkABACAuthorization(session?.user, requiredResource || 'default')
 
     // Se tem permissão, autoriza e registra acesso
     if (hasAccess) {
@@ -190,7 +190,7 @@ export function AuthGuard({
             },
             success: true,
           })
-          .catch(error => console.error('Audit log error:', String(_error)))
+          .catch(error => console.error('Audit log error:', String(error)))
       }
 
       return
@@ -221,7 +221,7 @@ export function AuthGuard({
         },
         success: false,
       })
-      .catch(error => console.error('Audit log error:', String(_error)))
+      .catch(error => console.error('Audit log error:', String(error)))
 
     // Chama callback se fornecido
     if (onUnauthorized) {
@@ -304,7 +304,7 @@ export function useAuth() {
      * Verifica se o usuário tem permissão para um recurso usando ABAC
      */
     hasPermission: (resource: string | null = null, action: string = 'access') =>
-      checkABACAuthorization(session?.user, action, resource),
+      checkABACAuthorization({ user: session?.user, action, resource }),
 
     /**
      * Verifica se o usuário tem acesso a recurso de administração

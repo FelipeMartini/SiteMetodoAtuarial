@@ -49,7 +49,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
       message: 'Ação executada com sucesso',
     })
   } catch (error) {
-    simpleLogger.error('Erro ao atualizar notificação', { error: String(_error), id: params.id })
+    simpleLogger.error('Erro ao atualizar notificação', { error: String(error), id: params.id })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -82,7 +82,7 @@ export async function DELETE(request: NextRequest, { params }: { params: { id: s
       message: 'Notificação removida com sucesso',
     })
   } catch (error) {
-    simpleLogger.error('Erro ao remover notificação', { error: String(_error), id: params.id })
+    simpleLogger.error('Erro ao remover notificação', { error: String(error), id: params.id })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
