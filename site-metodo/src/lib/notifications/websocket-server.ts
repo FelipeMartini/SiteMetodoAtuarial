@@ -1,6 +1,6 @@
 import { WebSocketServer, WebSocket } from 'ws'
 import { IncomingMessage } from 'http'
-import { WebSocketMessage, NotificationSocketData, NotificationData } from '@/types/notifications'
+import { WebSocketMessage, NotificationData } from '@/types/notifications'
 import { simpleLogger } from '@/lib/simple-logger'
 import { getNotificationService } from './notification-service'
 
@@ -207,8 +207,8 @@ export class NotificationWebSocketServer {
     this.userConnections.get(_userId)!.add(ws)
 
     // Configura handlers da conexão
-    ws.on('message', data => {
-      this.handleMessage(ws, _userId, Buffer.from(data as any))
+    ws.on('message', (data: unknown) => {
+      this.handleMessage(ws, _userId, Buffer.from(data as Buffer))
     })
 
     ws.on('close', () => {
@@ -241,7 +241,6 @@ export class NotificationWebSocketServer {
   private handleMessage(ws: WebSocket, userId: string, data: Buffer): void {
     try {
       const message: WebSocketMessage = JSON.parse(data.toString())
-
       switch (message.type) {
         case 'ping':
           this.sendMessageToConnection(ws, {
@@ -249,15 +248,14 @@ export class NotificationWebSocketServer {
             timestamp: Date.now(),
           })
           break
-
         default:
           simpleLogger.warn('Tipo de mensagem WebSocket não reconhecido', {
             type: message.type,
             userId,
           })
       }
-    } catch (_error) {
-      simpleLogger.warn('Erro ao processar mensagem WebSocket', { _error, userId })
+    } catch {
+      simpleLogger.warn('Erro ao processar mensagem WebSocket', { userId })
     }
   }
 
@@ -318,8 +316,8 @@ export class NotificationWebSocketServer {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message))
       }
-    } catch (_error) {
-      simpleLogger.warn('Erro ao enviar mensagem WebSocket', { _error })
+    } catch {
+      simpleLogger.warn('Erro ao enviar mensagem WebSocket')
     }
   }
 
@@ -349,8 +347,8 @@ export class NotificationWebSocketServer {
       // Mock implementation - substituir por verificação real do JWT
       const mockUserId = url.searchParams.get('userId')
       return mockUserId
-    } catch (_error) {
-      simpleLogger.warn('Erro ao extrair userId da requisição WebSocket', { _error })
+    } catch {
+      simpleLogger.warn('Erro ao extrair userId da requisição WebSocket')
       return null
     }
   }
@@ -362,17 +360,17 @@ export class NotificationWebSocketServer {
     this.heartbeatInterval = setInterval(() => {
       const deadConnections: WebSocket[] = []
 
-      for (const [userId, connections] of this.userConnections) {
+      for (const connections of this.userConnections.values()) {
         for (const ws of connections) {
-          if (!(ws as any).isAlive) {
+          const wsAny = ws as unknown as { isAlive?: boolean }
+          if (!wsAny.isAlive) {
             deadConnections.push(ws)
             continue
           }
-
-          ;(ws as any).isAlive = false
+          wsAny.isAlive = false
           try {
             ws.ping()
-          } catch (_error) {
+          } catch {
             deadConnections.push(ws)
           }
         }
@@ -389,16 +387,18 @@ export class NotificationWebSocketServer {
     for (const ws of deadConnections) {
       try {
         ws.terminate()
-      } catch (_error) {
+      } catch {
         // Ignora erros ao terminar conexão já morta
       }
-
       // Remove das listas de usuários
-      for (const [userId, connections] of this.userConnections) {
+      for (const connections of this.userConnections.values()) {
         connections.delete(ws)
-        if (connections.size === 0) {
-          this.userConnections.delete(userId)
-        }
+      }
+    }
+    // Remove usuários sem conexões
+    for (const [userId, connections] of this.userConnections) {
+      if (connections.size === 0) {
+        this.userConnections.delete(userId)
       }
     }
 
