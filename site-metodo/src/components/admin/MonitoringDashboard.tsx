@@ -444,7 +444,7 @@ export default function MonitoringDashboard() {
                       <YAxis domain={[0, 100]} />
                       <Tooltip
                         labelFormatter={value => new Date(value).toLocaleString()}
-                        formatter={(value: Record<string, unknown>) => [
+                        formatter={(value: number) => [
                           `${value}%`,
                           'Score de Saúde',
                         ]}
