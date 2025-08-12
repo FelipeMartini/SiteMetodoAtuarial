@@ -152,13 +152,13 @@ export class PushNotificationService {
           })
         } catch (error: unknown) {
           simpleLogger.warn('Falha ao enviar push notification', {
-            error: error.message,
+            error: String(error),
             userId,
             subscriptionId: subscription.id,
           })
 
           // Se subscription é inválida, marca como inativa
-          if (this.isSubscriptionInvalid(error)) {
+          if (this.isSubscriptionInvalid(error as any)) {
             failedSubscriptions.push(subscription.endpoint)
           }
         }
@@ -220,10 +220,10 @@ export class PushNotificationService {
     const testNotification: NotificationData = {
       id: 'test',
       userId,
-      type: 'info' as unknown,
-      channel: 'push' as unknown,
-      priority: 'normal' as unknown,
-      status: 'pending' as unknown,
+      type: 'info' as any,
+      channel: 'push' as any,
+      priority: 'normal' as any,
+      status: 'pending' as any,
       title: 'Teste de Push Notification',
       message: 'Esta é uma notificação de teste enviada em ' + new Date().toLocaleString(),
       createdAt: new Date(),

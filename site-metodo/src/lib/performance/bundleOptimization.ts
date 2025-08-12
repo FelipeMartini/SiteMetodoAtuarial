@@ -92,7 +92,7 @@ export function createTreeShakableExport<T>(
 
   Object.entries(exportMap).forEach(([exportName, moduleKey]) => {
     if (module[moduleKey]) {
-      ;(result as unknown)[exportName] = module[moduleKey]
+      ;(result as any)[exportName] = module[moduleKey]
     }
   })
 

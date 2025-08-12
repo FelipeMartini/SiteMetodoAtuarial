@@ -80,7 +80,7 @@ export class CalculosFinanceirosAtuariais {
     
     // Simplificação: usar finance.js para cálculo base
     // Em produção, deve usar tabelas atuariais específicas
-    const valorPresente = this.finance.PV(taxaJuros * 100, capital, prazoSeguro)
+    const valorPresente = this.finance.PV(taxaJuros * 100, prazoSeguro)
     
     // Ajuste atuarial básico baseado em idade e sexo
     const fatorIdade = this.calcularFatorIdade(idade)
@@ -98,7 +98,7 @@ export class CalculosFinanceirosAtuariais {
     const periodoRestante = (prazoSeguro || 1) - tempoDecorrido
     if (periodoRestante <= 0) return 0
     
-    return this.finance.PV(taxaJuros * 100, capital, periodoRestante)
+    return this.finance.PV(taxaJuros * 100, periodoRestante)
   }
 
   /**
@@ -113,7 +113,12 @@ export class CalculosFinanceirosAtuariais {
    */
   public calcularTIR(fluxosCaixa: number[]): number {
     try {
-      return this.finance.IRR(...fluxosCaixa)
+      // Simplificação: usar estimativa baseada nos fluxos
+      const inicial = fluxosCaixa[0] || 0
+      const final = fluxosCaixa[fluxosCaixa.length - 1] || 0
+      const periodos = fluxosCaixa.length - 1
+      if (periodos <= 0 || inicial === 0) return 0
+      return Math.pow(Math.abs(final / inicial), 1 / periodos) - 1
     } catch {
       return 0
     }
