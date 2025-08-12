@@ -98,7 +98,7 @@ export const auditLogger = {
   userUpdated: (
     performedBy: string,
     targetUser: string,
-    changes: Record<string, any>,
+    changes: Record<string, unknown>,
     meta?: LogMeta
   ) => simpleLogger.audit('user_updated', { ...meta, performedBy, targetUser, changes }),
   userDeleted: (performedBy: string, targetUser: string, meta?: LogMeta) =>

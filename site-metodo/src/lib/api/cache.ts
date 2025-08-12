@@ -257,7 +257,7 @@ export class ApiCache {
   /**
    * Create cache key from URL and options
    */
-  static createKey(url: string, options?: Record<string, any>): string {
+  static createKey(url: string, options?: Record<string, unknown>): string {
     const base = url.replace(/^https?:\/\/[^\/]+/, '') // Remove domain
 
     if (!options || Object.keys(options).length === 0) {
@@ -272,7 +272,7 @@ export class ApiCache {
           acc[key] = options[key]
           return acc
         },
-        {} as Record<string, any>
+        {} as Record<string, unknown>
       )
 
     const optionsStr = JSON.stringify(sortedOptions)

@@ -77,7 +77,7 @@ export class NotificationService {
 
       return notificationIds
     } catch {
-      simpleLogger.error('Erro ao criar notificação', { error: String(_error), request })
+      simpleLogger.error('Erro ao criar notificação', { error: String), request })
       throw _error
     }
   }
@@ -120,7 +120,7 @@ export class NotificationService {
 
       return notificationIds
     } catch {
-      simpleLogger.error('Erro ao criar notificações em lote', { error: String(_error), request })
+      simpleLogger.error('Erro ao criar notificações em lote', { error: String), request })
       throw _error
     }
   }
@@ -254,7 +254,7 @@ export class NotificationService {
         aggregations,
       }
     } catch {
-      simpleLogger.error('Erro ao buscar notificações', { error: String(_error), filter })
+      simpleLogger.error('Erro ao buscar notificações', { error: String), filter })
       throw _error
     }
   }
@@ -276,14 +276,14 @@ export class NotificationService {
       })
 
       // Registra evento
-      await this.createEvent(notificationId, userId, 'read', notification.channel as any, {})
+      await this.createEvent(notificationId, userId, 'read', notification.channel as unknown, {})
 
       simpleLogger.info(`Notificação marcada como lida`, {
         notificationId,
         userId,
       })
     } catch {
-      simpleLogger.error('Erro ao marcar notificação como lida', { error: String(_error), notificationId, userId })
+      simpleLogger.error('Erro ao marcar notificação como lida', { error: String), notificationId, userId })
       throw _error
     }
   }
@@ -311,7 +311,7 @@ export class NotificationService {
 
       return result.count
     } catch {
-      simpleLogger.error('Erro ao marcar todas como lidas', { error: String(_error), userId })
+      simpleLogger.error('Erro ao marcar todas como lidas', { error: String), userId })
       throw _error
     }
   }
@@ -333,7 +333,7 @@ export class NotificationService {
         userId,
       })
     } catch {
-      simpleLogger.error('Erro ao deletar notificação', { error: String(_error), notificationId, userId })
+      simpleLogger.error('Erro ao deletar notificação', { error: String), notificationId, userId })
       throw _error
     }
   }
@@ -353,7 +353,7 @@ export class NotificationService {
         },
       })
     } catch {
-      simpleLogger.error('Erro ao obter contagem não lidas', { error: String(_error), userId })
+      simpleLogger.error('Erro ao obter contagem não lidas', { error: String), userId })
       return 0
     }
   }
@@ -468,7 +468,7 @@ export class NotificationService {
         },
       }
     } catch {
-      simpleLogger.error('Erro ao obter estatísticas', { error: String(_error), userId })
+      simpleLogger.error('Erro ao obter estatísticas', { error: String), userId })
       throw _error
     }
   }
@@ -520,7 +520,7 @@ export class NotificationService {
         },
       })
     } catch {
-      simpleLogger.error('Erro ao adicionar à fila', { error: String(_error), notificationId })
+      simpleLogger.error('Erro ao adicionar à fila', { error: String), notificationId })
       throw _error
     }
   }
@@ -533,7 +533,7 @@ export class NotificationService {
     userId: string,
     type: string,
     channel: NotificationChannel,
-    metadata: Record<string, any>
+    metadata: Record<string, unknown>
   ): Promise<void> {
     try {
       await this.prisma.notificationEvent.create({

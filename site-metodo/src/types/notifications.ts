@@ -48,7 +48,7 @@ export interface NotificationData {
   status: NotificationStatus
   title: string
   message: string
-  data?: Record<string, any>
+  data?: Record<string, unknown>
   scheduledFor?: Date
   sentAt?: Date
   readAt?: Date
@@ -120,9 +120,9 @@ export interface CreateNotificationRequest {
   priority?: NotificationPriority
   title: string
   message: string
-  data?: Record<string, any>
+  data?: Record<string, unknown>
   templateId?: string
-  templateVariables?: Record<string, any>
+  templateVariables?: Record<string, unknown>
   scheduledFor?: Date
   expiresAt?: Date
 }
@@ -134,9 +134,9 @@ export interface BulkNotificationRequest {
   priority?: NotificationPriority
   title: string
   message: string
-  data?: Record<string, any>
+  data?: Record<string, unknown>
   templateId?: string
-  templateVariables?: Record<string, any>
+  templateVariables?: Record<string, unknown>
   scheduledFor?: Date
   expiresAt?: Date
 }
@@ -164,7 +164,7 @@ export interface EmailData {
   text?: string
   attachments?: EmailAttachment[]
   templateId?: string
-  templateVariables?: Record<string, any>
+  templateVariables?: Record<string, unknown>
   priority?: NotificationPriority
   scheduledFor?: Date
 }
@@ -244,7 +244,7 @@ export interface NotificationEvent {
   userId: string
   channel: NotificationChannel
   timestamp: Date
-  metadata?: Record<string, any>
+  metadata?: Record<string, unknown>
 }
 
 // Interfaces para filtros e busca

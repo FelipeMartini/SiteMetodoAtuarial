@@ -63,7 +63,7 @@ export class ExchangeService {
         return await this.getRateFromAwesomeApi(from, to)
       }
     } catch {
-      console.warn(`Falha no provedor ${provider}:`, _error)
+      console.warn(`Falha no provedor ${provider}:`)
 
       // Fallback para o outro provedor
       try {
@@ -222,7 +222,7 @@ export class ExchangeService {
             timestamp: currencyData.create_date,
           }
         } catch {
-          console.warn(`Erro ao buscar ${currency}:`, _error)
+          console.warn(`Erro ao buscar ${currency}:`)
           return null
         }
       })

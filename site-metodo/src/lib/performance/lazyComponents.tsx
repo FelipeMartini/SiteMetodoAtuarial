@@ -30,7 +30,7 @@ export const PerfilUsuarioModerno = lazy(() => import('@/components/ui/perfil-us
 /**
  * HOC para wrapping de componentes lazy com loading state
  */
-export function withLazyLoading<T extends Record<string, any>>(
+export function withLazyLoading<T extends Record<string, unknown>>(
   Component: React.LazyExoticComponent<React.ComponentType<T>>,
   fallback?: React.ReactNode
 ) {

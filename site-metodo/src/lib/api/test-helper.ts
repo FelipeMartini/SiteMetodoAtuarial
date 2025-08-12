@@ -369,7 +369,7 @@ export class ApiTestHelper {
       results.monitoring = await this.testMonitoring()
       console.log('')
     } catch {
-      console.error('💥 Erro durante os testes:', String(_error))
+      console.error('💥 Erro durante os testes:', "Unknown error")
     }
 
     // Calcular resumo

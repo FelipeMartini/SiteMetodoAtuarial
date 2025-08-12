@@ -51,7 +51,7 @@ const LoginPage: React.FC = () => {
           console.error('Erro OAuth:', result.errorMessage)
         }
       } catch {
-        console.error('Erro OAuth:', String(_error))
+        console.error('Erro OAuth:', "Unknown error")
       }
     })
   }

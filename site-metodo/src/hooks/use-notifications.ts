@@ -118,10 +118,10 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
           setUnreadCount(data.data.user.unreadCount)
         }
       }
-    } catch (error) {
+    } catch {
       console.warn('Erro ao buscar contagem não lidas:', error)
     }
-  }, [error])
+  }, []) // Remove 'error' dependency
 
   /**
    * Marca notificação como lida
@@ -152,7 +152,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       // Atualiza contagem
       setUnreadCount(prev => Math.max(0, prev - 1))
     } catch {
-      console.error('Erro ao marcar como lida:', String(error))
+      console.error('Erro ao marcar como lida:', "Unknown error")
       throw error
     }
   }, [])
@@ -192,7 +192,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setUnreadCount(0)
       return markedCount
     } catch {
-      console.error('Erro ao marcar todas como lidas:', String(error))
+      console.error('Erro ao marcar todas como lidas:', "Unknown error")
       throw error
     }
   }, [])
@@ -223,7 +223,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return newNotifications
       })
     } catch {
-      console.error('Erro ao remover notificação:', String(error))
+      console.error('Erro ao remover notificação:', "Unknown error")
       throw error
     }
   }, [])
@@ -320,7 +320,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return () => {
           ws.close()
         }
-      } catch (error) {
+      } catch {
         console.warn('WebSocket não disponível:', error)
       }
     }
@@ -445,7 +445,7 @@ export function usePushNotifications() {
       setSubscription(pushSubscription)
       return pushSubscription
     } catch {
-      console.error('Erro ao subscrever push notifications:', String(error))
+      console.error('Erro ao subscrever push notifications:', "Unknown error")
       throw error
     }
   }
@@ -467,7 +467,7 @@ export function usePushNotifications() {
         setSubscription(null)
       }
     } catch {
-      console.error('Erro ao cancelar subscription:', String(error))
+      console.error('Erro ao cancelar subscription:', "Unknown error")
       throw error
     }
   }
@@ -485,7 +485,7 @@ export function usePushNotifications() {
       const data = await response.json()
       return data.success
     } catch {
-      console.error('Erro no teste push:', String(error))
+      console.error('Erro no teste push:', "Unknown error")
       return false
     }
   }

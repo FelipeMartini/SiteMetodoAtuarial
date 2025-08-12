@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
       timestamp: authResult.timestamp,
     })
   } catch {
-    console.error('Error checking permission:', String(_error))
+    console.error('Error checking permission:', "Unknown error")
     return NextResponse.json(
       {
         success: false,
