@@ -15,9 +15,9 @@ export const queryClient = new QueryClient({
       // Manter em background por 10 minutos
       gcTime: 10 * 60 * 1000,
       // Retry em caso de erro
-      retry: (failureCount, error: Record<string, unknown>) => {
+      retry: (failureCount, error: Error) => {
         // Não retry em erros 4xx (client errors)
-        if (error?.status >= 400 && error?.status < 500) {
+        if ((error as any)?.status >= 400 && (error as any)?.status < 500) {
           return false
         }
         // Máximo 3 tentativas para outros erros

@@ -194,30 +194,30 @@ export class NotificationWebSocketServer {
   private handleConnection(ws: WebSocket, request: IncomingMessage): void {
     const _userId = this.extractUserIdFromRequest(request)
 
-    if (!userId) {
+    if (!_userId) {
       simpleLogger.warn('Conexão WebSocket rejeitada - usuário não autenticado')
       ws.close(1008, 'Usuário não autenticado')
       return
     }
 
     // Adiciona à lista de conexões do usuário
-    if (!this.userConnections.has(userId)) {
-      this.userConnections.set(userId, new Set())
+    if (!this.userConnections.has(_userId)) {
+      this.userConnections.set(_userId, new Set())
     }
-    this.userConnections.get(userId)!.add(ws)
+    this.userConnections.get(_userId)!.add(ws)
 
     // Configura handlers da conexão
     ws.on('message', data => {
-      this.handleMessage(ws, userId, Buffer.from(data as any))
+      this.handleMessage(ws, _userId, Buffer.from(data as any))
     })
 
     ws.on('close', () => {
-      this.handleDisconnection(ws, userId)
+      this.handleDisconnection(ws, _userId)
     })
 
     ws.on('error', error => {
-      simpleLogger.warn('Erro na conexão WebSocket', { error, userId })
-      this.handleDisconnection(ws, userId)
+      simpleLogger.warn('Erro na conexão WebSocket', { error, userId: _userId })
+      this.handleDisconnection(ws, _userId)
     })
 
     // Marca conexão como viva
@@ -227,12 +227,12 @@ export class NotificationWebSocketServer {
     })
 
     simpleLogger.info('Nova conexão WebSocket', {
-      userId,
+      userId: _userId,
       totalConnections: this.getTotalConnections(),
     })
 
     // Envia contagem inicial de não lidas
-    this.sendInitialData(ws, userId)
+    this.sendInitialData(ws, _userId)
   }
 
   /**
