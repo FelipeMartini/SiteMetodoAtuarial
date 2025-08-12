@@ -264,7 +264,7 @@ export class NotificationService {
    */
   async markAsRead(notificationId: string, userId: string): Promise<void> {
     try {
-      const notification = await this.prisma.notification.update({
+      await this.prisma.notification.update({
         where: {
           id: notificationId,
           userId: userId, // Garante que usuário só pode marcar suas próprias notificações
@@ -275,16 +275,13 @@ export class NotificationService {
         },
       })
 
-      // Registra evento
-      await this.createEvent(notificationId, userId, 'read', notification.channel as any, {})
-
       simpleLogger.info(`Notificação marcada como lida`, {
         notificationId,
         userId,
       })
-    } catch (_error) {
-      simpleLogger.error('Erro ao marcar notificação como lida', { error: String(_error), notificationId, userId })
-      throw _error
+    } catch {
+      simpleLogger.error('Erro ao marcar notificação como lida', { notificationId, userId })
+      throw new Error('Erro ao marcar notificação como lida')
     }
   }
 
@@ -371,7 +368,7 @@ export class NotificationService {
         if (dateTo) (where.createdAt as Record<string, unknown>).lte = dateTo
       }
 
-      const [total, byType, byChannel, byStatus, deliveryStats] = await Promise.all([
+      const [total, byType, byChannel, byStatus] = await Promise.all([
         this.prisma.notification.count({ where }),
         this.prisma.notification.groupBy({
           by: ['type'],

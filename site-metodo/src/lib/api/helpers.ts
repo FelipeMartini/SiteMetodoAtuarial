@@ -1,5 +1,14 @@
 /**
- * Sistema simplificado de decorators para cache e monitoramento
+ * Sistema simplificado de decorators par    let success = false
+
+    try {
+      const result = await fn(...args)
+      success = true
+      return result
+    } catch (err) {
+      success = false
+      throw err
+    } finally {nitoramento
  * Este arquivo substitui o sistema complexo de decorators por funções helper
  */
 
@@ -44,7 +53,6 @@ export function withMonitoring<T extends (...args: Record<string, unknown>[]) =>
   return (async (...args: Parameters<T>) => {
     const startTime = Date.now()
     let success = false
-    let error: string | undefined
 
     try {
       const result = await fn(...args)
@@ -52,7 +60,6 @@ export function withMonitoring<T extends (...args: Record<string, unknown>[]) =>
       return result
     } catch (err) {
       success = false
-      error = err instanceof Error ? err.message : 'Unknown error'
       throw err
     } finally {
       const responseTime = Date.now() - startTime

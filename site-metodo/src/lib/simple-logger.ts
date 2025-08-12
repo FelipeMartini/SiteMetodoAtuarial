@@ -3,7 +3,7 @@
  */
 
 export interface LogMeta {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 export interface LogEntry {
@@ -38,7 +38,7 @@ class SimpleLogger {
       const logMethod =
         level === 'error' ? console.error : level === 'warn' ? console.warn : console.log
 
-      logMethod(`[${level.toUpperCase()}] ${message}`, meta ? JSON.stringify(meta, null, 2) : '')
+      logMethod(`[${entry.level.toUpperCase()}] ${entry.message}`, entry.meta ? JSON.stringify(entry.meta, null, 2) : '')
     }
 
     // Em produção, você pode enviar para um serviço de logging externo
