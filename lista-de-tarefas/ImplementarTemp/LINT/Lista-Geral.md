@@ -2,7 +2,7 @@
 
 ## CONTADOR DE ERROS/WARNINGS
 **Total inicial:** 90
-**Restantes:** 15 (atualize a cada correção)
+**Restantes:** 10 (atualize a cada correção)
 
 ## Instruções Gerais
 Para cada erro/warning:
