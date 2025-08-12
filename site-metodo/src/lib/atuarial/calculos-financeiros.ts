@@ -16,14 +16,45 @@ export interface DadosAnuidade {
  * Interface para cálculos de seguros
  */
 export interface DadosSeguro {
-  tipoSeguro: 'vida' | 'acidentes' | 'temporario' | 'dotal' | 'misto'
+  tipoSeguro: 'vida' | 'invalidez' | 'acidentes'
   capital: number
   idade: number
   sexo: 'M' | 'F'
-  prazoSeguro?: number
-  premio?: number
   taxaJuros: number
-  carregamento?: number
+  carregamento: number
+  prazoSeguro?: number
+}
+
+export interface IntervaloConfianca {
+  inferior: number
+  superior: number
+}
+
+export interface ProjecaoFinanceira {
+  premioMedio: number
+  intervaloConfianca: IntervaloConfianca
+}
+
+export interface AnaliseRisco {
+  sensibilidadeTaxa: number
+  cenarioOtimista: number
+  cenarioPessimista: number
+  volatilidade: number
+}
+
+export interface ResumoExecutivo {
+  produto: string
+  capital: number
+  premioNivelado: number
+  idadeContratante: number
+  taxaJuros: number
+}
+
+export interface RelatorioCompleto {
+  resumoExecutivo: ResumoExecutivo
+  analiseRisco: AnaliseRisco
+  projecaoFinanceira: ProjecaoFinanceira
+  recomendacoes: string[]
 }
 
 /**
@@ -241,12 +272,7 @@ export class RelatoriosAtuariais {
   /**
    * Gera relatório completo de análise atuarial
    */
-  public static gerarRelatorioCompleto(dados: DadosSeguro): {
-    resumoExecutivo: Record<string, unknown>
-    analiseRisco: Record<string, unknown>
-    projecaoFinanceira: Record<string, unknown>
-    recomendacoes: string[]
-  } {
+  public static gerarRelatorioCompleto(dados: DadosSeguro): RelatorioCompleto {
     const calc = new CalculosFinanceirosAtuariais()
     
     const premioNivelado = calc.premioNivelado(dados)
