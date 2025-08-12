@@ -140,9 +140,9 @@ export class NotificationService {
       if (filter.unreadOnly) where.readAt = null
 
       if (filter.dateFrom || filter.dateTo) {
-        where.createdAt = {}
-        if (filter.dateFrom) where.createdAt.gte = filter.dateFrom
-        if (filter.dateTo) where.createdAt.lte = filter.dateTo
+        where.createdAt = {} as Record<string, unknown>
+        if (filter.dateFrom) (where.createdAt as Record<string, unknown>).gte = filter.dateFrom
+        if (filter.dateTo) (where.createdAt as Record<string, unknown>).lte = filter.dateTo
       }
 
       if (filter.search) {
