@@ -6,6 +6,16 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 
+// Interface para erros HTTP que podem ter status code
+interface HttpError extends Error {
+  status: number
+}
+
+// Type guard para verificar se o erro tem status
+function isHttpError(error: Error): error is HttpError {
+  return 'status' in error && typeof (error as HttpError).status === 'number'
+}
+
 // Configuração otimizada do React Query
 export const queryClient = new QueryClient({
   defaultOptions: {
@@ -17,7 +27,7 @@ export const queryClient = new QueryClient({
       // Retry em caso de erro
       retry: (failureCount, error: Error) => {
         // Não retry em erros 4xx (client errors)
-        if ((error as any)?.status >= 400 && (error as any)?.status < 500) {
+        if (isHttpError(error) && error.status >= 400 && error.status < 500) {
           return false
         }
         // Máximo 3 tentativas para outros erros
@@ -205,7 +215,7 @@ export function CacheProvider({ children }: CacheProviderProps) {
     <QueryClientProvider client={queryClient}>
       {children}
       {process.env.NODE_ENV === 'development' && (
-        <ReactQueryDevtools initialIsOpen={false} position={'bottom-right' as any} />
+        <ReactQueryDevtools initialIsOpen={false} />
       )}
     </QueryClientProvider>
   )
