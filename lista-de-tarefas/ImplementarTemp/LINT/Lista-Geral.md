@@ -1,5 +1,9 @@
 # Lista Geral de Erros de Lint - Projeto SiteMetodoAtuarial
 
+## CONTADOR DE ERROS/WARNINGS
+**Total inicial:** 90
+**Restantes:** 53 (atualize a cada correção)
+
 ## Instruções Gerais
 Para cada erro/warning:
 1. Consulte o Google/GitHub sobre a solução mais moderna e segura.
@@ -68,12 +72,6 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
 - [Next.js: Linting](https://nextjs.org/docs/app/building-your-application/configuring/eslint)
 - [Google: TypeScript lint best practices](https://www.google.com/search?q=typescript+lint+best+practices)
 - [GitHub: TypeScript Lint Patterns](https://github.com/typescript-eslint/typescript-eslint)
-
----
-
-## CONTADOR DE ERROS/WARNINGS
-**Total inicial:** 90
-**Restantes:** 53 (atualize a cada correção)
 
 ---
 
@@ -305,3 +303,22 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
 ## ./src/middleware/logging.ts
 - 92:14  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
 - 146:12  Warning: Unexpected any. Specify a different type.  @typescript-eslint/no-explicit-any
+
+---
+
+## INSTRUÇÃO IMPORTANTE APÓS CORREÇÃO DE TODOS OS ALERTAS
+
+**⚠️ APÓS ZERAR O CONTADOR DE ERROS/WARNINGS:**
+
+1. Reler TODAS as tarefas na pasta `lista-de-tarefas/ImplementarTemp/` 
+2. Continuar com TODAS as tarefas não feitas de maneira COMPLETA
+3. Seguir processo automatizado sem consultar o usuário
+4. Buscar referências no Google e docs oficiais sempre
+5. Implementar soluções mais atuais e recomendadas
+6. Evitar `any` - criar tipos específicos ou estender tipagem oficial
+7. Revisar e analisar de forma profunda cada implementação
+8. Resolver conflitos do git e enviar para remote main
+9. Considerar arquivos locais como fonte da verdade
+10. Testar lint/build/type-check a cada passo para evitar regressões
+
+**Localização obrigatória para documentação:** `lista-de-tarefas/ImplementarTemp/LINT/`

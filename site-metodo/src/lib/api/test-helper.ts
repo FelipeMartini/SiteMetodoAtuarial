@@ -191,7 +191,7 @@ export class ApiTestHelper {
     // Teste de tendências
     try {
       console.log('  📈 Testando tendências USD/BRL...')
-      const trends = await exchangeService.getTrends('USD', 7)
+      const trends = await exchangeService.getTrends('USD')
 
       results.trends.push({
         currency: 'USD',
