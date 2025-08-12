@@ -145,7 +145,7 @@ export class NotificationWebSocketServer {
 
       await this.sendMessageToUser(userId, message)
     } catch {
-      simpleLogger.error('Erro ao notificar contagem não lidas', { error: String(_error), userId })
+      simpleLogger.error('Erro ao notificar contagem não lidas', { error: String), userId })
     }
   }
 
@@ -201,14 +201,14 @@ export class NotificationWebSocketServer {
     }
 
     // Adiciona à lista de conexões do usuário
-    if (!this.userConnections.has(_userId)) {
+    if (!this.userConnections.has)) {
       this.userConnections.set(_userId, new Set())
     }
-    this.userConnections.get(_userId)!.add(ws)
+    this.userConnections.get)!.add(ws)
 
     // Configura handlers da conexão
     ws.on('message', data => {
-      this.handleMessage(ws, _userId, Buffer.from(data as any))
+      this.handleMessage(ws, _userId, Buffer.from(data as unknown))
     })
 
     ws.on('close', () => {
@@ -221,9 +221,9 @@ export class NotificationWebSocketServer {
     })
 
     // Marca conexão como viva
-    ;(ws as any).isAlive = true
+    ;(ws as unknown).isAlive = true
     ws.on('pong', () => {
-      ;(ws as any).isAlive = true
+      ;(ws as unknown).isAlive = true
     })
 
     simpleLogger.info('Nova conexão WebSocket', {
@@ -294,7 +294,7 @@ export class NotificationWebSocketServer {
 
       this.sendMessageToConnection(ws, message)
     } catch {
-      simpleLogger.error('Erro ao enviar dados iniciais', { error: String(_error), userId })
+      simpleLogger.error('Erro ao enviar dados iniciais', { error: String), userId })
     }
   }
 
@@ -364,12 +364,12 @@ export class NotificationWebSocketServer {
 
       for (const [userId, connections] of this.userConnections) {
         for (const ws of connections) {
-          if (!(ws as any).isAlive) {
+          if (!(ws as unknown).isAlive) {
             deadConnections.push(ws)
             continue
           }
 
-          ;(ws as any).isAlive = false
+          ;(ws as unknown).isAlive = false
           try {
             ws.ping()
           } catch {

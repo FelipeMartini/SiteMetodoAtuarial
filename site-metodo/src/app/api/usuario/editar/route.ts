@@ -39,7 +39,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json({ success: true })
   } catch {
-    console.error('Erro ao editar usuário:', String(_error))
+    console.error('Erro ao editar usuário:', "Unknown error")
     return NextResponse.json({ error: 'Erro interno do servidor.' }, { status: 500 })
   }
 }

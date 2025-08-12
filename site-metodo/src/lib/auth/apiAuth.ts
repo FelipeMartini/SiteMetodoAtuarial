@@ -59,7 +59,7 @@ export async function checkApiAuthorization(
       isActive: user.isActive,
     }
   } catch {
-    console.error('Erro na verificação de autorização da API:', String(_error))
+    console.error('Erro na verificação de autorização da API:', "Unknown error")
     return null
   }
 }

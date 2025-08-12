@@ -100,7 +100,7 @@ export function AuditDashboard() {
         setLogs(data.logs)
       }
     } catch {
-      console.error('Error fetching logs:', String(_error))
+      console.error('Error fetching logs:', "Unknown error")
     } finally {
       setLoading(false)
     }
@@ -116,7 +116,7 @@ export function AuditDashboard() {
         setStats(data.stats)
       }
     } catch {
-      console.error('Error fetching stats:', String(_error))
+      console.error('Error fetching stats:', "Unknown error")
     }
   }, [selectedPeriod])
 
@@ -162,7 +162,7 @@ export function AuditDashboard() {
       a.click()
       URL.revokeObjectURL(url)
     } catch {
-      console.error('Error exporting logs:', String(_error))
+      console.error('Error exporting logs:', "Unknown error")
     }
   }
 

@@ -24,7 +24,7 @@ export class EmailService {
   async sendWithTemplate(
     templateId: string,
     to: string | string[],
-    variables: Record<string, any>,
+    variables: Record<string, unknown>,
     options?: Partial<EmailData>
   ): Promise<boolean> {
     try {
@@ -76,7 +76,7 @@ export class EmailService {
             filename: att.filename,
             content: att.content,
             contentType: att.contentType,
-            encoding: att.encoding as any,
+            encoding: att.encoding as unknown,
             cid: att.cid,
           })),
           priority: this.mapPriorityToNodemailer(emailData.priority),
@@ -168,7 +168,7 @@ export class EmailService {
 
       return created.id
     } catch {
-      simpleLogger.error('Erro ao criar template', { error: String(_error), template: template.name })
+      simpleLogger.error('Erro ao criar template', { error: String), template: template.name })
       throw _error
     }
   }
@@ -197,7 +197,7 @@ export class EmailService {
         updatedAt: template.updatedAt,
       }
     } catch {
-      simpleLogger.error('Erro ao buscar template', { error: String(_error), templateId })
+      simpleLogger.error('Erro ao buscar template', { error: String), templateId })
       return null
     }
   }
@@ -228,7 +228,7 @@ export class EmailService {
         updatedAt: template.updatedAt,
       }))
     } catch {
-      simpleLogger.error('Erro ao listar templates', { error: String(_error), category })
+      simpleLogger.error('Erro ao listar templates', { error: String), category })
       return []
     }
   }
@@ -306,7 +306,7 @@ export class EmailService {
         text: `Teste de Email - ${new Date().toLocaleString()}`,
       })
     } catch {
-      simpleLogger.error('Erro no teste de email', { error: String(_error), to })
+      simpleLogger.error('Erro no teste de email', { error: String), to })
       return false
     }
   }
@@ -363,7 +363,7 @@ export class EmailService {
   /**
    * Processa template substituindo variáveis
    */
-  private processTemplate(template: string, variables: Record<string, any>): string {
+  private processTemplate(template: string, variables: Record<string, unknown>): string {
     let processed = template
 
     for (const [key, value] of Object.entries(variables)) {

@@ -129,7 +129,7 @@ export class AuditService {
     context: AuditContext & {
       targetUserId: string
       targetEmail?: string
-      changes?: Record<string, any>
+      changes?: Record<string, unknown>
       fromRole?: string
       toRole?: string
     }
@@ -215,7 +215,7 @@ export class AuditService {
         auditLogger.apiAccess(userId, method, endpoint, { ip, data })
       }
     } catch {
-      console.error('Erro ao registrar acesso à API:', String(_error))
+      console.error('Erro ao registrar acesso à API:', "Unknown error")
     }
   }
 
@@ -472,7 +472,7 @@ export const audit = {
   userUpdated: (
     performedBy: string,
     targetUserId: string,
-    changes: Record<string, any>,
+    changes: Record<string, unknown>,
     context: AuditContext
   ) =>
     auditService.logUserManagement('USER_UPDATE', {

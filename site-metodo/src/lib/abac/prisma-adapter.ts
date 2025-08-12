@@ -52,7 +52,7 @@ export class CustomPrismaAdapter {
 
       return policyLines
     } catch {
-      console.error('Error loading policies:', String(_error))
+      console.error('Error loading policies:', "Unknown error")
       return []
     }
   }
@@ -125,7 +125,7 @@ export class CustomPrismaAdapter {
         }
       }
     } catch {
-      console.error('Error saving policies:', String(_error))
+      console.error('Error saving policies:', "Unknown error")
       throw _error
     }
   }

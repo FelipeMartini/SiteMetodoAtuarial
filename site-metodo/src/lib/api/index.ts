@@ -296,7 +296,7 @@ if (typeof window !== 'undefined') {
 
     console.log('✅ API monitoring endpoints registered successfully')
   } catch {
-    console.warn('⚠️ Failed to register API monitoring endpoints:', _error)
+    console.warn('⚠️ Failed to register API monitoring endpoints:')
   }
 }
 

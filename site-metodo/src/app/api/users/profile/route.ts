@@ -75,7 +75,7 @@ export async function PATCH(request: NextRequest) {
 
     return NextResponse.json(updatedUser)
   } catch {
-    console.error('Erro ao atualizar perfil:', String(_error))
+    console.error('Erro ao atualizar perfil:', "Unknown error")
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }
 }

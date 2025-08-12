@@ -11,9 +11,6 @@ export async function POST(request: NextRequest) {
   if (!state || !stateCookie || state !== stateCookie) {
     return NextResponse.redirect('/login?error=invalid_state')
   }
-  if (_error) {
-    return NextResponse.redirect('/login?error=oauth_error')
-  }
   if (!code) {
     return NextResponse.redirect('/login?error=missing_code')
   }

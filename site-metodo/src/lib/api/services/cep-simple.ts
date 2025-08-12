@@ -72,7 +72,7 @@ export class CepService {
           return result
         }
       } catch {
-        console.warn(`Falha no provedor ${providerMethod}:`, _error)
+        console.warn(`Falha no provedor ${providerMethod}:`)
         continue
       }
     }
@@ -211,7 +211,7 @@ export class CepService {
           })
         )
     } catch {
-      console.error('Erro na busca por localização:', String(_error))
+      console.error('Erro na busca por localização:', "Unknown error")
       return []
     }
   }

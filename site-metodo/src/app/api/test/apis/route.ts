@@ -43,7 +43,7 @@ export async function GET(request: NextRequest) {
       message: `Teste ${testType} executado com sucesso`,
     })
   } catch {
-    console.error('Erro durante teste de APIs:', String(_error))
+    console.error('Erro durante teste de APIs:', "Unknown error")
 
     return NextResponse.json(
       {
@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         )
     }
   } catch {
-    console.error('Erro durante teste POST:', String(_error))
+    console.error('Erro durante teste POST:', "Unknown error")
 
     return NextResponse.json(
       {

@@ -53,7 +53,7 @@ export interface RoleDefinition {
   description?: string
   permissions: string[]
   inherits?: string[]
-  attributes?: Record<string, any>
+  attributes?: Record<string, unknown>
 }
 
 // Casbin enforcer interface
@@ -177,5 +177,5 @@ export type UserPermissions = {
   userId: string
   permissions: Permission[]
   roles: string[]
-  attributes: Record<string, any>
+  attributes: Record<string, unknown>
 }
