@@ -197,7 +197,7 @@ export class ApiTestHelper {
         console.log(`    ❌ Tendências: Falhou`)
       }
     } catch (_error) {
-      console.log(`    💥 Tendências: ${error}`)
+      console.log(`    💥 Tendências: ${_error}`)
       results.trends.push({
         currency: 'USD',
         days: 7,
@@ -265,7 +265,7 @@ export class ApiTestHelper {
           `    ${healthResult.healthy ? '✅' : '❌'} ${endpoint.name}: ${healthResult.responseTime}ms`
         )
       } catch (_error) {
-        console.log(`    💥 Health check: ${error}`)
+        console.log(`    💥 Health check: ${_error}`)
         results.healthChecks.push({
           name: endpoint.name,
           success: false,
@@ -288,7 +288,7 @@ export class ApiTestHelper {
 
       console.log(`    ✅ Métricas: ${allMetrics.length} endpoints monitorados`)
     } catch (_error) {
-      console.log(`    💥 Métricas: ${error}`)
+      console.log(`    💥 Métricas: ${_error}`)
       results.metrics = {
         success: false,
         error: _error instanceof Error ? _error.message : 'Unknown error',
@@ -374,13 +374,13 @@ export class ApiTestHelper {
 
       const traverse = (item: Record<string, unknown>) => {
         if (Array.isArray(item)) {
-          item.forEach(traverse)
+          item.forEach((subItem) => traverse(subItem as Record<string, unknown>))
         } else if (item && typeof item === 'object') {
           if ('success' in item) {
             if (item.success) success++
             else failed++
           } else {
-            Object.values(item).forEach(traverse)
+            Object.values(item).forEach((value) => traverse(value as Record<string, unknown>))
           }
         }
       }

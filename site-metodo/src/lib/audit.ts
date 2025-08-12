@@ -351,9 +351,9 @@ export class AuditService {
     if (filters.success !== undefined) where.success = filters.success
 
     if (filters.startDate || filters.endDate) {
-      where.createdAt = {}
-      if (filters.startDate) where.createdAt.gte = filters.startDate
-      if (filters.endDate) where.createdAt.lte = filters.endDate
+      where.createdAt = {} as Record<string, unknown>
+      if (filters.startDate) (where.createdAt as Record<string, unknown>).gte = filters.startDate
+      if (filters.endDate) (where.createdAt as Record<string, unknown>).lte = filters.endDate
     }
 
     const [logs, total] = await Promise.all([
