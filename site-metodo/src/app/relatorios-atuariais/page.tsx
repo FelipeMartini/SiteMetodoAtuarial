@@ -11,14 +11,7 @@ import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
 import { FileText, BarChart3, Download, AlertTriangle, CheckCircle, TrendingUp, TrendingDown } from 'lucide-react'
 import { toast } from 'sonner'
-import { RelatoriosAtuariais, DadosSeguro } from '@/lib/atuarial/calculos-financeiros'
-
-interface RelatorioCompleto {
-  resumoExecutivo: Record<string, unknown>
-  analiseRisco: Record<string, unknown>
-  projecaoFinanceira: Record<string, unknown>
-  recomendacoes: string[]
-}
+import { RelatoriosAtuariais, DadosSeguro, RelatorioCompleto } from '@/lib/atuarial/calculos-financeiros'
 
 export default function RelatoriosAtuariaisPage() {
   const [dadosSeguro, setDadosSeguro] = useState<DadosSeguro>({
