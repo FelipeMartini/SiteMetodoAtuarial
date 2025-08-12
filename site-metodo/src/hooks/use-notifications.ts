@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import {
   NotificationData,
+  NotificationStatus,
   UseNotificationsOptions,
   UseNotificationsReturn,
 } from '@/types/notifications'
@@ -144,7 +145,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setNotifications(prev =>
         prev.map(notification =>
           notification.id === notificationId
-            ? { ...notification, readAt: new Date(), status: 'read' as const }
+            ? { ...notification, readAt: new Date(), status: NotificationStatus.READ }
             : notification
         )
       )

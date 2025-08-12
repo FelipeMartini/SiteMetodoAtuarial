@@ -304,17 +304,17 @@ export function useAuth() {
      * Verifica se o usuário tem permissão para um recurso usando ABAC
      */
     hasPermission: (resource: string | null = null, action: string = 'access') =>
-      checkABACAuthorization({ user: session?.user, action, resource }),
+      checkABACAuthorization(session?.user, resource),
 
     /**
      * Verifica se o usuário tem acesso a recurso de administração
      */
-    isAdmin: () => checkABACAuthorization(session?.user, 'access', 'admin'),
+    isAdmin: () => checkABACAuthorization(session?.user, 'admin'),
 
     /**
      * Verifica se o usuário tem acesso a recurso de moderação
      */
-    isModerator: () => checkABACAuthorization(session?.user, 'moderate', 'moderation'),
+    isModerator: () => checkABACAuthorization(session?.user, 'moderator'),
   }
 }
 
