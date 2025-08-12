@@ -128,12 +128,12 @@ export class ApiTestHelper {
             console.log(`    ❌ ${provider}: Falhou`)
           }
         } catch (_error) {
-          console.log(`    💥 ${provider}: ${error}`)
+          console.log(`    💥 ${provider}: ${_error}`)
           results.rates.push({
             ...pair,
             provider,
             success: false,
-            error: error instanceof Error ? _error.message : 'Unknown error',
+            error: _error instanceof Error ? _error.message : 'Unknown error',
           })
         }
       }
@@ -170,11 +170,11 @@ export class ApiTestHelper {
           console.log(`    ❌ Conversão falhou`)
         }
       } catch (_error) {
-        console.log(`    💥 Conversão: ${error}`)
+        console.log(`    💥 Conversão: ${_error}`)
         results.conversions.push({
           ...conversion,
           success: false,
-          error: error instanceof Error ? _error.message : 'Unknown error',
+          error: _error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
@@ -202,7 +202,7 @@ export class ApiTestHelper {
         currency: 'USD',
         days: 7,
         success: false,
-        error: error instanceof Error ? _error.message : 'Unknown error',
+        error: _error instanceof Error ? _error.message : 'Unknown error',
       })
     }
 
@@ -269,7 +269,7 @@ export class ApiTestHelper {
         results.healthChecks.push({
           name: endpoint.name,
           success: false,
-          error: error instanceof Error ? _error.message : 'Unknown error',
+          error: _error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
@@ -291,7 +291,7 @@ export class ApiTestHelper {
       console.log(`    💥 Métricas: ${error}`)
       results.metrics = {
         success: false,
-        error: error instanceof Error ? _error.message : 'Unknown error',
+        error: _error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
@@ -317,10 +317,10 @@ export class ApiTestHelper {
 
       console.log(`    ✅ Cache funcionando: ${cached ? 'dados recuperados' : 'falhou'}`)
     } catch (_error) {
-      console.log(`    💥 Cache: ${error}`)
+      console.log(`    💥 Cache: ${_error}`)
       results.cache = {
         success: false,
-        error: error instanceof Error ? _error.message : 'Unknown error',
+        error: _error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
