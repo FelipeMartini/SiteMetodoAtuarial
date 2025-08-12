@@ -28,7 +28,7 @@ export interface ConversionResult {
  * Serviço para cotações de moedas com múltiplos provedores - versão servidor
  */
 export class ExchangeService {
-  private async simpleFetch(url: string, timeout = 5000): Promise<any> {
+  private async simpleFetch(url: string, timeout = 5000): Promise<unknown> {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeout)
     
@@ -39,12 +39,10 @@ export class ExchangeService {
           'User-Agent': 'Mozilla/5.0 (compatible; SiteMetodoAtuarial/1.0)',
         },
       })
-      
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`)
       }
-      
-      return await response.json()
+      return (await response.json()) as unknown
     } finally {
       clearTimeout(timeoutId)
     }
@@ -62,9 +60,8 @@ export class ExchangeService {
       } else {
         return await this.getRateFromAwesomeApi(from, to)
       }
-    } catch (_error) {
+    } catch {
       console.warn(`Falha no provedor ${provider}:`)
-
       // Fallback para o outro provedor
       try {
         const fallbackProvider = provider === 'exchangerate-api' ? 'awesomeapi' : 'exchangerate-api'
@@ -133,15 +130,20 @@ export class ExchangeService {
   /**
    * Obter tendências (simulado - versão simplificada)
    */
-  async getTrends(currency: string, days: number = 30): Promise<any> {
+  async getTrends(currency: string, _days: number = 30): Promise<{
+    current: number
+    change24h: number
+    changePercent24h: number
+    high24h: number
+    low24h: number
+    volume: number
+  } | null> {
     // Para uma implementação real, você precisaria de dados históricos
     // Por enquanto, retornamos dados simulados
     const currentRate = await this.getRate(currency, 'BRL')
-
     if (!currentRate) {
       return null
     }
-
     return {
       current: currentRate,
       change24h: (Math.random() - 0.5) * 0.1 * currentRate, // Variação simulada
@@ -172,17 +174,15 @@ export class ExchangeService {
   private async getRateFromAwesomeApi(from: string, to: string): Promise<number> {
     const pair = `${from}-${to}`
     const data = await this.simpleFetch(`https://economia.awesomeapi.com.br/json/last/${pair}`)
-
     const key = pair.replace('-', '')
-    if (!data[key]) {
+    const dataObj = data as Record<string, { bid: string }>
+    if (!dataObj[key]) {
       throw new Error(`Par de moedas não encontrado: ${pair}`)
     }
-
-    const rate = parseFloat(data[key].bid)
+    const rate = parseFloat(dataObj[key].bid)
     if (isNaN(rate)) {
       throw new Error('Taxa inválida recebida da API')
     }
-
     return rate
   }
 
@@ -202,14 +202,24 @@ export class ExchangeService {
       timestamp: string
     }>
   > {
-    const results = await Promise.allSettled(
+    type BrazilianRate = {
+      currency: string
+      name: string
+      buy: number
+      sell: number
+      variation: number
+      percentChange: number
+      high: number
+      low: number
+      timestamp: string
+    }
+    const results = await Promise.allSettled<BrazilianRate | null>(
       currencies.map(async currency => {
         try {
           const pair = `${currency}-BRL`
           const data = await this.simpleFetch(`https://economia.awesomeapi.com.br/json/last/${pair}`)
           const key = pair.replace('-', '')
-          const currencyData = data[key]
-
+          const currencyData = (data as Record<string, any>)[key]
           return {
             currency,
             name: currencyData.name || currency,
@@ -221,16 +231,15 @@ export class ExchangeService {
             low: parseFloat(currencyData.low),
             timestamp: currencyData.create_date,
           }
-        } catch (_error) {
+        } catch {
           console.warn(`Erro ao buscar ${currency}:`)
           return null
         }
       })
     )
-
     return results
-      .filter(result => result.status === 'fulfilled' && result.value !== null)
-      .map(result => (result as PromiseFulfilledResult<any>).value)
+      .filter((result): result is PromiseFulfilledResult<BrazilianRate | null> => result.status === 'fulfilled' && result.value !== null)
+      .map(result => result.value as BrazilianRate)
   }
 }
 
