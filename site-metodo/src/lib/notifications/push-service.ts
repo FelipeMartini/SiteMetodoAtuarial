@@ -258,7 +258,7 @@ export class PushNotificationService {
         subscriptionsByUser: byUser.length,
       }
     } catch (_error) {
-      simpleLogger.error('Erro ao obter estatísticas push', { error })
+      simpleLogger.error('Erro ao obter estatísticas push', { _error })
       return {
         totalSubscriptions: 0,
         activeSubscriptions: 0,
@@ -312,7 +312,7 @@ export class PushNotificationService {
 
       simpleLogger.info('Web Push configurado com sucesso')
     } catch (_error) {
-      simpleLogger.error('Erro ao configurar Web Push', { error })
+      simpleLogger.error('Erro ao configurar Web Push', { _error })
       throw _error
     }
   }
@@ -404,7 +404,7 @@ export class PushNotificationService {
         count: endpoints.length,
       })
     } catch (_error) {
-      simpleLogger.error('Erro ao marcar subscriptions como inativas', { error })
+      simpleLogger.error('Erro ao marcar subscriptions como inativas', { _error })
     }
   }
 

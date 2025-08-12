@@ -496,7 +496,7 @@ export class NotificationService {
       return preference?.enabled ?? true
     } catch (_error) {
       simpleLogger.warn('Erro ao verificar preferência, assumindo habilitado', {
-        error,
+        _error,
         userId,
         type,
         channel,
@@ -546,7 +546,7 @@ export class NotificationService {
         },
       })
     } catch (_error) {
-      simpleLogger.warn('Erro ao criar evento', { error, notificationId, type })
+      simpleLogger.warn('Erro ao criar evento', { _error, notificationId, type })
     }
   }
 

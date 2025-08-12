@@ -253,7 +253,7 @@ export async function addToBackgroundSync(url: string, options: RequestInit): Pr
       await (registration as any).sync.register('background-sync')
     }
   } catch (_error) {
-    console.warn('Background Sync não disponível:', error)
+    console.warn('Background Sync não disponível:', _error)
   }
 }
 

@@ -269,7 +269,7 @@ export class AuditLogger {
       userId,
       userEmail,
       description: `System error occurred${context ? ` in ${context}` : ''}`,
-      errorMessage: _error.message,
+      errorMessage: error.message,
       metadata: {
         stack: error.stack,
         context,

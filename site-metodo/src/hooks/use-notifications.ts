@@ -303,7 +303,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
               setUnreadCount(message.data.unreadCount)
             }
           } catch (_error) {
-            console.warn('Erro ao processar mensagem WebSocket:', error)
+            console.warn('Erro ao processar mensagem WebSocket:', _error)
           }
         }
 
@@ -320,7 +320,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return () => {
           ws.close()
         }
-      } catch (_error) {
+      } catch (error) {
         console.warn('WebSocket não disponível:', error)
       }
     }

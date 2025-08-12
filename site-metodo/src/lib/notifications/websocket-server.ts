@@ -59,7 +59,7 @@ export class NotificationWebSocketServer {
           deadConnections.push(ws)
         }
       } catch (_error) {
-        simpleLogger.warn('Erro ao enviar para conexão WebSocket', { error, userId })
+        simpleLogger.warn('Erro ao enviar para conexão WebSocket', { _error, userId })
         deadConnections.push(ws)
       }
     }
@@ -113,7 +113,7 @@ export class NotificationWebSocketServer {
             deadConnections.push(ws)
           }
         } catch (_error) {
-          simpleLogger.warn('Erro no broadcast WebSocket', { error, userId })
+          simpleLogger.warn('Erro no broadcast WebSocket', { _error, userId })
           deadConnections.push(ws)
         }
       }
@@ -257,7 +257,7 @@ export class NotificationWebSocketServer {
           })
       }
     } catch (_error) {
-      simpleLogger.warn('Erro ao processar mensagem WebSocket', { error, userId })
+      simpleLogger.warn('Erro ao processar mensagem WebSocket', { _error, userId })
     }
   }
 
@@ -319,7 +319,7 @@ export class NotificationWebSocketServer {
         ws.send(JSON.stringify(message))
       }
     } catch (_error) {
-      simpleLogger.warn('Erro ao enviar mensagem WebSocket', { error })
+      simpleLogger.warn('Erro ao enviar mensagem WebSocket', { _error })
     }
   }
 
@@ -350,7 +350,7 @@ export class NotificationWebSocketServer {
       const mockUserId = url.searchParams.get('userId')
       return mockUserId
     } catch (_error) {
-      simpleLogger.warn('Erro ao extrair userId da requisição WebSocket', { error })
+      simpleLogger.warn('Erro ao extrair userId da requisição WebSocket', { _error })
       return null
     }
   }

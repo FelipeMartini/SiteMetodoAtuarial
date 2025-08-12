@@ -48,7 +48,7 @@ export class EmailService {
       return await this.send(emailData)
     } catch (_error) {
       simpleLogger.error('Erro ao enviar email com template', {
-        error,
+        _error,
         templateId,
         to: Array.isArray(to) ? to.length : 1,
       })
@@ -93,7 +93,7 @@ export class EmailService {
       return true
     } catch (_error) {
       simpleLogger.error('Erro ao enviar email', {
-        error,
+        _error,
         to: emailData.to,
         subject: emailData.subject,
       })
@@ -355,7 +355,7 @@ export class EmailService {
         provider: this.config.provider,
       })
     } catch (_error) {
-      simpleLogger.error('Erro ao inicializar email transporter', { error })
+      simpleLogger.error('Erro ao inicializar email transporter', { _error })
       throw _error
     }
   }
