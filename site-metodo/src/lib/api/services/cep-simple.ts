@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { createApiClient } from '../client'
 
 const CepDataSchema = z.object({
   cep: z.string(),
@@ -23,26 +22,30 @@ export interface CepLookupOptions {
 }
 
 /**
- * Serviço para consulta de CEP com múltiplos provedores
+ * Serviço para consulta de CEP com múltiplos provedores - versão servidor
  */
 export class CepService {
-  private viaCepClient = createApiClient({
-    baseURL: 'https://viacep.com.br/ws',
-    timeout: 5000,
-    rateLimitRpm: 300,
-  })
-
-  private brasilApiClient = createApiClient({
-    baseURL: 'https://brasilapi.com.br/api/cep/v1',
-    timeout: 5000,
-    rateLimitRpm: 300,
-  })
-
-  private awesomeApiClient = createApiClient({
-    baseURL: 'https://cep.awesomeapi.com.br/json',
-    timeout: 5000,
-    rateLimitRpm: 200,
-  })
+  private async simpleFetch(url: string, timeout = 5000): Promise<any> {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
+    
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; SiteMetodoAtuarial/1.0)',
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+      
+      return await response.json()
+    } finally {
+      clearTimeout(timeoutId)
+    }
+  }
 
   /**
    * Busca CEP em múltiplos provedores com fallback
@@ -116,23 +119,23 @@ export class CepService {
    * ViaCEP (Correios)
    */
   private async lookupViaCep(cep: string): Promise<CepData> {
-    const response = await this.viaCepClient.get(`/${cep}/json/`)
+    const data = await this.simpleFetch(`https://viacep.com.br/ws/${cep}/json/`)
 
-    if (response.data.erro) {
+    if (data.erro) {
       throw new Error('CEP não encontrado')
     }
 
     return CepDataSchema.parse({
-      cep: response.data.cep,
-      logradouro: response.data.logradouro,
-      complemento: response.data.complemento,
-      bairro: response.data.bairro,
-      localidade: response.data.localidade,
-      uf: response.data.uf,
-      ibge: response.data.ibge,
-      gia: response.data.gia,
-      ddd: response.data.ddd,
-      siafi: response.data.siafi,
+      cep: data.cep,
+      logradouro: data.logradouro,
+      complemento: data.complemento,
+      bairro: data.bairro,
+      localidade: data.localidade,
+      uf: data.uf,
+      ibge: data.ibge,
+      gia: data.gia,
+      ddd: data.ddd,
+      siafi: data.siafi,
     })
   }
 
@@ -140,16 +143,16 @@ export class CepService {
    * BrasilAPI
    */
   private async lookupBrasilApi(cep: string): Promise<CepData> {
-    const response = await this.brasilApiClient.get(`/${cep}`)
+    const data = await this.simpleFetch(`https://brasilapi.com.br/api/cep/v1/${cep}`)
 
     return CepDataSchema.parse({
-      cep: response.data.cep,
-      logradouro: response.data.street,
+      cep: data.cep,
+      logradouro: data.street,
       complemento: '',
-      bairro: response.data.neighborhood,
-      localidade: response.data.city,
-      uf: response.data.state,
-      ibge: response.data.location?.coordinates?.latitude?.toString(),
+      bairro: data.neighborhood,
+      localidade: data.city,
+      uf: data.state,
+      ibge: data.location?.coordinates?.latitude?.toString(),
       ddd: '',
       siafi: '',
     })
@@ -159,21 +162,21 @@ export class CepService {
    * AwesomeAPI
    */
   private async lookupAwesomeApi(cep: string): Promise<CepData> {
-    const response = await this.awesomeApiClient.get(`/${cep}`)
+    const data = await this.simpleFetch(`https://cep.awesomeapi.com.br/json/${cep}`)
 
-    if (response.data.status === 400) {
+    if (data.status === 400) {
       throw new Error('CEP não encontrado')
     }
 
     return CepDataSchema.parse({
-      cep: response.data.cep,
-      logradouro: response.data.address,
+      cep: data.cep,
+      logradouro: data.address,
       complemento: '',
-      bairro: response.data.district,
-      localidade: response.data.city,
-      uf: response.data.state,
-      ibge: response.data.city_ibge,
-      ddd: response.data.ddd,
+      bairro: data.district,
+      localidade: data.city,
+      uf: data.state,
+      ibge: data.city_ibge,
+      ddd: data.ddd,
       siafi: '',
     })
   }
@@ -185,13 +188,13 @@ export class CepService {
     try {
       const url = street ? `/${uf}/${city}/${street}/json/` : `/${uf}/${city}/json/`
 
-      const response = await this.viaCepClient.get(url)
+      const data = await this.simpleFetch(`https://viacep.com.br/ws${url}`)
 
-      if (!Array.isArray(response.data)) {
+      if (!Array.isArray(data)) {
         return []
       }
 
-      return response.data
+      return data
         .filter((item: Record<string, unknown>) => !item.erro)
         .map((item: Record<string, unknown>) =>
           CepDataSchema.parse({
