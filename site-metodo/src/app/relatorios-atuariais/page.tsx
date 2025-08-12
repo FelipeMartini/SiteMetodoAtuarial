@@ -343,7 +343,7 @@ export default function RelatoriosAtuariaisPage() {
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Limite Inferior (5º Percentil)</span>
                             <span className="font-semibold">
-                              R$ {((relatorio.projecaoFinanceira.intervaloConfianca as any).inferior as number).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                              R$ {relatorio.projecaoFinanceira.intervaloConfianca.inferior.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                             </span>
                           </div>
                           
@@ -355,7 +355,7 @@ export default function RelatoriosAtuariaisPage() {
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Limite Superior (95º Percentil)</span>
                             <span className="font-semibold">
-                              R$ {((relatorio.projecaoFinanceira.intervaloConfianca as any).superior as number).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
+                              R$ {relatorio.projecaoFinanceira.intervaloConfianca.superior.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}
                             </span>
                           </div>
                         </div>
@@ -364,7 +364,7 @@ export default function RelatoriosAtuariaisPage() {
                       <div className="bg-blue-50 p-4 rounded-lg">
                         <h4 className="font-medium text-blue-900 mb-2">Interpretação</h4>
                         <p className="text-sm text-blue-800">
-                          Com 95% de confiança, o prêmio deve variar entre R$ {((relatorio.projecaoFinanceira.intervaloConfianca as any).inferior as number).toLocaleString('pt-BR', { minimumFractionDigits: 2 })} e R$ {((relatorio.projecaoFinanceira.intervaloConfianca as any).superior as number).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}, considerando variações nas condições econômicas.
+                          Com 95% de confiança, o prêmio deve variar entre R$ {relatorio.projecaoFinanceira.intervaloConfianca.inferior.toLocaleString('pt-BR', { minimumFractionDigits: 2 })} e R$ {relatorio.projecaoFinanceira.intervaloConfianca.superior.toLocaleString('pt-BR', { minimumFractionDigits: 2 })}, considerando variações nas condições econômicas.
                         </p>
                       </div>
                     </div>

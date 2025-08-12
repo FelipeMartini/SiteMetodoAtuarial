@@ -21,11 +21,87 @@ export interface CepLookupOptions {
   timeout?: number
 }
 
+// Interfaces para validação de responses dos providers
+interface ViaCepResponse {
+  cep: string
+  logradouro: string
+  complemento?: string
+  bairro: string
+  localidade: string
+  uf: string
+  ibge?: string
+  gia?: string
+  ddd?: string
+  siafi?: string
+  erro?: boolean
+}
+
+interface BrasilApiResponse {
+  cep: string
+  street: string
+  neighborhood: string
+  city: string
+  state: string
+  location?: {
+    coordinates?: {
+      latitude?: number
+    }
+  }
+}
+
+interface AwesomeApiResponse {
+  cep: string
+  address: string
+  district: string
+  city: string
+  state: string
+  city_ibge: string
+  ddd: string
+  status?: number
+}
+
+// Type guards para validação
+function isViaCepResponse(data: unknown): data is ViaCepResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'cep' in data &&
+    'logradouro' in data &&
+    'bairro' in data &&
+    'localidade' in data &&
+    'uf' in data
+  )
+}
+
+function isBrasilApiResponse(data: unknown): data is BrasilApiResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'cep' in data &&
+    'street' in data &&
+    'neighborhood' in data &&
+    'city' in data &&
+    'state' in data
+  )
+}
+
+function isAwesomeApiResponse(data: unknown): data is AwesomeApiResponse {
+  return (
+    typeof data === 'object' &&
+    data !== null &&
+    'cep' in data &&
+    'address' in data &&
+    'district' in data &&
+    'city' in data &&
+    'state' in data
+  )
+}
+
 /**
  * Serviço para consulta de CEP com múltiplos provedores - versão servidor
  */
 export class CepService {
-  private async simpleFetch(url: string, timeout = 5000): Promise<any> {
+  private async simpleFetch(url: string, timeout = 5000): Promise<unknown> {
     const controller = new AbortController()
     const timeoutId = setTimeout(() => controller.abort(), timeout)
     
@@ -55,7 +131,7 @@ export class CepService {
       throw new Error('CEP inválido')
     }
 
-    const { provider, forceRefresh = false } = options
+    const { provider } = options
 
     // Se um provedor específico foi solicitado
     if (provider) {
@@ -71,7 +147,7 @@ export class CepService {
         if (result) {
           return result
         }
-      } catch (_error) {
+      } catch {
         console.warn(`Falha no provedor ${providerMethod}:`)
         continue
       }
