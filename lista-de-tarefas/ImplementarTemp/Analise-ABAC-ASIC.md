@@ -1,3 +1,202 @@
+# 🚨 OBRIGATÓRIO: CORREÇÃO DE ERROS A CADA PASSO 🚨
+
+**A cada etapa implementada (refatoração, migração, limpeza, ajuste de permissão, etc), é OBRIGATÓRIO executar e corrigir:**
+- **Primeiro:** TODOS os erros e avisos de LINT (eslint, prettier, etc)
+- **Depois:** TODOS os erros de TYPESCRIPT (type-check)
+- **Depois:** TODOS os erros de COMPILAÇÃO (build)
+
+**NUNCA avance para a próxima etapa sem garantir que o projeto está 100% limpo de erros nestas três categorias.**
+
+---
+## IMPLEMENTAÇÃO DA CENTRALIZAÇÃO DE PERMISSÕES ABAC E LIMPEZA ESTRUTURAL (PROCEDIMENTO OBRIGATÓRIO)
+
+### Centralização das Permissões ABAC
+
+- **Toda lógica de permissão deve ser centralizada no backend, usando Casbin (enforcer) e policies persistidas em CasbinRule.**
+- O backend deve expor as permissões do usuário autenticado via endpoint seguro (ex: `/api/auth/permissions`), retornando as ações permitidas para cada recurso.
+- O frontend deve consumir essas permissões e condicionar a UI, mas nunca implementar lógica de permissão real.
+- **Nunca duplique regras de permissão no frontend.**
+- Toda checagem de permissão em endpoints, middlewares, loaders, mutations, etc, deve ser feita via enforcer Casbin, usando os atributos do usuário e do recurso.
+- **Exemplo de fluxo:**
+  1. Usuário faz login → backend carrega policies do CasbinRule.
+  2. Backend expõe as permissões do usuário via endpoint seguro.
+  3. Frontend consome e usa para condicionar UI.
+  4. Toda requisição sensível é validada novamente no backend via enforcer.
+- **Políticas devem ser versionadas, auditadas e documentadas.**
+- **Nunca use enums, strings fixas ou campos herdados do RBAC para permissão.**
+
+---
+
+## LIMPEZA ESTRUTURAL OBRIGATÓRIA APÓS MIGRAÇÃO
+
+### 1. Remover arquivos antigos, backups e nomes fora do padrão
+- **Após a migração e revisão completa, é OBRIGATÓRIO buscar e remover todos os arquivos e pastas com nomes contendo:**
+  - `old`, `bak`, `backup`, `antigo`, `deprecated`, `legacy`, etc.
+- **Deve restar apenas UM arquivo de análise final e atualizado.**
+- **Arquivos de log, scripts, seeds, policies, configs, etc, devem ser mantidos apenas na versão final e padronizada.**
+
+### 2. Padronização de nomes de arquivos
+- **Buscar e renomear/remover todos os arquivos e pastas com sufixos ou prefixos como `moderno`, `simples`, `novo`, `new`, etc.**
+- **O padrão deve ser sempre o nome funcional do recurso, sem adjetivos ou complementos.**
+- **Exemplo:**
+  - `log-moderno.ts` → `log.ts`
+  - `sistema-simples.ts` → `sistema.ts`
+- **Revisar todos os imports e referências após renomeação para não quebrar nada.**
+
+### 3. Remover arquivos e pastas sem uso, em branco ou marcados para deletar
+- **Buscar e deletar todos os arquivos e pastas sem uso, em branco, ou marcados para exclusão.**
+- **Confirmar a exclusão e garantir que não retornem ao repositório.**
+- **Esse procedimento deve ser feito em TODA a pasta `site-metodo/` e destacado como fundamental para a saúde do projeto.**
+
+---
+
+## CHECKLIST DE TESTES MANUAIS DE ENDPOINTS E FLUXOS DE USUÁRIO (OBRIGATÓRIO)
+
+### 🚨 **TESTE MANUAL DE TODOS OS ENDPOINTS E LINKS NO NAVEGADOR DO VS CODE** 🚨
+
+**Procedimento obrigatório após cada refatoração/migração:**
+
+1. **Acessar TODOS os links e endpoints relevantes do sistema no navegador do VS Code, para os dois perfis:**
+   - Usuário admin: `felipemartinii@gmail.com`
+   - Usuário comum (não admin)
+
+2. **Testar e registrar:**
+   - Se o admin acessa todas as áreas: `/area-cliente`, `/admin/dashboard`, `/admin/abac`, etc.
+   - Se o usuário comum acessa apenas o permitido e recebe mensagem adequada ao tentar acessar áreas restritas.
+   - Se há erros, mensagens inadequadas ou comportamentos inesperados.
+   - Repetir o teste mais de uma vez para garantir consistência.
+
+3. **Corrigir imediatamente qualquer erro encontrado.**
+
+4. **Destacar e documentar este procedimento na análise final.**
+
+> **Este checklist é OBRIGATÓRIO e deve ser seguido rigorosamente após cada alteração estrutural.**
+
+---
+
+## RESUMO FINAL E PRÓXIMOS PASSOS
+
+- Centralizar todas as permissões no backend usando Casbin/ABAC puro.
+- Expor permissões para o frontend apenas para UX.
+- Realizar limpeza completa de arquivos antigos, nomes fora do padrão e arquivos sem uso.
+- Testar manualmente todos os fluxos e endpoints para todos os perfis.
+- Documentar e auditar todo o processo.
+
+---
+## Revisão: Verificação de Permissão ABAC em Endpoints e Componentes Frontend
+
+### 1. Princípios Gerais
+
+- **A verificação de permissão deve SEMPRE ser feita no backend**. O frontend nunca pode ser considerado seguro, pois pode ser manipulado pelo usuário. Toda lógica de autorização real deve ser centralizada e aplicada no backend (API, endpoints, middlewares, ORM, etc).
+
+- **No frontend, a verificação de permissão serve apenas para experiência do usuário (UX)**: esconder botões, menus, rotas, campos, etc. Isso evita frustração e torna a interface mais intuitiva, mas não garante segurança.
+
+- **A lógica de permissão deve ser centralizada e reutilizável**. O ideal é que o backend exponha as permissões do usuário (ou as decisões de política) para o frontend, evitando duplicação de regras e inconsistências.
+
+### 2. Recomendações de fontes oficiais e melhores práticas
+
+- **freeCodeCamp (2025):**
+  - Políticas ABAC devem ser aplicadas tanto no backend (para segurança) quanto no frontend (para UX).
+  - O backend deve ser a fonte da verdade das políticas e decisões de permissão.
+  - O frontend pode consumir as permissões do backend e usá-las para condicionar a renderização de componentes, rotas e ações.
+  - Exemplo: O backend expõe um endpoint `/user/access_policies` ou retorna as permissões junto com o usuário autenticado.
+  - O frontend utiliza essas permissões para mostrar/ocultar botões, menus, rotas, etc.
+  - **Nunca confie apenas no frontend para proteger dados ou ações sensíveis.**
+
+- **DEV.to, OWASP, StackOverflow:**
+  - O frontend pode e deve usar permissões para melhorar a UX, mas toda checagem crítica deve ser repetida no backend.
+  - Centralize a lógica de permissão para evitar bugs e inconsistências.
+  - Use frameworks/bibliotecas que permitam compartilhar a lógica de permissão entre backend e frontend (ex: Casbin, CASL, OPA, Policy as Code, etc).
+
+- **Permit.io, Frontegg, Medium:**
+  - ABAC é mais flexível e escalável que RBAC, mas exige centralização e versionamento das políticas.
+  - Use "Policy as Code" e sincronize as decisões de permissão entre backend e frontend.
+  - O frontend pode consumir as decisões do backend via API, cache ou contexto global.
+
+### 3. Exemplos práticos
+
+- O backend expõe as permissões do usuário autenticado:
+  ```json
+  {
+    "post": { "create": true, "edit": false, "delete": false },
+    "user": { "edit": true }
+  }
+  ```
+  O frontend consome esse objeto e usa para condicionar a renderização:
+  ```tsx
+  {permissoes.post.create && <Button>Criar Post</Button>}
+  ```
+
+- Para granularidade, o backend pode expor permissões por recurso:
+  ```json
+  {
+    "post:123": { "edit": true, "delete": false },
+    "post:456": { "edit": false, "delete": false }
+  }
+  ```
+
+- O frontend pode usar hooks ou componentes como `<Can />` para condicionar UI:
+  ```tsx
+  <Can I="edit" a={post}>
+    <Button>Editar</Button>
+  </Can>
+  ```
+
+### 4. Resumo das melhores práticas
+
+- **Backend:**
+  - Centralize e versiona as políticas ABAC.
+  - Exponha as permissões do usuário para o frontend de forma segura e eficiente.
+  - Sempre aplique as checagens de permissão em todos os endpoints e operações sensíveis.
+
+- **Frontend:**
+  - Use as permissões fornecidas pelo backend para condicionar a UI.
+  - Nunca confie apenas no frontend para proteger dados ou ações.
+  - Use hooks, contextos ou componentes reutilizáveis para checagem de permissão.
+
+- **Geral:**
+  - Evite duplicação de lógica de permissão.
+  - Prefira "Policy as Code" e sincronização de decisões.
+  - Documente e audite as políticas e pontos de checagem.
+
+
+### 5. Referências (TODOS DEVEM SER ACESSADOS E ANALISADOS ANTES DE QUALQUER IMPLEMENTAÇÃO)
+
+- [freeCodeCamp: How to Build Scalable Access Control for Your Web App (2025)](https://www.freecodecamp.org/news/how-to-build-scalable-access-control-for-your-web-app/) — Guia completo e atualizado sobre ABAC, frontend/backend, exemplos práticos e melhores práticas.
+- [DEV.to: Permissions (access control) in web apps](https://dev.to/wasp/permissions-access-control-in-web-apps-j6b) — Conceitos, recomendações OWASP, centralização e frameworks.
+- [Frontegg: ABAC Guide](https://frontegg.com/guides/abac) — Guia prático, desafios, benefícios e exemplos de uso real.
+- [Permit.io: How to Implement ABAC](https://www.permit.io/blog/how-to-implement-abac) — Implementação, Policy as Code, integração com OPA, exemplos de código.
+- [Medium: ABAC in React](https://medium.com/@dev_aman/attribute-based-access-control-abac-in-react-a-scalable-approach-df4990c7cbf0) — Exemplo prático de ABAC no frontend React.
+- [OWASP Authorization Cheat Sheet](https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authorization_Cheat_Sheet.md) — Checklist de segurança, centralização e melhores práticas.
+- [Casbin ABAC Model Example](https://github.com/casbin/casbin/blob/master/examples/abac_model.conf) — Exemplo oficial de modelo ABAC Casbin.
+- [Casbin GitHub](https://github.com/casbin/casbin) — Repositório oficial, releases, issues e exemplos.
+- [Prisma Adapter Casbin](https://github.com/node-casbin/prisma-adapter) — Integração Casbin + Prisma.
+- [ABAC vs RBAC Auth0](https://auth0.com/docs/secure/access-control/rbac/) — Comparativo prático e recomendações de migração.
+- [ASIC Model Overview](https://github.com/casbin/casbin/blob/master/docs/model.md) — Documentação oficial do modelo ASIC.
+- [Casbin Online Editor](https://casbin.org/editor/) — Ferramenta para testar e validar policies Casbin.
+
+**Todos os links acima DEVEM ser acessados, lidos e analisados antes de qualquer implementação, refatoração ou decisão.**
+
+---
+## 🚨 ETAPA FINAL OBRIGATÓRIA: EXECUTAR TODAS AS TAREFAS DE `lista-de-tarefas/ImplementarTemp` 🚨
+
+Assim que toda a revisão, migração e implementação do ABAC/ASIC estiver concluída e validada (com todos os erros de lint, typescript e compilação zerados), é OBRIGATÓRIO:
+
+1. **Acessar, ler e entender a fundo TODAS as tarefas presentes na pasta `lista-de-tarefas/ImplementarTemp`.**
+2. **Implementar cada tarefa de forma completa, automática e sequencial, sem pular nenhuma.**
+3. **Documentar cada etapa e garantir que todas as tarefas sejam concluídas antes de encerrar o ciclo.**
+
+> **Esta etapa é obrigatória para garantir a evolução contínua e a qualidade do projeto.**
+
+---
+
+---
+
+**Resumo:**
+
+- O frontend deve usar permissões para UX, mas nunca para segurança real.
+- O backend é sempre a fonte da verdade e responsável por toda checagem crítica.
+- Centralize, documente e sincronize as políticas ABAC entre backend e frontend.
 # Análise Profunda ABAC/ASIC – SiteMetodoAtuarial
 
 ## Sumário

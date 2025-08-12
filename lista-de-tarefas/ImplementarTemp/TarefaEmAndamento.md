@@ -123,7 +123,7 @@ npm run dev # localhost:3000
 
 ### Status: 85% Completo - Sistema ABAC quase finalizado! ✅ Build funcionando
  [ ] remova todos warning de lint
-- [ ] **Tarefa 01**: Migração XLSX para ExcelJS (Prioridade: Alta)
+- [ ] **Tarefa 01**: CRIAS SISTEMA AUTOMATICO DE DEPLOY DIRETO NO PLESK CONFORME DOC OFICIAIS E GOGOLE FAÇA BUSCAS PARA SE ATUALIZAR SOBRE O TEMA (PRIORIDADE URGENTE CRITICA DESENVOLVER DE FORMA COMPLETA)
  [ ] remova todos warning de lint
 - [ ] **Tarefa 02**: Sistema ABAC Validação REVISADA (Prioridade: Crítica)
  [ ] remova todos warning de lint
