@@ -7,7 +7,7 @@ Para cada erro/warning:
 3. Corrija o erro pontualmente, criando tipagem específica sempre que possível.
 4. Teste o lint no arquivo alterado e garanta que o erro sumiu.
 5. Teste o build completo para garantir que nada quebrou.
-6. Documente detalhadamente a alteração em um arquivo markdown específico para o erro (ver instrução abaixo).
+6. Documente detalhadamente a alteração em um arquivo markdown específico para o erro (ver instrução abaixo) salve o arquivo junto com esse na pasta LINT.
 7. Atualize o contador de erros restantes e o checklist geral.
 8. Repita até zerar todos os erros/warnings.
 
