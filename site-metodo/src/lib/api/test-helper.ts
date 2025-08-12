@@ -47,7 +47,7 @@ export class ApiTestHelper {
             cep,
             provider,
             success: false,
-            error: error instanceof Error ? _error.message : 'Unknown error',
+            error: _error instanceof Error ? _error.message : 'Unknown error',
           })
         }
       }
@@ -67,10 +67,10 @@ export class ApiTestHelper {
 
       console.log(`    ✅ Bulk: ${results.bulk.found}/${results.bulk.total} encontrados`)
     } catch (_error) {
-      console.log(`    💥 Bulk: ${error}`)
+      console.log(`    💥 Bulk: ${_error}`)
       results.bulk = {
         success: false,
-        error: error instanceof Error ? _error.message : 'Unknown error',
+        error: _error instanceof Error ? _error.message : 'Unknown error',
       }
     }
 
@@ -240,11 +240,11 @@ export class ApiTestHelper {
 
         console.log(`    ✅ Endpoint ${endpoint.name} registrado`)
       } catch (_error) {
-        console.log(`    💥 Registro: ${error}`)
+        console.log(`    💥 Registro: ${_error}`)
         results.registration.push({
           ...endpoint,
           success: false,
-          error: error instanceof Error ? _error.message : 'Unknown error',
+          error: _error instanceof Error ? _error.message : 'Unknown error',
         })
       }
     }
