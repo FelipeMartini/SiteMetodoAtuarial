@@ -369,8 +369,11 @@ export function useConnectionAwarePrefetch() {
       setShouldPrefetch(!isCurrentlySlow)
     }
 
-    connection.addEventListener('change', handleChange)
-    return () => connection.removeEventListener('change', handleChange)
+    // Verificar se os métodos de event listener existem
+    if (connection.addEventListener && connection.removeEventListener) {
+      connection.addEventListener('change', handleChange)
+      return () => connection.removeEventListener!('change', handleChange)
+    }
   }, [])
 
   return shouldPrefetch

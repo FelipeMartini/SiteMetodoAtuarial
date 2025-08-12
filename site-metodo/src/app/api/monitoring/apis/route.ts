@@ -315,9 +315,7 @@ async function handleRecordMetric(metric: {
     apiMonitor.recordRequest(
       metric.endpointName,
       metric.responseTime,
-      metric.success,
-      metric.errorDetails,
-      metric.statusCode
+      metric.success
     )
 
     return NextResponse.json({
