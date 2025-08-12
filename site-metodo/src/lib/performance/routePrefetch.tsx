@@ -15,11 +15,8 @@ interface NetworkConnection {
   saveData?: boolean
   downlink?: number
   rtt?: number
-}
-
-// Extensão do Navigator para incluir connection
-interface NavigatorWithConnection extends Navigator {
-  connection?: NetworkConnection
+  addEventListener?: (event: string, handler: () => void) => void
+  removeEventListener?: (event: string, handler: () => void) => void
 }
 
 // Props para SmartLink com extensibilidade
@@ -166,53 +163,45 @@ export function useVisibilityPrefetch(route: string) {
 
 // === COMPONENTES OTIMIZADOS ===
 
-interface SmartLinkProps {
-  href: string
-  children: React.ReactNode
-  prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none'
-  className?: string
-  [key: string]: any
-}
-
 /**
  * Link inteligente com prefetch otimizado
  */
-export const SmartLink = memo(function SmartLink({
+export const SmartLink = memo<SmartLinkProps>(({
   href,
   children,
   prefetchStrategy = 'hover',
-  className,
-  ...props
-}: SmartLinkProps) {
+  ...linkProps
+}) => {
   const { handleHover } = useHoverPrefetch()
   const { ref } = useVisibilityPrefetch(href)
 
-  const linkProps: any = {
+  const finalLinkProps: React.ComponentProps<typeof Link> = {
     href,
-    className,
-    ...props,
+    ...linkProps,
   }
 
   // Configurar prefetch baseado na estratégia
   switch (prefetchStrategy) {
     case 'immediate':
-      linkProps.prefetch = true
+      finalLinkProps.prefetch = true
       break
     case 'hover':
-      linkProps.onMouseEnter = () => handleHover(href)
-      linkProps.prefetch = false
+      finalLinkProps.onMouseEnter = () => handleHover(href)
+      finalLinkProps.prefetch = false
       break
     case 'visible':
-      linkProps.ref = ref
-      linkProps.prefetch = false
+      finalLinkProps.ref = ref
+      finalLinkProps.prefetch = false
       break
     case 'none':
-      linkProps.prefetch = false
+      finalLinkProps.prefetch = false
       break
   }
 
-  return <Link {...linkProps}>{children}</Link>
+  return <Link {...finalLinkProps}>{children}</Link>
 })
+
+SmartLink.displayName = 'SmartLink'
 
 /**
  * Navegação com prefetch inteligente
@@ -359,7 +348,9 @@ export function useConnectionAwarePrefetch() {
   useEffect(() => {
     if (!('connection' in navigator)) return
 
-  const connection = (navigator as Navigator & { connection?: any }).connection
+    const connection = (navigator as Navigator & { connection?: NetworkConnection }).connection
+
+    if (!connection) return
 
     // Desabilitar prefetch em conexões lentas
     const isSlowConnection =
