@@ -73,7 +73,7 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
 
 ## CONTADOR DE ERROS/WARNINGS
 **Total inicial:** 90
-**Restantes:** 84 (atualize a cada correção)
+**Restantes:** 79 (atualize a cada correção)
 
 ---
 
@@ -88,9 +88,14 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
     - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
     - [StackOverflow: Promise.allSettled types](https://stackoverflow.com/questions/59780268/typescript-promise-allsettled-type)
   - Documentação e checklist atualizados.
-- [ ] ./src/lib/api/services/cep.ts (5 erros)
-  - Uso de `any`, variáveis não utilizadas, impacto em API de CEP.
-  - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+ - [x] ./src/lib/api/services/cep.ts (0 erros)
+   - Corrigido: remoção de variáveis não utilizadas, tipagem explícita de respostas de API externa, catch sem parâmetro não utilizado.
+   - Testado lint/build: OK, sem erros restantes neste arquivo.
+   - Documentação: [src-lib-api-services-cep.ts-lint-fix-20250812.md](src-lib-api-services-cep.ts-lint-fix-20250812.md)
+   - Referências:
+     - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+     - [TypeScript: Tipagem de resposta Axios](https://axios-http.com/docs/res_schema)
+     - [TypeScript: Handbook](https://www.typescriptlang.org/docs/handbook/2/functions.html)
 - [ ] ./src/lib/notifications/websocket-server.ts (10 erros)
   - Uso de `any`, variáveis não utilizadas, tipos não explícitos, lógica de notificação central.
   - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)

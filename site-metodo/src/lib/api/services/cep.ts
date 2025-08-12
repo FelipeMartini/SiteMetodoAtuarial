@@ -38,10 +38,7 @@ const CepSchema = z.object({
   siafi: z.string().optional().default(''),
 })
 
-const _CepErrorSchema = z.object({
-  erro: z.boolean(),
-  message: z.string().optional(),
-})
+
 
 /**
  * Service for CEP (Brazilian postal code) lookup
@@ -100,12 +97,12 @@ export class CepService {
    */
   private async lookupViaCep(cep: string): Promise<CepData> {
     const response = await this.viaCepClient.get(`/${cep}/json/`)
-
-    if ((response.data as any)?.erro) {
+  type ViaCepResponse = CepData & { erro?: boolean }
+  const data = response.data as ViaCepResponse
+    if (data.erro) {
       throw new Error('CEP não encontrado')
     }
-
-    return CepSchema.parse(response.data)
+    return CepSchema.parse(data)
   }
 
   /**
@@ -113,10 +110,16 @@ export class CepService {
    */
   private async lookupBrasilApi(cep: string): Promise<CepData> {
     const response = await this.brasilApiClient.get(`/cep/v1/${cep}`)
-
-    // Convert BrasilAPI format to standard format
-    const apiData = response.data as any
-    const data = {
+    type BrasilApiResponse = {
+      cep: string
+      street?: string
+      district?: string
+      city?: string
+      state?: string
+      city_ibge?: string
+    }
+    const apiData = response.data as BrasilApiResponse
+    const data: CepData = {
       cep: apiData.cep,
       logradouro: apiData.street || '',
       complemento: '',
@@ -128,7 +131,6 @@ export class CepService {
       ddd: '',
       siafi: '',
     }
-
     return CepSchema.parse(data)
   }
 
@@ -137,14 +139,21 @@ export class CepService {
    */
   private async lookupAwesomeApi(cep: string): Promise<CepData> {
     const response = await this.awesomeApiClient.get(`/json/${cep}`)
-    const apiData = response.data as any
-
+    type AwesomeApiResponse = {
+      cep: string
+      address?: string
+      district?: string
+      city?: string
+      state?: string
+      city_ibge?: string
+      ddd?: string
+      status?: number
+    }
+    const apiData = response.data as AwesomeApiResponse
     if (apiData.status === 400) {
       throw new Error('CEP não encontrado')
     }
-
-    // Convert AwesomeAPI format to standard format
-    const data = {
+    const data: CepData = {
       cep: apiData.cep,
       logradouro: apiData.address || '',
       complemento: '',
@@ -156,7 +165,6 @@ export class CepService {
       ddd: apiData.ddd || '',
       siafi: '',
     }
-
     return CepSchema.parse(data)
   }
 
@@ -176,22 +184,19 @@ export class CepService {
     ]
 
     let lastError: Error | null = null
-
     for (const provider of providers) {
       try {
         const result = await provider.method()
-
         // Format the result CEP with mask
         result.cep = this.addCepMask(result.cep)
-
         return result
-      } catch (_error) {
-        lastError = _error instanceof Error ? _error : new Error('Erro desconhecido')
-        console.warn(`Falha ao consultar ${provider.name}:`, lastError.message)
+      } catch {
+        // Não utilizado, apenas log abaixo
+        lastError = new Error('Erro desconhecido')
+        console.warn(`Falha ao consultar ${provider.name}`)
         continue
       }
     }
-
     throw lastError || new Error('Falha em todos os provedores de CEP')
   }
 
@@ -216,28 +221,24 @@ export class CepService {
 
     for (let i = 0; i < ceps.length; i += batchSize) {
       const batch = ceps.slice(i, i + batchSize)
-
       const batchPromises = batch.map(async cep => {
         try {
           const data = await this.lookupCep(cep)
           return { cep, data }
-        } catch (_error) {
+        } catch {
           return {
             cep,
-            error: _error instanceof Error ? _error.message : 'Erro desconhecido',
+            error: 'Erro desconhecido',
           }
         }
       })
-
       const batchResults = await Promise.all(batchPromises)
       results.push(...batchResults)
-
       // Wait between batches to respect rate limits
       if (i + batchSize < ceps.length) {
         await new Promise(resolve => setTimeout(resolve, 1000))
       }
     }
-
     return results
   }
 
@@ -300,7 +301,7 @@ export class CepService {
     try {
       await this.lookupCep(cep)
       return true
-    } catch (_error) {
+    } catch {
       return false
     }
   }
