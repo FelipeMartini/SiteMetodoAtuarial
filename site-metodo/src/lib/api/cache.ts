@@ -34,7 +34,7 @@ export interface CacheStats {
  * Features: TTL, LRU eviction, stale-while-revalidate, compression
  */
 export class ApiCache {
-  private cache: LRUCache<string, CacheEntry<any>>
+  private cache: LRUCache<string, CacheEntry<unknown>>
   private logger: typeof simpleLogger
   private stats: Omit<CacheStats, 'hitRate' | 'memoryUsage' | 'size' | 'maxSize'>
   private defaultTtl: number
@@ -153,7 +153,7 @@ export class ApiCache {
    * Get cache entry age in seconds
    */
   getAge(key: string): number | null {
-    const entry = this.cache.get(key) as CacheEntry<any> | undefined
+    const entry = this.cache.get(key) as CacheEntry<unknown> | undefined
     if (!entry) return null
 
     return Math.floor((Date.now() - entry.timestamp) / 1000)
@@ -163,7 +163,7 @@ export class ApiCache {
    * Check if entry is stale but still in cache
    */
   isStale(key: string): boolean {
-    const entry = this.cache.get(key) as CacheEntry<any> | undefined
+    const entry = this.cache.get(key) as CacheEntry<unknown> | undefined
     if (!entry) return false
 
     const now = Date.now()
@@ -249,7 +249,7 @@ export class ApiCache {
   private estimateSize(data: Record<string, unknown>): number {
     try {
       return JSON.stringify(data).length * 2 // UTF-16 approximation
-    } catch (_error) {
+    } catch {
       return 0
     }
   }
