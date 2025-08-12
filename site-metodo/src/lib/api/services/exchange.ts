@@ -242,7 +242,7 @@ export class ExchangeService {
 
     return response.data.map((item: Record<string, unknown>) => ({
       date: item.timestamp,
-      rate: parseFloat(item.bid),
+      rate: parseFloat(String(item.bid)),
     }))
   }
 

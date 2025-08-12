@@ -3,6 +3,7 @@
 import { z } from 'zod'
 import { ApiClient, createApiClient } from '../client'
 import { apiMonitor } from '../monitor-simple'
+import { apiCache } from '../cache'
 
 // Type definitions for CEP API
 export interface CepData {
