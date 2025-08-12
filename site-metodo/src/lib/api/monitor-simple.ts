@@ -90,9 +90,7 @@ export class SimpleApiMonitor {
   recordRequest(
     endpointName: string,
     responseTime: number,
-    success: boolean,
-    errorDetails?: string,
-    statusCode?: number
+    success: boolean
   ): void {
     const endpoint = this.endpoints.get(endpointName)
 
@@ -165,9 +163,7 @@ export class SimpleApiMonitor {
       this.recordRequest(
         endpointName,
         responseTime,
-        healthy,
-        healthy ? undefined : `HTTP ${response.status}`,
-        response.status
+        healthy
       )
 
       return {
@@ -179,7 +175,7 @@ export class SimpleApiMonitor {
       const responseTime = Date.now() - startTime
       const errorMessage = _error instanceof Error ? _error.message : 'Unknown error'
 
-      this.recordRequest(endpointName, responseTime, false, errorMessage)
+      this.recordRequest(endpointName, responseTime, false)
 
       return {
         healthy: false,
@@ -244,7 +240,7 @@ export class SimpleApiMonitor {
    */
   private updateCircuitBreaker(endpoint: EndpointMetrics): void {
     const maxErrors = 5
-    const _timeWindow: unknown = 5 * 60 * 1000 // 5 minutos
+    // Tempo para reset automático seria implementado aqui se necessário
 
     switch (endpoint.circuitBreakerState) {
       case 'CLOSED':
