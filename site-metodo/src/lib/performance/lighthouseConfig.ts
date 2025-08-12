@@ -224,40 +224,40 @@ export const CORE_WEB_VITALS_THRESHOLDS = {
  */
 export function analyzeLighthouseResult(result: Record<string, unknown>) {
   const { lhr } = result
-  const { audits, categories } = lhr
+  const { audits, categories } = lhr as Record<string, unknown>
 
   // Scores das categorias
   const scores = {
-    performance: Math.round(categories.performance.score * 100),
-    accessibility: Math.round(categories.accessibility.score * 100),
-    bestPractices: Math.round(categories['best-practices'].score * 100),
-    seo: Math.round(categories.seo.score * 100),
+    performance: Math.round((categories as any).performance.score * 100),
+    accessibility: Math.round((categories as any).accessibility.score * 100),
+    bestPractices: Math.round((categories as any)['best-practices'].score * 100),
+    seo: Math.round((categories as any).seo.score * 100),
   }
 
   // Core Web Vitals
   const coreWebVitals = {
-    lcp: audits['largest-contentful-paint']?.numericValue || 0,
-    fid: audits['max-potential-fid']?.numericValue || 0,
-    cls: audits['cumulative-layout-shift']?.numericValue || 0,
-    fcp: audits['first-contentful-paint']?.numericValue || 0,
-    tbt: audits['total-blocking-time']?.numericValue || 0,
+    lcp: (audits as any)['largest-contentful-paint']?.numericValue || 0,
+    fid: (audits as any)['max-potential-fid']?.numericValue || 0,
+    cls: (audits as any)['cumulative-layout-shift']?.numericValue || 0,
+    fcp: (audits as any)['first-contentful-paint']?.numericValue || 0,
+    tbt: (audits as any)['total-blocking-time']?.numericValue || 0,
   }
 
   // Performance metrics
   const performanceMetrics = {
-    speedIndex: audits['speed-index']?.numericValue || 0,
-    interactive: audits['interactive']?.numericValue || 0,
-    firstMeaningfulPaint: audits['first-meaningful-paint']?.numericValue || 0,
+    speedIndex: (audits as any)['speed-index']?.numericValue || 0,
+    interactive: (audits as any)['interactive']?.numericValue || 0,
+    firstMeaningfulPaint: (audits as any)['first-meaningful-paint']?.numericValue || 0,
   }
 
   // Opportunities (melhorias de performance)
-  const opportunities = Object.values(audits)
+  const opportunities = Object.values(audits as any)
     .filter(
       (audit: Record<string, unknown>) =>
         audit.scoreDisplayMode === 'numeric' &&
         audit.score !== null &&
         audit.score < 1 &&
-        audit.details?.overallSavingsMs > 100
+        (audit.details as any)?.overallSavingsMs > 100
     )
     .sort(
       (a: Record<string, unknown>, b: Record<string, unknown>) =>
