@@ -89,7 +89,7 @@ export function createLoggingMiddleware() {
           responseTime,
           statusCode: status,
           requestId,
-        })
+        } as any)
       }
 
       // Limpar dados do request
@@ -137,13 +137,13 @@ export function createAuditMiddleware() {
       // TODO: Extrair userId do token/session quando implementado
       // const userId = await getUserIdFromRequest(request)
 
-      structuredLogger.audit(`API ${request.method} ${pathname}`, { performedBy: 'system',
+      structuredLogger.audit(`API ${request.method} ${pathname}`, {
         performedBy: 'system',
         ip,
         userAgent,
         endpoint: pathname,
         method: request.method,
-      })
+      } as any)
     }
 
     return NextResponse.next()

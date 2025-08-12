@@ -164,7 +164,7 @@ export const SmartLink = memo(function SmartLink({
   const { handleHover } = useHoverPrefetch()
   const { ref } = useVisibilityPrefetch(href)
 
-  const linkProps: Record<string, unknown> = {
+  const linkProps: any = {
     href,
     className,
     ...props,
@@ -247,7 +247,7 @@ export async function prefetchWithRetry(
 ): Promise<boolean> {
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
-      await router.prefetch(route)
+      await (router as any).prefetch(route)
       return true
     } catch (_error) {
       console.warn(`Prefetch failed for ${route}, attempt ${attempt}:`, _error)
