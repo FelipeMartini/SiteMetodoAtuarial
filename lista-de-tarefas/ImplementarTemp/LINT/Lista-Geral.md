@@ -20,7 +20,7 @@
 
 ## CONTADOR DE ERROS/WARNINGS
 - **Total inicial:** 90
-- **Restantes:** (atualize a cada correção)
+- **Restantes:** 84
 
 ---
 
@@ -28,9 +28,15 @@
 
 ### 🛑 Arquivos com múltiplos erros graves (uso de `any`, muitos warnings, impacto em API/core):
 
-- [ ] ./src/lib/api/services/exchange-simple.ts (6 erros)
-  - Uso de `any` em múltiplos pontos, variáveis não utilizadas, lógica de API crítica.
-  - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+- [x] ./src/lib/api/services/exchange-simple.ts (0 erros)
+  - Corrigido: todos os usos de `any` substituídos por tipos explícitos (Promise<unknown>, interfaces específicas para retorno da AwesomeAPI, PromiseFulfilledResult tipado), parâmetros não utilizados removidos, variáveis não usadas eliminadas.
+  - Testado lint/build: OK, sem erros restantes neste arquivo.
+  - Referências:
+    - [TypeScript: Promise.allSettled tipagem](https://www.typescriptlang.org/docs/handbook/release-notes/typescript-3-8.html)
+    - [ESLint: no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/)
+    - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+    - [StackOverflow: Promise.allSettled types](https://stackoverflow.com/questions/59780268/typescript-promise-allsettled-type)
+  - Documentação e checklist atualizados.
 - [ ] ./src/lib/api/services/cep.ts (5 erros)
   - Uso de `any`, variáveis não utilizadas, impacto em API de CEP.
   - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)

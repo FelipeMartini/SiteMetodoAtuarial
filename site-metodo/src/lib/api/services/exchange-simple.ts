@@ -130,7 +130,7 @@ export class ExchangeService {
   /**
    * Obter tendências (simulado - versão simplificada)
    */
-  async getTrends(currency: string, _days: number = 30): Promise<{
+  async getTrends(currency: string): Promise<{
     current: number
     change24h: number
     changePercent24h: number
@@ -202,6 +202,16 @@ export class ExchangeService {
       timestamp: string
     }>
   > {
+    interface AwesomeApiResponse {
+      name: string
+      bid: string
+      ask: string
+      varBid: string
+      pctChange: string
+      high: string
+      low: string
+      create_date: string
+    }
     type BrazilianRate = {
       currency: string
       name: string
@@ -219,7 +229,7 @@ export class ExchangeService {
           const pair = `${currency}-BRL`
           const data = await this.simpleFetch(`https://economia.awesomeapi.com.br/json/last/${pair}`)
           const key = pair.replace('-', '')
-          const currencyData = (data as Record<string, any>)[key]
+          const currencyData = (data as Record<string, AwesomeApiResponse>)[key]
           return {
             currency,
             name: currencyData.name || currency,
@@ -238,7 +248,7 @@ export class ExchangeService {
       })
     )
     return results
-      .filter((result): result is PromiseFulfilledResult<BrazilianRate | null> => result.status === 'fulfilled' && result.value !== null)
+      .filter((result): result is PromiseFulfilledResult<BrazilianRate> => result.status === 'fulfilled' && result.value !== null)
       .map(result => result.value as BrazilianRate)
   }
 }
