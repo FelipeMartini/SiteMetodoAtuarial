@@ -1,5 +1,4 @@
 import { z } from 'zod'
-import { createApiClient } from '../client'
 
 const ExchangeRatesSchema = z.object({
   base: z.string(),
@@ -26,20 +25,30 @@ export interface ConversionResult {
 }
 
 /**
- * Serviço para cotações de moedas com múltiplos provedores
+ * Serviço para cotações de moedas com múltiplos provedores - versão servidor
  */
 export class ExchangeService {
-  private exchangeRateClient = createApiClient({
-    baseURL: 'https://api.exchangerate-api.com/v4',
-    timeout: 5000,
-    rateLimitRpm: 1500, // Free tier: 1500 requests/month
-  })
-
-  private awesomeApiClient = createApiClient({
-    baseURL: 'https://economia.awesomeapi.com.br/json',
-    timeout: 5000,
-    rateLimitRpm: 300,
-  })
+  private async simpleFetch(url: string, timeout = 5000): Promise<any> {
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), timeout)
+    
+    try {
+      const response = await fetch(url, {
+        signal: controller.signal,
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; SiteMetodoAtuarial/1.0)',
+        },
+      })
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}`)
+      }
+      
+      return await response.json()
+    } finally {
+      clearTimeout(timeoutId)
+    }
+  }
 
   /**
    * Obter taxa de câmbio entre duas moedas
@@ -147,14 +156,14 @@ export class ExchangeService {
    * ExchangeRate-API
    */
   private async getRateFromExchangeRateApi(from: string, to: string): Promise<number> {
-    const response = await this.exchangeRateClient.get(`/latest/${from}`)
-    const data = ExchangeRatesSchema.parse(response.data)
+    const data = await this.simpleFetch(`https://api.exchangerate-api.com/v4/latest/${from}`)
+    const parsed = ExchangeRatesSchema.parse(data)
 
-    if (!data.rates[to]) {
+    if (!parsed.rates[to]) {
       throw new Error(`Taxa não encontrada para ${from} -> ${to}`)
     }
 
-    return data.rates[to]
+    return parsed.rates[to]
   }
 
   /**
@@ -162,14 +171,14 @@ export class ExchangeService {
    */
   private async getRateFromAwesomeApi(from: string, to: string): Promise<number> {
     const pair = `${from}-${to}`
-    const response = await this.awesomeApiClient.get(`/last/${pair}`)
+    const data = await this.simpleFetch(`https://economia.awesomeapi.com.br/json/last/${pair}`)
 
     const key = pair.replace('-', '')
-    if (!response.data[key]) {
+    if (!data[key]) {
       throw new Error(`Par de moedas não encontrado: ${pair}`)
     }
 
-    const rate = parseFloat(response.data[key].bid)
+    const rate = parseFloat(data[key].bid)
     if (isNaN(rate)) {
       throw new Error('Taxa inválida recebida da API')
     }
@@ -197,20 +206,20 @@ export class ExchangeService {
       currencies.map(async currency => {
         try {
           const pair = `${currency}-BRL`
-          const response = await this.awesomeApiClient.get(`/last/${pair}`)
+          const data = await this.simpleFetch(`https://economia.awesomeapi.com.br/json/last/${pair}`)
           const key = pair.replace('-', '')
-          const data = response.data[key]
+          const currencyData = data[key]
 
           return {
             currency,
-            name: data.name || currency,
-            buy: parseFloat(data.bid),
-            sell: parseFloat(data.ask),
-            variation: parseFloat(data.varBid),
-            percentChange: parseFloat(data.pctChange),
-            high: parseFloat(data.high),
-            low: parseFloat(data.low),
-            timestamp: data.create_date,
+            name: currencyData.name || currency,
+            buy: parseFloat(currencyData.bid),
+            sell: parseFloat(currencyData.ask),
+            variation: parseFloat(currencyData.varBid),
+            percentChange: parseFloat(currencyData.pctChange),
+            high: parseFloat(currencyData.high),
+            low: parseFloat(currencyData.low),
+            timestamp: currencyData.create_date,
           }
         } catch (_error) {
           console.warn(`Erro ao buscar ${currency}:`, _error)
