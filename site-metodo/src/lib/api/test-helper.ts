@@ -42,7 +42,7 @@ export class ApiTestHelper {
             console.log(`    ❌ ${provider}: Falhou`)
           }
         } catch (_error) {
-          console.log(`    💥 ${provider}: Erro - ${error}`)
+          console.log(`    💥 ${provider}: Erro - ${_error}`)
           results.individual.push({
             cep,
             provider,
