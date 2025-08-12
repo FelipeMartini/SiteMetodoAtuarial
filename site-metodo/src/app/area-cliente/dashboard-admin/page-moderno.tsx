@@ -1,9 +1,8 @@
 'use client'
 
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import { useAuth } from '@/app/hooks/useAuth'
 import { AdminDashboardStats } from '@/components/admin/dashboard-stats'
-import { AdminUsersTable } from '@/components/admin/users-table'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -15,8 +14,72 @@ import { Users, Activity, Settings, Shield, BarChart3, Database, AlertTriangle }
  * Dashboard administrativo modernizado
  * Interface completa para gerenciamento do sistema
  */
-export default function DashboardAdminModerno() {
+export default function PageDashboardAdminModerno() {
   const { data: session, status } = useAuth()
+
+  // Estados para verificação de permissões ABAC
+  const [hasAccess, setHasAccess] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const [permissionError, setPermissionError] = useState<string | null>(null)
+
+  // Verificar permissão ABAC para acesso ao dashboard admin
+  useEffect(() => {
+    const checkPermissions = async () => {
+      // Se não há sessão, não faz a verificação ABAC
+      if (!session?.user?.email) {
+        setHasAccess(false)
+        setIsLoading(false)
+        return
+      }
+
+      try {
+        setIsLoading(true)
+        setPermissionError(null)
+
+        const response = await fetch('/api/abac/check', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            subject: session.user.email,
+            object: '/admin/dashboard',
+            action: 'read',
+            context: {
+              userEmail: session.user.email,
+              timestamp: new Date().toISOString(),
+            }
+          }),
+        })
+
+        if (!response.ok) {
+          throw new Error(`Erro ${response.status}: ${response.statusText}`)
+        }
+
+        const result = await response.json()
+        
+        console.log('🔍 Verificação ABAC para dashboard admin:', {
+          userEmail: session.user.email,
+          hasAccess: result.allowed,
+          reason: result.reason,
+        })
+
+        setHasAccess(result.allowed)
+
+        if (!result.allowed) {
+          setPermissionError('Acesso negado: permissões insuficientes para acessar o dashboard administrativo.')
+        }
+      } catch (error) {
+        console.error('Erro ao verificar permissões ABAC:', error)
+        setPermissionError('Erro ao verificar permissões. Tente novamente.')
+        setHasAccess(false)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    checkPermissions()
+  }, [session?.user?.email])
 
   if (status === 'loading') {
     return (
@@ -40,43 +103,41 @@ export default function DashboardAdminModerno() {
     return null
   }
 
-  // Verifica roles - suporta tanto array quanto string
-  const userRole = session.user.role
-  const userAccessLevel = session.user.accessLevel
-
-  let isAdmin = false
-  let isStaff = false
-
-  // Verificação por role (sistema moderno)
-  if (Array.isArray(userRole)) {
-    isAdmin = userRole.includes('admin')
-    isStaff = userRole.includes('staff')
-  } else if (typeof userRole === 'string') {
-    isAdmin = userRole === 'admin'
-    isStaff = userRole === 'staff'
+  // Loading state
+  if (isLoading) {
+    return (
+      <div className="container mx-auto py-8 px-4 max-w-7xl">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
+            <p className="text-muted-foreground">Verificando permissões...</p>
+          </div>
+        </div>
+      </div>
+    )
   }
 
-  // Fallback: verificação por accessLevel (compatibilidade)
-  if (!isAdmin && !isStaff && userAccessLevel) {
-    isAdmin = userAccessLevel >= 100
-    isStaff = userAccessLevel >= 50
-  }
-
-  console.log('🔍 Debug dashboard admin moderno:', {
-    userEmail: session.user.email,
-    userRole,
-    userAccessLevel,
-    isAdmin,
-    isStaff,
-    hasAccess: isAdmin || isStaff,
-  })
-
-  if (!(isAdmin || isStaff)) {
-    if (typeof window !== 'undefined') {
-      window.alert('Acesso restrito: apenas para administradores e staff.')
-      window.location.href = '/area-cliente'
-    }
-    return null
+  // Access denied
+  if (!hasAccess) {
+    return (
+      <div className="container mx-auto py-8 px-4 max-w-7xl">
+        <div className="flex items-center justify-center min-h-[400px]">
+          <div className="text-center">
+            <Shield className="h-16 w-16 text-red-500 mx-auto mb-4" />
+            <h2 className="text-2xl font-bold mb-2">Acesso Restrito</h2>
+            <p className="text-muted-foreground mb-4">
+              {permissionError || 'Você não tem permissão para acessar esta área.'}
+            </p>
+            <button
+              onClick={() => window.location.href = '/area-cliente'}
+              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors"
+            >
+              Voltar à Área do Cliente
+            </button>
+          </div>
+        </div>
+      </div>
+    )
   }
 
   return (
@@ -96,7 +157,7 @@ export default function DashboardAdminModerno() {
           <div className='flex items-center gap-3'>
             <Badge variant='destructive' className='gap-1'>
               <Shield className='h-3 w-3' />
-              {isAdmin ? 'ADMIN' : 'STAFF'}
+              ADMIN
             </Badge>
             <Button variant='outline' size='sm'>
               <Settings className='h-4 w-4 mr-2' />
@@ -137,7 +198,22 @@ export default function DashboardAdminModerno() {
         </TabsList>
 
         <TabsContent value='users' className='space-y-6'>
-          <AdminUsersTable />
+          <Card>
+            <CardHeader>
+              <CardTitle className='flex items-center gap-2'>
+                <Users className='h-5 w-5' />
+                Gestão de Usuários
+              </CardTitle>
+              <CardDescription>
+                Gerencie usuários e suas permissões no sistema ABAC
+              </CardDescription>
+            </CardHeader>
+            <CardContent>
+              <p className='text-muted-foreground'>
+                Componente de gestão de usuários em desenvolvimento...
+              </p>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value='activity' className='space-y-6'>

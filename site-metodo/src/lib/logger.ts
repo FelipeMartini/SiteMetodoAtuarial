@@ -5,45 +5,45 @@ import logger from './logger-simple'
 
 // Interfaces de compatibilidade
 export interface LogMeta {
-  [key: string]: any
+  [key: string]: unknown
 }
 
 // Classe de compatibilidade para estruturedLogger
 class StructuredLogger {
-  info(message: string, meta?: any) {
+  info(message: string, meta?: Record<string, unknown>) {
     logger.info(message, meta)
   }
 
-  error(message: string, meta?: any) {
+  error(message: string, meta?: Record<string, unknown>) {
     logger.error(message, meta)
   }
 
-  warn(message: string, meta?: any) {
+  warn(message: string, meta?: Record<string, unknown>) {
     logger.warn(message, meta)
   }
 
-  debug(message: string, meta?: any) {
+  debug(message: string, meta?: Record<string, unknown>) {
     logger.debug(message, meta)
   }
 
   // Métodos específicos que eram usados antes
-  auth(action: string, meta?: any) {
+  auth(action: string, meta?: Record<string, unknown>) {
     logger.info(`AUTH: ${action}`, meta)
   }
 
-  audit(action: string, meta?: any) {
+  audit(action: string, meta?: Record<string, unknown>) {
     logger.info(`AUDIT: ${action}`, meta)
   }
 
-  security(message: string, level: string, meta?: any) {
+  security(message: string, level: string, meta?: Record<string, unknown>) {
     logger.warn(`SECURITY [${level}]: ${message}`, meta)
   }
 
-  http(message: string, meta?: any) {
+  http(message: string, meta?: Record<string, unknown>) {
     logger.info(`HTTP: ${message}`, meta)
   }
 
-  performance(message: string, meta?: any) {
+  performance(message: string, meta?: Record<string, unknown>) {
     logger.info(`PERF: ${message}`, meta)
   }
 
@@ -79,7 +79,7 @@ export const logHelpers = {
   userUpdated: (
     performedBy: string,
     targetUser: string,
-    changes: any,
+    changes: Record<string, unknown>,
     meta?: LogMeta
   ) => structuredLogger.audit('user_updated', { ...meta, performedBy, targetUser, changes }),
 }

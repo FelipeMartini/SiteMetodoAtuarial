@@ -1,7 +1,7 @@
 'use client'
 export const dynamic = 'force-dynamic'
 
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/app/hooks/useAuth'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AdminLayout } from '@/components/admin-layout'
@@ -9,7 +9,52 @@ import DashboardAdmin from '@/app/area-cliente/DashboardAdmin'
 
 const PageDashboardAdmin: React.FC = () => {
   const { data: session, status } = useAuth()
-  if (status === 'loading') {
+  const [hasAdminAccess, setHasAdminAccess] = useState<boolean>(false)
+  const [isCheckingAccess, setIsCheckingAccess] = useState<boolean>(true)
+
+  // Verificar permissões ABAC para admin dashboard
+  useEffect(() => {
+    const checkAdminAccess = async () => {
+      if (!session?.user?.id) {
+        setIsCheckingAccess(false)
+        return
+      }
+
+      try {
+        // Verificar se o usuário tem acesso ao admin dashboard via ABAC
+        const response = await fetch('/api/abac/check', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            subject: `user:${session.user.id}`,
+            object: 'admin:dashboard',
+            action: 'access',
+            context: {
+              time: new Date().toISOString(),
+              location: session.user.location || 'unknown',
+              department: session.user.department || 'unknown'
+            }
+          })
+        })
+
+        if (response.ok) {
+          const result = await response.json()
+          setHasAdminAccess(result.allowed)
+        } else {
+          setHasAdminAccess(false)
+        }
+      } catch (error) {
+        console.error('Erro ao verificar permissões ABAC:', error)
+        setHasAdminAccess(false)
+      } finally {
+        setIsCheckingAccess(false)
+      }
+    }
+
+    checkAdminAccess()
+  }, [session])
+
+  if (status === 'loading' || isCheckingAccess) {
     return (
       <AdminLayout>
         <div style={{ maxWidth: 900, margin: '0 auto', padding: 32 }}>
@@ -28,28 +73,16 @@ const PageDashboardAdmin: React.FC = () => {
     }
     return null
   }
-  const userRole = session.user.role
-  const userAccessLevel = session.user.accessLevel
-  let isAdmin = false
-  let isStaff = false
-  if (Array.isArray(userRole)) {
-    isAdmin = userRole.includes('admin')
-    isStaff = userRole.includes('staff')
-  } else if (typeof userRole === 'string') {
-    isAdmin = userRole === 'admin'
-    isStaff = userRole === 'staff'
-  }
-  if (!isAdmin && !isStaff && userAccessLevel) {
-    isAdmin = userAccessLevel >= 100
-    isStaff = userAccessLevel >= 50
-  }
-  if (!(isAdmin || isStaff)) {
+
+  // Verificar se o usuário tem permissões de admin via ABAC
+  if (!hasAdminAccess) {
     if (typeof window !== 'undefined') {
-      window.alert('Acesso restrito: apenas para administradores e staff.')
+      window.alert('Acesso restrito: apenas para administradores.')
       window.location.href = '/area-cliente'
     }
     return null
   }
+
   return (
     <AdminLayout>
       <DashboardAdmin />

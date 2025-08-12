@@ -71,14 +71,15 @@ export function Header() {
                   Área Cliente
                 </Button>
               </Link>
-              {/* Exibe Dashboard Admin só para roles admin ou staff */}
-              {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && (
-                <Link href='/area-cliente/dashboard-admin' className='hidden md:inline-flex'>
-                  <Button variant='destructive' size='sm'>
-                    Dashboard Admin
-                  </Button>
-                </Link>
-              )}
+              {/* TODO: Implementar verificação ABAC para Dashboard Admin */}
+              {/* Temporariamente comentado até implementar ABAC completo */}
+              {/* {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && ( */}
+              <Link href='/area-cliente/dashboard-admin' className='hidden md:inline-flex'>
+                <Button variant='destructive' size='sm'>
+                  Dashboard Admin
+                </Button>
+              </Link>
+              {/* )} */}
               <span className='hidden md:inline text-sm text-muted-foreground'>
                 Olá, {session.user.name || session.user.email}
               </span>

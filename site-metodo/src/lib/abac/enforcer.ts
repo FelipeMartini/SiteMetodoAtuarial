@@ -51,7 +51,7 @@ interface ABACContext {
   userAgent?: string     // Browser/device
   sensitive?: boolean    // Dados sensíveis
   urgency?: 'low' | 'normal' | 'high' | 'critical'
-  [key: string]: any     // Contexto adicional
+  [key: string]: unknown // Contexto adicional
 }
 
 // 🏗️ Interface para resultado de autorização
@@ -94,7 +94,7 @@ function addCustomFunctions(enforcer: Enforcer) {
       
       return true
     } catch (error) {
-      structuredLogger.error('Context match error', 'high', { 
+      structuredLogger.error('Context match error', { 
         error: error instanceof Error ? error.message : String(error), 
         requestCtx, 
         policyCtx 
@@ -168,7 +168,7 @@ async function initializeEnforcer(): Promise<Enforcer> {
     
     return enforcer
   } catch (error) {
-    structuredLogger.error('Failed to initialize ABAC enforcer', 'critical', { 
+    structuredLogger.error('Failed to initialize ABAC enforcer', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     throw error
@@ -245,7 +245,7 @@ export async function checkABACPermission(
   } catch (error) {
     const responseTime = Date.now() - startTime
     
-    structuredLogger.error('ABAC permission check failed', 'high', {
+    structuredLogger.error('ABAC permission check failed', {
       error: error instanceof Error ? error.message : String(error),
       subject,
       object,
@@ -288,7 +288,7 @@ async function getAppliedPolicies(
     
     return [...new Set(relevantPolicies)] // Remove duplicatas
   } catch (error) {
-    structuredLogger.error('Failed to get applied policies', 'medium', { 
+    structuredLogger.error('Failed to get applied policies', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     return []
@@ -314,16 +314,13 @@ async function saveAccessLog(
         subject,
         object,
         action,
-        result: result.allowed ? 'allow' : 'deny',
-        reason: result.reason,
-        context: JSON.stringify(result.context),
-        responseTime: result.responseTime,
-        ipAddress: result.context.ip,
-        userAgent: result.context.userAgent
+        allowed: result.allowed,
+        ip: result.context.ip as string,
+        userAgent: result.context.userAgent as string
       }
     })
   } catch (error) {
-    structuredLogger.error('Failed to save access log', 'medium', { 
+    structuredLogger.error('Failed to save access log', { 
       error: error instanceof Error ? error.message : String(error) 
     })
   }
@@ -339,7 +336,7 @@ export async function addABACPolicy(
   object: string,
   action: string,
   effect: 'allow' | 'deny' = 'allow',
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): Promise<boolean> {
   try {
     const enforcer = await getEnforcer()
@@ -365,7 +362,7 @@ export async function addABACPolicy(
     
     return added
   } catch (error) {
-    structuredLogger.error('Failed to add ABAC policy', 'high', { 
+    structuredLogger.error('Failed to add ABAC policy', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     return false
@@ -396,7 +393,7 @@ export async function removeABACPolicy(
     
     return removed
   } catch (error) {
-    structuredLogger.error('Failed to remove ABAC policy', 'high', { 
+    structuredLogger.error('Failed to remove ABAC policy', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     return false
@@ -409,7 +406,7 @@ export async function getAllABACPolicies(): Promise<string[][]> {
     const enforcer = await getEnforcer()
     return await enforcer.getPolicy()
   } catch (error) {
-    structuredLogger.error('Failed to get ABAC policies', 'medium', { 
+    structuredLogger.error('Failed to get ABAC policies', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     return []
@@ -429,7 +426,7 @@ export async function reloadABACPolicies(): Promise<boolean> {
     structuredLogger.info('ABAC policies reloaded')
     return true
   } catch (error) {
-    structuredLogger.error('Failed to reload ABAC policies', 'high', { 
+    structuredLogger.error('Failed to reload ABAC policies', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     return false
@@ -467,7 +464,7 @@ export async function hasPermission(
   return await checkABACPermission(`user:${userId}`, resource, action, context)
 }
 
-export default {
+const abacEnforcer = {
   checkABACPermission,
   addABACPolicy,
   removeABACPolicy,
@@ -477,3 +474,5 @@ export default {
   canAccess,
   hasPermission
 }
+
+export default abacEnforcer

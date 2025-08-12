@@ -3,6 +3,7 @@
 import React from 'react'
 import { useAuth } from '@/app/hooks/useAuth'
 import { Skeleton } from '@/components/ui/skeleton'
+import { checkClientPermission } from '@/lib/abac/client'
 // Diretiva para garantir que o componente seja client-side
 /**
  * Componente MenuLateralCliente
@@ -15,24 +16,32 @@ import Link from 'next/link'
 
 export default function MenuLateralCliente() {
   const { data: session } = useAuth()
+  const [isAdmin, setIsAdmin] = React.useState(false)
 
-  // Verifica se o usuário tem permissão admin usando o novo sistema de roles
-  const isAdmin = React.useMemo(() => {
-    if (!session?.user) return false
+  // Verifica se o usuário tem permissão admin usando ABAC puro
+  React.useEffect(() => {
+    const checkAdminPermission = async () => {
+      if (!session?.user?.email) {
+        setIsAdmin(false)
+        return
+      }
 
-    const userRole = session.user.role
-    const userAccessLevel = session.user.accessLevel
-
-    // Verificação por role (sistema moderno)
-    if (Array.isArray(userRole)) {
-      return userRole.includes('admin') || userRole.includes('staff')
-    } else if (typeof userRole === 'string') {
-      return userRole === 'admin' || userRole === 'staff'
+      try {
+        // Verifica permissão para acessar dashboard admin usando ABAC
+        const hasAdminAccess = await checkClientPermission(
+          session.user.email,
+          '/admin/dashboard',
+          'access'
+        )
+        setIsAdmin(hasAdminAccess)
+      } catch (error) {
+        console.error('Erro ao verificar permissões:', error)
+        setIsAdmin(false)
+      }
     }
 
-    // Fallback: verificação por accessLevel (compatibilidade)
-    return (userAccessLevel || 0) >= 50
-  }, [session])
+    checkAdminPermission()
+  }, [session?.user?.email])
 
   // Exibe Skeleton enquanto dados do usuário não estão disponíveis
   if (!session?.user) {

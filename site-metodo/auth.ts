@@ -270,6 +270,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
             })
 
             token.id = newUser.id
+            token.email = newUser.email ?? ''
+            token.name = newUser.name
             token.isActive = newUser.isActive
             token.department = newUser.department
             token.location = newUser.location
@@ -298,7 +300,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
     async session({ session, token }) {
       // Verificar se usuário ainda está ativo
-      if (token.id) {
+      if (token?.id) {
         const user = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { isActive: true },
@@ -310,7 +312,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       }
 
       // Estender sessão com dados ABAC
-      if (session.user && token) {
+      if (session.user && token?.id) {
         session.user.id = token.id as string
         session.user.isActive = token.isActive as boolean
         session.user.department = token.department as string

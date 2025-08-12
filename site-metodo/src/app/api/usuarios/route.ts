@@ -4,17 +4,25 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { db as prisma } from '@/lib/prisma'
 import { usuarioABACSchema, usuarioUpdateABACSchema } from '@/validators/abacSchemas'
-import { checkABACPermission, hasPermission } from '@/lib/abac/enforcer'
+import { checkABACPermission } from '@/lib/abac/enforcer'
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
-import logger from '@/lib/logger-simple'
 import { structuredLogger } from '@/lib/logger'
 import { getClientIP } from '@/lib/utils/ip'
 
 /**
  * 🔐 UTILITÁRIO PARA EXTRAIR CONTEXTO ABAC DA REQUISIÇÃO
  */
-function buildABACContext(req: NextRequest, session: any) {
+interface SessionWithUser {
+  user?: {
+    location?: string | null
+    department?: string | null
+    mfaEnabled?: boolean
+    lastLoginAt?: Date | string | null
+  }
+}
+
+function buildABACContext(req: NextRequest, session: SessionWithUser) {
   return {
     ip: getClientIP(req),
     userAgent: req.headers.get('user-agent') || 'Unknown',
@@ -37,7 +45,7 @@ export async function GET(req: NextRequest) {
     }
 
     // Verificação ABAC: usuário pode listar usuários
-    const context = buildABACContext(req, session)
+    const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
       `user:${session.user.id}`,
       'resource:users',
@@ -112,7 +120,7 @@ export async function POST(req: NextRequest) {
     }
 
     // Verificação ABAC: usuário pode criar usuários
-    const context = buildABACContext(req, session)
+    const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
       `user:${session.user.id}`,
       'resource:users',
@@ -237,7 +245,7 @@ export async function PUT(req: NextRequest) {
     const targetUserId = updateData.id
 
     // Verificação ABAC: usuário pode atualizar usuários
-    const context = buildABACContext(req, session)
+    const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
       `user:${session.user.id}`,
       `resource:users:${targetUserId}`,
@@ -269,7 +277,8 @@ export async function PUT(req: NextRequest) {
       }, { status: 404 })
     }
 
-    // Preparar dados para atualização (remover id dos dados)
+    // Preparar dados para atualização (remover id dos dados se presente)
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { id, ...dataToUpdate } = updateData
 
     // Atualizar usuário
@@ -341,7 +350,7 @@ export async function DELETE(req: NextRequest) {
     }
 
     // Verificação ABAC: usuário pode deletar usuários
-    const context = buildABACContext(req, session)
+    const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
       `user:${session.user.id}`,
       `resource:users:${targetUserId}`,

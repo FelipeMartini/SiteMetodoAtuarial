@@ -315,7 +315,7 @@ export const migrationStepSchema = z.object({
 // 📤 EXPORTS PRINCIPAIS
 // ====================
 
-export default {
+const abacSchemas = {
   // Usuários
   usuarioABACSchema,
   usuarioUpdateABACSchema,
@@ -351,6 +351,8 @@ export default {
   policyEffectSchema,
   abacConditionsSchema
 }
+
+export default abacSchemas
 
 // 🏷️ TIPOS INFERIDOS DOS SCHEMAS
 // =============================
