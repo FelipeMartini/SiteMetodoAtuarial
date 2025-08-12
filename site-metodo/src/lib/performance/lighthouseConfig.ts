@@ -253,35 +253,35 @@ export function analyzeLighthouseResult(result: Record<string, unknown>) {
   // Opportunities (melhorias de performance)
   const opportunities = Object.values(audits as any)
     .filter(
-      (audit: Record<string, unknown>) =>
+      (audit: any) =>
         audit.scoreDisplayMode === 'numeric' &&
         audit.score !== null &&
         audit.score < 1 &&
         (audit.details as any)?.overallSavingsMs > 100
     )
     .sort(
-      (a: Record<string, unknown>, b: Record<string, unknown>) =>
+      (a: any, b: any) =>
         b.details.overallSavingsMs - a.details.overallSavingsMs
     )
     .slice(0, 10)
 
   // Diagnostics (problemas gerais)
-  const diagnostics = Object.values(audits)
+  const diagnostics = Object.values(audits as any)
     .filter(
-      (audit: Record<string, unknown>) =>
+      (audit: any) =>
         audit.scoreDisplayMode === 'informative' && audit.score !== null && audit.score < 1
     )
     .slice(0, 10)
 
   return {
-    url: lhr.finalUrl,
-    timestamp: lhr.fetchTime,
+    url: (lhr as any).finalUrl,
+    timestamp: (lhr as any).fetchTime,
     scores,
     coreWebVitals,
     performanceMetrics,
     opportunities,
     diagnostics,
-    runtime: lhr.timing?.total || 0,
+    runtime: (lhr as any).timing?.total || 0,
   }
 }
 
@@ -301,7 +301,7 @@ export function evaluateMetrics(
 
   // Avaliar scores das categorias
   Object.entries(thresholds).forEach(([category, threshold]) => {
-    const score = metrics.scores[category]
+    const score = (metrics.scores as any)[category]
     const thresholdNum = Number(threshold)
     if (score >= thresholdNum) {
       evaluation.passed++
@@ -317,7 +317,7 @@ export function evaluateMetrics(
 
   // Avaliar Core Web Vitals
   Object.entries(CORE_WEB_VITALS_THRESHOLDS).forEach(([metric, thresholds]) => {
-    const value = metrics.coreWebVitals[metric]
+    const value = (metrics.coreWebVitals as any)[metric]
 
     if (value <= thresholds.good) {
       evaluation.details[`cwv-${metric}`] = 'good'
@@ -359,10 +359,10 @@ export function generatePerformanceReport(results: Record<string, unknown>[]) {
 
   // Calcular médias
   results.forEach(result => {
-    report.summary.averageScores.performance += result.scores.performance
-    report.summary.averageScores.accessibility += result.scores.accessibility
-    report.summary.averageScores.bestPractices += result.scores.bestPractices
-    report.summary.averageScores.seo += result.scores.seo
+    report.summary.averageScores.performance += (result.scores as any).performance
+    report.summary.averageScores.accessibility += (result.scores as any).accessibility
+    report.summary.averageScores.bestPractices += (result.scores as any).bestPractices
+    report.summary.averageScores.seo += (result.scores as any).seo
   })
 
   Object.keys(report.summary.averageScores).forEach(key => {
@@ -374,7 +374,8 @@ export function generatePerformanceReport(results: Record<string, unknown>[]) {
   const commonIssues = new Map()
 
   results.forEach(result => {
-    result.opportunities.forEach((opportunity: Record<string, unknown>) => {
+    const opportunities = (result.opportunities as any) || [];
+    opportunities.forEach((opportunity: Record<string, unknown>) => {
       const count = commonIssues.get(opportunity.title) || 0
       commonIssues.set(opportunity.title, count + 1)
     })
