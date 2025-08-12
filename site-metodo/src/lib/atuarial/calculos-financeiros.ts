@@ -117,7 +117,8 @@ export class CalculosFinanceirosAtuariais {
     const fatorIdade = this.calcularFatorIdade(idade)
     const fatorSexo = sexo === 'M' ? 1.1 : 0.9 // Homens têm mortalidade maior
     
-    return Math.abs(valorPresente) * fatorIdade * fatorSexo
+    // Prêmio é proporcional ao capital segurado
+    return (capital * Math.abs(valorPresente) * fatorIdade * fatorSexo) / 1000
   }
 
   /**
@@ -129,7 +130,9 @@ export class CalculosFinanceirosAtuariais {
     const periodoRestante = (prazoSeguro || 1) - tempoDecorrido
     if (periodoRestante <= 0) return 0
     
-    return this.finance.PV(taxaJuros * 100, periodoRestante)
+    // Reserva é proporcional ao capital segurado e tempo restante
+    const valorPresente = this.finance.PV(taxaJuros * 100, periodoRestante)
+    return capital * Math.abs(valorPresente) / 1000
   }
 
   /**

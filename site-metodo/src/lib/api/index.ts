@@ -54,7 +54,7 @@ export function monitored(name: string) {
         apiMonitor.recordRequest(name, Date.now() - start, true)
         return result
       } catch (_error) {
-        apiMonitor.recordRequest(name, Date.now() - start, false, (_error as Error).message)
+        apiMonitor.recordRequest(name, Date.now() - start, false)
         throw _error
       }
     }
@@ -184,7 +184,7 @@ export class ApiHelpers {
     try {
       new URL(url)
       return true
-    } catch (_error) {
+    } catch {
       return false
     }
   }
@@ -195,7 +195,7 @@ export class ApiHelpers {
   static extractDomain(url: string): string {
     try {
       return new URL(url).hostname
-    } catch (_error) {
+    } catch {
       return 'unknown'
     }
   }
@@ -295,7 +295,7 @@ if (typeof window !== 'undefined') {
     )
 
     console.log('✅ API monitoring endpoints registered successfully')
-  } catch (_error) {
+  } catch {
     console.warn('⚠️ Failed to register API monitoring endpoints:')
   }
 }
