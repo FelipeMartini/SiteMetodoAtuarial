@@ -1,3 +1,9 @@
+// Interface para ServiceWorkerRegistration com suporte a sync
+interface ServiceWorkerRegistrationWithSync extends ServiceWorkerRegistration {
+  sync: {
+    register: (tag: string) => Promise<void>
+  }
+}
 /**
  * Utilitários para gerenciar Service Worker
  * Registra e controla o Service Worker no client-side
@@ -249,10 +255,10 @@ export async function addToBackgroundSync(url: string, options: RequestInit): Pr
 
   // Registrar para background sync (se disponível)
   try {
-    if ('sync' in registration && (registration as any).sync) {
-      await (registration as any).sync.register('background-sync')
+    if ('sync' in registration) {
+      await (registration as ServiceWorkerRegistrationWithSync).sync.register('background-sync')
     }
-  } catch (_error) {
+  } catch {
     console.warn('Background Sync não disponível:')
   }
 }
