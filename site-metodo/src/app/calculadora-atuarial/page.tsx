@@ -71,7 +71,7 @@ export default function CalculadoraAtuarialPage() {
           break
 
         case 'probabilidade-sobrevivencia':
-          const probSobrev = calculadoraAtuarial.probabilidadeSobrevivencia(
+          const probSobrev = calculadoraAtuarial.calcularProbabilidadeSobrevivencia(
             dadosMortalidade.idade,
             dadosMortalidade.sexo,
             dadosMortalidade.prazo
@@ -84,7 +84,7 @@ export default function CalculadoraAtuarialPage() {
           break
 
         case 'expectativa-vida':
-          const expectativa = calculadoraAtuarial.expectativaVida(
+          const expectativa = calculadoraAtuarial.calcularExpectativaVida(
             dadosMortalidade.idade,
             dadosMortalidade.sexo
           )
