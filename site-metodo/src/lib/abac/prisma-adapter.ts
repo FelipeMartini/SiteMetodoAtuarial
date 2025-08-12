@@ -36,16 +36,18 @@ export class CustomPrismaAdapter {
 
       // Converter políticas para formato Casbin
       policies.forEach((policy: Record<string, unknown>) => {
-        const line = ['p', policy.subject, policy.object, policy.action, policy.effect]
+        const line: string[] = ['p', String(policy.subject), String(policy.object), String(policy.action), String(policy.effect)]
         if (policy.conditions) {
-          line.push(policy.conditions)
+          line.push(String(policy.conditions))
         }
         policyLines.push(line)
       })
 
       // Converter roles para formato Casbin
       roles.forEach((userRole: Record<string, unknown>) => {
-        policyLines.push(['g', userRole.user.email, userRole.role.name])
+        const user = userRole.user as { email: string }
+        const role = userRole.role as { name: string }
+        policyLines.push(['g', user.email, role.name])
       })
 
       return policyLines
