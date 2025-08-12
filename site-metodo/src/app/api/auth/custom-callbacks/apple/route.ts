@@ -6,7 +6,6 @@ export async function POST(request: NextRequest) {
   const form = await request.formData()
   const code = form.get('code')
   const state = form.get('state')
-  const _error = form.get('error')
   const stateCookie = request.cookies.get('authjs.oauth-state')?.value
   if (!state || !stateCookie || state !== stateCookie) {
     return NextResponse.redirect('/login?error=invalid_state')

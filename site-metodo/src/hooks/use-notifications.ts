@@ -119,7 +119,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         }
       }
     } catch (_error) {
-      console.warn('Erro ao buscar contagem não lidas:', error)
+      console.warn(String(_error))
     }
   }, []) // Remove 'error' dependency
 
@@ -153,7 +153,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setUnreadCount(prev => Math.max(0, prev - 1))
     } catch (_error) {
       console.error('Erro ao marcar como lida:', String(_error))
-      throw error
+      throw _error
     }
   }, [])
 
@@ -193,7 +193,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       return markedCount
     } catch (_error) {
       console.error('Erro ao marcar todas como lidas:', String(_error))
-      throw error
+      throw _error
     }
   }, [])
 
@@ -224,7 +224,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       })
     } catch (_error) {
       console.error('Erro ao remover notificação:', String(_error))
-      throw error
+      throw _error
     }
   }, [])
 
@@ -303,12 +303,12 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
               setUnreadCount(message.data.unreadCount)
             }
           } catch (_error) {
-            console.warn('Erro ao processar mensagem WebSocket:', error)
+            console.warn(String(_error))
           }
         }
 
         ws.onerror = error => {
-          console.warn('Erro no WebSocket:', error)
+          console.warn('WebSocket error:', error)
         }
 
         ws.onclose = () => {
@@ -321,7 +321,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
           ws.close()
         }
       } catch (_error) {
-        console.warn('WebSocket não disponível:', error)
+        console.warn(String(_error))
       }
     }
 
@@ -361,7 +361,7 @@ export function useUnreadCount(userId: string) {
           }
         }
       } catch (_error) {
-        console.warn('Erro ao buscar contagem:', error)
+        console.warn(String(_error))
       } finally {
         setLoading(false)
       }
@@ -446,7 +446,7 @@ export function usePushNotifications() {
       return pushSubscription
     } catch (_error) {
       console.error('Erro ao subscrever push notifications:', String(_error))
-      throw error
+      throw _error
     }
   }
 
@@ -468,7 +468,7 @@ export function usePushNotifications() {
       }
     } catch (_error) {
       console.error('Erro ao cancelar subscription:', String(_error))
-      throw error
+      throw _error
     }
   }
 

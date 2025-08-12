@@ -38,7 +38,7 @@ const CepSchema = z.object({
   siafi: z.string().optional().default(''),
 })
 
-const CepErrorSchema = z.object({
+const _CepErrorSchema = z.object({
   erro: z.boolean(),
   message: z.string().optional(),
 })

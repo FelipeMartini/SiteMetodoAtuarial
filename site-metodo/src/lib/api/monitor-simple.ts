@@ -244,7 +244,7 @@ export class SimpleApiMonitor {
    */
   private updateCircuitBreaker(endpoint: EndpointMetrics): void {
     const maxErrors = 5
-    const _timeWindow = 5 * 60 * 1000 // 5 minutos
+    const _timeWindow: unknown = 5 * 60 * 1000 // 5 minutos
 
     switch (endpoint.circuitBreakerState) {
       case 'CLOSED':
