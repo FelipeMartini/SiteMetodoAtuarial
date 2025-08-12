@@ -27,7 +27,7 @@ export async function GET() {
       success: true,
       data: policies,
     })
-  } catch (_error) {
+  } catch {
     console.error('Error fetching policies:', String(_error))
     return NextResponse.json(
       {
@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
         { status: 400 }
       )
     }
-  } catch (_error) {
+  } catch {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -113,7 +113,7 @@ export async function DELETE(request: NextRequest) {
         { status: 404 }
       )
     }
-  } catch (_error) {
+  } catch {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },

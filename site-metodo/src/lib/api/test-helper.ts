@@ -3,6 +3,15 @@ import { exchangeService } from '@/lib/api/services/exchange-simple'
 import { apiMonitor } from '@/lib/api/monitor-simple'
 import { apiCache } from '@/lib/api/cache-simple'
 
+// Types for test results
+interface BulkTestResult {
+  success: boolean;
+  total?: number;
+  found?: number;
+  results?: unknown[];
+  error?: string;
+}
+
 /**
  * Utilitário para testar a infraestrutura de APIs externas
  */
@@ -18,7 +27,7 @@ export class ApiTestHelper {
 
     const results = {
       individual: [] as unknown[],
-      bulk: null as any,
+      bulk: null as BulkTestResult | null,
       validation: [] as unknown[],
     }
 
@@ -41,7 +50,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`)
           }
-        } catch (_error) {
+        } catch {
           console.log(`    💥 ${provider}: Erro - ${_error}`)
           results.individual.push({
             cep,
@@ -66,7 +75,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Bulk: ${results.bulk.found}/${results.bulk.total} encontrados`)
-    } catch (_error) {
+    } catch {
       console.log(`    💥 Bulk: ${_error}`)
       results.bulk = {
         success: false,
@@ -127,7 +136,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`)
           }
-        } catch (_error) {
+        } catch {
           console.log(`    💥 ${provider}: ${_error}`)
           results.rates.push({
             ...pair,
@@ -169,7 +178,7 @@ export class ApiTestHelper {
         } else {
           console.log(`    ❌ Conversão falhou`)
         }
-      } catch (_error) {
+      } catch {
         console.log(`    💥 Conversão: ${_error}`)
         results.conversions.push({
           ...conversion,
@@ -196,7 +205,7 @@ export class ApiTestHelper {
       } else {
         console.log(`    ❌ Tendências: Falhou`)
       }
-    } catch (_error) {
+    } catch {
       console.log(`    💥 Tendências: ${_error}`)
       results.trends.push({
         currency: 'USD',
@@ -218,8 +227,8 @@ export class ApiTestHelper {
     const results = {
       registration: [] as unknown[],
       healthChecks: [] as unknown[],
-      metrics: null as any,
-      cache: null as any,
+      metrics: null as unknown,
+      cache: null as unknown,
     }
 
     // Registrar endpoints de teste
@@ -239,7 +248,7 @@ export class ApiTestHelper {
         })
 
         console.log(`    ✅ Endpoint ${endpoint.name} registrado`)
-      } catch (_error) {
+      } catch {
         console.log(`    💥 Registro: ${_error}`)
         results.registration.push({
           ...endpoint,
@@ -264,7 +273,7 @@ export class ApiTestHelper {
         console.log(
           `    ${healthResult.healthy ? '✅' : '❌'} ${endpoint.name}: ${healthResult.responseTime}ms`
         )
-      } catch (_error) {
+      } catch {
         console.log(`    💥 Health check: ${_error}`)
         results.healthChecks.push({
           name: endpoint.name,
@@ -287,7 +296,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Métricas: ${allMetrics.length} endpoints monitorados`)
-    } catch (_error) {
+    } catch {
       console.log(`    💥 Métricas: ${_error}`)
       results.metrics = {
         success: false,
@@ -316,7 +325,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Cache funcionando: ${cached ? 'dados recuperados' : 'falhou'}`)
-    } catch (_error) {
+    } catch {
       console.log(`    💥 Cache: ${_error}`)
       results.cache = {
         success: false,
@@ -336,9 +345,9 @@ export class ApiTestHelper {
     const startTime = Date.now()
 
     const results = {
-      cep: null as any,
-      exchange: null as any,
-      monitoring: null as any,
+      cep: null as unknown,
+      exchange: null as unknown,
+      monitoring: null as unknown,
       summary: {
         duration: 0,
         totalTests: 0,
@@ -359,7 +368,7 @@ export class ApiTestHelper {
       // Teste Monitoring
       results.monitoring = await this.testMonitoring()
       console.log('')
-    } catch (_error) {
+    } catch {
       console.error('💥 Erro durante os testes:', String(_error))
     }
 

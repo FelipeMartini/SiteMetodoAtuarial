@@ -46,7 +46,7 @@ export class ABACEnforcer implements Enforcer {
       await this.enforcer.loadPolicy()
 
       console.log('ABAC Enforcer initialized successfully')
-    } catch (_error) {
+    } catch {
       console.error('Failed to initialize ABAC Enforcer:', String(_error))
       throw new AuthorizationError(
         'Failed to initialize authorization system',
@@ -91,7 +91,7 @@ export class ABACEnforcer implements Enforcer {
         ...context,
         time: now,
         hour: now.getHours(),
-        attributes: (context as any).attributes || {},
+        attributes: (context as { attributes?: Record<string, unknown> }).attributes || {},
       }
 
       const startTime = Date.now()
@@ -119,7 +119,7 @@ export class ABACEnforcer implements Enforcer {
       })
 
       return result
-    } catch (_error) {
+    } catch {
       console.error('ABAC authorization error:', _error)
       throw new AuthorizationError(
         'ABAC authorization check failed',
@@ -148,7 +148,7 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return added
-    } catch (_error) {
+    } catch {
       console.error('Error adding policy:', String(_error))
       return false
     }
@@ -173,7 +173,7 @@ export class ABACEnforcer implements Enforcer {
       }
 
       return removed
-    } catch (_error) {
+    } catch {
       console.error('Error removing policy:', String(_error))
       return false
     }
@@ -198,7 +198,7 @@ export class ABACEnforcer implements Enforcer {
         createdAt: new Date(),
         updatedAt: new Date(),
       }))
-    } catch (_error) {
+    } catch {
       console.error('Error getting policies:', String(_error))
       return []
     }
@@ -229,7 +229,7 @@ export class ABACEnforcer implements Enforcer {
           userAgent: logData.context?.userAgent,
         },
       })
-    } catch (_error) {
+    } catch {
       console.error('Error logging access:', _error)
       // Não propagar erro de log para não afetar a autorização
     }
@@ -278,7 +278,7 @@ export class ABACEnforcer implements Enforcer {
 
       await this.enforcer!.savePolicy()
       console.log('Default ABAC policies initialized')
-    } catch (_error) {
+    } catch {
       console.error('Error initializing default policies:', _error)
     }
   }
@@ -292,7 +292,7 @@ export class ABACEnforcer implements Enforcer {
     try {
       await this.enforcer!.loadPolicy()
       console.log('Policies reloaded successfully')
-    } catch (_error) {
+    } catch {
       console.error('Error reloading policies:', _error)
       throw new AuthorizationError('Failed to reload policies', 'POLICY_RELOAD_FAILED', _error instanceof Error ? { message: _error.message, stack: _error.stack } : { message: String(_error) })
     }

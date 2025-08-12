@@ -118,10 +118,10 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
           setUnreadCount(data.data.user.unreadCount)
         }
       }
-    } catch (_error) {
+    } catch (error) {
       console.warn('Erro ao buscar contagem não lidas:', error)
     }
-  }, [])
+  }, [error])
 
   /**
    * Marca notificação como lida
@@ -144,16 +144,16 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setNotifications(prev =>
         prev.map(notification =>
           notification.id === notificationId
-            ? { ...notification, readAt: new Date(), status: 'read' as any }
+            ? { ...notification, readAt: new Date(), status: 'read' as const }
             : notification
         )
       )
 
       // Atualiza contagem
       setUnreadCount(prev => Math.max(0, prev - 1))
-    } catch (_error) {
-      console.error('Erro ao marcar como lida:', String(_error))
-      throw _error
+    } catch {
+      console.error('Erro ao marcar como lida:', String(error))
+      throw error
     }
   }, [])
 
@@ -184,16 +184,16 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
       setNotifications(prev =>
         prev.map(notification =>
           !notification.readAt
-            ? { ...notification, readAt: new Date(), status: 'read' as any }
+            ? { ...notification, readAt: new Date(), status: 'read' as const }
             : notification
         )
       )
 
       setUnreadCount(0)
       return markedCount
-    } catch (_error) {
-      console.error('Erro ao marcar todas como lidas:', String(_error))
-      throw _error
+    } catch {
+      console.error('Erro ao marcar todas como lidas:', String(error))
+      throw error
     }
   }, [])
 
@@ -222,9 +222,9 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
 
         return newNotifications
       })
-    } catch (_error) {
-      console.error('Erro ao remover notificação:', String(_error))
-      throw _error
+    } catch {
+      console.error('Erro ao remover notificação:', String(error))
+      throw error
     }
   }, [])
 
@@ -249,7 +249,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
   useEffect(() => {
     fetchNotifications(true)
     fetchUnreadCount()
-  }, [userId, filter])
+  }, [userId, filter, fetchNotifications, fetchUnreadCount])
 
   // Auto-refresh
   useEffect(() => {
@@ -302,8 +302,8 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
             } else if (message.type === 'status') {
               setUnreadCount(message.data.unreadCount)
             }
-          } catch (_error) {
-            console.warn('Erro ao processar mensagem WebSocket:', _error)
+          } catch {
+            console.warn('Erro ao processar mensagem WebSocket:', error)
           }
         }
 
@@ -360,8 +360,8 @@ export function useUnreadCount(userId: string) {
             setCount(data.data.user.unreadCount)
           }
         }
-      } catch (_error) {
-        console.warn('Erro ao buscar contagem:', _error)
+      } catch {
+        console.warn('Erro ao buscar contagem:', error)
       } finally {
         setLoading(false)
       }
@@ -444,9 +444,9 @@ export function usePushNotifications() {
 
       setSubscription(pushSubscription)
       return pushSubscription
-    } catch (_error) {
-      console.error('Erro ao subscrever push notifications:', String(_error))
-      throw _error
+    } catch {
+      console.error('Erro ao subscrever push notifications:', String(error))
+      throw error
     }
   }
 
@@ -466,9 +466,9 @@ export function usePushNotifications() {
         await subscription.unsubscribe()
         setSubscription(null)
       }
-    } catch (_error) {
-      console.error('Erro ao cancelar subscription:', String(_error))
-      throw _error
+    } catch {
+      console.error('Erro ao cancelar subscription:', String(error))
+      throw error
     }
   }
 
@@ -484,8 +484,8 @@ export function usePushNotifications() {
 
       const data = await response.json()
       return data.success
-    } catch (_error) {
-      console.error('Erro no teste push:', String(_error))
+    } catch {
+      console.error('Erro no teste push:', String(error))
       return false
     }
   }

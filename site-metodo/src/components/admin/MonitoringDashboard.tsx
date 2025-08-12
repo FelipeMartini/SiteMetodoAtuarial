@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -88,7 +88,7 @@ export default function MonitoringDashboard() {
   const [refreshInterval, setRefreshInterval] = useState(30000) // 30 segundos
   const { toast } = useToast()
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     try {
       const response = await fetch('/api/monitoring/metrics')
 
@@ -106,7 +106,7 @@ export default function MonitoringDashboard() {
 
       const result = await response.json()
       setData(result)
-    } catch (_error) {
+    } catch {
       console.error('Error fetching monitoring data:', String(_error))
       toast({
         title: 'Erro',
@@ -116,7 +116,7 @@ export default function MonitoringDashboard() {
     } finally {
       setLoading(false)
     }
-  }
+  }, [toast])
 
   const exportMetrics = async (format: 'json' | 'prometheus' = 'json') => {
     try {
@@ -140,7 +140,7 @@ export default function MonitoringDashboard() {
         title: 'Exportação concluída',
         description: `Métricas exportadas em formato ${format.toUpperCase()}.`,
       })
-    } catch (_error) {
+    } catch {
       console.error('Error exporting metrics:', String(_error))
       toast({
         title: 'Erro na exportação',
@@ -152,14 +152,14 @@ export default function MonitoringDashboard() {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
 
   useEffect(() => {
     if (!autoRefresh) return
 
     const interval = setInterval(fetchData, refreshInterval)
     return () => clearInterval(interval)
-  }, [autoRefresh, refreshInterval])
+  }, [autoRefresh, refreshInterval, fetchData])
 
   const getHealthIcon = (status: string) => {
     switch (status) {

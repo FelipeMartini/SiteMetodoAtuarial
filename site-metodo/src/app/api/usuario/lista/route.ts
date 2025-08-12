@@ -30,7 +30,7 @@ export async function GET() {
     })
 
     return NextResponse.json({ usuarios })
-  } catch (_error) {
+  } catch {
     console.error('Erro ao listar usuários:', String(_error))
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }

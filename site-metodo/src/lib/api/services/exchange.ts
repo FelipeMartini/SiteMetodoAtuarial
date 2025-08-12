@@ -358,7 +358,7 @@ export class ExchangeService {
           rate,
           date: rates.date,
         })
-      } catch (_error) {
+      } catch {
         console.warn(`Error converting to ${toCurrency}:`, _error)
       }
     }

@@ -58,7 +58,7 @@ export class NotificationWebSocketServer {
         } else {
           deadConnections.push(ws)
         }
-      } catch (_error) {
+      } catch {
         simpleLogger.warn('Erro ao enviar para conexão WebSocket', { _error, userId })
         deadConnections.push(ws)
       }
@@ -112,7 +112,7 @@ export class NotificationWebSocketServer {
           } else {
             deadConnections.push(ws)
           }
-        } catch (_error) {
+        } catch {
           simpleLogger.warn('Erro no broadcast WebSocket', { _error, userId })
           deadConnections.push(ws)
         }
@@ -144,7 +144,7 @@ export class NotificationWebSocketServer {
       }
 
       await this.sendMessageToUser(userId, message)
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao notificar contagem não lidas', { error: String(_error), userId })
     }
   }
@@ -256,7 +256,7 @@ export class NotificationWebSocketServer {
             userId,
           })
       }
-    } catch (_error) {
+    } catch {
       simpleLogger.warn('Erro ao processar mensagem WebSocket', { _error, userId })
     }
   }
@@ -293,7 +293,7 @@ export class NotificationWebSocketServer {
       }
 
       this.sendMessageToConnection(ws, message)
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao enviar dados iniciais', { error: String(_error), userId })
     }
   }
@@ -318,7 +318,7 @@ export class NotificationWebSocketServer {
       if (ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify(message))
       }
-    } catch (_error) {
+    } catch {
       simpleLogger.warn('Erro ao enviar mensagem WebSocket', { _error })
     }
   }
@@ -349,7 +349,7 @@ export class NotificationWebSocketServer {
       // Mock implementation - substituir por verificação real do JWT
       const mockUserId = url.searchParams.get('userId')
       return mockUserId
-    } catch (_error) {
+    } catch {
       simpleLogger.warn('Erro ao extrair userId da requisição WebSocket', { _error })
       return null
     }
@@ -372,7 +372,7 @@ export class NotificationWebSocketServer {
           ;(ws as any).isAlive = false
           try {
             ws.ping()
-          } catch (_error) {
+          } catch {
             deadConnections.push(ws)
           }
         }
@@ -389,7 +389,7 @@ export class NotificationWebSocketServer {
     for (const ws of deadConnections) {
       try {
         ws.terminate()
-      } catch (_error) {
+      } catch {
         // Ignora erros ao terminar conexão já morta
       }
 

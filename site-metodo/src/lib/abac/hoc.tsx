@@ -71,7 +71,7 @@ export function withABAC<T extends object>(
           )
 
           setIsAuthorized(hasPermission)
-        } catch (_error) {
+        } catch {
           console.error('Authorization check failed:', String(_error))
           setIsAuthorized(false)
         } finally {
@@ -129,7 +129,7 @@ export function usePermission(resource: string, action: string = 'read') {
       try {
         const result = await checkClientPermission(session.user.email, resource, action)
         setHasPermission(result)
-      } catch (_error) {
+      } catch {
         console.error('Permission check error:', String(_error))
         setHasPermission(false)
       } finally {
@@ -302,7 +302,7 @@ export function ABACProtectedPage({
         )
 
         setIsAuthorized(hasPermission)
-      } catch (_error) {
+      } catch {
         console.error('Authorization failed:', String(_error))
         setIsAuthorized(false)
       }

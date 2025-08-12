@@ -121,7 +121,7 @@ export async function GET(request: NextRequest) {
       metrics: metricsData,
       availableMetrics,
     })
-  } catch (_error) {
+  } catch {
     structuredLogger.error('Error fetching metrics', _error as Error, {
       userId: (await auth())?.user?.id,
       ip: getClientIP(request),

@@ -34,7 +34,7 @@ export function useAuth() {
           setData(null)
           setStatus('unauthenticated')
         }
-      } catch (_error) {
+      } catch {
         console.error('[useAuth] Error fetching session:', String(_error))
         if (isMounted) {
           setData(null)
