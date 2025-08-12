@@ -303,7 +303,7 @@ export function useAuth() {
     /**
      * Verifica se o usuário tem permissão para um recurso usando ABAC
      */
-    hasPermission: (resource: string | null = null, action: string = 'access') =>
+    hasPermission: (resource: string | null = null) =>
       checkABACAuthorization(session?.user, resource),
 
     /**

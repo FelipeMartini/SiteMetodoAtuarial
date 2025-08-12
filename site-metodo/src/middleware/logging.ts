@@ -78,18 +78,9 @@ export function createLoggingMiddleware() {
         })
       }
 
-      // Log para erros
+      // Log para erros - simplificado
       if (status >= 400) {
-        const level = status >= 500 ? 'error' : 'warn'
-        structuredLogger[level](`HTTP ${status}: ${method} ${pathname}`, {
-          ip,
-          userAgent,
-          method,
-          endpoint: pathname,
-          responseTime,
-          statusCode: status,
-          requestId,
-        } as any)
+        console.warn(`HTTP ${status}: ${method} ${pathname}`)
       }
 
       // Limpar dados do request
@@ -131,19 +122,8 @@ export function createAuditMiddleware() {
     const shouldAudit = shouldAuditEndpoint(pathname, request.method)
 
     if (shouldAudit) {
-      const ip = getClientIP(request)
-      const userAgent = request.headers.get('user-agent') || undefined
-
-      // TODO: Extrair userId do token/session quando implementado
-      // const userId = await getUserIdFromRequest(request)
-
-      structuredLogger.audit(`API ${request.method} ${pathname}`, {
-        performedBy: 'system',
-        ip,
-        userAgent,
-        endpoint: pathname,
-        method: request.method,
-      } as any)
+      // Log de auditoria simplificado
+      console.log(`API ${request.method} ${pathname}`)
     }
 
     return NextResponse.next()

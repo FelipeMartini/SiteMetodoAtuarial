@@ -229,7 +229,7 @@ export class ABACEnforcer implements Enforcer {
           userAgent: logData.context?.userAgent,
         },
       })
-    } catch (_error) {
+    } catch {
       console.error('Error logging access:')
       // Não propagar erro de log para não afetar a autorização
     }
@@ -278,7 +278,7 @@ export class ABACEnforcer implements Enforcer {
 
       await this.enforcer!.savePolicy()
       console.log('Default ABAC policies initialized')
-    } catch (_error) {
+    } catch {
       console.error('Error initializing default policies:')
     }
   }
