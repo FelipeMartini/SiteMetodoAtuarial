@@ -165,7 +165,7 @@ export default auth((req: NextRequest & { auth: any }) => {
     if (shouldLog) {
       setTimeout(() => {
         const responseTime = Date.now() - startTime
-        structuredLogger.performance(pathname, responseTime, {
+        structuredLogger.performance(`${pathname} - ${responseTime}ms`, {
           ip,
           method,
           statusCode: 200,
@@ -265,7 +265,7 @@ export default auth((req: NextRequest & { auth: any }) => {
     if (shouldLog) {
       setTimeout(() => {
         const responseTime = Date.now() - startTime
-        structuredLogger.performance(pathname, responseTime, {
+        structuredLogger.performance(`${pathname} - ${responseTime}ms`, {
           userId: session.user?.id,
           ip,
           method,

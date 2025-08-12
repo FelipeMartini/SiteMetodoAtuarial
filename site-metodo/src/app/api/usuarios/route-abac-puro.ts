@@ -7,7 +7,6 @@ import { usuarioABACSchema, usuarioUpdateABACSchema } from '@/validators/abacSch
 import { checkABACPermission, hasPermission } from '@/lib/abac/enforcer'
 import { rateLimit } from '@/utils/rateLimit'
 import { withCors, withSecurityHeaders } from '@/utils/security'
-import logger from '@/lib/logger-simple'
 import { structuredLogger } from '@/lib/logger'
 import { getClientIP } from '@/lib/utils/ip'
 
@@ -22,7 +21,7 @@ function buildABACContext(req: NextRequest, session: any) {
     location: session?.user?.location || 'unknown',
     department: session?.user?.department || 'unknown',
     mfaVerified: session?.user?.mfaEnabled || false,
-    sessionAge: session?.user?.lastLoginAt ? Date.now() - new Date(session.user.lastLoginAt).getTime() : 0
+    sessionAge: session?.user?.lastLogin ? Date.now() - new Date(session.user.lastLogin).getTime() : 0
   }
 }
 

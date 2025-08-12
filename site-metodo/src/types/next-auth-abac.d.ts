@@ -8,7 +8,7 @@
 
 import { User, AuthorizationPolicy, AccessLog, AuditLog } from '@prisma/client'
 import NextAuth, { DefaultSession, DefaultUser } from 'next-auth'
-
+import { JWT } from 'next-auth/jwt'
 
 // 🔐 EXTENSÕES AUTH.JS V5 PARA ABAC
 // ================================

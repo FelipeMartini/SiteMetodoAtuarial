@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getEnforcer } from '@/lib/abac/enforcer'
+import { getEnforcer } from '@/lib/abac/enforcer-abac-puro'
 import { withABACAuthorization } from '@/lib/abac/middleware'
 import { z } from 'zod'
 
@@ -26,7 +26,7 @@ const PolicySchema = z.object({
 export async function GET(): Promise<NextResponse> {
   try {
     const enforcer = await getEnforcer()
-    const policies = await enforcer.getAllPolicies()
+    const policies = await enforcer.getPolicy()
 
     return NextResponse.json({
       success: true,
@@ -47,17 +47,12 @@ export async function POST(request: NextRequest) {
     const validatedData = PolicySchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const added = await enforcer.addPolicy({
-      id: `policy_${Date.now()}`,
-      subject: validatedData.subject,
-      object: validatedData.object,
-      action: validatedData.action,
-      effect: validatedData.effect,
-      conditions: validatedData.conditions,
-      description: `Policy for ${validatedData.subject} to ${validatedData.action} ${validatedData.object}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    const added = await enforcer.addPolicy(
+      validatedData.subject,
+      validatedData.object, 
+      validatedData.action,
+      validatedData.effect
+    )
 
     if (added) {
       return NextResponse.json({
@@ -89,16 +84,12 @@ export async function DELETE(request: NextRequest) {
     const validatedData = PolicySchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const removed = await enforcer.removePolicy({
-      id: `policy_temp`,
-      subject: validatedData.subject,
-      object: validatedData.object,
-      action: validatedData.action,
-      effect: validatedData.effect,
-      description: '',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    const removed = await enforcer.removePolicy(
+      validatedData.subject,
+      validatedData.object,
+      validatedData.action,
+      validatedData.effect
+    )
 
     if (removed) {
       return NextResponse.json({

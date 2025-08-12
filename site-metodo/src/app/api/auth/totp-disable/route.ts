@@ -11,6 +11,6 @@ export async function POST(request: NextRequest) {
   if (!session || !session.user) {
     return NextResponse.json({ error: 'Sessão inválida.' }, { status: 401 })
   }
-  await db.user.update({ where: { id: session.user.id }, data: { totpSecret: null } })
+  await db.user.update({ where: { id: session.user.id }, data: { mfaEnabled: false } })
   return NextResponse.json({ ok: true })
 }

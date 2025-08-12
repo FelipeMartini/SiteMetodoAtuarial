@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getNotificationService } from '@/lib/notifications/notification-service'
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import {
   CreateNotificationRequest,
   BulkNotificationRequest,
@@ -81,8 +82,20 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Usuário não autenticado' }, { status: 401 })
     }
 
-    // Verifica permissão para criar notificações
-    if (session.user.role !== 'admin' && session.user.role !== 'manager') {
+    // Verifica permissão ABAC para criar notificações
+    const hasPermission = await checkABACPermission(
+      session.user.email || '',
+      'resource:notifications',
+      'create',
+      {
+        department: session.user.department || '',
+        location: session.user.location || '',
+        jobTitle: session.user.jobTitle || '',
+        timestamp: new Date()
+      }
+    )
+    
+    if (!hasPermission.allowed) {
       return NextResponse.json({ error: 'Permissão insuficiente' }, { status: 403 })
     }
 

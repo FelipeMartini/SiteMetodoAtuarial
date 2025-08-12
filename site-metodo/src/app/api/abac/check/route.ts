@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '../../../../../auth'
-import { getEnforcer } from '@/lib/abac/enforcer'
+import { getEnforcer } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'
 
 const CheckPermissionSchema = z.object({
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
         action: 'manage',
       })
 
-      if (!adminCheck.allowed) {
+      if (!adminCheck) {
         return NextResponse.json({ success: false, error: 'Forbidden' }, { status: 403 })
       }
     }
@@ -58,9 +58,9 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({
       success: true,
-      allowed: authResult.allowed,
-      reason: authResult.reason,
-      timestamp: authResult.timestamp,
+      allowed: authResult,
+      reason: authResult ? 'Access granted' : 'Access denied',
+      timestamp: new Date().toISOString(),
     })
   } catch (_error) {
     console.error('Error checking permission:', String(_error))

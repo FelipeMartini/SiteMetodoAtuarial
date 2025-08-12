@@ -7,80 +7,92 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 👤 Modelo de usuário atualizado com sistema de roles unificado
+// 👤 MODELO DE USUÁRIO - APENAS ATRIBUTOS ABAC
 model User {
   id            String    @id @default(cuid())
-  name          String?
   email         String?   @unique
+  name          String?
   emailVerified DateTime?
   image         String?
   password      String?
-  
-  // 🔐 Sistema de autorização unificado
-  accessLevel   Int       @default(1)          // Compatibilidade: mantém sistema legado
-  roleType      UserRoleType @default(USER)    // Novo: sistema de roles moderno
   isActive      Boolean   @default(true)
   
-  // 📊 Metadados e auditoria
-  lastLogin     DateTime?
-  loginCount    Int       @default(0)         // Contador de logins
-  failedLogins  Int       @default(0)         // Tentativas de login falharam
-  lastFailedLogin DateTime?                   // Último login com falha
+  // 🎯 ATRIBUTOS ABAC
+  department    String?   // Departamento para contexto ABAC
+  location      String?   // Localização para contexto ABAC  
+  jobTitle      String?   // Cargo para contexto ABAC
+  validFrom     DateTime? // Período de validade início
+  validUntil    DateTime? // Período de validade fim
+  
+  // 🔐 SEGURANÇA
+  mfaEnabled    Boolean   @default(false)
+  loginCount    Int       @default(0)
+  failedLogins  Int       @default(0)
+  lastLoginAt   DateTime?
+  lastLoginIP   String?
+  
+  // 📊 AUDITORIA
   createdAt     DateTime  @default(now())
   updatedAt     DateTime  @updatedAt
   
-  // 🔗 Relacionamentos Auth.js v5
+  // 🔗 RELACIONAMENTOS
   accounts      Account[]
   sessions      Session[]
-  authenticators Authenticator[]
+  AccessLog     AccessLog[]
   
-  // 🔐 Sistema ABAC - Relacionamentos
-  userRoles     UserRole[]
-  
-  // 🔐 TOTP/MFA (preservado do sistema existente)
-  totpSecret    String?   @map("totp_secret")
-  mfaEnabled    Boolean   @default(false)     // Flag MFA ativo
-  
-  // 📝 Auditoria e logs
-  auditLogs     AuditLog[]
-  
-  // 🔔 Sistema de Notificações
-  notifications          Notification[]
-  notificationPreferences NotificationPreference[]
-  pushSubscriptions      PushSubscription[]
-  notificationEvents     NotificationEvent[]
-  
-  @@index([email])
-  @@index([roleType])
-  @@index([isActive])
-  @@index([accessLevel])
+  @@map("users")
 }
 
-// 🎭 Enum de tipos de roles do sistema (substitui accessLevel gradualmente)
-enum UserRoleType {
-  GUEST       // Visitante (accessLevel 0)
-  USER        // Usuário padrão (accessLevel 1-49)
-  MODERATOR   // Moderador (accessLevel 50-99)
-  ADMIN       // Administrador (accessLevel 100+)
+// 🔐 TABELA CASBIN PARA POLÍTICAS ABAC
+model CasbinRule {
+  id    Int     @id @default(autoincrement())
+  ptype String
+  v0    String?
+  v1    String?
+  v2    String?
+  v3    String?
+  v4    String?
+  v5    String?
+
+  @@map("casbin_rule")
 }
 
-// 🔑 Authenticator para WebAuthn/Passkeys
-model Authenticator {
-  credentialID         String   @id
-  userId               String
-  providerAccountId    String
-  credentialPublicKey  String
-  counter              Int
-  credentialDeviceType String
-  credentialBackedUp   Boolean
-  transports           String?
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+// 📋 POLÍTICAS DE AUTORIZAÇÃO (BACKUP/ADMIN)
+model AuthorizationPolicy {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  subject     String   // Ex: "dept:admin", "user:123"
+  object      String   // Ex: "resource:users", "resource:system"
+  action      String   // Ex: "read", "write", "delete"
+  effect      String   // "allow" ou "deny"
+  conditions  String?  // JSON com condições adicionais
+  description String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
-  @@unique([userId, credentialID])
-  @@index([providerAccountId])
+  @@map("authorization_policies")
 }
 
-// 🔗 Contas OAuth vinculadas (Auth.js v5)
+// 📜 LOG DE ACESSO ABAC
+model AccessLog {
+  id          String   @id @default(cuid())
+  userId      String?
+  subject     String   // Sujeito da requisição ABAC
+  object      String   // Objeto acessado
+  action      String   // Ação realizada
+  allowed     Boolean  // Se foi permitido
+  ip          String?
+  userAgent   String?
+  timestamp   DateTime @default(now())
+  
+  // 🔗 RELACIONAMENTOS
+  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  
+  @@map("access_logs")
+}
+
+// 🔑 CONTAS OAUTH
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -94,391 +106,30 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
-  @@index([userId])
-  @@index([provider])
+  @@map("accounts")
 }
 
-// 📊 Sessões de usuário (Database Sessions)
+// 🎫 SESSÕES
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
   userId       String
   expires      DateTime
   user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([userId])
-  @@index([expires])
+
+  @@map("sessions")
 }
 
-// 🔐 Tokens de verificação (email, reset password, etc.)
+// ✅ TOKENS DE VERIFICAÇÃO
 model VerificationToken {
   identifier String
   token      String   @unique
   expires    DateTime
 
   @@unique([identifier, token])
-  @@index([expires])
-}
-
-// 📋 Sistema de auditoria e logs de segurança
-model AuditLog {
-  id        String   @id @default(cuid())
-  userId    String?
-  action    AuditAction
-  target    String?
-  details   String?  // JSON com detalhes da ação
-  ipAddress String?  // IP do usuário
-  userAgent String?  // User agent do browser
-  success   Boolean  @default(true)
-  createdAt DateTime @default(now())
-  
-  user      User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
-  @@index([userId])
-  @@index([action])
-  @@index([createdAt])
-  @@index([success])
-}
-
-// 🎯 Enum de ações de auditoria
-enum AuditAction {
-  // Autenticação
-  LOGIN_SUCCESS
-  LOGIN_FAILED
-  LOGOUT
-  SIGNUP
-  PASSWORD_CHANGE
-  EMAIL_CHANGE
-  
-  // OAuth
-  OAUTH_LINK
-  OAUTH_UNLINK
-  
-  // MFA/TOTP
-  MFA_ENABLE
-  MFA_DISABLE
-  TOTP_VERIFY
-  
-  // Administração
-  USER_CREATE
-  USER_UPDATE
-  USER_DELETE
-  USER_ACTIVATE
-  USER_DEACTIVATE
-  ROLE_CHANGE
-  
-  // Sistema
-  SESSION_CREATE
-  SESSION_DELETE
-  ACCOUNT_LINK
-  ACCOUNT_UNLINK
-}
-
-// 🔐 Sistema ABAC/Casbin - Roles
-model Role {
-  id          String @id @default(cuid())
-  name        String @unique
-  description String?
-  attributes  String? // JSON com atributos do role
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  // Relacionamentos
-  userRoles   UserRole[]
-  
-  @@index([name])
-}
-
-// 🔗 Relacionamento usuário-role (many-to-many)
-model UserRole {
-  id     String @id @default(cuid())
-  userId String
-  roleId String
-  
-  // Metadados
-  assignedAt DateTime @default(now())
-  assignedBy String?  // ID do usuário que atribuiu o role
-  expiresAt  DateTime? // Role temporário
-  isActive   Boolean @default(true)
-  
-  // Relacionamentos
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role Role @relation(fields: [roleId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, roleId])
-  @@index([userId])
-  @@index([roleId])
-  @@index([isActive])
-}
-
-// 🛡️ Políticas de autorização ABAC
-model AuthorizationPolicy {
-  id         String @id @default(cuid())
-  subject    String // Usuário, role ou atributo
-  object     String // Recurso ou padrão de recurso
-  action     String // Ação permitida
-  effect     PolicyEffect @default(allow)
-  conditions String? // Condições ABAC em formato JSON
-  description String?
-  isActive   Boolean @default(true)
-  
-  // Metadados
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  createdBy  String? // ID do usuário que criou a política
-  
-  @@index([subject])
-  @@index([object])
-  @@index([action])
-  @@index([effect])
-  @@index([isActive])
-}
-
-// 📊 Enum para efeito das políticas
-enum PolicyEffect {
-  allow
-  deny
-}
-
-// 📈 Logs de acesso e autorização
-model AccessLog {
-  id         String @id @default(cuid())
-  userId     String?
-  resource   String
-  action     String
-  result     AccessResult
-  reason     String? // Motivo da decisão
-  policies   String? // JSON com políticas aplicadas
-  context    String? // JSON com contexto da requisição
-  
-  // Metadados de request
-  ipAddress  String?
-  userAgent  String?
-  timestamp  DateTime @default(now())
-  
-  @@index([userId])
-  @@index([resource])
-  @@index([action])
-  @@index([result])
-  @@index([timestamp])
-}
-
-// 🎯 Enum para resultado de acesso
-enum AccessResult {
-  allow
-  deny
-}
-
-// 🔔 SISTEMA DE NOTIFICAÇÕES
-// =========================
-
-// 📬 Notificações principais
-model Notification {
-  id          String             @id @default(cuid())
-  userId      String
-  type        NotificationType
-  channel     NotificationChannel
-  priority    NotificationPriority @default(normal)
-  status      NotificationStatus   @default(pending)
-  
-  // Conteúdo
-  title       String
-  message     String
-  data        String?             // JSON com dados adicionais
-  
-  // Timestamps
-  scheduledFor DateTime?          // Agendamento
-  sentAt      DateTime?           // Quando foi enviada
-  readAt      DateTime?           // Quando foi lida
-  expiresAt   DateTime?           // Expiração
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
-  
-  // Relacionamentos
-  user        User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  queueItems  NotificationQueue[]
-  events      NotificationEvent[]
-  
-  @@index([userId])
-  @@index([type])
-  @@index([channel])
-  @@index([status])
-  @@index([priority])
-  @@index([scheduledFor])
-  @@index([sentAt])
-  @@index([createdAt])
-  @@index([expiresAt])
-}
-
-// 📝 Templates de notificação
-model NotificationTemplate {
-  id           String             @id @default(cuid())
-  name         String             @unique
-  type         NotificationType
-  channel      NotificationChannel
-  
-  // Conteúdo do template
-  subject      String?            // Para emails
-  htmlTemplate String?            // Template HTML
-  textTemplate String?            // Template texto
-  variables    String             // JSON array com variáveis disponíveis
-  
-  // Metadados
-  description  String?
-  category     String?
-  isActive     Boolean            @default(true)
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
-  
-  @@index([type])
-  @@index([channel])
-  @@index([isActive])
-  @@index([category])
-}
-
-// ⚙️ Preferências de notificação por usuário
-model NotificationPreference {
-  id        String             @id @default(cuid())
-  userId    String
-  channel   NotificationChannel
-  type      NotificationType
-  enabled   Boolean            @default(true)
-  frequency String?            // immediate, daily, weekly, monthly
-  
-  // Horário de silêncio
-  quietHoursStart String?      // HH:mm
-  quietHoursEnd   String?      // HH:mm
-  timezone        String?      // Timezone do usuário
-  
-  createdAt DateTime           @default(now())
-  updatedAt DateTime           @updatedAt
-  
-  // Relacionamentos
-  user      User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@unique([userId, channel, type])
-  @@index([userId])
-  @@index([channel])
-  @@index([type])
-  @@index([enabled])
-}
-
-// 📱 Subscrições para push notifications
-model PushSubscription {
-  id         String   @id @default(cuid())
-  userId     String
-  endpoint   String   @unique
-  p256dh     String   // Chave de criptografia
-  auth       String   // Chave de autenticação
-  userAgent  String?  // Browser/device info
-  isActive   Boolean  @default(true)
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-  
-  // Relacionamentos
-  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([userId])
-  @@index([isActive])
-}
-
-// 📮 Fila de processamento de notificações
-model NotificationQueue {
-  id             String              @id @default(cuid())
-  notificationId String
-  priority       NotificationPriority @default(normal)
-  attempts       Int                 @default(0)
-  maxAttempts    Int                 @default(3)
-  nextRetry      DateTime?
-  error          String?             // Último erro
-  status         String              @default("pending") // pending, processing, completed, failed
-  
-  createdAt      DateTime            @default(now())
-  updatedAt      DateTime            @updatedAt
-  
-  // Relacionamentos
-  notification   Notification        @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-  
-  @@index([notificationId])
-  @@index([status])
-  @@index([priority])
-  @@index([nextRetry])
-  @@index([createdAt])
-}
-
-// 📊 Eventos de notificação (para analytics)
-model NotificationEvent {
-  id             String             @id @default(cuid())
-  notificationId String
-  userId         String
-  type           String             // sent, delivered, read, clicked, failed
-  channel        NotificationChannel
-  metadata       String?            // JSON com dados adicionais
-  timestamp      DateTime           @default(now())
-  
-  // Relacionamentos
-  notification   Notification       @relation(fields: [notificationId], references: [id], onDelete: Cascade)
-  user           User               @relation(fields: [userId], references: [id], onDelete: Cascade)
-  
-  @@index([notificationId])
-  @@index([userId])
-  @@index([type])
-  @@index([channel])
-  @@index([timestamp])
-}
-
-// 📨 Templates de email específicos
-model EmailTemplate {
-  id          String   @id @default(cuid())
-  name        String   @unique
-  subject     String
-  html        String   // Template HTML
-  text        String?  // Versão texto
-  variables   String   // JSON array com variáveis
-  category    String?  // Categoria do template
-  isActive    Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  
-  @@index([category])
-  @@index([isActive])
-}
-
-// 🔔 Enums para notificações
-enum NotificationType {
-  info
-  success
-  warning
-  error
-  security
-  system
-  user_action
-  marketing
-}
-
-enum NotificationChannel {
-  in_app
-  email
-  push
-  sms
-  webhook
-}
-
-enum NotificationStatus {
-  pending
-  sent
-  delivered
-  read
-  failed
-  cancelled
-}
-
-enum NotificationPriority {
-  low
-  normal
-  high
-  urgent
+  @@map("verificationtokens")
 }
