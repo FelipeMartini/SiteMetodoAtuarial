@@ -64,7 +64,7 @@ export class AuditService {
         success: entry.success,
         auditId: auditRecord.id,
       })
-    } catch (_error) {
+    } catch {
       // Falha na auditoria é crítica, mas não deve quebrar a aplicação
       simpleLogger.error('Failed to create audit log', {
         action: entry.action,
