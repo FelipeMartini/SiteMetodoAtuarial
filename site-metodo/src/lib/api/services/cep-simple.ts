@@ -197,6 +197,10 @@ export class CepService {
   private async lookupViaCep(cep: string): Promise<CepData> {
     const data = await this.simpleFetch(`https://viacep.com.br/ws/${cep}/json/`)
 
+    if (!isViaCepResponse(data)) {
+      throw new Error('Resposta inválida do ViaCEP')
+    }
+
     if (data.erro) {
       throw new Error('CEP não encontrado')
     }
@@ -221,6 +225,10 @@ export class CepService {
   private async lookupBrasilApi(cep: string): Promise<CepData> {
     const data = await this.simpleFetch(`https://brasilapi.com.br/api/cep/v1/${cep}`)
 
+    if (!isBrasilApiResponse(data)) {
+      throw new Error('Resposta inválida do BrasilAPI')
+    }
+
     return CepDataSchema.parse({
       cep: data.cep,
       logradouro: data.street,
@@ -239,6 +247,10 @@ export class CepService {
    */
   private async lookupAwesomeApi(cep: string): Promise<CepData> {
     const data = await this.simpleFetch(`https://cep.awesomeapi.com.br/json/${cep}`)
+
+    if (!isAwesomeApiResponse(data)) {
+      throw new Error('Resposta inválida do AwesomeAPI')
+    }
 
     if (data.status === 400) {
       throw new Error('CEP não encontrado')
