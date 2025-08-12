@@ -158,7 +158,7 @@ export class PushNotificationService {
           })
 
           // Se subscription é inválida, marca como inativa
-          if (this.isSubscriptionInvalid(error as any)) {
+          if (this.isSubscriptionInvalid(error as Record<string, unknown>)) {
             failedSubscriptions.push(subscription.endpoint)
           }
         }
@@ -398,12 +398,11 @@ export class PushNotificationService {
         where: { endpoint: { in: endpoints } },
         data: { isActive: false },
       })
-
       simpleLogger.info('Subscriptions inválidas marcadas como inativas', {
         count: endpoints.length,
       })
-    } catch (_error) {
-      simpleLogger.error('Erro ao marcar subscriptions como inativas', { _error })
+    } catch {
+      simpleLogger.error('Erro ao marcar subscriptions como inativas')
     }
   }
 
@@ -414,7 +413,7 @@ export class PushNotificationService {
     try {
       const url = new URL(endpoint)
       return `${url.origin}/*****`
-    } catch (_error) {
+    } catch {
       return endpoint.substring(0, 20) + '*****'
     }
   }
