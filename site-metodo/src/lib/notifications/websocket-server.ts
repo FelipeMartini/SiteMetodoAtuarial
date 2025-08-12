@@ -4,13 +4,18 @@ import { WebSocketMessage, NotificationData } from '@/types/notifications'
 import { simpleLogger } from '@/lib/simple-logger'
 import { getNotificationService } from './notification-service'
 
+// Interface para WebSocket com propriedades customizadas
+interface ExtendedWebSocket extends WebSocket {
+  isAlive?: boolean
+}
+
 /**
  * Servidor WebSocket para notificações real-time
  * Gerencia conexões de usuários e distribui notificações em tempo real
  */
 export class NotificationWebSocketServer {
   private wss: WebSocketServer
-  private userConnections: Map<string, Set<WebSocket>> = new Map()
+  private userConnections: Map<string, Set<ExtendedWebSocket>> = new Map()
   private heartbeatInterval?: NodeJS.Timeout
 
   constructor(port: number = 8080) {
@@ -179,7 +184,7 @@ export class NotificationWebSocketServer {
    * Configura o servidor WebSocket
    */
   private setupServer(): void {
-    this.wss.on('connection', (ws: WebSocket, request: IncomingMessage) => {
+    this.wss.on('connection', (ws: ExtendedWebSocket, request: IncomingMessage) => {
       this.handleConnection(ws, request)
     })
 
@@ -191,7 +196,7 @@ export class NotificationWebSocketServer {
   /**
    * Trata nova conexão WebSocket
    */
-  private handleConnection(ws: WebSocket, request: IncomingMessage): void {
+  private handleConnection(ws: ExtendedWebSocket, request: IncomingMessage): void {
     const _userId = this.extractUserIdFromRequest(request)
 
     if (!_userId) {
@@ -221,9 +226,9 @@ export class NotificationWebSocketServer {
     })
 
     // Marca conexão como viva
-    ;(ws as any).isAlive = true
+    ;(ws as ExtendedWebSocket).isAlive = true
     ws.on('pong', () => {
-      ;(ws as any).isAlive = true
+      ;(ws as ExtendedWebSocket).isAlive = true
     })
 
     simpleLogger.info('Nova conexão WebSocket', {
@@ -324,7 +329,7 @@ export class NotificationWebSocketServer {
   /**
    * Verifica se cliente pode se conectar
    */
-  private verifyClient(info: { origin: string; secure: boolean; req: IncomingMessage }): boolean {
+  private verifyClient(): boolean {
     // Implementar verificação de autenticação se necessário
     return true
   }
