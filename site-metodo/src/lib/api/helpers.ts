@@ -56,7 +56,7 @@ export function withMonitoring<T extends (...args: Record<string, unknown>[]) =>
       throw err
     } finally {
       const responseTime = Date.now() - startTime
-      apiMonitor.recordRequest(endpointName, responseTime, success, error)
+      apiMonitor.recordRequest(endpointName, responseTime, success)
     }
   }) as T
 }
