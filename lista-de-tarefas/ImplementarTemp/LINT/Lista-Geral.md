@@ -73,7 +73,7 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
 
 ## CONTADOR DE ERROS/WARNINGS
 **Total inicial:** 90
-**Restantes:** 63 (atualize a cada correção)
+**Restantes:** 53 (atualize a cada correção)
 
 ---
 
@@ -112,9 +112,14 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
      - [ESLint: no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/)
      - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
      - [TypeScript: Handbook](https://www.typescriptlang.org/docs/handbook/2/functions.html)
-- [ ] ./src/lib/performance/routePrefetch.tsx (10 erros)
-  - Uso de `any`, variáveis não utilizadas, tipos não explícitos, lógica de performance.
-  - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+ - [x] ./src/lib/performance/routePrefetch.tsx (0 erros)
+   - Corrigido: substituição de 'as any' por tipos explícitos, remoção de catch _error não utilizado, tipagem explícita de router e includes.
+   - Testado lint/build: OK, sem erros restantes neste arquivo.
+   - Documentação: [src-lib-performance-routePrefetch.tsx-lint-fix-20250812.md](src-lib-performance-routePrefetch.tsx-lint-fix-20250812.md)
+   - Referências:
+     - [ESLint: no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/)
+     - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+     - [TypeScript: Handbook](https://www.typescriptlang.org/docs/handbook/2/functions.html)
 
 ---
 
