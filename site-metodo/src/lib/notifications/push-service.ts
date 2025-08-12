@@ -1,6 +1,6 @@
 import webpush from 'web-push'
 import { PrismaClient } from '@prisma/client'
-import { NotificationData, NotificationPriority } from '@/types/notifications'
+import { NotificationData, NotificationPriority, NotificationType, NotificationChannel, NotificationStatus } from '@/types/notifications'
 import { simpleLogger } from '@/lib/simple-logger'
 
 /**
@@ -220,16 +220,15 @@ export class PushNotificationService {
     const testNotification: NotificationData = {
       id: 'test',
       userId,
-      type: 'info' as any,
-      channel: 'push' as any,
-      priority: 'normal' as any,
-      status: 'pending' as any,
+      type: NotificationType.INFO,
+      channel: NotificationChannel.PUSH,
+      priority: NotificationPriority.NORMAL,
+      status: NotificationStatus.PENDING,
       title: 'Teste de Push Notification',
       message: 'Esta é uma notificação de teste enviada em ' + new Date().toLocaleString(),
       createdAt: new Date(),
       updatedAt: new Date(),
     }
-
     return await this.sendToUser(userId, testNotification)
   }
 
@@ -496,8 +495,8 @@ export const pushNotificationClient = {
         }
       }
       return true
-    } catch (_error) {
-      console.error('Erro ao cancelar subscription:', String(_error))
+    } catch {
+      console.error('Erro ao cancelar subscription')
       return false
     }
   },

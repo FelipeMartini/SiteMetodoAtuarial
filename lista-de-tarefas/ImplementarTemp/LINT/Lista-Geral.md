@@ -73,7 +73,7 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
 
 ## CONTADOR DE ERROS/WARNINGS
 **Total inicial:** 90
-**Restantes:** 79 (atualize a cada correção)
+**Restantes:** 69 (atualize a cada correção)
 
 ---
 
@@ -96,9 +96,14 @@ Sempre que encontrar variáveis de erro não utilizadas, remova o parâmetro ou 
      - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
      - [TypeScript: Tipagem de resposta Axios](https://axios-http.com/docs/res_schema)
      - [TypeScript: Handbook](https://www.typescriptlang.org/docs/handbook/2/functions.html)
-- [ ] ./src/lib/notifications/websocket-server.ts (10 erros)
-  - Uso de `any`, variáveis não utilizadas, tipos não explícitos, lógica de notificação central.
-  - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+ - [x] ./src/lib/notifications/websocket-server.ts (0 erros)
+   - Corrigido: remoção de importação e variáveis não utilizadas, catch sem parâmetro, tipagem explícita de eventos e propriedades.
+   - Testado lint: OK, sem erros restantes neste arquivo.
+   - Documentação: [src-lib-notifications-websocket-server.ts-lint-fix-20250812.md](src-lib-notifications-websocket-server.ts-lint-fix-20250812.md)
+   - Referências:
+     - [ESLint: no-unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
+     - [TypeScript: Tipagem de eventos WebSocket](https://github.com/websockets/ws/blob/master/doc/ws.md)
+     - [TypeScript: Handbook](https://www.typescriptlang.org/docs/handbook/2/functions.html)
 - [ ] ./src/lib/notifications/push-service.ts (6 erros)
   - Uso de `any`, variáveis não utilizadas, tipos não explícitos, lógica de push notification.
   - [no-explicit-any](https://typescript-eslint.io/rules/no-explicit-any/) | [unused-vars](https://eslint.org/docs/latest/rules/no-unused-vars)
