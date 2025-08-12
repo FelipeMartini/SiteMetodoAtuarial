@@ -21,6 +21,8 @@ import {
   ShieldCheck,
   Briefcase,
   ChevronRight,
+  BarChart3,
+  PieChart,
 } from 'lucide-react'
 
 import { Badge } from '@/components/ui/badge'
@@ -36,9 +38,23 @@ export const MainNavigation: React.FC = () => {
 
   const services = [
     {
+      title: 'Calculadora Atuarial',
+      description: 'Sistema completo de cálculos atuariais',
+      icon: Calculator,
+      href: '/calculadora-atuarial',
+      badge: 'Novo',
+    },
+    {
+      title: 'Relatórios Atuariais',
+      description: 'Análises completas e projeções',
+      icon: BarChart3,
+      href: '/relatorios-atuariais',
+      badge: 'Novo',
+    },
+    {
       title: 'Avaliação Atuarial',
       description: 'Cálculo de passivos e provisões técnicas',
-      icon: Calculator,
+      icon: PieChart,
       href: '/servicos/avaliacao-atuarial',
       badge: 'Popular',
     },
