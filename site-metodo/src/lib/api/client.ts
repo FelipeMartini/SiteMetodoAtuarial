@@ -140,19 +140,19 @@ export class ApiClient {
 
   private formatError(error: AxiosError): ApiError {
     const apiError: ApiError = {
-      message: _error.message || 'Unknown error',
+      message: error.message || 'Unknown error',
       code: 'API_ERROR',
       status: error.response?.status || 500,
-      details: error.response?.data,
+      details: error.response?.data as Record<string, unknown> | undefined,
       timestamp: new Date().toISOString(),
     }
 
     if (error.response) {
       // Server responded with error status
       apiError.status = error.response.status
-      apiError.message = (error.response.data as any)?.message || _error.message
+      apiError.message = (error.response.data as any)?.message || error.message
       apiError.code = (error.response.data as any)?.code || `HTTP_${error.response.status}`
-      apiError.details = error.response.data
+      apiError.details = error.response.data as Record<string, unknown> | undefined
     } else if (error.request) {
       // Request was made but no response received
       apiError.code = 'NETWORK_ERROR'
@@ -196,7 +196,7 @@ export class ApiClient {
         throw _error
       }
 
-      const apiError = error as ApiError
+      const apiError = _error as ApiError
 
       // Don't retry for client errors (4xx) except for specific cases
       if (apiError.status >= 400 && apiError.status < 500 && apiError.status !== 429) {

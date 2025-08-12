@@ -249,6 +249,7 @@ export function withABACAuthorization(
           ip: getClientIP(request),
           userAgent: request.headers.get('user-agent') || undefined,
           time: new Date(),
+          attributes: {},
         },
       })
 

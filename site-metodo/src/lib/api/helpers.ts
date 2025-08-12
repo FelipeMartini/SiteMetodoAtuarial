@@ -123,7 +123,7 @@ export function withRetry<T extends (...args: Record<string, unknown>[]) => Prom
       try {
         return await fn(...args)
       } catch (_error) {
-        lastError = error instanceof Error ? error : new Error('Unknown error')
+        lastError = _error instanceof Error ? _error : new Error('Unknown error')
 
         if (attempt === maxRetries) {
           throw lastError

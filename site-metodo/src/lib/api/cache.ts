@@ -237,7 +237,7 @@ export class ApiCache {
 
     for (const [key, entry] of this.cache.entries()) {
       totalSize += key.length * 2 // UTF-16 characters
-      totalSize += this.estimateSize(entry)
+      totalSize += this.estimateSize(entry as unknown as Record<string, unknown>)
     }
 
     return totalSize

@@ -151,7 +151,7 @@ export const useActuarialStore = create<ActuarialState>()(
         } catch (_error) {
           set({
             isCalculating: false,
-            lastError: error instanceof Error ? _error.message : 'Erro no cálculo do seguro de vida',
+            lastError: _error instanceof Error ? _error.message : 'Erro no cálculo do seguro de vida',
           })
         }
       },
@@ -199,7 +199,7 @@ export const useActuarialStore = create<ActuarialState>()(
         } catch (_error) {
           set({
             isCalculating: false,
-            lastError: error instanceof Error ? _error.message : 'Erro no cálculo da anuidade',
+            lastError: _error instanceof Error ? _error.message : 'Erro no cálculo da anuidade',
           })
         }
       },
@@ -267,7 +267,7 @@ export const useActuarialStore = create<ActuarialState>()(
         } catch (_error) {
           set({
             isCalculating: false,
-            lastError: error instanceof Error ? _error.message : 'Erro na análise de mortalidade',
+            lastError: _error instanceof Error ? _error.message : 'Erro na análise de mortalidade',
           })
         }
       },
