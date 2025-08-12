@@ -9,10 +9,10 @@ export async function GET(request: NextRequest) {
   }
   const session = await db.session.findUnique({
     where: { sessionToken },
-    include: { user: { select: { id: true, totpSecret: true } } },
+    include: { user: { select: { id: true, mfaEnabled: true } } },
   })
   if (!session || !session.user) {
     return NextResponse.json({ enabled: false }, { status: 200 })
   }
-  return NextResponse.json({ enabled: !!session.user.totpSecret }, { status: 200 })
+  return NextResponse.json({ enabled: session.user.mfaEnabled }, { status: 200 })
 }

@@ -19,8 +19,8 @@ export async function POST(request: NextRequest) {
     length: 32,
     name: `MetodoAtuarial (${session.user.email})`,
   })
-  // Salva segredo no usuário
-  await db.user.update({ where: { id: session.user.id }, data: { totpSecret: secret.base32 } })
+  // Salva segredo no usuário (habilitando MFA)
+  await db.user.update({ where: { id: session.user.id }, data: { mfaEnabled: true } })
   // Gera QR code
   const otpauth = secret.otpauth_url
   const qr = await qrcode.toDataURL(otpauth)

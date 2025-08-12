@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getEnforcer } from './enforcer'
+import { getEnforcer } from './enforcer-abac-puro'
 // import { AuthorizationError } from './types';
 
 /**

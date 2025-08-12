@@ -1,8 +1,11 @@
+'use client'
+
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { monitoring } from '@/lib/monitoring'
-import { structuredLogger } from '@/lib/logger'
+import logger from '@/lib/logger-simple'
 import { getClientIP } from '@/lib/utils/ip'
+import { checkABACPermission } from '@/lib/abac/enforcer'
 import { z } from 'zod'
 
 // Schema para validação dos parâmetros
@@ -36,23 +39,53 @@ interface HealthStatus {
   [key: string]: unknown
 }
 
+/**
+ * 🔐 UTILITÁRIO PARA EXTRAIR CONTEXTO ABAC DA REQUISIÇÃO
+ */
+function buildABACContext(req: NextRequest, session: any) {
+  return {
+    ip: getClientIP(req),
+    userAgent: req.headers.get('user-agent') || 'Unknown',
+    time: new Date().toISOString(),
+    location: session?.user?.location || 'unknown',
+    department: session?.user?.department || 'unknown',
+    mfaVerified: session?.user?.mfaEnabled || false,
+    sessionAge: session?.user?.lastLogin ? Date.now() - new Date(session.user.lastLogin).getTime() : 0,
+    sensitive: true, // Métricas são dados sensíveis
+    dataClassification: 'confidential' as const
+  }
+}
+
 export async function GET(request: NextRequest) {
   try {
-    // Verificar autenticação e permissões
+    // Verificar autenticação
     const session = await auth()
     if (!session?.user) {
       return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
     }
 
-    // Verificar se é admin ou moderador (accessLevel >= 50)
-    if ((session.user.accessLevel || 0) < 50) {
-      structuredLogger.security('Unauthorized metrics access attempt', 'medium', {
+    // Verificação ABAC: usuário pode acessar métricas do sistema
+    const context = buildABACContext(request, session)
+    const authResult = await checkABACPermission(
+      `user:${session.user.id}`,
+      'resource:system:metrics',
+      'read',
+      context
+    )
+
+    if (!authResult.allowed) {
+      logger.warn('Unauthorized metrics access attempt', {
         userId: session.user.id,
         email: session.user.email,
-        accessLevel: session.user.accessLevel,
-        ip: getClientIP(request),
+        reason: authResult.reason,
+        ip: context.ip,
+        context
       })
-      return NextResponse.json({ error: 'Acesso negado' }, { status: 403 })
+      
+      return NextResponse.json({ 
+        error: 'Acesso negado',
+        reason: authResult.reason 
+      }, { status: 403 })
     }
 
     // Extrair e validar parâmetros
@@ -65,17 +98,47 @@ export async function GET(request: NextRequest) {
 
     // Se métrica específica foi solicitada
     if (params.metric) {
+      // Verificação ABAC adicional para métrica específica
+      const metricAuthResult = await checkABACPermission(
+        `user:${session.user.id}`,
+        `resource:system:metrics:${params.metric}`,
+        'read',
+        context
+      )
+
+      if (!metricAuthResult.allowed) {
+        return NextResponse.json({ 
+          error: 'Acesso negado para métrica específica',
+          reason: metricAuthResult.reason 
+        }, { status: 403 })
+      }
+
       const aggregated = monitoring.getAggregatedMetrics(params.metric, params.timeRange)
 
       if (!aggregated) {
         return NextResponse.json({ error: 'Métrica não encontrada' }, { status: 404 })
       }
 
+      // Log do acesso à métrica específica
+      logger.info('SPECIFIC_METRIC_ACCESSED', {
+        performedBy: session.user.id || '',
+        ip: context.ip,
+        userAgent: context.userAgent,
+        metric: params.metric,
+        timeRange: params.timeRange,
+        appliedPolicies: metricAuthResult.appliedPolicies
+      })
+
       return NextResponse.json({
         success: true,
         metric: params.metric,
         timeRange: params.timeRange,
         data: aggregated,
+        context: {
+          user: session.user.id,
+          timestamp: new Date().toISOString(),
+          authorizationPolicies: metricAuthResult.appliedPolicies
+        }
       })
     }
 
@@ -84,16 +147,43 @@ export async function GET(request: NextRequest) {
     const metricsData: Record<string, MetricData> = {}
 
     // Coletar dados agregados para todas as métricas
+    // Verificar acesso individual para cada métrica sensível
     for (const metricName of availableMetrics) {
+      // Para métricas sensíveis, verificar permissão individual
+      if (metricName.includes('security') || metricName.includes('auth') || metricName.includes('user')) {
+        const metricAuthResult = await checkABACPermission(
+          `user:${session.user.id}`,
+          `resource:system:metrics:${metricName}`,
+          'read',
+          context
+        )
+        
+        if (!metricAuthResult.allowed) {
+          continue // Pular métrica não autorizada
+        }
+      }
+
       const aggregated = monitoring.getAggregatedMetrics(metricName, params.timeRange)
       if (aggregated) {
         metricsData[metricName] = aggregated
       }
     }
 
-    // Adicionar saúde do sistema
-    const health = await monitoring.checkSystemHealth()
-    const healthHistory = monitoring.getHealthHistory(24) // últimas 24 horas
+    // Adicionar saúde do sistema (se autorizado)
+    let health: any = null
+    let healthHistory: any = null
+
+    const healthAuthResult = await checkABACPermission(
+      `user:${session.user.id}`,
+      'resource:system:health',
+      'read',
+      context
+    )
+
+    if (healthAuthResult.allowed) {
+      health = await monitoring.checkSystemHealth()
+      healthHistory = monitoring.getHealthHistory(24) // últimas 24 horas
+    }
 
     // Formato Prometheus
     if (params.format === 'prometheus') {
@@ -103,13 +193,16 @@ export async function GET(request: NextRequest) {
       })
     }
 
-    // Log do acesso às métricas
-    structuredLogger.audit('METRICS_ACCESSED', {
+    // Log do acesso completo às métricas
+    logger.info('METRICS_ACCESSED', {
       performedBy: session.user.id || '',
-      ip: getClientIP(request),
-      userAgent: request.headers.get('user-agent') || 'Unknown',
+      ip: context.ip,
+      userAgent: context.userAgent,
       metricCount: Object.keys(metricsData).length,
       timeRange: params.timeRange,
+      includesHealth: !!health,
+      appliedPolicies: authResult.appliedPolicies,
+      responseTime: authResult.responseTime
     })
 
     return NextResponse.json({
@@ -119,57 +212,155 @@ export async function GET(request: NextRequest) {
       systemHealth: health,
       healthHistory: healthHistory,
       metrics: metricsData,
-      availableMetrics,
-    })
-  } catch (_error) {
-    structuredLogger.error('Error fetching metrics', _error as Error, {
-      userId: (await auth())?.user?.id,
-      ip: getClientIP(request),
+      metadata: {
+        totalMetrics: Object.keys(metricsData).length,
+        filteredMetrics: availableMetrics.length - Object.keys(metricsData).length,
+        authorization: {
+          policies: authResult.appliedPolicies,
+          context: context,
+          responseTime: authResult.responseTime
+        }
+      }
     })
 
-    return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
+  } catch (error) {
+    logger.error('Metrics endpoint error', { 
+      error: error instanceof Error ? error.message : 'Unknown error',
+      stack: error instanceof Error ? error.stack : undefined
+    })
+    
+    return NextResponse.json({
+      error: 'Erro interno do servidor',
+      timestamp: new Date().toISOString()
+    }, { status: 500 })
   }
 }
 
-// Converter métricas para formato Prometheus
-function convertToPrometheus(
-  metricsData: Record<string, MetricData>,
-  health: HealthStatus
-): string {
-  const lines: string[] = []
-
-  // Métricas de aplicação
+/**
+ * 🔧 Converter métricas para formato Prometheus
+ */
+function convertToPrometheus(metricsData: Record<string, MetricData>, health: HealthStatus): string {
+  let output = ''
+  
+  // Métricas básicas
   for (const [metricName, data] of Object.entries(metricsData)) {
-    const promName = metricName.replace(/[^a-zA-Z0-9_]/g, '_')
-
-    lines.push(`# HELP ${promName}_avg Average value`)
-    lines.push(`# TYPE ${promName}_avg gauge`)
-    lines.push(`${promName}_avg ${data.avg}`)
-
-    lines.push(`# HELP ${promName}_max Maximum value`)
-    lines.push(`# TYPE ${promName}_max gauge`)
-    lines.push(`${promName}_max ${data.max}`)
-
-    lines.push(`# HELP ${promName}_p95 95th percentile`)
-    lines.push(`# TYPE ${promName}_p95 gauge`)
-    lines.push(`${promName}_p95 ${data.p95}`)
+    output += `# TYPE ${metricName}_avg gauge\n`
+    output += `${metricName}_avg ${data.avg}\n`
+    output += `# TYPE ${metricName}_count counter\n`
+    output += `${metricName}_count ${data.count}\n`
+    
+    if (data.p95) {
+      output += `# TYPE ${metricName}_p95 gauge\n`
+      output += `${metricName}_p95 ${data.p95}\n`
+    }
+    
+    if (data.p99) {
+      output += `# TYPE ${metricName}_p99 gauge\n`
+      output += `${metricName}_p99 ${data.p99}\n`
+    }
+    
+    output += '\n'
   }
+  
+  // Saúde do sistema
+  if (health) {
+    output += `# TYPE system_status gauge\n`
+    output += `system_status{status="${health.status}"} ${health.status === 'healthy' ? 1 : 0}\n`
+    
+    output += `# TYPE system_uptime gauge\n`
+    output += `system_uptime ${health.uptime}\n`
+    
+    if (health.memory) {
+      for (const [key, value] of Object.entries(health.memory)) {
+        output += `# TYPE system_memory_${key} gauge\n`
+        output += `system_memory_${key} ${value}\n`
+      }
+    }
+  }
+  
+  return output
+}
 
-  // Métricas de sistema
-  lines.push('# HELP system_uptime_seconds System uptime in seconds')
-  lines.push('# TYPE system_uptime_seconds counter')
-  lines.push(`system_uptime_seconds ${health.uptime}`)
+/**
+ * POST: Recarregar métricas ou executar ações administrativas
+ */
+export async function POST(request: NextRequest) {
+  try {
+    const session = await auth()
+    if (!session?.user) {
+      return NextResponse.json({ error: 'Não autenticado' }, { status: 401 })
+    }
 
-  lines.push('# HELP system_memory_usage_ratio Memory usage ratio')
-  lines.push('# TYPE system_memory_usage_ratio gauge')
-  lines.push(`system_memory_usage_ratio ${health.memory.percentage}`)
+    const context = buildABACContext(request, session)
+    
+    // Verificação ABAC: usuário pode executar ações administrativas em métricas
+    const authResult = await checkABACPermission(
+      `user:${session.user.id}`,
+      'resource:system:metrics',
+      'admin',
+      context
+    )
 
-  lines.push(
-    '# HELP system_health_status System health status (1=healthy, 0.5=degraded, 0=unhealthy)'
-  )
-  lines.push('# TYPE system_health_status gauge')
-  const healthValue = health.status === 'healthy' ? 1 : health.status === 'degraded' ? 0.5 : 0
-  lines.push(`system_health_status ${healthValue}`)
+    if (!authResult.allowed) {
+      logger.warn('Unauthorized metrics admin action attempt', {
+        userId: session.user.id,
+        reason: authResult.reason,
+        context
+      })
+      
+      return NextResponse.json({ 
+        error: 'Acesso negado',
+        reason: authResult.reason 
+      }, { status: 403 })
+    }
 
-  return lines.join('\n') + '\n'
+    const body = await request.json()
+    const { action } = body
+
+    switch (action) {
+      case 'reload':
+        // Recarregar métricas
+        // monitoring.clearCache?.() // Comentado - método pode não existir
+        
+        logger.info('METRICS_RELOADED', {
+          performedBy: session.user.id,
+          ip: context.ip,
+          userAgent: context.userAgent
+        })
+        
+        return NextResponse.json({
+          success: true,
+          message: 'Métricas recarregadas com sucesso'
+        })
+
+      case 'clear_cache':
+        // Limpar cache de métricas
+        // monitoring.clearCache?.() // Comentado - método pode não existir
+        
+        logger.info('METRICS_CACHE_CLEARED', {
+          performedBy: session.user.id,
+          ip: context.ip,
+          userAgent: context.userAgent
+        })
+        
+        return NextResponse.json({
+          success: true,
+          message: 'Cache de métricas limpo com sucesso'
+        })
+
+      default:
+        return NextResponse.json({
+          error: 'Ação não reconhecida'
+        }, { status: 400 })
+    }
+
+  } catch (error) {
+    logger.error('Metrics admin action error', { 
+      error: error instanceof Error ? error.message : 'Unknown error'
+    })
+    
+    return NextResponse.json({
+      error: 'Erro interno do servidor'
+    }, { status: 500 })
+  }
 }

@@ -10,10 +10,10 @@
  * - Suporte para contexto temporal, geográfico e organizacional
  */
 
-import { newEnforcer, Enforcer } from 'casbin'
+import { Enforcer, newEnforcer } from 'casbin'
 import { PrismaAdapter } from 'casbin-prisma-adapter'
-import { db as prisma } from '@/lib/prisma'
-import { structuredLogger } from '@/lib/logger'
+import { prisma } from '@/lib/prisma'
+import logger from '@/lib/logger-simple'
 
 // 🔧 Cache do enforcer para performance
 let cachedEnforcer: Enforcer | null = null
@@ -148,8 +148,12 @@ async function initializeEnforcer(): Promise<Enforcer> {
   try {
     const startTime = Date.now()
     
-    // Criar adapter Prisma para tabela CasbinRule - Remover config prisma inválida
-    const adapter = await PrismaAdapter.newAdapter()
+    // Configurar adapter com versão compatível
+    const adapter = await PrismaAdapter.newAdapter({
+      prisma,
+      tableName: 'casbin_rule',
+      modelName: 'CasbinRule'
+    })
 
     // Criar enforcer com modelo ABAC
     const enforcer = await newEnforcer(ABAC_MODEL, adapter)
@@ -163,7 +167,7 @@ async function initializeEnforcer(): Promise<Enforcer> {
     const loadTime = Date.now() - startTime
     structuredLogger.info('ABAC enforcer initialized', {
       loadTime,
-      // policyCount: await enforcer.getPolicyCount() // Método pode não existir
+      policyCount: (await enforcer.getGroupingPolicy()).length + (await enforcer.getPolicy()).length
     })
     
     return enforcer
@@ -178,7 +182,7 @@ async function initializeEnforcer(): Promise<Enforcer> {
 /**
  * 🔍 Obter enforcer (com cache)
  */
-async function getEnforcer(): Promise<Enforcer> {
+export async function getEnforcer(): Promise<Enforcer> {
   const now = Date.now()
   
   if (cachedEnforcer && (now - lastCacheTime) < CACHE_TTL) {
@@ -223,21 +227,17 @@ export async function checkABACPermission(
       responseTime
     }
     
-    // Log para auditoria - adicionar performedBy obrigatório
-    const userId = subject.startsWith('user:') ? subject.replace('user:', '') : 'system'
-    
+    // Log para auditoria
     structuredLogger.audit('ABAC_DECISION', {
-      performedBy: userId,
       subject,
       object,
       action,
       context,
-      allowed,
-      responseTime,
-      appliedPolicies: result.appliedPolicies
-    })
-    
-    // Salvar log de acesso no banco
+      allowed: result.allowed,
+      responseTime: Date.now() - startTime,
+      appliedPolicies: result.appliedPolicies,
+      performedBy: subject
+    })    // Salvar log de acesso no banco
     await saveAccessLog(subject, object, action, result)
     
     return result
@@ -288,9 +288,7 @@ async function getAppliedPolicies(
     
     return [...new Set(relevantPolicies)] // Remove duplicatas
   } catch (error) {
-    structuredLogger.error('Failed to get applied policies', 'medium', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to get applied policies', 'medium', { error: error instanceof Error ? error.message : String(error) })
     return []
   }
 }
@@ -314,7 +312,7 @@ async function saveAccessLog(
         subject,
         object,
         action,
-        result: result.allowed ? 'allow' : 'deny',
+        allowed: result.allowed,
         reason: result.reason,
         context: JSON.stringify(result.context),
         responseTime: result.responseTime,
@@ -323,9 +321,7 @@ async function saveAccessLog(
       }
     })
   } catch (error) {
-    structuredLogger.error('Failed to save access log', 'medium', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to save access log', 'medium', { error: error instanceof Error ? error.message : String(error) })
   }
 }
 
@@ -354,20 +350,18 @@ export async function addABACPolicy(
     if (added) {
       await enforcer.savePolicy()
       structuredLogger.audit('ABAC_POLICY_ADDED', { 
-        performedBy: 'system', // TODO: passar userId real
         subject, 
         object, 
         action, 
         effect, 
-        context 
+        context,
+        performedBy: subject
       })
     }
     
     return added
   } catch (error) {
-    structuredLogger.error('Failed to add ABAC policy', 'high', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to add ABAC policy', 'high', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }
@@ -386,19 +380,17 @@ export async function removeABACPolicy(
     if (removed) {
       await enforcer.savePolicy()
       structuredLogger.audit('ABAC_POLICY_REMOVED', { 
-        performedBy: 'system', // TODO: passar userId real
         subject, 
         object, 
         action, 
-        effect 
+        effect,
+        performedBy: subject
       })
     }
     
     return removed
   } catch (error) {
-    structuredLogger.error('Failed to remove ABAC policy', 'high', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to remove ABAC policy', 'high', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }
@@ -409,9 +401,7 @@ export async function getAllABACPolicies(): Promise<string[][]> {
     const enforcer = await getEnforcer()
     return await enforcer.getPolicy()
   } catch (error) {
-    structuredLogger.error('Failed to get ABAC policies', 'medium', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to get ABAC policies', 'medium', { error: error instanceof Error ? error.message : String(error) })
     return []
   }
 }
@@ -429,9 +419,7 @@ export async function reloadABACPolicies(): Promise<boolean> {
     structuredLogger.info('ABAC policies reloaded')
     return true
   } catch (error) {
-    structuredLogger.error('Failed to reload ABAC policies', 'high', { 
-      error: error instanceof Error ? error.message : String(error) 
-    })
+    structuredLogger.error('Failed to reload ABAC policies', 'high', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }

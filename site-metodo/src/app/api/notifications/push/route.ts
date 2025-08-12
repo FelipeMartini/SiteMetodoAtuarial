@@ -5,6 +5,7 @@ import { createPushNotificationService, PushConfig } from '@/lib/notifications/p
 import { simpleLogger } from '@/lib/simple-logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
 /**
  * API para Push Notifications
@@ -161,7 +162,20 @@ export async function GET(request: NextRequest) {
         })
 
       case 'stats':
-        if (session.user.role !== 'admin') {
+        // Verificar permissão ABAC para visualizar estatísticas
+        const hasStatsPermission = await checkABACPermission(
+          session.user.email || '',
+          'resource:notifications:stats',
+          'read',
+          {
+            department: session.user.department || '',
+            location: session.user.location || '',
+            jobTitle: session.user.jobTitle || '',
+            timestamp: new Date()
+          }
+        )
+        
+        if (!hasStatsPermission.allowed) {
           return NextResponse.json({ error: 'Permissão insuficiente' }, { status: 403 })
         }
 

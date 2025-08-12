@@ -5,6 +5,7 @@ import { getNotificationService } from '@/lib/notifications/notification-service
 import { simpleLogger } from '@/lib/simple-logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
 /**
  * API para estatísticas de notificações
@@ -22,8 +23,23 @@ export async function GET(request: NextRequest) {
 
     const { searchParams } = new URL(request.url)
     const period = searchParams.get('period') || '7d' // 7d, 30d, 90d
-    const includeGlobal =
-      searchParams.get('includeGlobal') === 'true' && session.user.role === 'admin'
+    
+    // Verificar permissão ABAC para incluir estatísticas globais
+    const hasGlobalPermission = searchParams.get('includeGlobal') === 'true' 
+      ? await checkABACPermission(
+          session.user.email || '',
+          'resource:notifications:stats:global',
+          'read',
+          {
+            department: session.user.department || '',
+            location: session.user.location || '',
+            jobTitle: session.user.jobTitle || '',
+            timestamp: new Date()
+          }
+        )
+      : { allowed: false }
+    
+    const includeGlobal = hasGlobalPermission.allowed
 
     // Calcula datas baseado no período
     const now = new Date()

@@ -2,7 +2,7 @@
 export const dynamic = 'force-dynamic'
 
 import React from 'react'
-import { PerfilUsuarioModerno } from '@/components/ui/perfil-usuario-moderno'
+import PerfilUsuarioModerno from '@/components/ui/perfil-usuario-moderno'
 
 /**
  * Página de perfil modernizada do usuário

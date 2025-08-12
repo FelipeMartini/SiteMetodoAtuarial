@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { getEnforcer } from '@/lib/abac/enforcer'
+import { getEnforcer } from '@/lib/abac/enforcer-abac-puro'
 import { withABACAuthorization } from '@/lib/abac/middleware'
 import { z } from 'zod'
 
@@ -21,7 +21,7 @@ const PolicyAssignmentSchema = z.object({
 export async function GET() {
   try {
     const enforcer = await getEnforcer()
-    const policies = await enforcer.getAllPolicies()
+    const policies = await enforcer.getPolicy()
 
     return NextResponse.json({
       success: true,
@@ -48,16 +48,7 @@ export async function POST(request: NextRequest) {
     const { userEmail, resource, action, effect } = PolicyAssignmentSchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const added = await enforcer.addPolicy({
-      id: `policy_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      subject: userEmail,
-      object: resource,
-      action,
-      effect,
-      description: `Policy for ${userEmail} to ${action} ${resource}`,
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    const added = await enforcer.addPolicy('p', userEmail, resource, action, effect)
 
     if (added) {
       return NextResponse.json({
@@ -92,15 +83,7 @@ export async function DELETE(request: NextRequest) {
     const { userEmail, resource, action } = PolicyAssignmentSchema.parse(body)
 
     const enforcer = await getEnforcer()
-    const removed = await enforcer.removePolicy({
-      id: '', // ID não é usado para remoção, apenas para criação
-      subject: userEmail,
-      object: resource,
-      action,
-      effect: 'allow', // Default for removal
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    })
+    const removed = await enforcer.removePolicy('p', userEmail, resource, action)
 
     if (removed) {
       return NextResponse.json({
