@@ -241,6 +241,145 @@
 
 ## 13. Comparação Detalhada: Nosso Schema vs ASIC/Casbin
 
+---
+
+## 14. Análise dos Atributos e Regras ABAC/ASIC Atuais vs Padrão ASIC
+
+---
+
+## 🚨 Destaque Crítico: Incompatibilidade de Enums/Campos Fixos/Strings com ABAC Puro
+
+> **ATENÇÃO:**
+>
+> O sistema ainda utiliza enums, campos fixos e checagem por string para admin/moderador (ex: `roleType`, `UserRoleType`, `accessLevel`, checagem de 'admin', 'moderador', etc.), o que é **incompatível com ABAC puro**.
+>
+> **No padrão ASIC/ABAC puro:**
+> - Não existem enums/campos fixos para roles.
+> - Não existe checagem de permissão por string ou enum no código.
+> - Tudo é policy dinâmica e atributos livres, definidos em tempo de execução.
+>
+> **Recomendação:**
+> - Eliminar todos os enums/campos fixos de roles, accessLevel, UserRoleType, etc.
+> - Centralizar permissões em policies ABAC (CasbinRule).
+> - Toda checagem de permissão deve ser feita via enforcer ABAC, nunca por string ou enum.
+
+---
+---
+
+## 15. Plano de Migração e Refatoração para ABAC/ASIC Puro
+
+### Etapas Recomendadas
+1. **Remover todos os campos e enums RBAC do schema:**
+  - accessLevel, roleType, UserRoleType, UserRole, Role, etc.
+2. **Migrar policies para CasbinRule:**
+  - Persistir todas as permissões em CasbinRule, não em AuthorizationPolicy.
+3. **Refatorar código para usar apenas enforcer ABAC:**
+  - Eliminar checagens por string ('admin', 'moderador', etc.) e enums.
+  - Toda autorização deve ser feita via enforcer Casbin.
+4. **Criar seed ABAC puro para admin:**
+  - Exemplo: `p, felipemartinii@gmail.com, /admin/abac, manage`
+5. **Revisar e adaptar testes, MFA, account linking, provedores sociais:**
+  - Garantir que nada é quebrado na autenticação e fluxo de login.
+6. **Documentar e treinar equipe para novo padrão ABAC puro.**
+
+### Exemplo de Policies ABAC Puro
+```csv
+p, felipemartinii@gmail.com, /admin/abac, manage
+p, grupo-moderadores, /admin, view
+g, usuario@email.com, grupo-moderadores
+```
+
+---
+
+## 16. Continuação da Análise Aprofundada
+
+### Mapeamento dos Principais Pontos de Checagem por Enum/Campo Fixo/String
+
+- **Hooks e tipos:**
+  - `useRegistrarUsuario.ts`: utiliza `accessLevel`.
+  - `usuarioSchemas.ts`: valida `roleType`.
+  - `next-auth.d.ts`: define `accessLevel`, `role`.
+- **Componentes e lógica de UI:**
+  - `Header.tsx`: exibe links de admin/staff baseado em `role` string.
+  - `Dashboard Admin`: widgets e rotas protegidas por checagem de `role` string.
+- **Middleware e policies:**
+  - `middleware.ts`, `hoc.tsx`: checagem de roles por string e array.
+  - `prisma-adapter.ts`: busca e atribui roles via entidades e campos fixos.
+- **Policies e modelos:**
+  - `pure_abac_policies.csv`, `basic_policies.csv`: ainda há mistura de roles fixos e atributos dinâmicos.
+  - Modelos híbridos (RBAC+ABAC) presentes.
+- **Enums e entidades:**
+  - `UserRoleType`, `Role`, `UserRole` ainda existem no schema e código comprar com github assic oficial puro se atualize e veja o que temos que mudar para manter o padrao puro.
+
+### Recomendações para Refatoração Incremental
+1. **Priorizar refatoração dos pontos de checagem de permissão por string/enums:**
+   - Substituir por chamadas ao enforcer ABAC.
+2. **Remover gradualmente enums/campos fixos do schema e código:**
+   - Adaptar migrations e testes.
+3. **Centralizar toda lógica de autorização em policies ABAC:**
+   - Atualizar policies para usar apenas atributos dinâmicos.
+4. **Documentar cada etapa e garantir retrocompatibilidade temporária até migração total.**
+
+### Exemplos de Refatoração
+- Antes:
+  ```ts
+  if (user.role === 'admin') { /* ... */ }
+  ```
+- Depois:
+  ```ts
+  if (await enforcer.enforce(user.email, '/admin/abac', 'manage')) { /* ... */ }
+  ```
+
+---
+
+- Mapear todos os pontos do código que ainda fazem checagem por string ou enum para permissão.
+- Listar todos os lugares onde accessLevel, roleType, UserRoleType, Role, UserRole são usados.
+- Propor plano incremental de refatoração para cada ponto identificado.
+- Validar se todas as rotas e áreas protegidas estão cobertas por policies ABAC.
+- Garantir que o fluxo de autenticação, MFA, account linking e provedores sociais não seja afetado.
+- Documentar exemplos de policies para todos os perfis do sistema (admin, moderador, editor, usuário comum).
+
+---
+
+### Atributos e Regras Atuais no Projeto
+- O sistema ainda utiliza atributos herdados do RBAC, como:
+  - `accessLevel` (User)
+  - `roleType` (User, UserRole, enum UserRoleType)
+  - `isActive` (User, UserRole)
+  - `Role` e `UserRole` (entidades e relacionamentos)
+- Enum `UserRoleType` define: GUEST, USER, MODERATOR, ADMIN
+- Diversos pontos do código e banco usam strings como 'admin', 'moderador', 'editor', 'viewer' para checagem de permissões.
+- Policies ABAC são implementadas em `AuthorizationPolicy`, mas coexistem com RBAC.
+- Não há atributo `isAdmin` explícito, mas a lógica de admin/moderador é feita via roleType, accessLevel ou role string.
+
+### Padrão ASIC/ABAC Recomendado
+- Não existe `accessLevel`, `roleType`, `UserRoleType`, nem entidades Role/UserRole.
+- Não há enum fixo de roles; qualquer atributo pode ser usado como subject em policies.
+- Atributos são livres e definidos por policies, ex:
+  - `p, felipemartinii@gmail.com, /admin/abac, manage`
+  - `p, grupo-moderadores, /admin, view`
+- Não há checagem de 'admin', 'moderador', etc. por string fixa no código; tudo é policy.
+- Atributos podem ser adicionados como claims extras no usuário, mas não como enum ou campo fixo.
+
+### Diferenças e Recomendações
+- O sistema atual mistura checagem de role por string, enums e policies, o que gera inconsistência e dificulta manutenção.
+- Recomenda-se:
+  - Remover todos os enums e campos fixos de role/accessLevel/moderador/admin.
+  - Centralizar todas as permissões em policies ABAC (CasbinRule).
+  - Se necessário, criar grupos (ex: grupo-admins) via policies, não via enum/campo fixo.
+  - Checagens de permissão devem ser sempre via Casbin (enforcer), nunca por string ou enum no código.
+- Exemplo de policy ABAC puro:
+  - `p, felipemartinii@gmail.com, /admin/abac, manage`
+  - `p, grupo-moderadores, /admin, view`
+  - `g, usuario@email.com, grupo-moderadores`
+
+### Resumo
+- O modelo ASIC puro é mais flexível, seguro e fácil de manter.
+- Atributos como isAdmin/moderador devem ser eliminados do schema/código e substituídos por policies dinâmicas.
+- Toda lógica de permissão deve ser centralizada no enforcer ABAC.
+
+---
+
 ### Nosso Schema (resumo)
 - User: id, name, email, accessLevel, roleType, MFA, relacionamentos Auth.js, etc.
 - UserRole: userId, roleId, roleType, etc.
