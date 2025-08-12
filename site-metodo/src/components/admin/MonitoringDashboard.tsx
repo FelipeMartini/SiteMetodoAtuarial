@@ -414,7 +414,7 @@ export default function MonitoringDashboard() {
                           <YAxis />
                           <Tooltip
                             labelFormatter={value => new Date(value).toLocaleString()}
-                            formatter={(value: Record<string, unknown>) => [
+                            formatter={(value: number) => [
                               `${value.toFixed(2)}${metricName.includes('time') ? 'ms' : ''}`,
                               metricName,
                             ]}

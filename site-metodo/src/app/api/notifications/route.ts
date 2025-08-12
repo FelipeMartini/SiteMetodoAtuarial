@@ -5,6 +5,10 @@ import {
   CreateNotificationRequest,
   BulkNotificationRequest,
   NotificationFilter,
+  NotificationType,
+  NotificationChannel,
+  NotificationStatus,
+  NotificationPriority,
 } from '@/types/notifications'
 import { simpleLogger } from '@/lib/simple-logger'
 import { auditService } from '@/lib/audit'
@@ -30,10 +34,10 @@ export async function GET(request: NextRequest) {
     // Monta filtros da query string
     const filter: NotificationFilter = {
       userId: session.user.id,
-      types: searchParams.get('types')?.split(',') as unknown[],
-      channels: searchParams.get('channels')?.split(',') as unknown[],
-      statuses: searchParams.get('statuses')?.split(',') as unknown[],
-      priorities: searchParams.get('priorities')?.split(',') as unknown[],
+      types: searchParams.get('types')?.split(',') as NotificationType[],
+      channels: searchParams.get('channels')?.split(',') as NotificationChannel[],
+      statuses: searchParams.get('statuses')?.split(',') as NotificationStatus[],
+      priorities: searchParams.get('priorities')?.split(',') as NotificationPriority[],
       unreadOnly: searchParams.get('unreadOnly') === 'true',
       search: searchParams.get('search') || undefined,
       limit: parseInt(searchParams.get('limit') || '50'),
@@ -63,7 +67,7 @@ export async function GET(request: NextRequest) {
       data: result,
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao buscar notificações', { error })
+    simpleLogger.error('Erro ao buscar notificações', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -143,7 +147,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao criar notificação', { error })
+    simpleLogger.error('Erro ao criar notificação', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
