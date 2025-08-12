@@ -148,7 +148,7 @@ interface SmartLinkProps {
   children: React.ReactNode
   prefetchStrategy?: 'immediate' | 'hover' | 'visible' | 'none'
   className?: string
-  [key: string]: Record<string, unknown>
+  [key: string]: any
 }
 
 /**
