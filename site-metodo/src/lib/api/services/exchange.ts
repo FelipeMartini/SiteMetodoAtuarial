@@ -28,6 +28,12 @@ export interface CurrencyInfo {
   country: string
 }
 
+// Interface para response de dados históricos
+interface HistoricalRateData {
+  date: string
+  value: number
+}
+
 // Zod schemas
 const ExchangeRatesSchema = z.object({
   base: z.string(),
@@ -194,7 +200,7 @@ export class ExchangeService {
       timestamp: string
     }> = []
 
-    for (const [pairKey, data] of Object.entries(response.data as Record<string, unknown>)) {
+    for (const [, data] of Object.entries(response.data as Record<string, unknown>)) {
       const validated = BrazilApiQuoteSchema.parse(data)
       const currency = validated.code
 
@@ -240,9 +246,9 @@ export class ExchangeService {
       `/daily/${baseCurrency}-${targetCurrency}/${days}`
     )
 
-    return (response.data as any[]).map((item: Record<string, unknown>) => ({
-      date: String(item.date),
-      rate: Number(item.value) || 0,
+    return (response.data as HistoricalRateData[]).map((item: HistoricalRateData) => ({
+      date: item.date,
+      rate: item.value || 0,
     }))
   }
 
@@ -277,7 +283,7 @@ export class ExchangeService {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(amount)
-    } catch (_error) {
+    } catch {
       // Fallback for unsupported currencies
       return `${currency.symbol} ${amount.toFixed(2)}`
     }
@@ -358,7 +364,7 @@ export class ExchangeService {
           rate,
           date: rates.date,
         })
-      } catch (_error) {
+      } catch {
         console.warn(`Error converting to ${toCurrency}:`)
       }
     }
@@ -411,9 +417,11 @@ export class ExchangeService {
     // Clear cache entries related to this service
     const patterns = [/ExchangeService\./, /exchangerate-api/, /awesomeapi-currency/]
 
-    patterns.forEach(pattern => {
-      // Clear from different cache instances
-      // Implementation depends on cache structure
+    // Clear from different cache instances
+    // Implementation depends on cache structure
+    patterns.forEach(() => {
+      // Placeholder for cache clearing logic
+      // This would interface with the actual cache implementation
     })
   }
 }

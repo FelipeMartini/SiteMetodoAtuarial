@@ -1,5 +1,5 @@
 import nodemailer from 'nodemailer'
-import { EmailData, EmailTemplate, NotificationPriority } from '@/types/notifications'
+import { EmailData, EmailTemplate, NotificationPriority, EmailAttachment } from '@/types/notifications'
 import { simpleLogger } from '@/lib/simple-logger'
 import { PrismaClient } from '@prisma/client'
 
@@ -72,7 +72,7 @@ export class EmailService {
           subject: emailData.subject,
           html: emailData.html,
           text: emailData.text,
-          attachments: emailData.attachments?.map((att: any) => ({
+          attachments: emailData.attachments?.map((att: EmailAttachment) => ({
             filename: att.filename,
             content: att.content,
             contentType: att.contentType,
@@ -117,7 +117,7 @@ export class EmailService {
         try {
           const success = await this.send(email)
           return success ? 'sent' : 'failed'
-        } catch (_error) {
+        } catch {
           return 'failed'
         }
       })
@@ -271,7 +271,7 @@ export class EmailService {
         errors,
         usedVariables: [...new Set(usedVariables)], // Remove duplicatas
       }
-    } catch (_error) {
+    } catch {
       return {
         valid: false,
         errors: ['Erro ao validar template'],
