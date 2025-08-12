@@ -194,7 +194,7 @@ export class ExchangeService {
       timestamp: string
     }> = []
 
-    for (const [pairKey, data] of Object.entries(response.data)) {
+    for (const [pairKey, data] of Object.entries(response.data as Record<string, unknown>)) {
       const validated = BrazilApiQuoteSchema.parse(data)
       const currency = validated.code
 
@@ -240,9 +240,9 @@ export class ExchangeService {
       `/daily/${baseCurrency}-${targetCurrency}/${days}`
     )
 
-    return response.data.map((item: Record<string, unknown>) => ({
-      date: item.timestamp,
-      rate: parseFloat(String(item.bid)),
+    return (response.data as any[]).map((item: Record<string, unknown>) => ({
+      date: String(item.date),
+      rate: Number(item.value) || 0,
     }))
   }
 

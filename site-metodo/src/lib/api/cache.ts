@@ -310,7 +310,7 @@ export function cached(ttl?: number, cacheInstance: ApiCache = apiCache.normal) 
     const originalMethod = descriptor.value
 
     descriptor.value = async function (...args: Record<string, unknown>[]) {
-      const cacheKey = ApiCache.createKey(`${target.constructor.name}.${propertyKey}`, args)
+      const cacheKey = ApiCache.createKey(`${target.constructor.name}.${propertyKey}`, args as unknown as Record<string, unknown>)
 
       // Try to get from cache first
       const cached = cacheInstance.get(cacheKey)
