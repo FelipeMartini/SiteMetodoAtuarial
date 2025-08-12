@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/prisma'
 import { z } from 'zod'
-import speakeasy from 'speakeasy'
 
 const verifySchema = z.object({
   token: z.string().min(6).max(6),

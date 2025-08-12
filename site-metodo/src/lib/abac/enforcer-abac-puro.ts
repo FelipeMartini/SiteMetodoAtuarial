@@ -1,46 +1,27 @@
-'use client'
-
 /**
- * 🛡️ SISTEMA ABAC/ASIC PURO - ENFORCER CASBIN
- * ==========================================
+ * 🛡️ SISTEMA ABAC/ASIC PURO - ENFORCER CASBIN (SERVER-SIDE)
+ * ==========================================================
  * 
  * Sistema de autorização baseado em atributos usando Casbin
  * - Remove completamente sistema RBAC legado
  * - Implementa ABAC/ASIC com políticas flexíveis
  * - Suporte para contexto temporal, geográfico e organizacional
+ * - APENAS SERVER-SIDE - Para client-side usar /lib/abac/client.ts
  */
 
 import { Enforcer, newEnforcer } from 'casbin'
 import { PrismaAdapter } from 'casbin-prisma-adapter'
 import { prisma } from '@/lib/prisma'
-import logger from '@/lib/logger-simple'
+import { structuredLogger } from '@/lib/logger'
+import path from 'path'
 
 // 🔧 Cache do enforcer para performance
 let cachedEnforcer: Enforcer | null = null
 let lastCacheTime = 0
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutos
 
-// 📋 Modelo ABAC/ASIC Casbin
-const ABAC_MODEL = `
-[request_definition]
-r = sub, obj, act, ctx
-
-[policy_definition]
-p = sub, obj, act, eft
-
-[role_definition]
-g = _, _
-
-[policy_effect]
-e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
-
-[matchers]
-m = g(r.sub, p.sub) || r.sub == p.sub || keyMatch2(r.sub, p.sub) || \
-    (r.obj == p.obj || keyMatch2(r.obj, p.obj)) && \
-    (r.act == p.act || keyMatch2(r.act, p.act)) && \
-    eval(p.eft) && \
-    contextMatch(r.ctx, p.ctx)
-`
+// 📋 Caminho para o modelo ABAC/ASIC Casbin
+const ABAC_MODEL_PATH = path.join(process.cwd(), 'src/lib/abac/abac-model.conf')
 
 // 🏗️ Interface para contexto ABAC
 interface ABACContext {
@@ -51,7 +32,7 @@ interface ABACContext {
   userAgent?: string     // Browser/device
   sensitive?: boolean    // Dados sensíveis
   urgency?: 'low' | 'normal' | 'high' | 'critical'
-  [key: string]: any     // Contexto adicional
+  [key: string]: unknown // Contexto adicional
 }
 
 // 🏗️ Interface para resultado de autorização
@@ -94,7 +75,7 @@ function addCustomFunctions(enforcer: Enforcer) {
       
       return true
     } catch (error) {
-      structuredLogger.error('Context match error', 'high', { 
+      structuredLogger.error('Context match error', { 
         error: error instanceof Error ? error.message : String(error), 
         requestCtx, 
         policyCtx 
@@ -149,14 +130,10 @@ async function initializeEnforcer(): Promise<Enforcer> {
     const startTime = Date.now()
     
     // Configurar adapter com versão compatível
-    const adapter = await PrismaAdapter.newAdapter({
-      prisma,
-      tableName: 'casbin_rule',
-      modelName: 'CasbinRule'
-    })
+    const adapter = await PrismaAdapter.newAdapter(prisma)
 
     // Criar enforcer com modelo ABAC
-    const enforcer = await newEnforcer(ABAC_MODEL, adapter)
+    const enforcer = await newEnforcer(ABAC_MODEL_PATH, adapter)
     
     // Adicionar funções customizadas
     addCustomFunctions(enforcer)
@@ -172,7 +149,7 @@ async function initializeEnforcer(): Promise<Enforcer> {
     
     return enforcer
   } catch (error) {
-    structuredLogger.error('Failed to initialize ABAC enforcer', 'critical', { 
+    structuredLogger.error('Failed to initialize ABAC enforcer', { 
       error: error instanceof Error ? error.message : String(error) 
     })
     throw error
@@ -245,7 +222,7 @@ export async function checkABACPermission(
   } catch (error) {
     const responseTime = Date.now() - startTime
     
-    structuredLogger.error('ABAC permission check failed', 'high', {
+    structuredLogger.error('ABAC permission check failed', {
       error: error instanceof Error ? error.message : String(error),
       subject,
       object,
@@ -288,7 +265,7 @@ async function getAppliedPolicies(
     
     return [...new Set(relevantPolicies)] // Remove duplicatas
   } catch (error) {
-    structuredLogger.error('Failed to get applied policies', 'medium', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to get applied policies', { error: error instanceof Error ? error.message : String(error) })
     return []
   }
 }
@@ -313,15 +290,12 @@ async function saveAccessLog(
         object,
         action,
         allowed: result.allowed,
-        reason: result.reason,
-        context: JSON.stringify(result.context),
-        responseTime: result.responseTime,
-        ipAddress: result.context.ip,
+        ip: result.context.ip,
         userAgent: result.context.userAgent
       }
     })
   } catch (error) {
-    structuredLogger.error('Failed to save access log', 'medium', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to save access log', { error: error instanceof Error ? error.message : String(error) })
   }
 }
 
@@ -335,7 +309,7 @@ export async function addABACPolicy(
   object: string,
   action: string,
   effect: 'allow' | 'deny' = 'allow',
-  context?: Record<string, any>
+  context?: Record<string, unknown>
 ): Promise<boolean> {
   try {
     const enforcer = await getEnforcer()
@@ -361,7 +335,7 @@ export async function addABACPolicy(
     
     return added
   } catch (error) {
-    structuredLogger.error('Failed to add ABAC policy', 'high', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to add ABAC policy', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }
@@ -390,7 +364,7 @@ export async function removeABACPolicy(
     
     return removed
   } catch (error) {
-    structuredLogger.error('Failed to remove ABAC policy', 'high', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to remove ABAC policy', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }
@@ -401,7 +375,7 @@ export async function getAllABACPolicies(): Promise<string[][]> {
     const enforcer = await getEnforcer()
     return await enforcer.getPolicy()
   } catch (error) {
-    structuredLogger.error('Failed to get ABAC policies', 'medium', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to get ABAC policies', { error: error instanceof Error ? error.message : String(error) })
     return []
   }
 }
@@ -419,7 +393,7 @@ export async function reloadABACPolicies(): Promise<boolean> {
     structuredLogger.info('ABAC policies reloaded')
     return true
   } catch (error) {
-    structuredLogger.error('Failed to reload ABAC policies', 'high', { error: error instanceof Error ? error.message : String(error) })
+    structuredLogger.error('Failed to reload ABAC policies', { error: error instanceof Error ? error.message : String(error) })
     return false
   }
 }
@@ -455,7 +429,7 @@ export async function hasPermission(
   return await checkABACPermission(`user:${userId}`, resource, action, context)
 }
 
-export default {
+const abacEnforcerPuro = {
   checkABACPermission,
   addABACPolicy,
   removeABACPolicy,
@@ -465,3 +439,5 @@ export default {
   canAccess,
   hasPermission
 }
+
+export default abacEnforcerPuro

@@ -1,10 +1,10 @@
 'use client'
 
-import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '@/../auth-abac-puro'
-import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
+import { NextResponse } from 'next/server'
+import { auth } from '@/lib/auth'
+import { checkABACPermission } from '@/lib/abac/enforcer'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth()
     

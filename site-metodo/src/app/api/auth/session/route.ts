@@ -1,8 +1,8 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { auth } from '@/../auth'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     const session = await auth()
     
@@ -13,47 +13,49 @@ export async function GET(request: NextRequest) {
       )
     }
 
-    // Verificar permissão ABAC para visualizar sessão
+    // Check ABAC permission para acessar sessão
     const hasPermission = await checkABACPermission(
-      session.user.email || '',
-      'resource:session',
+      `user:${session.user.id}`,
+      'session:read',
       'read',
       {
-        department: session.user.department || '',
-        location: session.user.location || '',
-        jobTitle: session.user.jobTitle || '',
-        timestamp: new Date()
+        time: new Date().toISOString(),
+        location: session.user.location || 'unknown',
+        department: session.user.department || 'unknown',
+        ip: 'session-check'
       }
     )
 
     if (!hasPermission.allowed) {
       return NextResponse.json(
-        { error: 'Acesso negado' },
+        { error: 'Acesso negado pelo sistema ABAC' },
         { status: 403 }
       )
     }
 
-    // Retornar dados da sessão com contexto ABAC
-    return NextResponse.json({
-      user: {
-        id: session.user.id,
-        email: session.user.email,
-        name: session.user.name,
-        image: session.user.image,
-        department: session.user.department,
-        location: session.user.location,
-        jobTitle: session.user.jobTitle,
-        isActive: session.user.isActive,
-        validFrom: session.user.validFrom,
-        validUntil: session.user.validUntil
+    return NextResponse.json(
+      {
+        user: {
+          id: session.user.id,
+          email: session.user.email,
+          name: session.user.name,
+          image: session.user.image,
+          department: session.user.department,
+          location: session.user.location,
+          jobTitle: session.user.jobTitle,
+          isActive: session.user.isActive,
+          validFrom: session.user.validFrom,
+          validUntil: session.user.validUntil
+        },
+        abac: {
+          enabled: true,
+          permission: hasPermission,
+          context: hasPermission.context
+        }
       },
-      abacContext: {
-        department: session.user.department,
-        location: session.user.location,
-        jobTitle: session.user.jobTitle
-      }
-    })
-    
+      { status: 200 }
+    )
+
   } catch (error) {
     console.error('Erro ao obter sessão:', error)
     return NextResponse.json(

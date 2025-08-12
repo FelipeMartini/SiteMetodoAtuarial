@@ -3,7 +3,7 @@
  * Adaptação limpa para sistema ABAC puro
  */
 
-import { Adapter } from 'casbin'
+import { Adapter, Model } from 'casbin'
 import { PrismaClient } from '@prisma/client'
 
 export class PrismaAdapter implements Adapter {
@@ -16,7 +16,7 @@ export class PrismaAdapter implements Adapter {
   /**
    * 📚 Carregar políticas do banco
    */
-  async loadPolicy(model: any): Promise<void> {
+  async loadPolicy(model: Model): Promise<void> {
     try {
       // Carregar regras do banco
       const rules = await this.prisma.casbinRule.findMany()
@@ -37,13 +37,13 @@ export class PrismaAdapter implements Adapter {
   /**
    * 💾 Salvar política no banco
    */
-  async savePolicy(model: any): Promise<boolean> {
+  async savePolicy(model: Model): Promise<boolean> {
     try {
       // Limpar regras existentes
       await this.prisma.casbinRule.deleteMany({})
 
       // Salvar novas políticas
-      const policies = model.getPolicy()
+      const policies = model.getPolicy('p', 'p')
       for (const [ptype, ...rule] of policies) {
         await this.prisma.casbinRule.create({
           data: {
@@ -114,7 +114,7 @@ export class PrismaAdapter implements Adapter {
    */
   async removeFilteredPolicy(sec: string, ptype: string, fieldIndex: number, ...fieldValues: string[]): Promise<void> {
     try {
-      const where: any = { ptype }
+      const where: Record<string, unknown> = { ptype }
       
       fieldValues.forEach((value, index) => {
         if (value) {

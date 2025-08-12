@@ -12,7 +12,14 @@ import { useSession } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import { LoadingSpinner } from '@/components/ui/loading-spinner'
 import { auditLogger, AuditSeverity } from '@/lib/audit/auditLogger'
-import { AuditAction } from '@prisma/client'
+
+// Enum local para ações de auditoria
+enum AuditAction {
+  LOGIN_SUCCESS = 'LOGIN_SUCCESS',
+  LOGIN_FAILED = 'LOGIN_FAILED',
+  ACCESS_GRANTED = 'ACCESS_GRANTED',
+  ACCESS_DENIED = 'ACCESS_DENIED',
+}
 
 interface AuthGuardProps {
   /**

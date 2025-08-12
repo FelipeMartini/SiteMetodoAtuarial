@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { useSession } from 'next-auth/react'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -59,14 +59,7 @@ export default function PerfilUsuarioModerno() {
     jobTitle: ''
   })
 
-  useEffect(() => {
-    if (session?.user) {
-      fetchUserProfile()
-      fetchABACContext()
-    }
-  }, [session])
-
-  const fetchUserProfile = async () => {
+  const fetchUserProfile = useCallback(async () => {
     if (!session?.user?.email) return
 
     setIsLoading(true)
@@ -92,9 +85,9 @@ export default function PerfilUsuarioModerno() {
     } finally {
       setIsLoading(false)
     }
-  }
+  }, [session?.user?.email, toast])
 
-  const fetchABACContext = async () => {
+  const fetchABACContext = useCallback(async () => {
     try {
       const response = await fetch('/api/abac/context')
       if (response.ok) {
@@ -104,7 +97,14 @@ export default function PerfilUsuarioModerno() {
     } catch (error) {
       console.error('Erro ao buscar contexto ABAC:', error)
     }
-  }
+  }, [])
+
+  useEffect(() => {
+    if (session?.user) {
+      fetchUserProfile()
+      fetchABACContext()
+    }
+  }, [session, fetchUserProfile, fetchABACContext])
 
   const handleSave = async () => {
     if (!profile) return

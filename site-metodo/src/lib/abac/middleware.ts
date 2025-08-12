@@ -125,19 +125,19 @@ export async function abacMiddleware(
       const action = getActionFromMethod(request.method)
 
       // Check authorization
-      const result = await enforcer.enforce({
-        subject: user.email,
-        object: pathname,
-        action: action,
-        context: {
+      const isAllowed = await enforcer.enforce(
+        user.email,
+        pathname,
+        action,
+        JSON.stringify({
           ip: getClientIP(request),
           userAgent: request.headers.get('user-agent') || undefined,
           time: new Date(),
           attributes: {},
-        },
-      })
+        })
+      )
 
-      if (!result.allowed) {
+      if (!isAllowed) {
         // Log unauthorized access attempt
         if (mergedConfig.enableLogging) {
           console.warn(`Unauthorized access attempt: ${user.email} -> ${pathname} (${action})`)
@@ -241,19 +241,19 @@ export function withABACAuthorization(
       const enforcer = await getEnforcer()
       const { pathname } = request.nextUrl
 
-      const result = await enforcer.enforce({
-        subject: user.email,
-        object: pathname,
-        action: requiredAction,
-        context: {
+      const isAllowed = await enforcer.enforce(
+        user.email,
+        pathname,
+        requiredAction,
+        JSON.stringify({
           ip: getClientIP(request),
           userAgent: request.headers.get('user-agent') || undefined,
           time: new Date(),
           attributes: {},
-        },
-      })
+        })
+      )
 
-      if (!result.allowed) {
+      if (!isAllowed) {
         return new NextResponse('Forbidden', { status: 403 })
       }
 
@@ -276,13 +276,13 @@ export async function checkPermission(
   try {
     const enforcer = await getEnforcer()
 
-    const result = await enforcer.enforce({
-      subject: userEmail,
-      object: resource,
-      action: action,
-    })
+    const isAllowed = await enforcer.enforce(
+      userEmail,
+      resource,
+      action
+    )
 
-    return result.allowed
+    return isAllowed
   } catch (_error) {
     console.error('Permission check error:', String(_error))
     return false

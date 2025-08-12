@@ -157,15 +157,17 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
                     </Button>
                   </Link>
 
-                  {(session.user.role?.includes('admin') ||
-                    session.user.role?.includes('staff')) && (
+                  {/* TODO: Implementar verificação ABAC para Dashboard Admin */}
+                  {/* Temporariamente comentado até implementar ABAC completo */}
+                  {/* {(session.user.role?.includes('admin') ||
+                    session.user.role?.includes('staff')) && ( */}
                     <Link href='/area-cliente/dashboard-admin' onClick={() => setOpen(false)}>
                       <Button variant='destructive' size='sm' className='w-full justify-start'>
                         <Building className='mr-2 h-4 w-4' />
                         Dashboard Admin
                       </Button>
                     </Link>
-                  )}
+                  {/* )} */}
 
                   <Button
                     variant='ghost'

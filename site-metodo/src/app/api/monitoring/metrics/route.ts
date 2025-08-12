@@ -8,6 +8,15 @@ import { getClientIP } from '@/lib/utils/ip'
 import { checkABACPermission } from '@/lib/abac/enforcer'
 import { z } from 'zod'
 
+interface SessionWithUser {
+  user?: {
+    location?: string | null
+    department?: string | null
+    mfaEnabled?: boolean
+    lastLogin?: Date | string | null
+  }
+}
+
 // Schema para validação dos parâmetros
 const MetricsParams = z.object({
   metric: z.string().optional(),
@@ -42,7 +51,7 @@ interface HealthStatus {
 /**
  * 🔐 UTILITÁRIO PARA EXTRAIR CONTEXTO ABAC DA REQUISIÇÃO
  */
-function buildABACContext(req: NextRequest, session: any) {
+function buildABACContext(req: NextRequest, session: SessionWithUser) {
   return {
     ip: getClientIP(req),
     userAgent: req.headers.get('user-agent') || 'Unknown',
@@ -170,8 +179,8 @@ export async function GET(request: NextRequest) {
     }
 
     // Adicionar saúde do sistema (se autorizado)
-    let health: any = null
-    let healthHistory: any = null
+    let health: unknown = null
+    let healthHistory: unknown = null
 
     const healthAuthResult = await checkABACPermission(
       `user:${session.user.id}`,

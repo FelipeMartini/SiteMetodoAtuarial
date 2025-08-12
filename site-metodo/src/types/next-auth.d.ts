@@ -6,8 +6,7 @@
  * Remove completamente referências ao sistema RBAC legado
  */
 
-import { User, AuthorizationPolicy, AccessLog, AuditLog } from '@prisma/client'
-import NextAuth, { DefaultSession, DefaultUser } from 'next-auth'
+import { DefaultSession, DefaultUser } from 'next-auth'
 
 
 // 🔐 EXTENSÕES AUTH.JS V5 PARA ABAC
@@ -141,7 +140,7 @@ export interface ABACContext {
   urgency?: 'low' | 'normal' | 'high' | 'critical'
   
   // Contexto adicional (extensível)
-  [key: string]: any
+  [key: string]: unknown
 }
 
 /**
@@ -177,7 +176,7 @@ export interface ABACPolicy {
   object: string
   action: string
   effect: 'allow' | 'deny'
-  conditions?: Record<string, any>
+  conditions?: Record<string, unknown>
   description?: string
   category?: string
   priority: number
@@ -216,7 +215,7 @@ export interface ABACauditEvent {
   userId?: string | null
   action: string
   target?: string
-  details?: Record<string, any>
+  details?: Record<string, unknown>
   ipAddress?: string
   userAgent?: string
   success: boolean
@@ -365,7 +364,7 @@ export interface AppSession {
   expiresAt: Date
 }
 
-export default {
+const NextAuthTypes = {
   ABACContext,
   ABACResult,
   ABACRequest,
@@ -381,3 +380,5 @@ export default {
   AppUser,
   AppSession
 }
+
+export default NextAuthTypes

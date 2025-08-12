@@ -42,6 +42,19 @@ const nextConfig = {
     // Adicione outros IPs usados no dev, ex: sua rede local
     'http://10.0.0.69:3000',
   ],
+  
+  // Configuração para Casbin - evita problemas com fs no frontend
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        os: false,
+      }
+    }
+    return config
+  },
 }
 
 module.exports = withBundleAnalyzer(nextConfig)
