@@ -240,7 +240,7 @@ async function handleGetTrends(request: NextRequest, clientIp: string) {
     days: query.days,
   })
 
-  const trends = await exchangeService.getTrends(query.currency, query.days)
+  const trends = await exchangeService.getTrends(query.currency)
 
   return NextResponse.json({
     success: true,
