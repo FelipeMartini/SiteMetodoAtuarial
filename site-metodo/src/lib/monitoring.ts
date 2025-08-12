@@ -336,7 +336,7 @@ export class MonitoringService {
         status: 'connected',
         responseTime,
       }
-    } catch (_error) {
+    } catch {
       return {
         status: 'disconnected',
       }

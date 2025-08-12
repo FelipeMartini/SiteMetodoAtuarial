@@ -42,7 +42,7 @@ export async function PATCH(req: NextRequest, { params }: { params: { id: string
       meta: { before, after: updated },
     })
     return NextResponse.json({ ok: true, user: updated })
-  } catch (_error) {
+  } catch {
     return NextResponse.json({ error: 'Erro ao atualizar' }, { status: 500 })
   }
 }

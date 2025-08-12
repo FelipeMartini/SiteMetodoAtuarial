@@ -323,7 +323,7 @@ export class ApiClient {
         healthy: true,
         latency: Date.now() - startTime,
       }
-    } catch (_error) {
+    } catch {
       return {
         healthy: false,
         latency: Date.now() - startTime,

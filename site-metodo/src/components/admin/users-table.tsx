@@ -181,7 +181,7 @@ function UsersTable() {
         await exportarUsuariosParaPdf(mapped, colunasExport, 'usuarios.pdf')
         toast.success('Exportação PDF concluída!')
       }
-    } catch (_error) {
+    } catch {
       toast.error('Erro ao exportar usuários')
     } finally {
       setExportLoading(false)
