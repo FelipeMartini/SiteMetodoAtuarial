@@ -54,7 +54,7 @@ export class ExchangeService {
         return await this.getRateFromAwesomeApi(from, to)
       }
     } catch (_error) {
-      console.warn(`Falha no provedor ${provider}:`, error)
+      console.warn(`Falha no provedor ${provider}:`, _error)
 
       // Fallback para o outro provedor
       try {
@@ -213,7 +213,7 @@ export class ExchangeService {
             timestamp: data.create_date,
           }
         } catch (_error) {
-          console.warn(`Erro ao buscar ${currency}:`, error)
+          console.warn(`Erro ao buscar ${currency}:`, _error)
           return null
         }
       })
