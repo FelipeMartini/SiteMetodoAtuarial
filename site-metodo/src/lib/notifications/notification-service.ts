@@ -366,9 +366,9 @@ export class NotificationService {
       const where: Record<string, unknown> = {}
       if (userId) where.userId = userId
       if (dateFrom || dateTo) {
-        where.createdAt = {}
-        if (dateFrom) where.createdAt.gte = dateFrom
-        if (dateTo) where.createdAt.lte = dateTo
+        where.createdAt = {} as Record<string, unknown>
+        if (dateFrom) (where.createdAt as Record<string, unknown>).gte = dateFrom
+        if (dateTo) (where.createdAt as Record<string, unknown>).lte = dateTo
       }
 
       const [total, byType, byChannel, byStatus, deliveryStats] = await Promise.all([
@@ -555,21 +555,21 @@ export class NotificationService {
    */
   private mapToNotificationData(notification: Record<string, unknown>): NotificationData {
     return {
-      id: notification.id,
-      userId: notification.userId,
-      type: notification.type,
-      channel: notification.channel,
-      priority: notification.priority,
-      status: notification.status,
-      title: notification.title,
-      message: notification.message,
-      data: notification.data ? JSON.parse(notification.data) : undefined,
-      scheduledFor: notification.scheduledFor,
-      sentAt: notification.sentAt,
-      readAt: notification.readAt,
-      expiresAt: notification.expiresAt,
-      createdAt: notification.createdAt,
-      updatedAt: notification.updatedAt,
+      id: notification.id as string,
+      userId: notification.userId as string,
+      type: notification.type as NotificationType,
+      channel: notification.channel as NotificationChannel,
+      priority: notification.priority as NotificationPriority,
+      status: notification.status as NotificationStatus,
+      title: notification.title as string,
+      message: notification.message as string,
+      data: notification.data ? JSON.parse(notification.data as string) : undefined,
+      scheduledFor: (notification.scheduledFor as Date | null) || undefined,
+      sentAt: (notification.sentAt as Date | null) || undefined,
+      readAt: (notification.readAt as Date | null) || undefined,
+      expiresAt: (notification.expiresAt as Date | null) || undefined,
+      createdAt: notification.createdAt as Date,
+      updatedAt: notification.updatedAt as Date,
     }
   }
 }
