@@ -152,7 +152,7 @@ export class PushNotificationService {
           })
         } catch (error: any) {
           simpleLogger.warn('Falha ao enviar push notification', {
-            error: _error.message,
+            error: error.message,
             userId,
             subscriptionId: subscription.id,
           })
@@ -384,9 +384,9 @@ export class PushNotificationService {
   private isSubscriptionInvalid(error: Record<string, unknown>): boolean {
     const invalidCodes = [410, 404, 400]
     return (
-      invalidCodes.includes(error.statusCode) ||
-      _error.message?.includes('invalid') ||
-      _error.message?.includes('expired')
+      invalidCodes.includes(error.statusCode as number) ||
+      (error.message as string)?.includes('invalid') ||
+      (error.message as string)?.includes('expired')
     )
   }
 

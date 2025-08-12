@@ -43,7 +43,7 @@ export class NotificationWebSocketServer {
       data: {
         notification,
         unreadCount,
-      } as NotificationSocketData,
+      } as Record<string, unknown>,
       timestamp: Date.now(),
     }
 
