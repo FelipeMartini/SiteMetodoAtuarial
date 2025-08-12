@@ -70,7 +70,7 @@ export async function POST(request: NextRequest) {
       },
       { status: 201 }
     )
-  } catch (_error) {
+  } catch {
     console.error('Erro de registro:', String(_error))
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }

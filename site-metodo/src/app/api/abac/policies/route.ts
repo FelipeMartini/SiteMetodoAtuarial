@@ -32,7 +32,7 @@ export async function GET(): Promise<NextResponse> {
       success: true,
       data: policies,
     })
-  } catch (_error) {
+  } catch {
     console.error('Error fetching policies:', String(_error))
     return NextResponse.json({ success: false, error: 'Failed to fetch policies' }, { status: 500 })
   }
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
     } else {
       return NextResponse.json({ success: false, error: 'Failed to add policy' }, { status: 400 })
     }
-  } catch (_error) {
+  } catch {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },
@@ -108,7 +108,7 @@ export async function DELETE(request: NextRequest) {
     } else {
       return NextResponse.json({ success: false, error: 'Policy not found' }, { status: 404 })
     }
-  } catch (_error) {
+  } catch {
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
         { success: false, error: 'Invalid request data', details: _error.issues },

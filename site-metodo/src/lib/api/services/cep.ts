@@ -183,7 +183,7 @@ export class CepService {
         result.cep = this.addCepMask(result.cep)
 
         return result
-      } catch (_error) {
+      } catch {
         lastError = _error instanceof Error ? _error : new Error('Erro desconhecido')
         console.warn(`Falha ao consultar ${provider.name}:`, lastError.message)
         continue
@@ -219,7 +219,7 @@ export class CepService {
         try {
           const data = await this.lookupCep(cep)
           return { cep, data }
-        } catch (_error) {
+        } catch {
           return {
             cep,
             error: _error instanceof Error ? _error.message : 'Erro desconhecido',

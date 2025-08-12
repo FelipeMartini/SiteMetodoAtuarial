@@ -24,14 +24,14 @@ import { Search, MoreHorizontal, Download, Plus, Shield } from 'lucide-react'
 import { getRoleTypeLabel } from '@/lib/abac/roleMapping'
 import { UserRoleType } from '@prisma/client'
 
-interface User {
-  id: string
-  name: string | null
-  email: string | null
-  roleType: UserRoleType
-  isActive: boolean
-  createdAt: Date
-}
+// interface User {
+//   id: string
+//   name: string | null
+//   email: string | null
+//   roleType: UserRoleType
+//   isActive: boolean
+//   createdAt: Date
+// }
 
 /**
  * Tabela moderna de gerenciamento de usuários para admin

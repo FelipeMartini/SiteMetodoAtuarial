@@ -29,7 +29,7 @@ export function PerfilUsuarioModerno() {
   }
 
   const user = session.user
-  const roleType = (session.user as any)?.roleType || UserRoleType.USER
+  const roleType = (session.user as { roleType?: UserRoleType })?.roleType || UserRoleType.USER
   const displayValue = getRoleTypeDisplayValue(roleType)
 
   const getRoleBadgeColor = () => {

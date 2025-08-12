@@ -64,7 +64,7 @@ export class AuditService {
         success: entry.success,
         auditId: auditRecord.id,
       })
-    } catch (_error) {
+    } catch {
       // Falha na auditoria é crítica, mas não deve quebrar a aplicação
       simpleLogger.error('Failed to create audit log', {
         action: entry.action,
@@ -214,7 +214,7 @@ export class AuditService {
       if (userId) {
         auditLogger.apiAccess(userId, method, endpoint, { ip, data })
       }
-    } catch (_error) {
+    } catch {
       console.error('Erro ao registrar acesso à API:', String(_error))
     }
   }

@@ -92,7 +92,7 @@ export class AuditLogger {
           metadata: data.metadata,
         })
       }
-    } catch (_error) {
+    } catch {
       console.error('[AUDIT] ❌ Failed to log audit event:', String(_error))
       // Em caso de erro no sistema de auditoria, logar no console como fallback
       console.error('[AUDIT-FALLBACK]', JSON.stringify(data, null, 2))

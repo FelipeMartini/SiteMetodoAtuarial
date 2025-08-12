@@ -46,7 +46,7 @@ export class EmailService {
       }
 
       return await this.send(emailData)
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao enviar email com template', {
         _error,
         templateId,
@@ -91,7 +91,7 @@ export class EmailService {
       }
 
       return true
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao enviar email', {
         _error,
         to: emailData.to,
@@ -117,7 +117,7 @@ export class EmailService {
         try {
           const success = await this.send(email)
           return success ? 'sent' : 'failed'
-        } catch (_error) {
+        } catch {
           return 'failed'
         }
       })
@@ -167,7 +167,7 @@ export class EmailService {
       })
 
       return created.id
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao criar template', { error: String(_error), template: template.name })
       throw _error
     }
@@ -196,7 +196,7 @@ export class EmailService {
         createdAt: template.createdAt,
         updatedAt: template.updatedAt,
       }
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao buscar template', { error: String(_error), templateId })
       return null
     }
@@ -227,7 +227,7 @@ export class EmailService {
         createdAt: template.createdAt,
         updatedAt: template.updatedAt,
       }))
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao listar templates', { error: String(_error), category })
       return []
     }
@@ -271,7 +271,7 @@ export class EmailService {
         errors,
         usedVariables: [...new Set(usedVariables)], // Remove duplicatas
       }
-    } catch (_error) {
+    } catch {
       return {
         valid: false,
         errors: ['Erro ao validar template'],
@@ -305,7 +305,7 @@ export class EmailService {
         html: testHtml,
         text: `Teste de Email - ${new Date().toLocaleString()}`,
       })
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro no teste de email', { error: String(_error), to })
       return false
     }
@@ -354,7 +354,7 @@ export class EmailService {
       simpleLogger.info('Email transporter inicializado', {
         provider: this.config.provider,
       })
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao inicializar email transporter', { _error })
       throw _error
     }

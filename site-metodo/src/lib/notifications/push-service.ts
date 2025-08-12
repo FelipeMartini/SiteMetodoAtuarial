@@ -85,7 +85,7 @@ export class PushNotificationService {
 
         return created.id
       }
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao registrar push subscription', { error: String(_error), userId })
       throw _error
     }
@@ -104,7 +104,7 @@ export class PushNotificationService {
       simpleLogger.info('Push subscription removida', {
         endpoint: this.maskEndpoint(endpoint),
       })
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao remover subscription', { error: String(_error), endpoint })
       throw _error
     }
@@ -150,7 +150,7 @@ export class PushNotificationService {
             userId,
             subscriptionId: subscription.id,
           })
-        } catch (error: any) {
+        } catch (error: unknown) {
           simpleLogger.warn('Falha ao enviar push notification', {
             error: error.message,
             userId,
@@ -177,7 +177,7 @@ export class PushNotificationService {
       })
 
       return sent > 0
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao enviar push notification', { error: String(_error), userId })
       return false
     }
@@ -257,7 +257,7 @@ export class PushNotificationService {
         activeSubscriptions: active,
         subscriptionsByUser: byUser.length,
       }
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao obter estatísticas push', { _error })
       return {
         totalSubscriptions: 0,
@@ -286,7 +286,7 @@ export class PushNotificationService {
         ...sub,
         endpoint: this.maskEndpoint(sub.endpoint),
       }))
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao listar subscriptions do usuário', { error: String(_error), userId })
       return []
     }
@@ -311,7 +311,7 @@ export class PushNotificationService {
       )
 
       simpleLogger.info('Web Push configurado com sucesso')
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao configurar Web Push', { _error })
       throw _error
     }
@@ -403,7 +403,7 @@ export class PushNotificationService {
       simpleLogger.info('Subscriptions inválidas marcadas como inativas', {
         count: endpoints.length,
       })
-    } catch (_error) {
+    } catch {
       simpleLogger.error('Erro ao marcar subscriptions como inativas', { _error })
     }
   }
@@ -477,7 +477,7 @@ export const pushNotificationClient = {
       })
 
       return subscription
-    } catch (_error) {
+    } catch {
       console.error('Erro ao subscrever push notifications:', String(_error))
       return null
     }
@@ -496,7 +496,7 @@ export const pushNotificationClient = {
         }
       }
       return true
-    } catch (_error) {
+    } catch {
       console.error('Erro ao cancelar subscription:', String(_error))
       return false
     }

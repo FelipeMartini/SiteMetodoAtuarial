@@ -127,7 +127,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json(response)
-  } catch (_error) {
+  } catch {
     console.error('Exchange rate error:', String(_error))
 
     if (_error instanceof z.ZodError) {
@@ -170,7 +170,7 @@ export async function POST(request: NextRequest) {
     }
 
     return NextResponse.json({ error: 'Ação não suportada' }, { status: 400 })
-  } catch (_error) {
+  } catch {
     console.error('Exchange POST error:', String(_error))
 
     if (_error instanceof z.ZodError) {

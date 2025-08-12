@@ -10,11 +10,11 @@ import { withCors, withSecurityHeaders } from '@/utils/security'
 /**
  * Verificação ABAC simplificada para APIs
  */
-function checkABACAccess(user: any, resource: string): boolean {
+function checkABACAccess(user: { isActive?: boolean; email?: string | null; name?: string | null; id?: string } | undefined, resource: string): boolean {
   if (!user?.isActive) return false
 
   if (resource === 'admin') {
-    return (
+    return Boolean(
       user.email?.includes('@admin') || user.name?.includes('Admin') || user.id === 'admin-user'
     )
   }

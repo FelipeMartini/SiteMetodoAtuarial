@@ -72,8 +72,8 @@ interface AuthGuardProps {
  * Verificação ABAC simplificada para AuthGuard
  */
 function checkABACAuthorization(
-  user: any,
-  action: string = 'access',
+  user: { isActive?: boolean; email?: string | null; name?: string | null; id?: string } | undefined,
+  // _action: string = 'access', - parâmetro removido pois não é utilizado
   resource: string | null = null
 ): boolean {
   try {
@@ -109,7 +109,7 @@ function checkABACAuthorization(
 
     // Para outros recursos, verificar se está autenticado e ativo
     return true
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error('ABAC Authorization Error:', String(error))
     return false
   }

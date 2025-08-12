@@ -3,6 +3,69 @@
  * Automatiza análise de performance e acessibilidade
  */
 
+// === TYPES ===
+
+interface LighthouseAudit {
+  numericValue?: number;
+  score?: number | null;
+  scoreDisplayMode?: string;
+  title?: string;
+  details?: {
+    overallSavingsMs?: number;
+  };
+}
+
+interface LighthouseCategory {
+  score: number;
+}
+
+interface LighthouseResult {
+  lhr: {
+    finalUrl: string;
+    fetchTime: string;
+    timing?: {
+      total?: number;
+    };
+    audits: Record<string, LighthouseAudit>;
+    categories: {
+      performance: LighthouseCategory;
+      accessibility: LighthouseCategory;
+      'best-practices': LighthouseCategory;
+      seo: LighthouseCategory;
+    };
+  };
+}
+
+interface CoreWebVitals {
+  lcp: number;
+  fid: number;
+  cls: number;
+  fcp: number;
+  tbt: number;
+}
+
+interface PerformanceMetrics {
+  speedIndex: number;
+  interactive: number;
+  firstMeaningfulPaint: number;
+}
+
+interface AnalysisResult {
+  url: string;
+  timestamp: string;
+  scores: {
+    performance: number;
+    accessibility: number;
+    bestPractices: number;
+    seo: number;
+  };
+  coreWebVitals: CoreWebVitals;
+  performanceMetrics: PerformanceMetrics;
+  opportunities: LighthouseAudit[];
+  diagnostics: LighthouseAudit[];
+  runtime: number;
+}
+
 // === CONFIGURAÇÕES LIGHTHOUSE ===
 
 /**
@@ -222,66 +285,70 @@ export const CORE_WEB_VITALS_THRESHOLDS = {
 /**
  * Analisa resultado do Lighthouse
  */
-export function analyzeLighthouseResult(result: Record<string, unknown>) {
+export function analyzeLighthouseResult(result: LighthouseResult): AnalysisResult {
   const { lhr } = result
-  const { audits, categories } = lhr as Record<string, unknown>
+  const { audits, categories } = lhr
 
   // Scores das categorias
   const scores = {
-    performance: Math.round((categories as any).performance.score * 100),
-    accessibility: Math.round((categories as any).accessibility.score * 100),
-    bestPractices: Math.round((categories as any)['best-practices'].score * 100),
-    seo: Math.round((categories as any).seo.score * 100),
+    performance: Math.round(categories.performance.score * 100),
+    accessibility: Math.round(categories.accessibility.score * 100),
+    bestPractices: Math.round(categories['best-practices'].score * 100),
+    seo: Math.round(categories.seo.score * 100),
   }
 
   // Core Web Vitals
-  const coreWebVitals = {
-    lcp: (audits as any)['largest-contentful-paint']?.numericValue || 0,
-    fid: (audits as any)['max-potential-fid']?.numericValue || 0,
-    cls: (audits as any)['cumulative-layout-shift']?.numericValue || 0,
-    fcp: (audits as any)['first-contentful-paint']?.numericValue || 0,
-    tbt: (audits as any)['total-blocking-time']?.numericValue || 0,
+  const coreWebVitals: CoreWebVitals = {
+    lcp: audits['largest-contentful-paint']?.numericValue || 0,
+    fid: audits['max-potential-fid']?.numericValue || 0,
+    cls: audits['cumulative-layout-shift']?.numericValue || 0,
+    fcp: audits['first-contentful-paint']?.numericValue || 0,
+    tbt: audits['total-blocking-time']?.numericValue || 0,
   }
 
   // Performance metrics
-  const performanceMetrics = {
-    speedIndex: (audits as any)['speed-index']?.numericValue || 0,
-    interactive: (audits as any)['interactive']?.numericValue || 0,
-    firstMeaningfulPaint: (audits as any)['first-meaningful-paint']?.numericValue || 0,
+  const performanceMetrics: PerformanceMetrics = {
+    speedIndex: audits['speed-index']?.numericValue || 0,
+    interactive: audits['interactive']?.numericValue || 0,
+    firstMeaningfulPaint: audits['first-meaningful-paint']?.numericValue || 0,
   }
 
   // Opportunities (melhorias de performance)
-  const opportunities = Object.values(audits as any)
+  const opportunities = Object.values(audits)
     .filter(
-      (audit: any) =>
+      (audit: LighthouseAudit) =>
         audit.scoreDisplayMode === 'numeric' &&
         audit.score !== null &&
+        audit.score !== undefined &&
         audit.score < 1 &&
-        (audit.details as any)?.overallSavingsMs > 100
+        (audit.details?.overallSavingsMs ?? 0) > 100
     )
     .sort(
-      (a: any, b: any) =>
-        b.details.overallSavingsMs - a.details.overallSavingsMs
+      (a: LighthouseAudit, b: LighthouseAudit) =>
+        (b.details?.overallSavingsMs ?? 0) - (a.details?.overallSavingsMs ?? 0)
     )
     .slice(0, 10)
 
   // Diagnostics (problemas gerais)
-  const diagnostics = Object.values(audits as any)
+  const diagnostics = Object.values(audits)
     .filter(
-      (audit: any) =>
-        audit.scoreDisplayMode === 'informative' && audit.score !== null && audit.score < 1
+      (audit: LighthouseAudit) =>
+        audit.scoreDisplayMode === 'informative' && 
+        audit.score !== null && 
+        audit.score !== undefined && 
+        audit.score < 1
     )
     .slice(0, 10)
 
   return {
-    url: (lhr as any).finalUrl,
-    timestamp: (lhr as any).fetchTime,
+    url: lhr.finalUrl,
+    timestamp: lhr.fetchTime,
     scores,
     coreWebVitals,
     performanceMetrics,
     opportunities,
     diagnostics,
-    runtime: (lhr as any).timing?.total || 0,
+    runtime: lhr.timing?.total || 0,
   }
 }
 
@@ -289,8 +356,8 @@ export function analyzeLighthouseResult(result: Record<string, unknown>) {
  * Avalia se métricas estão dentro dos thresholds
  */
 export function evaluateMetrics(
-  metrics: Record<string, unknown>,
-  thresholds: Record<string, unknown>
+  metrics: AnalysisResult,
+  thresholds: Record<string, number>
 ) {
   const evaluation = {
     passed: 0,
@@ -301,7 +368,7 @@ export function evaluateMetrics(
 
   // Avaliar scores das categorias
   Object.entries(thresholds).forEach(([category, threshold]) => {
-    const score = (metrics.scores as any)[category]
+    const score = (metrics.scores as Record<string, number>)[category]
     const thresholdNum = Number(threshold)
     if (score >= thresholdNum) {
       evaluation.passed++
@@ -317,7 +384,8 @@ export function evaluateMetrics(
 
   // Avaliar Core Web Vitals
   Object.entries(CORE_WEB_VITALS_THRESHOLDS).forEach(([metric, thresholds]) => {
-    const value = (metrics.coreWebVitals as any)[metric]
+    const coreWebVitals = metrics.coreWebVitals as unknown as Record<string, number>
+    const value = coreWebVitals[metric]
 
     if (value <= thresholds.good) {
       evaluation.details[`cwv-${metric}`] = 'good'
@@ -336,7 +404,7 @@ export function evaluateMetrics(
 /**
  * Gera relatório de performance
  */
-export function generatePerformanceReport(results: Record<string, unknown>[]) {
+export function generatePerformanceReport(results: AnalysisResult[]) {
   const report = {
     timestamp: new Date().toISOString(),
     summary: {
@@ -359,25 +427,27 @@ export function generatePerformanceReport(results: Record<string, unknown>[]) {
 
   // Calcular médias
   results.forEach(result => {
-    report.summary.averageScores.performance += (result.scores as any).performance
-    report.summary.averageScores.accessibility += (result.scores as any).accessibility
-    report.summary.averageScores.bestPractices += (result.scores as any).bestPractices
-    report.summary.averageScores.seo += (result.scores as any).seo
+    report.summary.averageScores.performance += result.scores.performance
+    report.summary.averageScores.accessibility += result.scores.accessibility
+    report.summary.averageScores.bestPractices += result.scores.bestPractices
+    report.summary.averageScores.seo += result.scores.seo
   })
 
   Object.keys(report.summary.averageScores).forEach(key => {
-    const scores = report.summary.averageScores as any
+    const scores = report.summary.averageScores as Record<string, number>
     scores[key] = Math.round(scores[key] / results.length)
   })
 
   // Gerar recomendações baseadas nos problemas mais comuns
-  const commonIssues = new Map()
+  const commonIssues = new Map<string, number>()
 
   results.forEach(result => {
-    const opportunities = (result.opportunities as any) || [];
-    opportunities.forEach((opportunity: Record<string, unknown>) => {
-      const count = commonIssues.get(opportunity.title) || 0
-      commonIssues.set(opportunity.title, count + 1)
+    const opportunities = result.opportunities || [];
+    opportunities.forEach((opportunity: LighthouseAudit) => {
+      if (opportunity.title) {
+        const count = commonIssues.get(opportunity.title) || 0
+        commonIssues.set(opportunity.title, count + 1)
+      }
     })
   })
 
@@ -441,7 +511,7 @@ export const CI_CONFIG = {
 /**
  * Valida se resultado passa nos critérios de CI
  */
-export function validateCIResult(result: Record<string, unknown>): boolean {
+export function validateCIResult(result: LighthouseResult): boolean {
   const analysis = analyzeLighthouseResult(result)
 
   return (

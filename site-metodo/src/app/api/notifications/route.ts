@@ -42,8 +42,8 @@ export async function GET(request: NextRequest) {
       search: searchParams.get('search') || undefined,
       limit: parseInt(searchParams.get('limit') || '50'),
       offset: parseInt(searchParams.get('offset') || '0'),
-      sortBy: (searchParams.get('sortBy') as any) || 'createdAt',
-      sortOrder: (searchParams.get('sortOrder') as any) || 'desc',
+      sortBy: (searchParams.get('sortBy') as 'status' | 'createdAt' | 'priority') || 'createdAt',
+      sortOrder: (searchParams.get('sortOrder') as 'asc' | 'desc') || 'desc',
     }
 
     // Remove campos undefined
@@ -66,7 +66,7 @@ export async function GET(request: NextRequest) {
       success: true,
       data: result,
     })
-  } catch (_error) {
+  } catch {
     simpleLogger.error('Erro ao buscar notificações', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
@@ -146,7 +146,7 @@ export async function POST(request: NextRequest) {
         count: notificationIds.length,
       },
     })
-  } catch (_error) {
+  } catch {
     simpleLogger.error('Erro ao criar notificação', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
