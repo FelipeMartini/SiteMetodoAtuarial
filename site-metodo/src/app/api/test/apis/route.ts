@@ -49,7 +49,7 @@ export async function GET(request: NextRequest) {
       {
         error: 'Erro durante execução dos testes',
         testType,
-        details: error instanceof Error ? _error.message : 'Unknown error',
+        details: _error instanceof Error ? _error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
       },
       { status: 500 }
@@ -109,7 +109,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: 'Erro durante execução do teste',
-        details: error instanceof Error ? _error.message : 'Unknown error',
+        details: _error instanceof Error ? _error.message : 'Unknown error',
         timestamp: new Date().toISOString(),
       },
       { status: 500 }

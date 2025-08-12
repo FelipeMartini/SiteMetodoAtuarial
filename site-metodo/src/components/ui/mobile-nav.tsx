@@ -3,6 +3,7 @@
 import * as React from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import type { Session } from 'next-auth'
 
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/button'
@@ -80,7 +81,7 @@ const navigation: NavItem[] = [
 ]
 
 interface MobileNavProps {
-  session?: Record<string, unknown>
+  session?: Session | null
   onLogout?: () => void
 }
 

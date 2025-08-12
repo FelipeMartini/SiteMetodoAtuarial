@@ -58,7 +58,7 @@ function AuthErrorContent() {
     }
   }
 
-  const errorInfo = getErrorMessage(error)
+  const errorInfo = getErrorMessage(_error)
 
   return (
     <div className='w-full max-w-md'>
@@ -79,7 +79,7 @@ function AuthErrorContent() {
             <AlertDescription className='text-orange-800'>{errorInfo.suggestion}</AlertDescription>
           </Alert>
 
-          {error === 'OAuthAccountNotLinked' && (
+          {_error === 'OAuthAccountNotLinked' && (
             <div className='space-y-3'>
               <Button asChild className='w-full' variant='default'>
                 <Link href='/login' className='flex items-center gap-2'>
@@ -101,7 +101,7 @@ function AuthErrorContent() {
             <Button
               asChild
               className='w-full'
-              variant={error === 'OAuthAccountNotLinked' ? 'outline' : 'default'}
+              variant={_error === 'OAuthAccountNotLinked' ? 'outline' : 'default'}
             >
               <Link href='/login' className='flex items-center gap-2'>
                 <ArrowLeft className='w-4 h-4' />
@@ -114,9 +114,9 @@ function AuthErrorContent() {
             </Button>
           </div>
 
-          {error && (
+          {_error && (
             <div className='text-center'>
-              <p className='text-xs text-gray-500'>Código do erro: {error}</p>
+              <p className='text-xs text-gray-500'>Código do erro: {_error}</p>
             </div>
           )}
         </CardContent>
