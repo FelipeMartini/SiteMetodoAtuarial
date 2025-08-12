@@ -29,8 +29,8 @@ export async function GET() {
       user: session.user,
       timestamp: new Date().toISOString(),
     })
-  } catch {
-    console.error('[API] GET /api/me - Erro:', "Unknown error")
+  } catch (_error) {
+    console.error('[API] GET /api/me - Erro:', String(_error))
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -82,8 +82,8 @@ export async function PATCH(req: NextRequest) {
     console.log('[API] PATCH /api/me - Usuário atualizado:', updated.email)
 
     return NextResponse.json({ ok: true, user: updated })
-  } catch {
-    console.error('[API] PATCH /api/me - Erro:', "Unknown error")
+  } catch (_error) {
+    console.error('[API] PATCH /api/me - Erro:', String(_error))
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

@@ -50,7 +50,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`)
           }
-        } catch {
+        } catch (_error) {
           console.log(`    💥 ${provider}: Erro - ${_error}`)
           results.individual.push({
             cep,
@@ -75,7 +75,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Bulk: ${results.bulk.found}/${results.bulk.total} encontrados`)
-    } catch {
+    } catch (_error) {
       console.log(`    💥 Bulk: ${_error}`)
       results.bulk = {
         success: false,
@@ -136,7 +136,7 @@ export class ApiTestHelper {
           } else {
             console.log(`    ❌ ${provider}: Falhou`)
           }
-        } catch {
+        } catch (_error) {
           console.log(`    💥 ${provider}: ${_error}`)
           results.rates.push({
             ...pair,
@@ -178,7 +178,7 @@ export class ApiTestHelper {
         } else {
           console.log(`    ❌ Conversão falhou`)
         }
-      } catch {
+      } catch (_error) {
         console.log(`    💥 Conversão: ${_error}`)
         results.conversions.push({
           ...conversion,
@@ -205,7 +205,7 @@ export class ApiTestHelper {
       } else {
         console.log(`    ❌ Tendências: Falhou`)
       }
-    } catch {
+    } catch (_error) {
       console.log(`    💥 Tendências: ${_error}`)
       results.trends.push({
         currency: 'USD',
@@ -248,7 +248,7 @@ export class ApiTestHelper {
         })
 
         console.log(`    ✅ Endpoint ${endpoint.name} registrado`)
-      } catch {
+      } catch (_error) {
         console.log(`    💥 Registro: ${_error}`)
         results.registration.push({
           ...endpoint,
@@ -273,7 +273,7 @@ export class ApiTestHelper {
         console.log(
           `    ${healthResult.healthy ? '✅' : '❌'} ${endpoint.name}: ${healthResult.responseTime}ms`
         )
-      } catch {
+      } catch (_error) {
         console.log(`    💥 Health check: ${_error}`)
         results.healthChecks.push({
           name: endpoint.name,
@@ -296,7 +296,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Métricas: ${allMetrics.length} endpoints monitorados`)
-    } catch {
+    } catch (_error) {
       console.log(`    💥 Métricas: ${_error}`)
       results.metrics = {
         success: false,
@@ -325,7 +325,7 @@ export class ApiTestHelper {
       }
 
       console.log(`    ✅ Cache funcionando: ${cached ? 'dados recuperados' : 'falhou'}`)
-    } catch {
+    } catch (_error) {
       console.log(`    💥 Cache: ${_error}`)
       results.cache = {
         success: false,
@@ -368,8 +368,8 @@ export class ApiTestHelper {
       // Teste Monitoring
       results.monitoring = await this.testMonitoring()
       console.log('')
-    } catch {
-      console.error('💥 Erro durante os testes:', "Unknown error")
+    } catch (_error) {
+      console.error('💥 Erro durante os testes:', String(_error))
     }
 
     // Calcular resumo

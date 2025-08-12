@@ -277,7 +277,7 @@ export class ExchangeService {
         minimumFractionDigits: 2,
         maximumFractionDigits: 2,
       }).format(amount)
-    } catch {
+    } catch (_error) {
       // Fallback for unsupported currencies
       return `${currency.symbol} ${amount.toFixed(2)}`
     }
@@ -358,7 +358,7 @@ export class ExchangeService {
           rate,
           date: rates.date,
         })
-      } catch {
+      } catch (_error) {
         console.warn(`Error converting to ${toCurrency}:`)
       }
     }

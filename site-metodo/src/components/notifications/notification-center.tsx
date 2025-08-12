@@ -91,7 +91,7 @@ export function NotificationCenter({
     if (autoMarkAsRead && !notification.readAt) {
       try {
         await markAsRead(notification.id)
-      } catch {
+      } catch (_error) {
         console.warn('Erro ao marcar como lida:', error)
       }
     }
@@ -109,7 +109,7 @@ export function NotificationCenter({
         title: 'Sucesso',
         description: 'Notificação marcada como lida',
       })
-    } catch {
+    } catch (_error) {
       toast({
         title: 'Erro',
         description: 'Erro ao marcar notificação como lida',
@@ -125,7 +125,7 @@ export function NotificationCenter({
         title: 'Sucesso',
         description: `${count} notificações marcadas como lidas`,
       })
-    } catch {
+    } catch (_error) {
       toast({
         title: 'Erro',
         description: 'Erro ao marcar todas como lidas',
@@ -146,7 +146,7 @@ export function NotificationCenter({
         title: 'Sucesso',
         description: 'Notificação removida',
       })
-    } catch {
+    } catch (_error) {
       toast({
         title: 'Erro',
         description: 'Erro ao remover notificação',
@@ -177,7 +177,7 @@ export function NotificationCenter({
         })
       }
       setSelectedNotifications(new Set())
-    } catch {
+    } catch (_error) {
       toast({
         title: 'Erro',
         description: 'Erro na ação em lote',

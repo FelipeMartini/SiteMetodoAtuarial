@@ -40,8 +40,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       message: 'Se o email estiver cadastrado, você receberá instruções para redefinir sua senha.',
     })
-  } catch {
-    console.error('Erro na recuperação de senha:', "Unknown error")
+  } catch (_error) {
+    console.error('Erro na recuperação de senha:', String(_error))
     return NextResponse.json({ message: 'Erro interno do servidor' }, { status: 500 })
   }
 }

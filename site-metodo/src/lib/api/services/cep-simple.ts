@@ -71,7 +71,7 @@ export class CepService {
         if (result) {
           return result
         }
-      } catch {
+      } catch (_error) {
         console.warn(`Falha no provedor ${providerMethod}:`)
         continue
       }
@@ -210,8 +210,8 @@ export class CepService {
             siafi: item.siafi,
           })
         )
-    } catch {
-      console.error('Erro na busca por localização:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro na busca por localização:', String(_error))
       return []
     }
   }

@@ -78,7 +78,7 @@ export async function GET(request: NextRequest) {
         },
       },
     })
-  } catch {
+  } catch (_error) {
     simpleLogger.error('Erro ao obter estatísticas de notificações', { error: _error })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }

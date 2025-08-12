@@ -118,7 +118,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
           setUnreadCount(data.data.user.unreadCount)
         }
       }
-    } catch {
+    } catch (_error) {
       console.warn('Erro ao buscar contagem não lidas:', error)
     }
   }, []) // Remove 'error' dependency
@@ -151,8 +151,8 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
 
       // Atualiza contagem
       setUnreadCount(prev => Math.max(0, prev - 1))
-    } catch {
-      console.error('Erro ao marcar como lida:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro ao marcar como lida:', String(_error))
       throw error
     }
   }, [])
@@ -191,8 +191,8 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
 
       setUnreadCount(0)
       return markedCount
-    } catch {
-      console.error('Erro ao marcar todas como lidas:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro ao marcar todas como lidas:', String(_error))
       throw error
     }
   }, [])
@@ -222,8 +222,8 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
 
         return newNotifications
       })
-    } catch {
-      console.error('Erro ao remover notificação:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro ao remover notificação:', String(_error))
       throw error
     }
   }, [])
@@ -302,7 +302,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
             } else if (message.type === 'status') {
               setUnreadCount(message.data.unreadCount)
             }
-          } catch {
+          } catch (_error) {
             console.warn('Erro ao processar mensagem WebSocket:', error)
           }
         }
@@ -320,7 +320,7 @@ export function useNotifications(options: UseNotificationsOptions): UseNotificat
         return () => {
           ws.close()
         }
-      } catch {
+      } catch (_error) {
         console.warn('WebSocket não disponível:', error)
       }
     }
@@ -360,7 +360,7 @@ export function useUnreadCount(userId: string) {
             setCount(data.data.user.unreadCount)
           }
         }
-      } catch {
+      } catch (_error) {
         console.warn('Erro ao buscar contagem:', error)
       } finally {
         setLoading(false)
@@ -444,8 +444,8 @@ export function usePushNotifications() {
 
       setSubscription(pushSubscription)
       return pushSubscription
-    } catch {
-      console.error('Erro ao subscrever push notifications:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro ao subscrever push notifications:', String(_error))
       throw error
     }
   }
@@ -466,8 +466,8 @@ export function usePushNotifications() {
         await subscription.unsubscribe()
         setSubscription(null)
       }
-    } catch {
-      console.error('Erro ao cancelar subscription:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro ao cancelar subscription:', String(_error))
       throw error
     }
   }
@@ -484,8 +484,8 @@ export function usePushNotifications() {
 
       const data = await response.json()
       return data.success
-    } catch {
-      console.error('Erro no teste push:', "Unknown error")
+    } catch (_error) {
+      console.error('Erro no teste push:', String(_error))
       return false
     }
   }

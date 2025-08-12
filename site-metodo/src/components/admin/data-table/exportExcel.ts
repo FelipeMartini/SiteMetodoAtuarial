@@ -106,7 +106,7 @@ export async function salvarExcel(
 
     console.log(`Arquivo ${nomeArquivo} exportado com sucesso!`)
   } catch (error: unknown) {
-    console.error('Erro ao exportar Excel:', "Unknown error")
+    console.error('Erro ao exportar Excel:', String(error))
     throw new Error('Falha na exportação do arquivo Excel')
   }
 }

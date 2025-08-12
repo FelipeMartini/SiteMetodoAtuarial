@@ -58,7 +58,7 @@ function AuthErrorContent() {
     }
   }
 
-  const errorInfo = getErrorMessage)
+  const errorInfo = getErrorMessage(_error)
 
   return (
     <div className='w-full max-w-md'>

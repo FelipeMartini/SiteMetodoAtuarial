@@ -26,7 +26,7 @@ function ClientePerfilContent() {
     return <Skeleton className='h-32 w-full' />
   }
   if (error) {
-    return <Alert variant='destructive'>Erro ao carregar usuário: {String(error)}</Alert>
+    return <Alert variant='destructive'>Erro ao carregar usuário: {String(_error)}</Alert>
   }
   if (!user) {
     return <Alert variant='default'>Usuário não autenticado.</Alert>

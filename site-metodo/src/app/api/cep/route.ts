@@ -69,8 +69,8 @@ export async function GET(request: NextRequest) {
         timestamp: new Date().toISOString(),
       },
     })
-  } catch {
-    console.error('CEP lookup error:', "Unknown error")
+  } catch (_error) {
+    console.error('CEP lookup error:', String(_error))
 
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
@@ -144,8 +144,8 @@ export async function POST(request: NextRequest) {
         processingTime: Date.now(), // Could be enhanced with actual timing
       },
     })
-  } catch {
-    console.error('CEP bulk lookup error:', "Unknown error")
+  } catch (_error) {
+    console.error('CEP bulk lookup error:', String(_error))
 
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
@@ -204,8 +204,8 @@ export async function PATCH(request: NextRequest) {
       },
       timestamp: new Date().toISOString(),
     })
-  } catch {
-    console.error('CEP validation error:', "Unknown error")
+  } catch (_error) {
+    console.error('CEP validation error:', String(_error))
 
     if (_error instanceof z.ZodError) {
       return NextResponse.json(
