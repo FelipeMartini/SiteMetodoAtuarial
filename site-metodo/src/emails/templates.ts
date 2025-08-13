@@ -1,6 +1,6 @@
 "use client"
 
-import { render } from '@react-email/components';
+import { render } from '@react-email/render';
 import WelcomeEmail from './welcome-email';
 import SecurityAlertEmail from './security-alert-email';
 import NotificationEmail from './notification-email';
@@ -48,494 +48,113 @@ export async function renderEmailTemplate(
  * Função legado mantida para compatibilidade - DEPRECATED
  * @deprecated Use renderEmailTemplate() para novos desenvolvimentos
  */
-
-export function createWelcomeEmailHtml(props: EmailTemplateProps): string {
-  console.warn('createWelcomeEmailHtml is deprecated. Use renderEmailTemplate("welcome", props) instead.');
-  const { name = 'Usuário', email = 'usuario@exemplo.com', loginUrl = 'https://metodoatuarial.com/login' } = props;
-  
-  return render(WelcomeEmail({ name, email, loginUrl }));
-}
-
-export function createSecurityAlertEmailHtml(props: EmailTemplateProps): string {
-  console.warn('createSecurityAlertEmailHtml is deprecated. Use renderEmailTemplate("security-alert", props) instead.');
-  return render(SecurityAlertEmail(props));
-}
-
-export function createNotificationEmailHtml(props: EmailTemplateProps): string {
-  console.warn('createNotificationEmailHtml is deprecated. Use renderEmailTemplate("notification", props) instead.');
-  return render(NotificationEmail(props));
-}
-
-export function createPasswordResetEmailHtml(props: EmailTemplateProps): string {
-  console.warn('createPasswordResetEmailHtml is deprecated. Use renderEmailTemplate("password-reset", props) instead.');
-  return render(PasswordResetEmail(props));
-}
-
-/**
- * Função utilitária para obter template por tipo - DEPRECATED
- * @deprecated Use renderEmailTemplate() para novos desenvolvimentos
- */
 export function getEmailTemplate(templateType: string, props: EmailTemplateProps): string {
   console.warn('getEmailTemplate is deprecated. Use renderEmailTemplate() instead.');
   
+  // Fallback simples para templates básicos
   switch (templateType) {
     case 'welcome':
-      return createWelcomeEmailHtml(props);
+      return createWelcomeEmailSimple(props);
     case 'security-alert':
-      return createSecurityAlertEmailHtml(props);
+      return createSecurityAlertEmailSimple(props);
     case 'notification':
-      return createNotificationEmailHtml(props);
+      return createNotificationEmailSimple(props);
     case 'password-reset':
-      return createPasswordResetEmailHtml(props);
+      return createPasswordResetEmailSimple(props);
     default:
       throw new Error(`Template ${templateType} não encontrado`);
   }
 }
 
-// Template de Alerta de Segurança
-export function createSecurityAlertEmailHtml(props: EmailTemplateProps): string {
-  const { 
-    name = 'Usuário', 
-    email = 'usuario@exemplo.com',
-    alertType = 'login_attempt',
-    location = 'Localização não identificada',
-    ipAddress = '192.168.1.1',
-    deviceInfo = 'Dispositivo não identificado',
-    timestamp = new Date().toLocaleString('pt-BR'),
-    actionUrl = 'https://metodoatuarial.com/security'
-  } = props;
-
-  const getAlertInfo = () => {
-    switch (alertType) {
-      case 'login_attempt':
-        return { title: 'Tentativa de Login Detectada', priority: 'high' };
-      case 'password_change':
-        return { title: 'Senha Alterada', priority: 'medium' };
-      case 'suspicious_activity':
-        return { title: 'Atividade Suspeita Detectada', priority: 'urgent' };
-      default:
-        return { title: 'Alerta de Segurança', priority: 'medium' };
-    }
-  };
-
-  const alertInfo = getAlertInfo();
-  const alertColor = alertInfo.priority === 'urgent' ? '#dc3545' : alertInfo.priority === 'high' ? '#fd7e14' : '#ffc107';
-
+// Templates simples para fallback
+function createWelcomeEmailSimple(props: EmailTemplateProps): string {
+  const { name = 'Usuário', email = 'usuario@exemplo.com', loginUrl = 'https://metodoatuarial.com/login' } = props;
+  
   return `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${alertInfo.title} - Método Atuarial</title>
-    <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif;
-            background-color: #f6f9fc;
-            line-height: 1.6;
-        }
-        .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: #ffffff;
-            margin-bottom: 64px;
-        }
-        .header { 
-            padding: 32px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid #e6ebf1; 
-        }
-        .logo { 
-            max-width: 150px; 
-            height: auto; 
-        }
-        .content { 
-            padding: 32px 20px; 
-        }
-        .alert-banner { 
-            background-color: ${alertColor}; 
-            color: white; 
-            padding: 12px 16px; 
-            border-radius: 4px; 
-            text-align: center; 
-            margin-bottom: 24px; 
-        }
-        .alert-text { 
-            margin: 0; 
-            font-weight: 600; 
-            font-size: 14px; 
-            text-transform: uppercase; 
-            letter-spacing: 0.5px; 
-        }
-        .title { 
-            color: #1d1c1d; 
-            font-size: 24px; 
-            font-weight: 600; 
-            text-align: center; 
-            margin: 0 0 20px; 
-        }
-        .text { 
-            color: #525f7f; 
-            font-size: 16px; 
-            margin: 0 0 16px; 
-        }
-        .details-table { 
-            background-color: #f8f9fa; 
-            border: 1px solid #e9ecef; 
-            border-radius: 4px; 
-            padding: 20px; 
-            margin: 24px 0; 
-        }
-        .detail-row { 
-            margin-bottom: 12px; 
-        }
-        .detail-label { 
-            color: #6c757d; 
-            font-weight: 600; 
-            font-size: 14px; 
-        }
-        .detail-value { 
-            color: #212529; 
-            font-size: 14px; 
-        }
-        .button-section { 
-            text-align: center; 
-            margin: 32px 0; 
-        }
-        .button { 
-            display: inline-block; 
-            background-color: #dc3545; 
-            color: #ffffff; 
-            text-decoration: none; 
-            padding: 12px 24px; 
-            border-radius: 4px; 
-            font-weight: 600; 
-            font-size: 16px; 
-        }
-        .tip-section { 
-            background-color: #e7f3ff; 
-            border: 1px solid #b8daff; 
-            border-radius: 4px; 
-            padding: 20px; 
-            margin: 24px 0; 
-        }
-        .tip-title { 
-            color: #004085; 
-            font-weight: 600; 
-            margin: 0 0 12px; 
-        }
-        .tip-text { 
-            color: #004085; 
-            font-size: 14px; 
-            margin: 0; 
-        }
-        .footer { 
-            border-top: 1px solid #e6ebf1; 
-            padding: 32px 20px 20px; 
-            text-align: center; 
-        }
-        .footer-text { 
-            color: #8898aa; 
-            font-size: 12px; 
-            margin: 0 0 8px; 
-        }
-        .link { 
-            color: #007ee6; 
-            text-decoration: underline; 
-        }
-    </style>
+    <title>Bem-vindo ao Método Atuarial</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://metodoatuarial.com/logo.png" alt="Método Atuarial" class="logo">
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <h1 style="color: #1d1c1d; text-align: center;">Bem-vindo ao Método Atuarial!</h1>
+        <p>Olá <strong>${name}</strong>,</p>
+        <p>Seja bem-vindo à plataforma Método Atuarial! Sua conta foi criada com sucesso.</p>
+        <p><strong>Email cadastrado:</strong> ${email}</p>
+        <div style="text-align: center; margin: 32px 0;">
+            <a href="${loginUrl}" style="background-color: #007ee6; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; display: inline-block;">Acessar Plataforma</a>
         </div>
-        
-        <div class="content">
-            <div class="alert-banner">
-                <p class="alert-text">🔒 ALERTA DE SEGURANÇA</p>
-            </div>
-            
-            <h1 class="title">${alertInfo.title}</h1>
-            
-            <p class="text">Olá <strong>${name}</strong>,</p>
-            
-            <p class="text">
-                Detectamos atividade em sua conta. Por favor, revise os detalhes abaixo:
-            </p>
-            
-            <div class="details-table">
-                <div class="detail-row">
-                    <div class="detail-label">Data/Hora:</div>
-                    <div class="detail-value">${timestamp}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Localização:</div>
-                    <div class="detail-value">${location}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Endereço IP:</div>
-                    <div class="detail-value">${ipAddress}</div>
-                </div>
-                <div class="detail-row">
-                    <div class="detail-label">Dispositivo:</div>
-                    <div class="detail-value">${deviceInfo}</div>
-                </div>
-            </div>
-            
-            <p class="text">
-                <strong>Se foi você:</strong> Nenhuma ação é necessária.
-            </p>
-            
-            <p class="text">
-                <strong>Se não foi você:</strong> Altere sua senha imediatamente.
-            </p>
-            
-            <div class="button-section">
-                <a href="${actionUrl}" class="button">Revisar Segurança da Conta</a>
-            </div>
-            
-            <div class="tip-section">
-                <p class="tip-title">💡 Dicas de Segurança:</p>
-                <div class="tip-text">
-                    • Use senhas únicas e complexas<br>
-                    • Ative a autenticação de dois fatores<br>
-                    • Monitore regularmente a atividade da sua conta
-                </div>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p class="footer-text">
-                Este é um email automático de segurança enviado para ${email}.
-            </p>
-            
-            <p class="footer-text">
-                © 2024 Método Atuarial. Todos os direitos reservados.
-            </p>
-            
-            <p class="footer-text">
-                <a href="https://metodoatuarial.com/security" class="link">Central de Segurança</a> | 
-                <a href="https://metodoatuarial.com/contact" class="link">Suporte</a>
-            </p>
-        </div>
+        <p style="font-size: 12px; color: #8898aa; text-align: center;">© 2024 Método Atuarial. Todos os direitos reservados.</p>
     </div>
 </body>
 </html>`;
 }
 
-// Template de Notificação
-export function createNotificationEmailHtml(props: EmailTemplateProps): string {
-  const { 
-    name = 'Usuário',
-    email = 'usuario@exemplo.com',
-    notificationType = 'info',
-    notificationTitle = 'Nova Notificação',
-    notificationMessage = 'Você tem uma nova notificação.',
-    priority = 'normal',
-    actionUrl = 'https://metodoatuarial.com/notifications',
-    actionText = 'Ver Notificações',
-    timestamp = new Date().toLocaleString('pt-BR')
-  } = props;
-
-  const getNotificationStyle = () => {
-    switch (notificationType) {
-      case 'success':
-        return { icon: '✅', color: '#28a745', bg: '#d4edda' };
-      case 'warning':
-        return { icon: '⚠️', color: '#ffc107', bg: '#fff3cd' };
-      case 'error':
-        return { icon: '❌', color: '#dc3545', bg: '#f8d7da' };
-      default:
-        return { icon: 'ℹ️', color: '#007bff', bg: '#cce7ff' };
-    }
-  };
-
-  const notificationStyle = getNotificationStyle();
-
+function createSecurityAlertEmailSimple(props: EmailTemplateProps): string {
+  const { name = 'Usuário', email = 'usuario@exemplo.com' } = props;
+  
   return `
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>${notificationTitle} - Método Atuarial</title>
-    <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif;
-            background-color: #f6f9fc;
-            line-height: 1.6;
-        }
-        .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: #ffffff;
-            margin-bottom: 64px;
-        }
-        .header { 
-            padding: 32px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid #e6ebf1; 
-        }
-        .logo { 
-            max-width: 150px; 
-            height: auto; 
-        }
-        .content { 
-            padding: 32px 20px; 
-        }
-        .notification-card { 
-            background-color: ${notificationStyle.bg}; 
-            border: 2px solid ${notificationStyle.color}; 
-            border-radius: 8px; 
-            padding: 20px; 
-            margin: 0 0 24px; 
-            display: flex; 
-            align-items: flex-start; 
-        }
-        .notification-icon { 
-            font-size: 32px; 
-            margin-right: 15px; 
-        }
-        .notification-content { 
-            flex: 1; 
-        }
-        .notification-title { 
-            color: ${notificationStyle.color}; 
-            font-size: 18px; 
-            font-weight: 600; 
-            margin: 0 0 8px; 
-        }
-        .notification-text { 
-            color: #374151; 
-            font-size: 16px; 
-            margin: 0 0 8px; 
-        }
-        .notification-time { 
-            color: #6b7280; 
-            font-size: 14px; 
-            margin: 0; 
-        }
-        .text { 
-            color: #525f7f; 
-            font-size: 16px; 
-            margin: 0 0 16px; 
-        }
-        .button-section { 
-            text-align: center; 
-            margin: 32px 0; 
-        }
-        .button { 
-            display: inline-block; 
-            background-color: #007ee6; 
-            color: #ffffff; 
-            text-decoration: none; 
-            padding: 12px 24px; 
-            border-radius: 4px; 
-            font-weight: 600; 
-            font-size: 16px; 
-        }
-        .tips-section { 
-            background-color: #f8f9fa; 
-            border: 1px solid #e9ecef; 
-            border-radius: 6px; 
-            padding: 20px; 
-            margin: 24px 0; 
-        }
-        .tips-title { 
-            color: #495057; 
-            font-weight: 600; 
-            margin: 0 0 12px; 
-        }
-        .tips-text { 
-            color: #6c757d; 
-            font-size: 14px; 
-            margin: 0; 
-        }
-        .footer { 
-            border-top: 1px solid #e6ebf1; 
-            padding: 32px 20px 20px; 
-            text-align: center; 
-        }
-        .footer-text { 
-            color: #8898aa; 
-            font-size: 12px; 
-            margin: 0 0 8px; 
-        }
-        .link { 
-            color: #007ee6; 
-            text-decoration: underline; 
-        }
-    </style>
+    <title>Alerta de Segurança</title>
 </head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://metodoatuarial.com/logo.png" alt="Método Atuarial" class="logo">
-        </div>
-        
-        <div class="content">
-            <div class="notification-card">
-                <div class="notification-icon">${notificationStyle.icon}</div>
-                <div class="notification-content">
-                    <h2 class="notification-title">${notificationTitle}</h2>
-                    <p class="notification-text">${notificationMessage}</p>
-                    <p class="notification-time">${timestamp}</p>
-                </div>
-            </div>
-            
-            <p class="text">Olá <strong>${name}</strong>,</p>
-            
-            <p class="text">
-                Você recebeu uma nova notificação em sua conta do Método Atuarial.
-            </p>
-            
-            <div class="button-section">
-                <a href="${actionUrl}" class="button">${actionText}</a>
-            </div>
-            
-            <div class="tips-section">
-                <p class="tips-title">🔔 Configurações de Notificação</p>
-                <p class="tips-text">
-                    Você pode gerenciar suas preferências de notificação por email 
-                    acessando as configurações da sua conta.
-                </p>
-            </div>
-        </div>
-        
-        <div class="footer">
-            <p class="footer-text">
-                Esta notificação foi enviada para ${email} em ${timestamp}.
-            </p>
-            
-            <p class="footer-text">
-                © 2024 Método Atuarial. Todos os direitos reservados.
-            </p>
-            
-            <p class="footer-text">
-                <a href="https://metodoatuarial.com/unsubscribe" class="link">Cancelar Notificações</a> | 
-                <a href="https://metodoatuarial.com/contact" class="link">Suporte</a>
-            </p>
-        </div>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <h1 style="color: #dc2626; text-align: center;">🔒 Alerta de Segurança</h1>
+        <p>Olá <strong>${name}</strong>,</p>
+        <p>Detectamos atividade em sua conta que requer sua atenção.</p>
+        <p style="font-size: 12px; color: #8898aa; text-align: center;">© 2024 Método Atuarial. Todos os direitos reservados.</p>
     </div>
 </body>
 </html>`;
 }
 
-// Função utilitária para obter template por tipo
-export function getEmailTemplate(templateType: string, props: EmailTemplateProps): string {
-  switch (templateType) {
-    case 'welcome':
-      return createWelcomeEmailHtml(props);
-    case 'security-alert':
-      return createSecurityAlertEmailHtml(props);
-    case 'notification':
-      return createNotificationEmailHtml(props);
-    default:
-      throw new Error(`Template ${templateType} não encontrado`);
-  }
+function createNotificationEmailSimple(props: EmailTemplateProps): string {
+  const { name = 'Usuário', title = 'Notificação', message = 'Nova notificação' } = props;
+  
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Notificação</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <h1 style="color: #2563eb; text-align: center;">${title}</h1>
+        <p>Olá <strong>${name}</strong>,</p>
+        <p>${message}</p>
+        <p style="font-size: 12px; color: #8898aa; text-align: center;">© 2024 Método Atuarial. Todos os direitos reservados.</p>
+    </div>
+</body>
+</html>`;
+}
+
+function createPasswordResetEmailSimple(props: EmailTemplateProps): string {
+  const { name = 'Usuário', resetUrl = '#', expiresIn = '24 horas' } = props;
+  
+  return `
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Redefinição de Senha</title>
+</head>
+<body style="font-family: Arial, sans-serif; line-height: 1.6; margin: 0; padding: 20px;">
+    <div style="max-width: 600px; margin: 0 auto; background: #ffffff;">
+        <h1 style="color: #059669; text-align: center;">🔑 Redefinição de Senha</h1>
+        <p>Olá <strong>${name}</strong>,</p>
+        <p>Recebemos uma solicitação para redefinir a senha da sua conta.</p>
+        <p><strong>Válido por:</strong> ${expiresIn}</p>
+        <div style="text-align: center; margin: 32px 0;">
+            <a href="${resetUrl}" style="background-color: #059669; color: #ffffff; text-decoration: none; padding: 12px 24px; border-radius: 4px; display: inline-block;">Redefinir Senha</a>
+        </div>
+        <p style="font-size: 12px; color: #8898aa; text-align: center;">© 2024 Método Atuarial. Todos os direitos reservados.</p>
+    </div>
+</body>
+</html>`;
 }
