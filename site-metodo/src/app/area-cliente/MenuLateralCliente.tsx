@@ -28,10 +28,10 @@ export default function MenuLateralCliente() {
 
       try {
         // Verifica permissão para acessar dashboard admin usando ABAC
-        const hasAdminAccess = await checkClientPermission(
-          session.user.email,
-          '/admin/dashboard',
-          'access'
+          const hasAdminAccess = await checkClientPermission(
+            session.user.email,
+            'admin:dashboard',
+            'read'
         )
         setIsAdmin(hasAdminAccess)
       } catch (error) {

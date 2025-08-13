@@ -11,14 +11,16 @@ export async function checkClientPermission(
   action: string
 ): Promise<boolean> {
   try {
+    // Log para rastrear todas as chamadas
+    console.log('[checkClientPermission] chamada', { userEmail, resource, action })
     const response = await fetch('/api/abac/check', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        userEmail,
-        resource,
+        subject: userEmail,
+        object: resource,
         action,
       }),
     })

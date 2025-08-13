@@ -1,10 +1,22 @@
+// Utilitário para mapear NotificationPriority para o formato aceito pelo serviço
+function mapPriority(priority?: NotificationPriority): 'low' | 'medium' | 'high' | undefined {
+  switch (priority) {
+    case NotificationPriority.LOW:
+      return 'low'
+    case NotificationPriority.NORMAL:
+      return 'medium'
+    case NotificationPriority.HIGH:
+    case NotificationPriority.URGENT:
+      return 'high'
+    default:
+      return undefined
+  }
+}
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getNotificationService } from '@/lib/notifications/notification-service'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import {
-  CreateNotificationRequest,
-  BulkNotificationRequest,
   NotificationFilter,
   NotificationType,
   NotificationChannel,
@@ -107,11 +119,12 @@ export async function POST(request: NextRequest) {
 
     if (bulk && Array.isArray(notificationData.userIds)) {
       // Criação em lote
-      const bulkRequest: BulkNotificationRequest = {
+      // Monta objeto do tipo BulkNotificationRequest do service
+      const bulkRequestService = {
         userIds: notificationData.userIds,
         type: notificationData.type,
         channels: notificationData.channels,
-        priority: notificationData.priority,
+        priority: mapPriority(notificationData.priority),
         title: notificationData.title,
         message: notificationData.message,
         data: notificationData.data,
@@ -123,14 +136,15 @@ export async function POST(request: NextRequest) {
         expiresAt: notificationData.expiresAt ? new Date(notificationData.expiresAt) : undefined,
       }
 
-      notificationIds = await notificationService.createBulkNotifications(bulkRequest)
+      notificationIds = await notificationService.createBulkNotifications(bulkRequestService)
     } else {
       // Criação individual
-      const createRequest: CreateNotificationRequest = {
+      // Monta objeto do tipo NotificationRequest do service
+      const createRequestService = {
         userId: notificationData.userId || session.user.id,
         type: notificationData.type,
         channels: notificationData.channels,
-        priority: notificationData.priority,
+        priority: mapPriority(notificationData.priority),
         title: notificationData.title,
         message: notificationData.message,
         data: notificationData.data,
@@ -142,7 +156,7 @@ export async function POST(request: NextRequest) {
         expiresAt: notificationData.expiresAt ? new Date(notificationData.expiresAt) : undefined,
       }
 
-      notificationIds = await notificationService.createNotification(createRequest)
+      notificationIds = await notificationService.createNotification(createRequestService)
     }
 
     // Log da criação

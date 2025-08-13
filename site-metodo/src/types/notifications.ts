@@ -128,6 +128,7 @@ export interface CreateNotificationRequest {
 }
 
 export interface BulkNotificationRequest {
+  [key: string]: unknown
   userIds: string[]
   type: NotificationType
   channels: NotificationChannel[]
@@ -249,6 +250,7 @@ export interface NotificationEvent {
 
 // Interfaces para filtros e busca
 export interface NotificationFilter {
+  [key: string]: unknown
   userId?: string
   types?: NotificationType[]
   channels?: NotificationChannel[]
