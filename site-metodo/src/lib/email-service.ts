@@ -1,5 +1,3 @@
-"use client"
-
 import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/prisma';
 import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
