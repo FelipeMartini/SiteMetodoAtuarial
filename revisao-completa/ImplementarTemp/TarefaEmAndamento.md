@@ -4,10 +4,10 @@
 
 ### Lista de Tarefas Principal
 
-- [ ] **01 - Tarefas Iniciais**
-  - [ ] Corrigir item do menu superior para consistência de layout
-  - [ ] Garantir que página admin ABAC não tenha loop infinito
-  - [ ] Seguir ciclo de validação obrigatório
+- [x] **01 - Tarefas Iniciais**
+  - [x] Corrigir item do menu superior para consistência de layout - CONCLUÍDO: Adicionado ThemeToggle ao AdminLayout
+  - [x] Garantir que página admin ABAC não tenha loop infinito - CONCLUÍDO: Removido dependências infinitas do useEffect
+  - [x] Seguir ciclo de validação obrigatório - CONCLUÍDO: Type-check e lint passando
   
 - [ ] **02 - Dashboard Admin & Página ABAC**
   - [ ] Análise profunda do projeto referência: https://github.com/arhamkhnz/next-shadcn-admin-dashboard
@@ -123,3 +123,8 @@ https://github.com/arhamkhnz/next-shadcn-admin-dashboard
 - **[13/08/2025 - Início]** Criado arquivo de controle e iniciando leitura completa de documentação
 - **[13/08/2025 - Análise]** Analisou profundamente projeto de referência: https://github.com/arhamkhnz/next-shadcn-admin-dashboard
 - **[13/08/2025 - Tarefa 01]** INICIANDO TAREFA 01 - TAREFAS INICIAIS
+- **[13/08/2025 - Tarefa 01 CONCLUÍDA]** ✅ TAREFA 01 CONCLUÍDA COM SUCESSO
+  - ✅ Corrigido menu superior admin com ThemeToggle para consistência
+  - ✅ Corrigido loop infinito página ABAC removendo dependências infinitas
+  - ✅ Type-check e lint zerados
+  - ✅ Servidor funcionando corretamente
