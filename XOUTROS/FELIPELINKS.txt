@@ -1,0 +1,4 @@
+Design: Inspirar-se em Next Shadcn Admin Dashboard e TailAdmin, adaptando para o tema do projeto.
+
+https://github.com/TailAdmin/free-nextjs-admin-dashboard
+https://github.com/arhamkhnz/next-shadcn-admin-dashboard
