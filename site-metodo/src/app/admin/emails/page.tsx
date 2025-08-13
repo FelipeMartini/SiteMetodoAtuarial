@@ -1,15 +1,7 @@
 'use client';
 
 import React from 'react';
-import { Cexport default function EmailsPage() {
-  const [logs, setLogs] = React.useState<EmailLog[]>([]);
-  const [loading, setLoading] = React.useState(true);
-  const [stats, setStats] = React.useState({
-    total: 0,
-    sent: 0,
-    failed: 0,
-    pending: 0,
-  });ontent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';

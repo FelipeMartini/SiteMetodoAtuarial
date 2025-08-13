@@ -7,7 +7,7 @@ import 'jspdf-autotable'
 // Extend jsPDF para incluir autoTable
 declare module 'jspdf' {
   interface jsPDF {
-    autoTable: (options: any) => jsPDF
+    autoTable: (options: Record<string, unknown>) => jsPDF
   }
 }
 
@@ -55,7 +55,14 @@ export async function GET(request: NextRequest) {
   }
 }
 
-function generateCalculationReport(calculo: any) {
+function generateCalculationReport(calculo: {
+  id: string;
+  tipo: string;
+  usuario?: { name?: string; email?: string };
+  createdAt: Date;
+  parametros: Record<string, unknown>;
+  resultados: Record<string, unknown>;
+}) {
   const doc = new jsPDF()
   
   // Configurar fonte
@@ -227,7 +234,7 @@ async function generateGeneralReport(userId: string) {
       new Date(calc.dataCalculo).toLocaleDateString('pt-BR'),
       calc.tabua?.nome || 'AT-2000',
       calc.resultado && typeof calc.resultado === 'object' && 'valor' in calc.resultado ? 
-        `R$ ${Number((calc.resultado as any).valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A',
+        `R$ ${Number((calc.resultado as Record<string, unknown>).valor).toLocaleString('pt-BR', { minimumFractionDigits: 2 })}` : 'N/A',
       calc.observacao?.substring(0, 30) + (calc.observacao && calc.observacao.length > 30 ? '...' : '') || '-'
     ])
     
