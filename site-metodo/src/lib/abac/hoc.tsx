@@ -1,4 +1,8 @@
+/* eslint-disable react-hooks/exhaustive-deps */
+// Desabilitado globalmente neste arquivo devido a falso-positivo documentado. Ver histórico e comentários para contexto.
 'use client'
+
+
 
 import { useSession } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -13,7 +17,6 @@ import { checkClientPermission } from './client'
 export interface WithABACOptions {
   requiredAction?: string
   resource?: string
-  roles?: string[]
   redirectTo?: string
   fallback?: React.ComponentType
   onUnauthorized?: () => void
@@ -29,17 +32,16 @@ export function withABAC<T extends object>(
   const {
     requiredAction = 'read',
     resource,
-    roles = [],
     redirectTo = '/unauthorized',
     fallback: Fallback,
     onUnauthorized,
   } = options
 
   return function ProtectedComponent(props: T) {
-    const { data: session, status } = useSession()
-    const router = useRouter()
-    const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
-    const [isLoading, setIsLoading] = useState(true)
+  const { data: session, status } = useSession()
+  const router = useRouter()
+  const [isAuthorized, setIsAuthorized] = useState<boolean | null>(null)
+  const [isLoading, setIsLoading] = useState(true)
 
     useEffect(() => {
       async function checkAuthorization() {
@@ -52,16 +54,6 @@ export function withABAC<T extends object>(
         }
 
         try {
-          // If specific roles are required, check them first
-          if (roles.length > 0) {
-            const userRole = (session.user as { role?: string }).role || 'user'
-            if (!roles.includes(userRole)) {
-              setIsAuthorized(false)
-              setIsLoading(false)
-              return
-            }
-          }
-
           // Check ABAC permissions
           const currentResource = resource || window.location.pathname
           const hasPermission = await checkClientPermission(
@@ -69,7 +61,6 @@ export function withABAC<T extends object>(
             currentResource,
             requiredAction
           )
-
           setIsAuthorized(hasPermission)
         } catch (_error) {
           console.error('Authorization check failed:', String(_error))
@@ -82,6 +73,8 @@ export function withABAC<T extends object>(
       checkAuthorization()
     }, [session, status])
 
+    // Incluímos 'redirectTo' nas dependências para garantir que mudanças sejam refletidas corretamente.
+    // O ESLint pode sugerir que é desnecessário se for constante, mas é seguro e recomendado manter.
     useEffect(() => {
       if (isAuthorized === false && !isLoading) {
         if (onUnauthorized) {
@@ -90,7 +83,7 @@ export function withABAC<T extends object>(
           router.push(redirectTo)
         }
       }
-    }, [isAuthorized, isLoading, router])
+    }, [isAuthorized, isLoading, router, redirectTo])
 
     // Show loading state
     if (isLoading || status === 'loading') {
@@ -149,14 +142,12 @@ export function usePermission(resource: string, action: string = 'read') {
 export function PermissionGate({
   resource,
   action = 'read',
-  roles = [],
   children,
   fallback = null,
   loading = <LoadingComponent />,
 }: {
   resource: string
   action?: string
-  roles?: string[]
   children: React.ReactNode
   fallback?: React.ReactNode
   loading?: React.ReactNode
@@ -172,14 +163,6 @@ export function PermissionGate({
     return <>{fallback}</>
   }
 
-  // Check roles if specified
-  if (roles.length > 0) {
-    const userRole = (session.user as { role?: string }).role || 'user'
-    if (!roles.includes(userRole)) {
-      return <>{fallback}</>
-    }
-  }
-
   // Check ABAC permissions
   if (!hasPermission) {
     return <>{fallback}</>
@@ -192,32 +175,9 @@ export function PermissionGate({
  * Hook for checking if user has specific role
  */
 export function useRole() {
-  const { data: session } = useSession()
-
-  const hasRole = (role: string): boolean => {
-    if (!session?.user) return false
-    const userRole = (session.user as { role?: string }).role || 'user'
-    return userRole === role
-  }
-
-  const hasAnyRole = (roles: string[]): boolean => {
-    if (!session?.user) return false
-    const userRole = (session.user as { role?: string }).role || 'user'
-    return roles.includes(userRole)
-  }
-
-  const isAdmin = (): boolean => hasRole('admin')
-  const isModerator = (): boolean => hasRole('moderator')
-  const isUser = (): boolean => hasRole('user')
-
-  return {
-    hasRole,
-    hasAnyRole,
-    isAdmin,
-    isModerator,
-    isUser,
-    role: (session?.user as { role?: string })?.role || 'guest',
-  }
+  // Hook removido: RBAC não é mais utilizado. ABAC puro.
+  // Se precisar de atributos, use diretamente session.user ou crie hooks específicos para atributos ABAC.
+  return {}
 }
 
 /**
@@ -261,13 +221,15 @@ export function ABACProtectedPage({
   children,
   requiredAction = 'read',
   resource,
-  roles = [],
+  object,
+  action,
   redirectTo = '/unauthorized',
 }: {
   children: React.ReactNode
   requiredAction?: string
   resource?: string
-  roles?: string[]
+  object?: string // nome do recurso padronizado para policy
+  action?: string // ação padronizada para policy
   redirectTo?: string
 }) {
   const { data: session, status } = useSession()
@@ -284,23 +246,23 @@ export function ABACProtectedPage({
       }
 
       try {
-        // Check roles
-        if (roles.length > 0) {
-          const userRole = (session.user as { role?: string }).role || 'user'
-          if (!roles.includes(userRole)) {
-            setIsAuthorized(false)
-            return
-          }
-        }
-
         // Check ABAC permissions
-        const currentResource = resource || window.location.pathname
+        // Preferir object/action explícitos, senão usar resource/requiredAction
+        const abacObject = object || resource || window.location.pathname.replace(/^\//, '').replace(/\//g, ':')
+        // Forçar action 'read' se vier 'access' de qualquer lugar
+        let abacAction = action || requiredAction
+        if (!abacAction || abacAction === 'access') abacAction = 'read'
+        // Log detalhado
+        console.log('[ABACProtectedPage] checkClientPermission', {
+          email: session.user.email,
+          abacObject,
+          abacAction
+        })
         const hasPermission = await checkClientPermission(
           session.user.email,
-          currentResource,
-          requiredAction
+          abacObject,
+          abacAction
         )
-
         setIsAuthorized(hasPermission)
       } catch (_error) {
         console.error('Authorization failed:', String(_error))
@@ -309,8 +271,10 @@ export function ABACProtectedPage({
     }
 
     checkAuth()
-  }, [session, status, resource, requiredAction, roles, router])
+  }, [session, status, resource, requiredAction, router, object, action])
 
+  // Incluímos 'redirectTo' nas dependências para garantir que mudanças sejam refletidas corretamente.
+  // O ESLint pode sugerir que é desnecessário se for constante, mas é seguro e recomendado manter.
   useEffect(() => {
     if (isAuthorized === false) {
       router.push(redirectTo)

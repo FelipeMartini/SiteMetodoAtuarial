@@ -28,7 +28,7 @@ const PageDashboardAdmin: React.FC = () => {
           body: JSON.stringify({
             subject: session.user.email || `user:${session.user.id}`,
             object: 'admin:dashboard',
-            action: 'access',
+            action: 'read',
             context: {
               time: new Date().toISOString(),
               location: session.user.location || 'unknown',
