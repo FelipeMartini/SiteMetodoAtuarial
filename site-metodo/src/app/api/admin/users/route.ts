@@ -1,9 +1,9 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { NextResponse } from 'next/server'
 import { auth } from '@/../auth'
 import { prisma } from '@/lib/prisma'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     // Verificar autenticação
     const session = await auth()
@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
 
     // Verificar permissões ABAC para listar usuários
     const hasPermission = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'admin:users',
       'read',
       {

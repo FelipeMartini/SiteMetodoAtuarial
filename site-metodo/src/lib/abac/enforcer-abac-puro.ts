@@ -186,11 +186,8 @@ export async function checkABACPermission(
   try {
     const enforcer = await getEnforcer()
     
-    // Converter contexto para string JSON
-    const contextStr = JSON.stringify(context)
-    
-    // Verificar permissão
-    const allowed = await enforcer.enforce(subject, object, action, contextStr)
+    // Verificar permissão sem contexto para simplificar
+    const allowed = await enforcer.enforce(subject, object, action)
     
     const responseTime = Date.now() - startTime
     
@@ -214,7 +211,9 @@ export async function checkABACPermission(
       responseTime: Date.now() - startTime,
       appliedPolicies: result.appliedPolicies,
       performedBy: subject
-    })    // Salvar log de acesso no banco
+    })
+    
+    // Salvar log de acesso no banco
     await saveAccessLog(subject, object, action, result)
     
     return result

@@ -1,0 +1,76 @@
+{
+  "name": "SiteMetodoAtuarial-Deploy",
+  "version": "1.0.0",
+  "description": "Sistema automatizado de deploy para Plesk",
+  "environment": "production",
+  "project": {
+    "name": "Site Método Atuarial",
+    "domain": "metodoactuarial.com",
+    "subdomain": "www",
+    "ssl": true,
+    "nodejs_version": "18.x",
+    "nextjs_version": "15.4.6"
+  },
+  "plesk": {
+    "server": {
+      "host": "servidor.metodoactuarial.com",
+      "port": 22,
+      "username": "admin",
+      "control_panel_port": 8443,
+      "api_version": "1.6.3.0"
+    },
+    "database": {
+      "type": "sqlite",
+      "name": "production_db",
+      "backup_enabled": true,
+      "migration_required": true
+    },
+    "ssl": {
+      "auto_renew": true,
+      "letsencrypt": true,
+      "force_https": true
+    }
+  },
+  "deployment": {
+    "build_command": "npm run build",
+    "install_command": "npm ci --production",
+    "start_command": "npm start",
+    "pre_deploy_commands": [
+      "npm run prisma:generate",
+      "npm run prisma:migrate"
+    ],
+    "post_deploy_commands": [
+      "npm run build:cache-clear",
+      "systemctl restart nodejs-app"
+    ]
+  },
+  "backup": {
+    "enabled": true,
+    "retention_days": 30,
+    "include_database": true,
+    "include_uploads": true,
+    "schedule": "0 2 * * *"
+  },
+  "monitoring": {
+    "health_check_url": "/api/health",
+    "notification_email": "admin@metodoactuarial.com",
+    "alerts": {
+      "disk_usage": 85,
+      "memory_usage": 90,
+      "response_time": 5000
+    }
+  },
+  "security": {
+    "file_permissions": "0755",
+    "directory_permissions": "0755",
+    "excluded_files": [
+      ".env.local",
+      ".env.production.local",
+      "*.log",
+      "node_modules",
+      ".git",
+      "coverage",
+      "*.tsbuildinfo"
+    ]
+  }
+}

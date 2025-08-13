@@ -26,7 +26,7 @@ const PageDashboardAdmin: React.FC = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            subject: `user:${session.user.id}`,
+            subject: session.user.email || `user:${session.user.id}`,
             object: 'admin:dashboard',
             action: 'access',
             context: {
