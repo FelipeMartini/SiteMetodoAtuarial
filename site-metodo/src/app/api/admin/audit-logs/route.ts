@@ -1,19 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/lib/auth';
+import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { checkPermission } from '@/lib/abac/enforcer-abac-puro';
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro';
 
 export async function GET(request: NextRequest) {
   try {
-    const session = await getServerSession(authOptions);
+    const session = await auth();
     
     if (!session?.user?.email) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     // Verificar permissão para visualizar logs de auditoria
-    const permission = await checkPermission(
+    const permission = await checkABACPermission(
       session.user.email,
       'audit_logs',
       'read'
