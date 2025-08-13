@@ -5,3 +5,9 @@ https://github.com/arhamkhnz/next-shadcn-admin-dashboard
 
 
 e depois faça uma revisão profunda de tudo que temos de cálculos atuariais na área de cálculos e nos links do menu nav top bar que têm cálculos também, revise tudo, procure por coisas incompletas, simplificadas, temporárias, não implementadas, parcialmente desenvolvidas, oportunidades de melhorias, busque a fundo analisar todos arquivos e busque 50 fontes sobre o assunto para montar também um plano de revisão e desenvolvimento dessa parte de cálculos atuariais de maneira aprofundada
+
+
+O procedimento padrão envolve: tabular mortos esperados e ocorridos por faixa etária, calcular o qui-quadrado, comparar com o valor crítico e decidir sobre a aderência.
+
+
+
