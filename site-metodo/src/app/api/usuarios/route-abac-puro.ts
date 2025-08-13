@@ -47,7 +47,7 @@ export async function GET(req: NextRequest) {
     // Verificação ABAC: usuário pode listar usuários
     const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'resource:users',
       'list',
       context
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
     // Verificação ABAC: usuário pode criar usuários
     const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'resource:users',
       'create',
       context
@@ -247,7 +247,7 @@ export async function PUT(req: NextRequest) {
     // Verificação ABAC: usuário pode atualizar usuários
     const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       `resource:users:${targetUserId}`,
       'update',
       context
@@ -352,7 +352,7 @@ export async function DELETE(req: NextRequest) {
     // Verificação ABAC: usuário pode deletar usuários
     const context = buildABACContext(req, session as SessionWithUser)
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       `resource:users:${targetUserId}`,
       'delete',
       context

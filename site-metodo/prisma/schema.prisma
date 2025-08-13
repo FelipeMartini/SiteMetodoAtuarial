@@ -7,43 +7,33 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// 👤 MODELO DE USUÁRIO - APENAS ATRIBUTOS ABAC
 model User {
-  id            String    @id @default(cuid())
-  email         String?   @unique
+  id            String      @id @default(cuid())
+  email         String?     @unique
   name          String?
   emailVerified DateTime?
   image         String?
   password      String?
-  isActive      Boolean   @default(true)
-  
-  // 🎯 ATRIBUTOS ABAC
-  department    String?   // Departamento para contexto ABAC
-  location      String?   // Localização para contexto ABAC  
-  jobTitle      String?   // Cargo para contexto ABAC
-  validFrom     DateTime? // Período de validade início
-  validUntil    DateTime? // Período de validade fim
-  
-  // 🔐 SEGURANÇA
-  mfaEnabled    Boolean   @default(false)
-  loginCount    Int       @default(0)
-  failedLogins  Int       @default(0)
+  isActive      Boolean     @default(true)
+  department    String?
+  location      String?
+  jobTitle      String?
+  validFrom     DateTime?
+  validUntil    DateTime?
+  mfaEnabled    Boolean     @default(false)
+  loginCount    Int         @default(0)
+  failedLogins  Int         @default(0)
   lastLoginAt   DateTime?
   lastLoginIP   String?
-  
-  // 📊 AUDITORIA
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  
-  // 🔗 RELACIONAMENTOS
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  AccessLog     AccessLog[]
   accounts      Account[]
   sessions      Session[]
-  AccessLog     AccessLog[]
-  
+
   @@map("users")
 }
 
-// 🔐 TABELA CASBIN PARA POLÍTICAS ABAC
 model CasbinRule {
   id    Int     @id @default(autoincrement())
   ptype String
@@ -57,15 +47,14 @@ model CasbinRule {
   @@map("casbin_rule")
 }
 
-// 📋 POLÍTICAS DE AUTORIZAÇÃO (BACKUP/ADMIN)
 model AuthorizationPolicy {
   id          String   @id @default(cuid())
   name        String   @unique
-  subject     String   // Ex: "dept:admin", "user:123"
-  object      String   // Ex: "resource:users", "resource:system"
-  action      String   // Ex: "read", "write", "delete"
-  effect      String   // "allow" ou "deny"
-  conditions  String?  // JSON com condições adicionais
+  subject     String
+  object      String
+  action      String
+  effect      String
+  conditions  String?
   description String?
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -74,25 +63,21 @@ model AuthorizationPolicy {
   @@map("authorization_policies")
 }
 
-// 📜 LOG DE ACESSO ABAC
 model AccessLog {
-  id          String   @id @default(cuid())
-  userId      String?
-  subject     String   // Sujeito da requisição ABAC
-  object      String   // Objeto acessado
-  action      String   // Ação realizada
-  allowed     Boolean  // Se foi permitido
-  ip          String?
-  userAgent   String?
-  timestamp   DateTime @default(now())
-  
-  // 🔗 RELACIONAMENTOS
-  user        User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
-  
+  id        String   @id @default(cuid())
+  userId    String?
+  subject   String
+  object    String
+  action    String
+  allowed   Boolean
+  ip        String?
+  userAgent String?
+  timestamp DateTime @default(now())
+  user      User?    @relation(fields: [userId], references: [id])
+
   @@map("access_logs")
 }
 
-// 🔑 CONTAS OAUTH
 model Account {
   id                String  @id @default(cuid())
   userId            String
@@ -106,14 +91,12 @@ model Account {
   scope             String?
   id_token          String?
   session_state     String?
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([provider, providerAccountId])
   @@map("accounts")
 }
 
-// 🎫 SESSÕES
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique
@@ -124,7 +107,6 @@ model Session {
   @@map("sessions")
 }
 
-// ✅ TOKENS DE VERIFICAÇÃO
 model VerificationToken {
   identifier String
   token      String   @unique

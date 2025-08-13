@@ -76,7 +76,7 @@ export async function GET(request: NextRequest) {
     // Verificação ABAC: usuário pode acessar métricas do sistema
     const context = buildABACContext(request, session)
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'resource:system:metrics',
       'read',
       context
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
     if (params.metric) {
       // Verificação ABAC adicional para métrica específica
       const metricAuthResult = await checkABACPermission(
-        `user:${session.user.id}`,
+        session.user.email || `user:${session.user.id}`,
         `resource:system:metrics:${params.metric}`,
         'read',
         context
@@ -161,7 +161,7 @@ export async function GET(request: NextRequest) {
       // Para métricas sensíveis, verificar permissão individual
       if (metricName.includes('security') || metricName.includes('auth') || metricName.includes('user')) {
         const metricAuthResult = await checkABACPermission(
-          `user:${session.user.id}`,
+          session.user.email || `user:${session.user.id}`,
           `resource:system:metrics:${metricName}`,
           'read',
           context
@@ -183,7 +183,7 @@ export async function GET(request: NextRequest) {
     let healthHistory: unknown = null
 
     const healthAuthResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'resource:system:health',
       'read',
       context
@@ -304,7 +304,7 @@ export async function POST(request: NextRequest) {
     
     // Verificação ABAC: usuário pode executar ações administrativas em métricas
     const authResult = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'resource:system:metrics',
       'admin',
       context

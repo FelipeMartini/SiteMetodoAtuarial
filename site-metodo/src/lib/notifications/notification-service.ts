@@ -37,17 +37,17 @@ export class NotificationService {
     return { id: `notification-${Date.now()}`, success: true }
   }
 
-  async createNotification(request: any): Promise<string[]> {
+  async createNotification(request: NotificationRequest): Promise<string[]> {
     console.log('Create Notification (stub):', request)
     return [`notification-${Date.now()}`]
   }
 
-  async sendBulkNotifications(request: any): Promise<{ sent: number; failed: number }> {
+  async sendBulkNotifications(request: BulkNotificationRequest): Promise<{ sent: number; failed: number }> {
     console.log('Send Bulk Notifications (stub):', request)
     return { sent: request.userIds?.length || 0, failed: 0 }
   }
 
-  async createBulkNotifications(request: any): Promise<string[]> {
+  async createBulkNotifications(request: BulkNotificationRequest): Promise<string[]> {
     console.log('Create Bulk Notifications (stub):', request)
     const userIds = request.userIds || []
     return userIds.map((_: unknown, index: number) => `notification-${Date.now()}-${index}`)
@@ -106,7 +106,7 @@ export class NotificationService {
     }
   }
 
-  async searchNotifications(filter: Record<string, unknown> | any) {
+  async searchNotifications(filter: Record<string, unknown>) {
     console.log('Search Notifications (stub):', { filter })
     return {
       notifications: [],

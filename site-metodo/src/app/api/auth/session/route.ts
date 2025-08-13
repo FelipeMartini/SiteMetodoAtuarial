@@ -13,9 +13,9 @@ export async function GET() {
       )
     }
 
-    // Check ABAC permission para acessar sessão
+    // Check ABAC permission para acessar sessão - usar email do usuário
     const hasPermission = await checkABACPermission(
-      `user:${session.user.id}`,
+      session.user.email || `user:${session.user.id}`,
       'session:read',
       'read',
       {
