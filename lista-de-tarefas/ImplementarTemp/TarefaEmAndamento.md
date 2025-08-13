@@ -1,3 +1,27 @@
+# Checklist de Atualização de Documentação e Templates (Tarefas 2, 3, 4, 5, 7)
+- [ ] Etapa 1: Atualizar `README.md`
+   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" onde aplicável
+   - [ ] Incluir menção clara à importação/exportação de tábuas (Excel/PDF)
+   - [ ] Destacar precisão, testes e validação dos cálculos
+   - [ ] Garantir que diferenciais e funcionalidades reflitam as melhorias das tarefas 2, 3, 4, 5, 7
+   - [ ] Reforçar ciclo de validação e obrigatoriedade de referências
+- [ ] Etapa 2: Atualizar `revisao-completa/Revisao-Melhorias.md`
+   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" em todos os checklists e instruções
+   - [ ] Incluir referências e instruções detalhadas para importação/exportação de tábuas
+   - [ ] Garantir checklist incremental/manual para cálculos e tábuas
+   - [ ] Reforçar obrigatoriedade de ciclo de validação e referências
+- [ ] Etapa 3: Atualizar `revisao-completa/template-tarefa-principal.md`
+   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" no template
+   - [ ] Incluir instrução para importação/exportação de tábuas quando aplicável
+   - [ ] Garantir checklist incremental/manual atualizado
+- [ ] Etapa 4: Atualizar `revisao-completa/template-tarefa-secundaria.md`
+   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" no template
+   - [ ] Incluir instrução para importação/exportação de tábuas quando aplicável
+   - [ ] Garantir checklist incremental/manual atualizado
+
+---
+
+Este checklist será atualizado conforme cada etapa for concluída.
 # 📋 Lista de Tarefas - Sistema Completo ABAC + Deploy Automático Plesk ✅
 
 ## 🎯 Status ## 🏆 RESULTADO FINAL:

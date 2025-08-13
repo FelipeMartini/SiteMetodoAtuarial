@@ -1,5 +1,7 @@
 # Site Método Atuarial
 
+> **Agora com gestão avançada de Tábua de Mortalidade: importação/exportação (Excel/PDF), precisão validada e ciclo de validação obrigatório!**
+
 <p align="center">
 	<img src="site-metodo/public/loginboxclara.png" alt="Logo" width="180" />
 </p>
@@ -25,7 +27,8 @@ O Site Método Atuarial é uma plataforma moderna e completa para consultoria at
 - **🔐 Sistema de autenticação multi-provider** (Google, GitHub, Apple, Microsoft, Email)
 - **👥 Gestão completa de usuários** com ABAC (Attribute-Based Access Control)
 - **📊 Dashboard administrativo** com estatísticas em tempo real
-- **🧮 Ferramentas de cálculos atuariais** integradas
+- **🧮 Ferramentas de cálculos atuariais** integradas e gestão de Tábua de Mortalidade
+- **📥 Importação/Exportação de Tábuas de Mortalidade** (Excel/PDF) com validação automática
 - **📄 Portal de documentação** técnica e APIs
 - **🌙 Dark/Light mode** com persistência
 - **📱 Design responsivo** mobile-first
@@ -205,6 +208,13 @@ src/
 - **Dashboard Admin**: Estatísticas, gestão e monitoramento
 - **Widgets configuráveis** e responsivos
 
+#### 📈 Gestão de Tábuas de Mortalidade
+- **Importação/Exportação de Tábuas**: Suporte completo a arquivos Excel e PDF
+- **Validação automática**: Checagem de integridade e formato das tábuas
+- **Precisão dos cálculos**: Testes unitários e validação manual obrigatória
+- **Referências obrigatórias**: Baseado nas melhores práticas atuariais internacionais
+- **Ciclo de validação**: Type-check, lint, build e validação manual obrigatórios
+
 ---
 
 ## � APIs Principais
@@ -244,6 +254,8 @@ src/
 - 🌙 **Dark/Light mode** com persistência
 - 📱 **Mobile-first** design responsivo
 - ♿ **Acessibilidade** (WCAG 2.1)
+- 📥 **Importação/Exportação de Tábuas de Mortalidade** (Excel/PDF)
+- 📊 **Cálculos atuariais validados** com precisão e referências
 
 ### 🛠️ Para Desenvolvedores
 - 🏗️ **TypeScript strict** mode
@@ -252,6 +264,8 @@ src/
 - 🔄 **Hot reload** desenvolvimento rápido
 - 📦 **Bundle optimization** automática
 - 🔍 **API documentation** com exemplos
+- 📈 **Ciclo de validação obrigatório**: type-check, lint, build e validação manual
+- 📚 **Referências obrigatórias** para cálculos e tábuas
 
 ### 🔧 Para Admins
 - 📊 **Dashboard** com métricas em tempo real
@@ -259,6 +273,7 @@ src/
 - 🛡️ **Sistema ABAC** para controle granular
 - 📈 **Analytics** e monitoramento
 - ⚙️ **Configurações** dinâmicas
+- 📥 **Gestão de Tábuas de Mortalidade**: importação/exportação, validação e histórico
 
 ---
 
@@ -283,6 +298,9 @@ src/
 - ✅ **SEO preparado** - Meta tags, sitemap, structured data
 - ✅ **LGPD compliance** - Políticas e termos atualizados
 - ✅ **CI/CD ready** - Deploy automático Vercel/Netlify
+- ✅ **Gestão de Tábua de Mortalidade** - Importação/exportação (Excel/PDF), precisão validada, ciclo de validação obrigatório
+- ✅ **Testes e validação manual** - Todos os cálculos e tábuas passam por testes unitários e validação manual
+- ✅ **Referências obrigatórias** - Implementação baseada em fontes atuariais internacionais
 
 ---
 
@@ -394,12 +412,16 @@ furnished to do so, subject to the following conditions:
 - [Prisma Documentation](https://www.prisma.io/docs/) - ORM
 - [shadcn/ui Documentation](https://ui.shadcn.com/) - Componentes
 - [Tailwind CSS](https://tailwindcss.com/docs) - Estilos
+- [ExcelJS](https://github.com/exceljs/exceljs) - Manipulação de arquivos Excel
+- [pdf-lib](https://pdf-lib.js.org/) - Manipulação de PDFs
 
 ### Padrões & Qualidade
 - [Conventional Commits](https://www.conventionalcommits.org/pt-br/) - Padronização
 - [TypeScript Handbook](https://www.typescriptlang.org/docs/) - Tipagem
 - [Jest Documentation](https://jestjs.io/docs/getting-started) - Testes
 - [ESLint Rules](https://eslint.org/docs/rules/) - Linting
+- [Referências Atuariais Internacionais](https://www.soa.org/resources/research-reports/) - Society of Actuaries
+- [Referências Atuariais Internacionais](https://www.actuaries.org/) - International Actuarial Association
 
 ---
 
@@ -421,6 +443,14 @@ Agradecimentos especiais a:
 Feito com ❤️ pela equipe [Método Atuarial](https://metodoatuarial.com.br)
 
 </div>
+
+---
+
+## ⚠️ AVISO IMPORTANTE SOBRE O CICLO DE VALIDAÇÃO E REFERÊNCIAS
+
+> **É OBRIGATÓRIO seguir o ciclo de validação completo (type-check, lint, build, validação manual) e consultar todas as referências técnicas e atuariais antes de marcar qualquer tarefa como concluída.**
+
+> **A gestão de Tábua de Mortalidade (importação/exportação, precisão, validação) segue padrões internacionais e deve ser validada manualmente em cada release.**
 
 ---
 
