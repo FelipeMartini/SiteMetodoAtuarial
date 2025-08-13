@@ -26,8 +26,6 @@ import {
   TrendingUp
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 import { DatePickerWithRange, DateRange } from '@/components/ui/date-range-picker';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
@@ -121,10 +119,34 @@ export default function AuditLogsPage() {
       cell: ({ row }) => (
         <div className="flex flex-col">
           <span className="text-sm font-medium">
-            {format(row.getValue('timestamp'), "dd/MM/yyyy", { locale: ptBR })}
+            {(() => {
+              const value = row.getValue('timestamp');
+              if (!value) return '';
+              let date: Date;
+              if (value instanceof Date) {
+                date = value;
+              } else if (typeof value === 'string' || typeof value === 'number') {
+                date = new Date(value);
+              } else {
+                return '';
+              }
+              return date.toLocaleDateString('pt-BR');
+            })()}
           </span>
           <span className="text-xs text-muted-foreground">
-            {format(row.getValue('timestamp'), "HH:mm:ss", { locale: ptBR })}
+            {(() => {
+              const value = row.getValue('timestamp');
+              if (!value) return '';
+              let date: Date;
+              if (value instanceof Date) {
+                date = value;
+              } else if (typeof value === 'string' || typeof value === 'number') {
+                date = new Date(value);
+              } else {
+                return '';
+              }
+              return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+            })()}
           </span>
         </div>
       )
