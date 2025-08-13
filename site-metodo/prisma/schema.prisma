@@ -142,3 +142,55 @@ model EmailLog {
 
   @@map("email_logs")
 }
+
+model TabuaMortalidade {
+  id            String   @id @default(cuid())
+  nome          String   @unique
+  ano           Int
+  fonte         String
+  sexo          String   // 'M', 'F', 'AMBOS'
+  status        String   @default("ativa") // 'ativa', 'inativa', 'descontinuada'
+  descricao     String?
+  observacao    String?
+  dataImportacao DateTime @default(now())
+  criadoEm      DateTime @default(now())
+  atualizadoEm  DateTime @updatedAt
+
+  taxas         TaxaMortalidade[]
+  calculos      CalculoAtuarial[]
+
+  @@map("tabuas_mortalidade")
+}
+
+model TaxaMortalidade {
+  id       String  @id @default(cuid())
+  tabuaId  String
+  idade    Int
+  qx       Float   // Probabilidade de morte
+  lx       Float?  // Número de sobreviventes
+  dx       Float?  // Número de mortes
+  ex       Float?  // Expectativa de vida
+  px       Float?  // Probabilidade de sobrevivência (1 - qx)
+  observacao String?
+
+  tabua    TabuaMortalidade @relation(fields: [tabuaId], references: [id], onDelete: Cascade)
+
+  @@unique([tabuaId, idade])
+  @@map("taxas_mortalidade")
+}
+
+model CalculoAtuarial {
+  id            String   @id @default(cuid())
+  tipo          String   // 'seguro_vida', 'renda_vitalicia', 'reserva', 'expectativa'
+  parametros    Json     // Parâmetros utilizados no cálculo
+  resultado     Json     // Resultado do cálculo
+  tabuaId       String?
+  userId        String?
+  dataCalculo   DateTime @default(now())
+  observacao    String?
+
+  tabua         TabuaMortalidade? @relation(fields: [tabuaId], references: [id], onDelete: SetNull)
+  user          User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("calculos_atuariais")
+}
