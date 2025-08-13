@@ -1,7 +1,15 @@
 'use client';
 
 import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Cexport default function EmailsPage() {
+  const [logs, setLogs] = React.useState<EmailLog[]>([]);
+  const [loading, setLoading] = React.useState(true);
+  const [stats, setStats] = React.useState({
+    total: 0,
+    sent: 0,
+    failed: 0,
+    pending: 0,
+  });ontent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -18,17 +26,11 @@ import {
   MailOpen, 
   MailX,
   Send,
-  Plus,
   Settings,
-  Users,
-  AlertTriangle,
   CheckCircle,
   Clock,
   RefreshCw,
-  Download,
-  Upload,
   Eye,
-  Trash2,
   Edit
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -57,8 +59,7 @@ interface EmailTemplate {
 }
 
 export default function EmailManagementPage() {
-  const [emailLogs, setEmailLogs] = React.useState<EmailLog[]>([]);
-  const [templates, setTemplates] = React.useState<EmailTemplate[]>([]);
+  const [logs, setLogs] = React.useState<EmailLog[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [stats, setStats] = React.useState({
     total: 0,
@@ -91,7 +92,7 @@ export default function EmailManagementPage() {
     search: '',
   });
 
-  const loadEmailLogs = React.useCallback(async () => {
+  const loadLogs = React.useCallback(async () => {
     try {
       setLoading(true);
       const params = new URLSearchParams();
@@ -103,7 +104,7 @@ export default function EmailManagementPage() {
       const response = await fetch(`/api/emails?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setEmailLogs(data.logs.map((log: any) => ({
+        setLogs(data.logs.map((log: { createdAt: string | Date; sentAt?: string | Date; [key: string]: unknown }) => ({
           ...log,
           createdAt: new Date(log.createdAt),
           sentAt: log.sentAt ? new Date(log.sentAt) : undefined,
@@ -118,8 +119,8 @@ export default function EmailManagementPage() {
   }, [filters]);
 
   React.useEffect(() => {
-    loadEmailLogs();
-  }, [loadEmailLogs]);
+    loadLogs();
+  }, [loadLogs]);
 
   const sendEmail = async () => {
     try {
@@ -137,7 +138,7 @@ export default function EmailManagementPage() {
           priority: 'normal',
           template: '',
         });
-        await loadEmailLogs();
+        await loadLogs();
       }
     } catch (error) {
       console.error('Erro ao enviar email:', error);
@@ -157,7 +158,7 @@ export default function EmailManagementPage() {
       } else {
         alert(`Erro na conexão: ${result.error}`);
       }
-    } catch (error) {
+    } catch (_error) {
       alert('Erro ao testar conexão SMTP');
     } finally {
       setSmtpSettings(prev => ({ ...prev, testConnection: false }));
@@ -378,7 +379,7 @@ export default function EmailManagementPage() {
               </p>
             </div>
             <div className="flex items-center gap-2">
-              <Button variant="outline" onClick={loadEmailLogs} disabled={loading}>
+              <Button variant="outline" onClick={loadLogs} disabled={loading}>
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Atualizar
               </Button>

@@ -4,7 +4,7 @@ import FormularioUploadExcel from '@/components/analise-excel/FormularioUploadEx
 import AbasPlanilhaExcel from '@/components/analise-excel/AbasPlanilhaExcel';
 import TabelaExcel from '@/components/analise-excel/TabelaExcel';
 import { useState } from 'react';
-import type { DadosAnaliseExcel, PlanilhaExcel } from '@/types/analise-excel';
+import type { DadosAnaliseExcel } from '@/types/analise-excel';
 
 export default function PaginaAnaliseExcel() {
   const [dados, setDados] = useState<DadosAnaliseExcel | null>(null);
