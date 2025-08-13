@@ -8,29 +8,19 @@ datasource db {
 }
 
 model User {
-  id            String      @id @default(cuid())
-  email         String?     @unique
+  id            String    @id @default(cuid())
   name          String?
+  email         String    @unique
   emailVerified DateTime?
   image         String?
-  password      String?
-  isActive      Boolean     @default(true)
-  department    String?
-  location      String?
-  jobTitle      String?
-  validFrom     DateTime?
-  validUntil    DateTime?
-  mfaEnabled    Boolean     @default(false)
-  loginCount    Int         @default(0)
-  failedLogins  Int         @default(0)
-  lastLoginAt   DateTime?
-  lastLoginIP   String?
-  createdAt     DateTime    @default(now())
-  updatedAt     DateTime    @updatedAt
-  AccessLog     AccessLog[]
-  accounts      Account[]
-  sessions      Session[]
-  notifications Notification[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  accounts       Account[]
+  sessions       Session[]
+  accessLogs     AccessLog[]
+  notifications  Notification[]
+  emailLogs      EmailLog[]
 
   @@map("users")
 }
@@ -122,15 +112,33 @@ model Notification {
   userId    String
   title     String
   message   String
-  type      String   @default("info") // info, success, warning, error
-  priority  String   @default("normal") // low, normal, high, urgent
+  type      String   // 'info', 'success', 'warning', 'error'
+  priority  String   // 'low', 'normal', 'high', 'urgent'
   read      Boolean  @default(false)
   readAt    DateTime?
-  metadata  String? // JSON metadata
+  metadata  Json?
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-  
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("notifications")
+}
+
+model EmailLog {
+  id        String   @id @default(cuid())
+  to        String
+  subject   String
+  messageId String?
+  status    String   // 'sent', 'failed', 'pending'
+  error     String?
+  priority  String   @default("normal")
+  userId    String?
+  sentAt    DateTime?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+
+  @@map("email_logs")
 }
