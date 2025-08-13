@@ -12,13 +12,19 @@ import {
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { ColumnDef } from '@tanstack/react-table'
+import { Badge } from '@/components/ui/badge'
 import { useUsuariosPaginados } from '../hooks/useUsuariosPaginados'
+
 
 interface UsuarioTabelaRow {
   id: string
   name: string | null
   email: string | null
-  accessLevel: number
+  department?: string | null
+  location?: string | null
+  jobTitle?: string | null
+  validFrom?: string | null
+  validUntil?: string | null
   isActive: boolean
   createdAt: string
 }
@@ -26,16 +32,44 @@ interface UsuarioTabelaRow {
 const colunas: ColumnDef<UsuarioTabelaRow>[] = [
   { accessorKey: 'name', header: 'Nome' },
   { accessorKey: 'email', header: 'Email' },
-  { accessorKey: 'accessLevel', header: 'Nível' },
+  {
+    accessorKey: 'department',
+    header: 'Departamento',
+    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="outline">{getValue()}</Badge> : '-',
+  },
+  {
+    accessorKey: 'location',
+    header: 'Localidade',
+    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="secondary">{getValue()}</Badge> : '-',
+  },
+  {
+    accessorKey: 'jobTitle',
+    header: 'Cargo',
+    cell: ({ getValue }: { getValue: any }) => getValue() ? <span className="font-medium text-xs text-muted-foreground">{getValue()}</span> : '-',
+  },
+  {
+    id: 'validade',
+    header: 'Validade',
+    cell: ({ row }: { row: any }) => {
+      const from = row.original.validFrom ? new Date(row.original.validFrom).toLocaleDateString('pt-BR') : '-';
+      const to = row.original.validUntil ? new Date(row.original.validUntil).toLocaleDateString('pt-BR') : '-';
+      return (
+        <div className="flex flex-col text-xs">
+          <span className="text-muted-foreground">de <b>{from}</b></span>
+          <span className="text-muted-foreground">até <b>{to}</b></span>
+        </div>
+      );
+    },
+  },
   {
     accessorKey: 'isActive',
     header: 'Ativo',
-    cell: ({ getValue }) => (getValue<boolean>() ? 'Sim' : 'Não'),
+    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="default">Sim</Badge> : <Badge variant="destructive">Não</Badge>,
   },
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
-    cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString(),
+    cell: ({ getValue }: { getValue: any }) => new Date(getValue()).toLocaleDateString('pt-BR'),
   },
 ]
 
@@ -44,23 +78,38 @@ export default function ListaUsuariosPage() {
   const [pageSize] = useState(10)
   const { data, isLoading } = useUsuariosPaginados(page, pageSize, '')
   const [editing, setEditing] = useState<UsuarioTabelaRow | null>(null)
-  const [form, setForm] = useState({ name: '', accessLevel: '', isActive: 'true' })
+  const [form, setForm] = useState({
+    name: '',
+    department: '',
+    location: '',
+    jobTitle: '',
+    validFrom: '',
+    validUntil: '',
+    isActive: 'true',
+  })
 
   const openEdit = (row: UsuarioTabelaRow) => {
     setEditing(row)
     setForm({
       name: row.name ?? '',
-      accessLevel: String(row.accessLevel),
+      department: row.department ?? '',
+      location: row.location ?? '',
+      jobTitle: row.jobTitle ?? '',
+      validFrom: row.validFrom ?? '',
+      validUntil: row.validUntil ?? '',
       isActive: row.isActive ? 'true' : 'false',
     })
   }
 
   const salvar = async () => {
     if (!editing) return
-    const payload: Partial<Pick<UsuarioTabelaRow, 'name' | 'accessLevel' | 'isActive'>> = {}
+    const payload: Partial<UsuarioTabelaRow> = {}
     if (form.name && form.name !== editing.name) payload.name = form.name
-    const al = parseInt(form.accessLevel, 10)
-    if (!Number.isNaN(al) && al !== editing.accessLevel) payload.accessLevel = al
+    if (form.department && form.department !== editing.department) payload.department = form.department
+    if (form.location && form.location !== editing.location) payload.location = form.location
+    if (form.jobTitle && form.jobTitle !== editing.jobTitle) payload.jobTitle = form.jobTitle
+    if (form.validFrom && form.validFrom !== editing.validFrom) payload.validFrom = form.validFrom
+    if (form.validUntil && form.validUntil !== editing.validUntil) payload.validUntil = form.validUntil
     const activeBool = form.isActive === 'true'
     if (activeBool !== editing.isActive) payload.isActive = activeBool
     if (Object.keys(payload).length === 0) {
@@ -73,7 +122,6 @@ export default function ListaUsuariosPage() {
       body: JSON.stringify(payload),
     })
     setEditing(null)
-    // TODO: invalidar cache react-query (simples reload por enquanto)
     window.location.reload()
   }
 
@@ -94,7 +142,7 @@ export default function ListaUsuariosPage() {
         legendaAcessivel='Tabela de usuários paginada com suporte a ordenação'
         onRowClick={linha => openEdit(linha as UsuarioTabelaRow)}
       />
-      <Dialog open={!!editing} onOpenChange={o => !o && setEditing(null)}>
+  <Dialog open={!!editing} onOpenChange={(o: boolean) => !o && setEditing(null)}>
         <DialogContent className='max-w-md'>
           <DialogHeader>
             <DialogTitle>Editar Usuário</DialogTitle>
@@ -104,15 +152,44 @@ export default function ListaUsuariosPage() {
               <label className='text-sm font-medium'>Nome</label>
               <Input
                 value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, name: e.target.value }))}
               />
             </div>
             <div className='flex flex-col gap-1'>
-              <label className='text-sm font-medium'>Nível de Acesso</label>
+              <label className='text-sm font-medium'>Departamento</label>
               <Input
-                type='number'
-                value={form.accessLevel}
-                onChange={e => setForm(f => ({ ...f, accessLevel: e.target.value }))}
+                value={form.department}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, department: e.target.value }))}
+              />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <label className='text-sm font-medium'>Localidade</label>
+              <Input
+                value={form.location}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, location: e.target.value }))}
+              />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <label className='text-sm font-medium'>Cargo</label>
+              <Input
+                value={form.jobTitle}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, jobTitle: e.target.value }))}
+              />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <label className='text-sm font-medium'>Válido de</label>
+              <Input
+                type='date'
+                value={form.validFrom}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, validFrom: e.target.value }))}
+              />
+            </div>
+            <div className='flex flex-col gap-1'>
+              <label className='text-sm font-medium'>Válido até</label>
+              <Input
+                type='date'
+                value={form.validUntil}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setForm(f => ({ ...f, validUntil: e.target.value }))}
               />
             </div>
             <div className='flex flex-col gap-1'>

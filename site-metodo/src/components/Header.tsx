@@ -5,6 +5,7 @@ import { ThemeToggle } from '@/components/ui/theme-toggle'
 import { MainNavigation } from '@/components/ui/main-navigation'
 import { MobileNav } from '@/components/ui/mobile-nav'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/hooks/useAuth'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
@@ -75,8 +76,8 @@ export function Header() {
               {/* Temporariamente comentado até implementar ABAC completo */}
               {/* {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && ( */}
               <Link href='/area-cliente/dashboard-admin' className='hidden md:inline-flex'>
-                <Button variant='destructive' size='sm'>
-                  Dashboard Admin
+                <Button variant='secondary' size='sm'>
+                  Dashboard Admin <span className="ml-2"><Badge variant="outline">Admin</Badge></span>
                 </Button>
               </Link>
               {/* )} */}

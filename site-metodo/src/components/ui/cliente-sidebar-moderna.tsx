@@ -257,15 +257,12 @@ export function ClienteSidebarModerna({ className }: SidebarProps) {
                   <Button
                     key={item.href}
                     variant={isActive ? 'secondary' : 'ghost'}
-                    className={cn(
-                      'w-full justify-start gap-3 px-3 text-red-600 hover:text-red-700',
-                      isActive && 'bg-red-50 text-red-700 font-medium'
-                    )}
+                    className={cn('w-full justify-start gap-3 px-3', isActive && 'bg-secondary/50 font-medium')}
                     asChild
                   >
                     <Link href={item.href} onClick={() => setIsMobileOpen(false)}>
                       <IconComponent className="h-4 w-4" />
-                      <span className="flex-1 text-left">{item.title}</span>
+                      <span className="flex-1 text-left">{item.title} <Badge variant="outline" className="ml-2">Admin</Badge></span>
                     </Link>
                   </Button>
                 );
