@@ -53,10 +53,6 @@ export default function MfaConfiguracao() {
   const [showSetup, setShowSetup] = useState(false)
   const toast = useToast()
 
-  useEffect(() => {
-    fetchMfaStatus()
-  }, [fetchMfaStatus])
-
   const fetchMfaStatus = useCallback(async () => {
     setLoading(true)
     try {
@@ -77,7 +73,11 @@ export default function MfaConfiguracao() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [toast])
+
+  useEffect(() => {
+    fetchMfaStatus()
+  }, [fetchMfaStatus])
 
   const generateTotp = async () => {
     setError('')
