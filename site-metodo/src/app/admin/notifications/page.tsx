@@ -49,11 +49,16 @@ export default function NotificationsPage() {
   const [loading, setLoading] = React.useState(true);
   
   // Formulário para nova notificação
-  const [newNotification, setNewNotification] = React.useState({
+  const [newNotification, setNewNotification] = React.useState<{
+    title: string;
+    message: string;
+    type: 'info' | 'success' | 'warning' | 'error';
+    priority: 'low' | 'normal' | 'high' | 'urgent';
+  }>({
     title: '',
     message: '',
-    type: 'info' as const,
-    priority: 'normal' as const
+    type: 'info',
+    priority: 'normal'
   });
 
   // Filtros
@@ -495,7 +500,7 @@ export default function NotificationsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="type">Tipo</Label>
-                    <Select value={newNotification.type} onValueChange={(value: string) => setNewNotification(prev => ({ ...prev, type: value as 'info' | 'success' | 'warning' | 'error' }))}>
+                    <Select value={newNotification.type} onValueChange={(value) => setNewNotification(prev => ({ ...prev, type: value as typeof newNotification.type }))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -510,7 +515,7 @@ export default function NotificationsPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="priority">Prioridade</Label>
-                    <Select value={newNotification.priority} onValueChange={(value: string) => setNewNotification(prev => ({ ...prev, priority: value as 'low' | 'normal' | 'high' | 'urgent' }))}>
+                    <Select value={newNotification.priority} onValueChange={(value) => setNewNotification(prev => ({ ...prev, priority: value as typeof newNotification.priority }))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

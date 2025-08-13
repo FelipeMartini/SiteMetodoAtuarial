@@ -54,12 +54,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (startDate || endDate) {
-      where.timestamp = {};
+      where.timestamp = {} as any;
       if (startDate) {
-        where.timestamp.gte = new Date(startDate);
+        (where.timestamp as any).gte = new Date(startDate);
       }
       if (endDate) {
-        where.timestamp.lte = new Date(endDate);
+        (where.timestamp as any).lte = new Date(endDate);
       }
     }
 

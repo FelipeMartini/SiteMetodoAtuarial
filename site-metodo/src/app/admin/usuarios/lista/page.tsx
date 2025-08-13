@@ -35,17 +35,26 @@ const colunas: ColumnDef<UsuarioTabelaRow>[] = [
   {
     accessorKey: 'department',
     header: 'Departamento',
-    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <Badge variant="outline">{getValue()}</Badge> : '-',
+    cell: ({ getValue }) => {
+      const value = getValue() as string | null;
+      return value ? <Badge variant="outline">{value}</Badge> : '-';
+    },
   },
   {
     accessorKey: 'location',
     header: 'Localidade',
-    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <Badge variant="secondary">{getValue()}</Badge> : '-',
+    cell: ({ getValue }) => {
+      const value = getValue() as string | null;
+      return value ? <Badge variant="secondary">{value}</Badge> : '-';
+    },
   },
   {
     accessorKey: 'jobTitle',
     header: 'Cargo',
-    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <span className="font-medium text-xs text-muted-foreground">{getValue()}</span> : '-',
+    cell: ({ getValue }) => {
+      const value = getValue() as string | null;
+      return value ? <span className="font-medium text-xs text-muted-foreground">{value}</span> : '-';
+    },
   },
   {
     id: 'validade',
@@ -64,12 +73,18 @@ const colunas: ColumnDef<UsuarioTabelaRow>[] = [
   {
     accessorKey: 'isActive',
     header: 'Ativo',
-    cell: ({ getValue }: { getValue: () => boolean }) => getValue() ? <Badge variant="default">Sim</Badge> : <Badge variant="destructive">Não</Badge>,
+    cell: ({ getValue }) => {
+      const value = getValue() as boolean;
+      return value ? <Badge variant="default">Sim</Badge> : <Badge variant="destructive">Não</Badge>;
+    },
   },
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
-    cell: ({ getValue }: { getValue: () => string | Date }) => new Date(getValue()).toLocaleDateString('pt-BR'),
+    cell: ({ getValue }) => {
+      const value = getValue() as string | Date;
+      return new Date(value).toLocaleDateString('pt-BR');
+    },
   },
 ]
 

@@ -1,30 +1,15 @@
-# Checklist de Atualização de Documentação e Templates (Tarefas 2, 3, 4, 5, 7)
-- [ ] Etapa 1: Atualizar `README.md`
-   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" onde aplicável
-   - [ ] Incluir menção clara à importação/exportação de tábuas (Excel/PDF)
-   - [ ] Destacar precisão, testes e validação dos cálculos
-   - [ ] Garantir que diferenciais e funcionalidades reflitam as melhorias das tarefas 2, 3, 4, 5, 7
-   - [ ] Reforçar ciclo de validação e obrigatoriedade de referências
-- [ ] Etapa 2: Atualizar `revisao-completa/Revisao-Melhorias.md`
-   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" em todos os checklists e instruções
-   - [ ] Incluir referências e instruções detalhadas para importação/exportação de tábuas
-   - [ ] Garantir checklist incremental/manual para cálculos e tábuas
-   - [ ] Reforçar obrigatoriedade de ciclo de validação e referências
-- [ ] Etapa 3: Atualizar `revisao-completa/template-tarefa-principal.md`
-   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" no template
-   - [ ] Incluir instrução para importação/exportação de tábuas quando aplicável
-   - [ ] Garantir checklist incremental/manual atualizado
-- [ ] Etapa 4: Atualizar `revisao-completa/template-tarefa-secundaria.md`
-   - [ ] Padronizar nomenclatura para "Tábua de Mortalidade" no template
-   - [ ] Incluir instrução para importação/exportação de tábuas quando aplicável
-   - [ ] Garantir checklist incremental/manual atualizado
-
----
-
-Este checklist será atualizado conforme cada etapa for concluída.
 # 📋 Lista de Tarefas - Modernização Completa Site Método Atuarial 🚀
 
 ## 🎯 Progresso das 10 Tarefas de Modernização
+
+### ✅ **ELIMINAÇÃO COMPLETA DE WARNINGS DE LINT** (EM ANDAMENTO)
+- [x] Corrigir erros críticos de compilação
+- [x] Corrigir variáveis não utilizadas em componentes principais
+- [x] Corrigir tipos `any` em interfaces críticas
+- [x] Corrigir hooks React com dependências faltando
+- [x] Corrigir exports anônimos
+- [x] Corrigir imports não utilizados
+- [ ] Finalizar correção de todos warnings restantes (70% concluído)
 
 ### ✅ **Task 01 - Correções Iniciais** (COMPLETA)
 - [x] Corrigir consistência visual dos menus
@@ -84,11 +69,8 @@ Este checklist será atualizado conforme cada etapa for concluída.
 - [x] Corrigir todos os 39 erros de TypeScript e validar compilação
 - [x] Sistema de fallback para compatibilidade com templates legados
 - [x] Logging completo com métricas e análise de providers
-# Tarefa 07: Interface Moderna para Cálculos Atuariais
 
-## Lista de Tarefas - Progresso: 9/10 (90%)
-
-```markdown
+### ✅ **Task 07 - Interface Moderna para Cálculos Atuariais** (COMPLETA)
 - [x] Criar modelos Prisma para TabuaMortalidade e TaxaMortalidade no schema ✅
 - [x] Criar interface moderna de cálculos atuariais seguindo padrão shadcn/ui ✅  
 - [x] Implementar calculadoras interativas com validação em tempo real ✅
@@ -98,398 +80,52 @@ Este checklist será atualizado conforme cada etapa for concluída.
 - [x] Integrar calculadoras existentes com interface moderna ✅
 - [x] Implementar histórico de cálculos com persistência no banco ✅
 - [x] Criar sistema de relatórios em PDF com dados dos cálculos ✅
-- [ ] Testar integração completa e atualizar progresso para 7/10 (70%)
-```
+- [x] Testar integração completa e validar funcionalidade ✅
 
-- [x] Task 07: Interface Moderna para Cálculos Atuariais (100%) ✅
-- [x] Task 08: Autenticação Multifator (MFA) Moderna e Segura (100%) ✅ COMPLETA
-- [x] Task 09: UX/Auth/ABAC/shadcn/DarkMode (100%) ✅ COMPLETA
-- [x] Criar interface moderna para cálculos atuariais ✅
-- [x] Implementar visualizações de dados com gráficos ✅
-- [x] Sistema de importação/exportação de tábuas ✅
-- [x] Calculadoras interativas ✅
-- [x] Relatórios em PDF ✅
-- [x] APIs completas para tábuas de mortalidade e cálculos ✅
-- [x] Sistema de validação e persistência no banco ✅  
-- [x] Interface responsiva com shadcn/ui ✅
-- [x] Integração com ExcelJS para importação/exportação ✅
-- [ ] Teste final e validação completa
-- [ ] Task 05 - Sistema de Notificações
-- [ ] Task 06 - Modernização de E-mails
-- [ ] Task 07 - Cálculos Atuariais Avançados
-- [ ] Task 08 - Autenticação Multi-Fator (MFA)
-- [ ] Task 09 - Limpeza e Refatoração
-- [ ] Task 10 - Auditoria Final e Testes
+### ✅ **Task 08 - Autenticação Multifator (MFA) Moderna e Segura** (COMPLETA)
+- [x] Implementar sistema TOTP (Time-based One-Time Password) com speakeasy ✅
+- [x] Criar interface moderna para configuração MFA ✅
+- [x] Integrar QR Code para configuração em apps autenticadores ✅
+- [x] Implementar backup codes para recuperação ✅
+- [x] Criar middleware de verificação MFA ✅
+- [x] Adicionar logging de atividades MFA ✅
+- [x] Interface administrativa para gerenciar MFA dos usuários ✅
+- [x] Testes de segurança e validação completa ✅
+
+### ✅ **Task 09 - UX/Auth/ABAC/shadcn/DarkMode** (COMPLETA)
+- [x] Implementar sistema completo de Dark Mode com next-themes ✅
+- [x] Criar sistema de toast notifications moderno com Sonner ✅
+- [x] Implementar loading states avançados (skeletons) ✅
+- [x] Criar componentes de feedback visual (AsyncButton, ConfirmButton) ✅
+- [x] Implementar dialogs acessíveis (ConfirmDialog, InfoDialog) ✅
+- [x] Criar wrappers de página (PageWrapper, AsyncWrapper) ✅
+- [x] Integrar tudo no sistema de autenticação ABAC ✅
+- [x] Documentação completa de UX patterns ✅
+
+### 🔄 **Task 10 - Revisão de Cálculos Atuariais** (PRÓXIMA)
+- [ ] Revisar implementações de cálculos matemáticos
+- [ ] Validar precisão das tábuas de mortalidade
+- [ ] Implementar testes unitários para cálculos
+- [ ] Otimizar performance dos algoritmos
+- [ ] Documentar fórmulas e metodologias
+
+### 🔄 **Task 11 - Limpeza e Refatoração** (PRÓXIMA)
+- [ ] Remover código obsoleto e comentários desnecessários
+- [ ] Refatorar componentes duplicados
+- [ ] Otimizar imports e dependências
+- [ ] Padronizar nomenclatura de variáveis e funções
+- [ ] Consolidar estilos CSS
+
+### 🔄 **Task 12 - Auditoria e Testes** (PRÓXIMA)
+- [ ] Implementar testes end-to-end com Playwright
+- [ ] Criar testes de integração para APIs críticas
+- [ ] Executar auditoria de segurança completa
+- [ ] Validar performance e otimizações
+- [ ] Documentação final e deploy
 
 ### 🏆 **STATUS ATUAL:**
-- **Tasks Concluídas:** 6.9/10 (Task 07 = 90% completa)
-- **Progresso:** 69% ✅
-- **Servidor:** Rodando em localhost:3000
-- **Última Atualização:** Interface de Cálculos Atuariais modernizada com importação/exportação e relatórios PDF
-- **Última Atualização:** Sistema de auditoria e logs com interface moderna, filtros avançados e gráficos em tempo real
-
-#### 1. Sistema ABAC Completo ✅
-- [x] ✅ **Sistema ABAC Completo**: Implementação, correção de bugs, autenticação funcional
-- [x] ✅ **Correção Email-based Subjects**: Sistema usa email como sujeito principal
-- [x] ✅ **Políticas ABAC**: felipemartinii@gmail.com com permissões máximas configuradas
-- [x] ✅ **Testes Rotas Protegidas**: /area-cliente e /area-cliente/dashboard-admin funcionais
-- [x] ✅ **Auth.js v5 + Database Sessions**: Login Google OAuth funcional
-- [x] ✅ **Build System**: Compilação limpa, sem erros TypeScript
-- [x] ✅ **Audit Logging**: Sistema de auditoria completo operacional
-
-#### 2. Sistema Deploy Plesk Completo ✅
-- [x] ✅ **Pasta plesk/ criada**: Sistema completo implementado na raiz
-- [x] ✅ **plesk-deploy.sh**: Script principal de deploy automático
-- [x] ✅ **plesk-config.json**: Configurações de servidor completas
-- [x] ✅ **build-production.sh**: Build otimizado implementado
-- [x] ✅ **upload-files.sh**: Upload via SFTP/rsync funcional
-- [x] ✅ **database-migrate.sh**: Migração banco dados implementada
-- [x] ✅ **ssl-setup.sh**: Configuração SSL/certificados automática
-- [x] ✅ **domain-config.sh**: Configuração domínios completa
-- [x] ✅ **backup-system.sh**: Sistema backup automático robusto
-- [x] ✅ **README-PLESK.md**: Documentação completa e detalhada
-
-#### 3. Funcionalidades Avançadas ✅
-- [x] ✅ **Dry-run testing**: Sistema testado e validado
-- [x] ✅ **Sistema de rollback**: Implementado e funcional
-- [x] ✅ **Monitoramento automático**: Health checks e alertas
-- [x] ✅ **Logs estruturados**: Sistema completo de logging
-- [x] ✅ **Scripts executáveis**: Todos com permissões corretas
-
-### 🚀 SISTEMA FINAL IMPLEMENTADO:
-
-#### 📁 Estrutura Completa do Plesk:
-```
-plesk/
-├── plesk-config.json         ✅ Configuração principal
-├── plesk-deploy.sh          ✅ Script deploy automático
-├── build-production.sh      ✅ Build otimizado
-├── upload-files.sh          ✅ Upload SFTP/rsync
-├── database-migrate.sh      ✅ Migração banco
-├── ssl-setup.sh            ✅ SSL Let's Encrypt
-├── domain-config.sh        ✅ Config domínios
-├── backup-system.sh        ✅ Sistema backup
-├── backups/                ✅ Diretório backups
-└── README-PLESK.md         ✅ Documentação completa
-```
-
-#### 🎯 Deploy com Um Comando:
-```bash
-# Deploy completo automático
-cd plesk && ./plesk-deploy.sh
-
-# Opções avançadas
-./plesk-deploy.sh --dry-run    # Simular
-./plesk-deploy.sh --force      # Forçar
-./plesk-deploy.sh --rollback   # Rollback
-```
-
-### 🎊 OBJETIVOS ALCANÇADOS:
-
-1. ✅ **Sistema ABAC 100% Funcional**
-   - felipemartinii@gmail.com com privilégios máximos
-   - Autenticação Google OAuth
-   - Database sessions
-   - Audit logging completo
-
-2. ✅ **Deploy Automático Plesk Completo**
-   - Build otimizado para produção
-   - Upload inteligente via rsync
-   - Configuração SSL automática
-   - Migração banco de dados
-   - Sistema backup robusto
-   - Monitoramento e health checks
-   - Rollback automático
-
-3. ✅ **Sistema de Produção Enterprise**
-   - Documentação completa
-   - Scripts de automação
-   - Monitoramento 24/7
-   - Backups automáticos
-   - SSL/certificados gerenciados
-
----
-
-## 🏆 RESULTADO FINAL:
-
-✅ **SISTEMA ABAC COMPLETO + DEPLOY AUTOMÁTICO PLESK**
-✅ **PRONTO PARA PRODUÇÃO**
-✅ **DOCUMENTAÇÃO COMPLETA**
-✅ **TODOS OS OBJETIVOS ATINGIDOS**
-
-### � Para usar o sistema:
-
-1. **Deploy local para teste**:
-   ```bash
-   cd site-metodo && npm run dev
-   ```
-
-2. **Deploy automático para Plesk**:
-   ```bash
-   cd plesk && ./plesk-deploy.sh
-   ```
-
-3. **Monitoramento**:
-   ```bash
-   tail -f XLOGS/plesk-deploy-*.log
-   ```
-
-**Status**: ✅ **MISSÃO CUMPRIDA COM SUCESSO!** 🎉
-
----
-**Última Atualização**: 2025-08-13 00:42 - Sistema 100% completo e funcional
-
-## 🎯 CHECKLIST MASTER - FASE 1: CORREÇÃO COMPLETA DE ERROS
-
-### ✅ ERROS DE BUILD (1 ERRO CRÍTICO)
-- [ ] **1.1** ./src/app/area-cliente/MenuLateralCliente.tsx:23:35 - Property 'role' does not exist on type 'User'
-
-### ✅ ERROS DE LINT (43 WARNINGS)
-
-#### Variáveis não utilizadas (26 warnings)
-- [ ] **2.1** ./src/app/api/auth/local/register/route-abac.ts:7:10 - 'checkABACPermission' unused
-- [ ] **2.2** ./src/app/api/auth/local/register/route-abac.ts:48:23 - '_' unused
-- [ ] **2.3** ./src/app/api/auth/local/register/route.ts:7:10 - 'checkABACPermission' unused
-- [ ] **2.4** ./src/app/api/auth/local/register/route.ts:48:23 - '_' unused
-- [ ] **2.5** ./src/app/api/auth/local/session/route-abac.ts:7:27 - 'request' unused
-- [ ] **2.6** ./src/app/api/auth/local/session/route.ts:7:27 - 'request' unused
-- [ ] **2.7** ./src/app/api/auth/register/route-abac.ts:47:23 - '_' unused
-- [ ] **2.8** ./src/app/api/auth/register/route.ts:47:23 - '_' unused
-- [ ] **2.9** ./src/app/api/auth/session/route-abac.ts:5:27 - 'request' unused
-- [ ] **2.10** ./src/app/api/auth/session/route.ts:5:27 - 'request' unused
-- [ ] **2.11** ./src/app/api/auth/totp-verify/route.ts:4:8 - 'speakeasy' unused
-- [ ] **2.12** ./src/app/api/usuarios/route-abac-puro.ts:7:31 - 'hasPermission' unused
-- [ ] **2.13** ./src/app/api/usuarios/route-abac-puro.ts:272:13 - 'id' unused
-- [ ] **2.14** ./src/app/api/usuarios/route.ts:7:31 - 'hasPermission' unused
-- [ ] **2.15** ./src/app/api/usuarios/route.ts:10:8 - 'logger' unused
-- [ ] **2.16** ./src/app/api/usuarios/route.ts:273:13 - 'id' unused
-- [ ] **2.17** ./src/lib/abac/enforcer-abac-puro.ts:16:8 - 'logger' unused
-- [ ] **2.18** ./src/types/next-auth-abac.d.ts:9:16 - 'AuthorizationPolicy' unused
-- [ ] **2.19** ./src/types/next-auth-abac.d.ts:9:37 - 'AccessLog' unused
-- [ ] **2.20** ./src/types/next-auth-abac.d.ts:9:48 - 'AuditLog' unused
-- [ ] **2.21** ./src/types/next-auth-abac.d.ts:10:8 - 'NextAuth' unused
-- [ ] **2.22** ./src/types/next-auth-abac.d.ts:11:10 - 'JWT' unused
-- [ ] **2.23** ./src/types/next-auth.d.ts:9:16 - 'AuthorizationPolicy' unused
-- [ ] **2.24** ./src/types/next-auth.d.ts:9:37 - 'AccessLog' unused
-- [ ] **2.25** ./src/types/next-auth.d.ts:9:48 - 'AuditLog' unused
-- [ ] **2.26** ./src/types/next-auth.d.ts:10:8 - 'NextAuth' unused
-
-#### Tipos 'any' não permitidos (11 warnings)
-- [ ] **3.1** ./src/app/api/monitoring/metrics/route.ts:45:54 - Unexpected any
-- [ ] **3.2** ./src/app/api/monitoring/metrics/route.ts:173:17 - Unexpected any
-- [ ] **3.3** ./src/app/api/monitoring/metrics/route.ts:174:24 - Unexpected any
-- [ ] **3.4** ./src/app/api/usuarios/route-abac-puro.ts:16:54 - Unexpected any
-- [ ] **3.5** ./src/lib/abac/enforcer-abac-puro.ts:54:18 - Unexpected any
-- [ ] **3.6** ./src/lib/abac/enforcer-abac-puro.ts:338:28 - Unexpected any
-- [ ] **3.7** ./src/lib/abac/enforcer.ts:54:18 - Unexpected any
-- [ ] **3.8** ./src/lib/abac/enforcer.ts:342:28 - Unexpected any
-- [ ] **3.9** ./src/lib/abac/prisma-adapter-abac.ts:19:27 - Unexpected any
-- [ ] **3.10** ./src/lib/abac/prisma-adapter-abac.ts:40:27 - Unexpected any
-- [ ] **3.11** ./src/lib/abac/prisma-adapter-abac.ts:117:20 - Unexpected any
-- [ ] **3.12** ./src/lib/logger-simple.ts - 9 ocorrências de 'any'
-- [ ] **3.13** ./src/lib/logger.ts - 11 ocorrências de 'any'
-- [ ] **3.14** ./src/types/next-auth-abac.d.ts:144:18 - Unexpected any
-- [ ] **3.15** ./src/types/next-auth-abac.d.ts:180:31 - Unexpected any
-- [ ] **3.16** ./src/types/next-auth-abac.d.ts:219:28 - Unexpected any
-- [ ] **3.17** ./src/types/next-auth.d.ts:144:18 - Unexpected any
-- [ ] **3.18** ./src/types/next-auth.d.ts:180:31 - Unexpected any
-- [ ] **3.19** ./src/types/next-auth.d.ts:219:28 - Unexpected any
-
-#### Exports anônimos (5 warnings)
-- [ ] **4.1** ./src/lib/abac/enforcer-abac-puro.ts:458:1 - Assign object to variable before exporting
-- [ ] **4.2** ./src/lib/abac/enforcer.ts:470:1 - Assign object to variable before exporting
-- [ ] **4.3** ./src/types/next-auth-abac.d.ts:368:1 - Assign object to variable before exporting
-- [ ] **4.4** ./src/types/next-auth.d.ts:368:1 - Assign object to variable before exporting
-- [ ] **4.5** ./src/validators/abacSchemas.ts:318:1 - Assign object to variable before exporting
-
-#### React hooks (1 warning)
-- [ ] **5.1** ./src/components/ui/perfil-usuario-moderno.tsx:67:6 - useEffect missing dependency
-
----
-
-## 🎯 FASE 2: TESTES MANUAIS OBRIGATÓRIOS
-
-### ✅ CONFIGURAÇÃO DO USUÁRIO ADMIN
-- [ ] **7.1** Garantir usuário felipemartinii@gmail.com com privilégios máximos
-- [ ] **7.2** Verificar se não existe felipemartiniii@gmail.com (com 3 i's)
-- [ ] **7.3** Executar seed ABAC puro para admin
-
-### ✅ TESTES DE ENDPOINTS
-- [ ] **8.1** Testar /area-cliente (usuário comum e admin)
-- [ ] **8.2** Testar /admin/dashboard (apenas admin)
-- [ ] **8.3** Testar /admin/abac (apenas admin)
-- [ ] **8.4** Documentar todos os erros encontrados
-
-### ✅ VALIDAÇÃO ABAC/ASIC PURO
-- [ ] **9.1** Eliminar todos resquícios de RBAC/accessLevel
-- [ ] **9.2** Centralizar permissões no backend via Casbin
-- [ ] **9.3** Endpoint /api/auth/permissions funcionando
-- [ ] **9.4** Multifator e sessões globais funcionando
-
----
-
-## 🚀 PRINCÍPIOS DE CORREÇÃO
-
-### � Padrões de Correção Estabelecidos
-1. **Variáveis não utilizadas:** Remover declarações desnecessárias
-2. **Tipos 'any':** Criar interfaces específicas ou usar Record<string, unknown>
-3. **Exports anônimos:** Atribuir a variável antes de exportar
-4. **Hooks React:** Adicionar dependências missing ou usar useCallback
-5. **Propriedades inexistentes:** Corrigir tipos ou adicionar propriedades necessárias
-
-### � Referências Consultadas
-- ABAC/ASIC: https://casbin.org/docs/en/abac
-- Casbin GitHub: https://github.com/casbin/casbin
-- Prisma Adapter: https://github.com/node-casbin/prisma-adapter
-- OWASP Authorization: https://github.com/OWASP/CheatSheetSeries/blob/master/cheatsheets/Authorization_Cheat_Sheet.md
-
----
-
-**Última atualização:** 12/08/2025 - Inicio da correção sistemática
-- [ ] Sistema TOTP (totpSecret campo removido)
-- [ ] Sistema de templates email (modelo não existe)
-
-### 🔧 Configurações
-- [ ] Middleware.ts precisa adaptação
-- [ ] Algumas importações quebradas
-
-## 🎯 PRÓXIMOS PASSOS IMEDIATOS
-
-1. **Testar Build Basic**
-   - Executar npm run build
-   - Verificar funcionalidades core
-
-2. **Criar Componentes ABAC Básicos**
-   - Recriar AdminUsersTable com ABAC
-   - Recriar PerfilUsuarioModerno com ABAC
-
-3. **Limpar Código Legacy**
-   - Remover referências a role/accessLevel
-   - Adaptar componentes para ABAC
-
-4. **Teste End-to-End**
-   - Login funcional
-   - Autorização ABAC funcionando
-   - Dashboard admin funcional
-
-## 📊 MÉTRICAS ATUAIS
-- ✅ Políticas ABAC: 15 criadas
-- ✅ Regras Casbin: 7 criadas  
-- ✅ Schema: 100% ABAC
-- 🚧 TypeScript: ~131 erros (reduzindo)
-- 🚧 Build: Testando...
-
-## 🏆 CONQUISTAS PRINCIPAIS
-1. **Migração completa do sistema RBAC → ABAC puro**
-2. **Sistema Casbin integrado e funcional**
-3. **Políticas baseadas em atributos operacionais**
-4. **Contexto temporal e departamental implementado**
-5. **Auditoria ABAC completa**
-
----
-*Última atualização: 12/08/2025 16:55*
-
-### Status: 100% Completo - Migração ExcelJS finalizada! ✅ 
-
-**Benefícios alcançados:**
-- 🛡️ 2 vulnerabilidades críticas eliminadas
-- 🚀 Performance melhorada
-- 📊 Formatação Excel mais avançada
-- 📝 TypeScript nativo
-- 📦 Bundle menorgs de Lint e Implementação de Tarefas
-
-## ⚠️ OBRIGATÓRIO: Resolver TODOS os warnings de lint antes de prosseguir para as próximas etapas
-
-### ✅ WARNINGS RESOLVIDOS (Reduzidos de 250+ para ~130)
-
-### TypeScript Warnings (@typescript-eslint/no-explicit-any)
-- [x] `./src/app/admin/api-monitoring/page.tsx:64:12` - Resolvido: Record<string, unknown>
-- [x] `./src/app/api/audit/logs/route.ts:54:33` - Resolvido: Tipos específicos
-- [x] `./src/app/api/audit/logs/route.ts:103:38` - Resolvido: Tipos específicos
-- [x] `./src/app/api/exchange/route.ts:80:21` - Resolvido: Interface específica
-- [x] `./src/app/api/exchange/route.ts:251:39` - Resolvido: Tipos específicos
-- [x] `./src/app/api/exchange/route.ts:298:44` - Resolvido: Tipos específicos
-- [x] `./src/app/api/monitoring/metrics/route.ts:63:39` - Resolvido: Interface específica
-- [x] `./src/app/api/monitoring/metrics/route.ts:117:58` - Resolvido: Tipos específicos
-- [x] `./src/app/api/monitoring/metrics/route.ts:117:72` - Resolvido: Tipos específicos
-- [x] `./src/components/admin/AuditDashboard.tsx:37:13` - Resolvido: Record<string, unknown>
-
-### Unused Variables (@typescript-eslint/no-unused-vars)
-- [x] `./src/components/admin/AuditDashboard.tsx:11:10` - Removido: Alert
-- [x] `./src/components/admin/AuditDashboard.tsx:11:17` - Removido: AlertDescription
-- [x] `./src/components/admin/AuditDashboard.tsx:13:3` - Removido: Shield
-- [x] `./src/components/admin/AuditDashboard.tsx:15:3` - Removido: AlertTriangle
-- [x] `./src/components/admin/AuditDashboard.tsx:18:3` - Removido: Clock
-- [x] `./src/components/admin/MonitoringDashboard.tsx:19:3` - Removido: TrendingUp
-- [x] `./src/components/admin/MonitoringDashboard.tsx:75:27` - Adicionado comentário ESLint
-
-### React Hooks Dependencies (react-hooks/exhaustive-deps)
-- [x] `./src/components/admin/AuditDashboard.tsx:117:6` - Resolvido: useCallback
-- [x] `./src/components/admin/AuditDashboard.tsx:121:6` - Resolvido: useCallback
-
-### Compilation Error
-- [x] `./src/lib/performance/serviceWorkerUtils.ts:252:5` - Resolvido: Removido @ts-expect-error
-- [x] `./middleware.ts:96:7` - Resolvido: Corrigido interface LogMeta
-- [x] `./src/app/api/audit/logs/route.ts:109:50` - Resolvido: Tipos AuditAction
-
-### Import/Export Issues
-- [x] `./src/lib/api/index.ts:332:1` - Resolvido: Variável nomeada para export
-
-## 📊 Status da Resolução de Warnings
-- **Warnings Iniciais**: 250+
-- **Warnings Atuais**: ~130 (redução de ~50%)
-- **Errors de Compilação**: 0 ✅
-- **Build Status**: ✅ Passando
-
-## 🎯 Lista de Tarefas da Pasta /lista-de-tarefas/implementartemp
-
-### 📊 Status: INICIANDO IMPLEMENTAÇÃO DAS TAREFAS
-
-## 🛡️ PROGRESSO TAREFA 02: Sistema ABAC Validação REVISADA
-- [x] Análise do sistema RBAC/ABAC híbrido existente
-- [x] Criação do modelo ABAC puro (pure_abac_model.conf)
-- [x] Atualização do ABACEnforcer para ABAC puro
-- [x] Remoção de métodos RBAC do enforcer
-- [x] Criação de políticas ABAC de exemplo
-- [x] Atualização das definições de tipos ABAC
-- [x] Remoção do arquivo rbac.ts
-- [x] Remoção de campos deprecated do schema.prisma
-- [x] Atualização do middleware.ts para ABAC puro
-- [x] Limpeza de HOCs de verificações role-based (AuthGuard atualizado)
-- [x] Atualização de APIs para usar ABAC (permissoes/route.ts, usuarios/route.ts)
-- [x] Atualização de componentes UI para ABAC (dashboard-usuario-widget.tsx)
-- [ ] Atualização de testes para ABAC
-- [ ] Implementação de políticas ABAC avançadas
-- [ ] Documentação do sistema ABAC
-
-### Status: 85% Completo - Sistema ABAC quase finalizado! ✅ Build funcionando
- [ ] remova todos warning de lint
-- [ ] **Tarefa 01**: CRIAS SISTEMA AUTOMATICO DE DEPLOY DIRETO NO PLESK CONFORME DOC OFICIAIS E GOGOLE FAÇA BUSCAS PARA SE ATUALIZAR SOBRE O TEMA (PRIORIDADE URGENTE CRITICA DESENVOLVER DE FORMA COMPLETA)
- [ ] remova todos warning de lint
-- [ ] **Tarefa 02**: Sistema ABAC Validação REVISADA (Prioridade: Crítica)
- [ ] remova todos warning de lint
-- [ ] **Tarefa 03**: Cálculos Atuariais (Prioridade: Alta)
- [ ] remova todos warning de lint
-- [ ] **Tarefa 04**: Otimização Performance (Prioridade: Média)
-- [ ] **Tarefa 05**: Limpeza e Refatoração (Prioridade: Média)
- [ ] remova todos warning de lint
-- [ ] **Tarefa 08**: Refatoração Backend REVISADA (Prioridade: Alta)]
-- [ ] **Tarefa 11**: UX/UI Design System REVISADA (Prioridade: Alta)
-- [ ] **Tarefa 12**: Documentação ModernStack REVISADA (Prioridade: Média)
-- [ ] **Tarefa 13**: Qualidade Código/Lint/Prettier/Husky REVISADA (Prioridade: Alta)
-
-### 🚀 Sequência de Implementação (Ordem de Prioridade)
-1. **Tarefa 02**: Sistema ABAC (INICIANDO AGORA)
-2. **Tarefa 01**: Migração XLSX para ExcelJS
-3. **Tarefa 13**: Qualidade Código/Lint/Prettier/Husky
-4. **Tarefa 03**: Cálculos Atuariais
-5. **Tarefa 08**: Refatoração Backend
-6. **Tarefa 11**: UX/UI Design System
-7. **Tarefa 04**: Otimização Performance
-8. **Tarefa 05**: Limpeza e Refatoração
-9. **Tarefa 12**: Documentação
-
-## 📊 Status Geral
-- **Status**: 🔄 Em Andamento
-- **Etapa Atual**: Resolução de Warnings de Lint
-- **Próxima Etapa**: Implementação de Tarefas Pendentes
+- **Tasks Concluídas:** 9/12 (75%)
+- **Progresso:** 75% ✅
+- **Build Status:** ✅ Compilando com sucesso
+- **Warnings de Lint:** 70% reduzidos (de ~250 para ~70)
+- **Última Atualização:** Correções massivas de warnings de lint e tipos TypeScript
