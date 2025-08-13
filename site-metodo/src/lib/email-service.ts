@@ -1,6 +1,8 @@
+"use client"
+
 import nodemailer from 'nodemailer';
 import { prisma } from '@/lib/prisma';
-import { getEmailTemplate } from '@/emails/templates';
+import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
 import { simpleLogger } from '@/lib/simple-logger';
 
 export interface EmailOptions {

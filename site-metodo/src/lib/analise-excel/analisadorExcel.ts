@@ -3,15 +3,26 @@ import type { DadosAnaliseExcel } from '@/types/analise-excel';
 
 
 /**
- * Analisa um arquivo Excel a partir de um Buffer puro do Node.js.
- * @param buffer Buffer puro do Node.js (NÃO Buffer<ArrayBufferLike>).
+ * Analisa um arquivo Excel a partir de um Buffer ou ArrayBuffer.
+ * @param buffer Buffer do Node.js ou ArrayBuffer compatível.
  */
-export async function analisarExcel(buffer: Buffer): Promise<DadosAnaliseExcel> {
-  if (!Buffer.isBuffer(buffer)) {
-    throw new Error('O parâmetro buffer deve ser um Buffer puro do Node.js');
+export async function analisarExcel(buffer: Buffer | ArrayBuffer | Uint8Array): Promise<DadosAnaliseExcel> {
+  // Converte ArrayBuffer/Uint8Array para Buffer se necessário
+  let workbookBuffer: Buffer;
+  
+  if (Buffer.isBuffer(buffer)) {
+    workbookBuffer = buffer;
+  } else if (buffer instanceof ArrayBuffer) {
+    workbookBuffer = Buffer.from(buffer);
+  } else if (buffer instanceof Uint8Array) {
+    workbookBuffer = Buffer.from(buffer);
+  } else {
+    throw new Error('O parâmetro buffer deve ser um Buffer, ArrayBuffer ou Uint8Array');
   }
+  
   const workbook = new ExcelJS.Workbook();
-  await workbook.xlsx.load(buffer);
+  // Type assertion necessária devido a incompatibilidade de tipos entre Node.js Buffer e definições do ExcelJS
+  await workbook.xlsx.load(workbookBuffer as any);
   const planilhas = workbook.worksheets.map((sheet: ExcelJS.Worksheet) => {
     const colunas: string[] = [];
     const linhas: any[] = [];
