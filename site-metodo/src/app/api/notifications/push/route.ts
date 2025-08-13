@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@/lib/auth'
-import { createPushNotificationService, PushConfig } from '@/lib/notifications/push-service'
+import { createPushNotificationService, PushConfig } from '../../../../lib/notifications/push-service'
 import { simpleLogger } from '@/lib/simple-logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
@@ -20,7 +20,7 @@ const pushConfig: PushConfig = {
     process.env.VAPID_PUBLIC_KEY ||
     'BEl62iUYgUivxIkv69yViEuiBIa40HI2BN4EMYaRJifrJbRGCLxs9vPO4LvKL5u8Y-E_7V7Z1Y4pZ9dRLJhTQOY',
   vapidPrivateKey: process.env.VAPID_PRIVATE_KEY || 'aT9ZTQfJwdW8fHpGt9G7r9z7G7tBKtGp3CdwJkGhZZY',
-  subject: process.env.VAPID_SUBJECT || 'mailto:admin@metodoatuarial.com',
+  vapidEmail: process.env.VAPID_SUBJECT || 'mailto:felipe@metodoatuarial.com',
 }
 
 export async function POST(request: NextRequest) {
