@@ -20,20 +20,14 @@ import {
   CheckCircle, 
   XCircle, 
   Activity,
-  AlertTriangle,
   UserCheck,
   Settings,
   Eye,
-  Edit,
   Trash2,
   Plus,
-  Filter,
-  Search,
   RefreshCw
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
-import { format } from 'date-fns';
-import { ptBR } from 'date-fns/locale';
 
 interface Policy {
   id: string;
@@ -52,7 +46,7 @@ interface PermissionTestResult {
   subject: string;
   object: string;
   action: string;
-  context: any;
+  context: Record<string, unknown>;
 }
 
 export default function ABACPage() {

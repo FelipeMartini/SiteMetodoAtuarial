@@ -20,9 +20,6 @@ import {
   Download,
   RefreshCw,
   Search,
-  Clock,
-  User,
-  AlertTriangle,
   TrendingUp
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -94,7 +91,7 @@ export default function AuditLogsPage() {
       const response = await fetch(`/api/admin/audit-logs?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setLogs(data.logs.map((log: any) => ({
+        setLogs(data.logs.map((log: { timestamp: string | Date; [key: string]: unknown }) => ({
           ...log,
           timestamp: new Date(log.timestamp)
         })));
@@ -214,7 +211,7 @@ export default function AuditLogsPage() {
     {
       id: 'actions',
       header: 'Ações',
-      cell: ({ row }) => (
+      cell: () => (
         <Button variant="ghost" size="sm">
           <Eye className="h-4 w-4" />
         </Button>

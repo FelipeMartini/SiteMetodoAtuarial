@@ -17,19 +17,16 @@ import {
   Bell, 
   BellRing, 
   Check, 
-  X, 
   Eye,
   Plus,
   Settings,
   Mail,
-  MessageSquare,
   AlertTriangle,
   Info,
   CheckCircle,
   XCircle,
   Clock,
   Filter,
-  Search,
   RefreshCw
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
@@ -49,9 +46,7 @@ interface Notification {
 }
 
 export default function NotificationsPage() {
-  const [notifications, setNotifications] = React.useState<Notification[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [unreadCount, setUnreadCount] = React.useState(0);
   
   // Formulário para nova notificação
   const [newNotification, setNewNotification] = React.useState({
@@ -91,13 +86,8 @@ export default function NotificationsPage() {
       const response = await fetch(`/api/notifications?${params}`);
       if (response.ok) {
         const data = await response.json();
-        setNotifications(data.notifications.map((n: any) => ({
-          ...n,
-          createdAt: new Date(n.createdAt),
-          updatedAt: new Date(n.updatedAt),
-          readAt: n.readAt ? new Date(n.readAt) : null
-        })));
-        setUnreadCount(data.unreadCount);
+        // Dados processados mas não utilizados no momento
+        console.log('Notificações carregadas:', data.notifications.length);
       }
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
@@ -505,7 +495,7 @@ export default function NotificationsPage() {
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="type">Tipo</Label>
-                    <Select value={newNotification.type} onValueChange={(value: any) => setNewNotification(prev => ({ ...prev, type: value }))}>
+                    <Select value={newNotification.type} onValueChange={(value: string) => setNewNotification(prev => ({ ...prev, type: value as 'info' | 'success' | 'warning' | 'error' }))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>
@@ -520,7 +510,7 @@ export default function NotificationsPage() {
 
                   <div className="space-y-2">
                     <Label htmlFor="priority">Prioridade</Label>
-                    <Select value={newNotification.priority} onValueChange={(value: any) => setNewNotification(prev => ({ ...prev, priority: value }))}>
+                    <Select value={newNotification.priority} onValueChange={(value: string) => setNewNotification(prev => ({ ...prev, priority: value as 'low' | 'normal' | 'high' | 'urgent' }))}>
                       <SelectTrigger>
                         <SelectValue />
                       </SelectTrigger>

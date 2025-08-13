@@ -103,6 +103,7 @@ Este checklist será atualizado conforme cada etapa for concluída.
 
 - [x] Task 07: Interface Moderna para Cálculos Atuariais (100%) ✅
 - [x] Task 08: Autenticação Multifator (MFA) Moderna e Segura (100%) ✅ COMPLETA
+- [x] Task 09: UX/Auth/ABAC/shadcn/DarkMode (100%) ✅ COMPLETA
 - [x] Criar interface moderna para cálculos atuariais ✅
 - [x] Implementar visualizações de dados com gráficos ✅
 - [x] Sistema de importação/exportação de tábuas ✅

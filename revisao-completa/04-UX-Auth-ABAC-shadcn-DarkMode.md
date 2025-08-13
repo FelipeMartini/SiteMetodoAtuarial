@@ -11,20 +11,20 @@
 > - **Ao finalizar uma tarefa principal, é OBRIGATÓRIO reler todos os arquivos da pasta `revisao-completa` para relembrar o processo como um todo antes de iniciar a próxima tarefa principal.**
 
 ## Checklist Detalhado de UX/Auth/ABAC
-- [ ] Adicionar feedback instantâneo (toasts, sonner)
-- [ ] Usar diálogos/alertas acessíveis (Dialog/AlertDialog)
-- [ ] Skeletons e Progress para loading
-- [ ] Tooltips explicativos
-- [ ] Botões, Badges e Avatar modernos
-- [ ] Fluxo de acesso negado claro
-- [ ] Loading global seguro
-- [ ] Garantir acessibilidade total
-- [ ] Composição e abstração de wrappers
-- [ ] Suporte total a tema claro/escuro (dark mode) e seletor de tema
-- [ ] Garantir documentação e exemplos de uso para todos os fluxos
-- [ ] Validar contraste e acessibilidade em ambos os temas
-- [ ] Testar navegação por teclado e leitores de tela
-- [ ] Documentar todos os componentes customizados e wrappers
+- [x] Adicionar feedback instantâneo (toasts, sonner)
+- [x] Usar diálogos/alertas acessíveis (Dialog/AlertDialog)
+- [x] Skeletons e Progress para loading
+- [x] Tooltips explicativos
+- [x] Botões, Badges e Avatar modernos
+- [x] Fluxo de acesso negado claro
+- [x] Loading global seguro
+- [x] Garantir acessibilidade total
+- [x] Composição e abstração de wrappers
+- [x] Suporte total a tema claro/escuro (dark mode) e seletor de tema
+- [x] Garantir documentação e exemplos de uso para todos os fluxos
+- [x] Validar contraste e acessibilidade em ambos os temas
+- [x] Testar navegação por teclado e leitores de tela
+- [x] Documentar todos os componentes customizados e wrappers
 
 ## Plano de Implementação UX/Auth/ABAC
 

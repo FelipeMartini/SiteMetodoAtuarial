@@ -35,22 +35,22 @@ const colunas: ColumnDef<UsuarioTabelaRow>[] = [
   {
     accessorKey: 'department',
     header: 'Departamento',
-    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="outline">{getValue()}</Badge> : '-',
+    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <Badge variant="outline">{getValue()}</Badge> : '-',
   },
   {
     accessorKey: 'location',
     header: 'Localidade',
-    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="secondary">{getValue()}</Badge> : '-',
+    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <Badge variant="secondary">{getValue()}</Badge> : '-',
   },
   {
     accessorKey: 'jobTitle',
     header: 'Cargo',
-    cell: ({ getValue }: { getValue: any }) => getValue() ? <span className="font-medium text-xs text-muted-foreground">{getValue()}</span> : '-',
+    cell: ({ getValue }: { getValue: () => string }) => getValue() ? <span className="font-medium text-xs text-muted-foreground">{getValue()}</span> : '-',
   },
   {
     id: 'validade',
     header: 'Validade',
-    cell: ({ row }: { row: any }) => {
+    cell: ({ row }: { row: { original: UsuarioTabelaRow } }) => {
       const from = row.original.validFrom ? new Date(row.original.validFrom).toLocaleDateString('pt-BR') : '-';
       const to = row.original.validUntil ? new Date(row.original.validUntil).toLocaleDateString('pt-BR') : '-';
       return (
@@ -64,12 +64,12 @@ const colunas: ColumnDef<UsuarioTabelaRow>[] = [
   {
     accessorKey: 'isActive',
     header: 'Ativo',
-    cell: ({ getValue }: { getValue: any }) => getValue() ? <Badge variant="default">Sim</Badge> : <Badge variant="destructive">Não</Badge>,
+    cell: ({ getValue }: { getValue: () => boolean }) => getValue() ? <Badge variant="default">Sim</Badge> : <Badge variant="destructive">Não</Badge>,
   },
   {
     accessorKey: 'createdAt',
     header: 'Criado em',
-    cell: ({ getValue }: { getValue: any }) => new Date(getValue()).toLocaleDateString('pt-BR'),
+    cell: ({ getValue }: { getValue: () => string | Date }) => new Date(getValue()).toLocaleDateString('pt-BR'),
   },
 ]
 
