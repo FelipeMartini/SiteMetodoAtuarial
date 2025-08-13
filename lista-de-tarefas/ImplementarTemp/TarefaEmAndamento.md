@@ -72,17 +72,22 @@ Este checklist será atualizado conforme cada etapa for concluída.
 - [x] Sistema de prioridades e tipos de notificação
 
 ### ✅ **Task 06 - Sistema de E-mails** (COMPLETA)
-- [x] Modernizar templates de email com design responsivo
-- [x] Integrar sistema de notificações com envio de emails
-- [x] Criar interface para gerenciar templates de email
-- [x] Implementar fila de emails com retry automático
-- [x] Sistema de analytics para emails enviados
-- [x] Templates HTML modernos (boas-vindas, segurança, notificações)
-- [x] Serviço de email com suporte a Nodemailer
-- [x] Interface administrativa completa (/admin/emails)
-- [x] APIs REST para envio e gerenciamento
-- [x] Integração com sistema de notificações
-- [x] Logs detalhados e estatísticas
+# Tarefa 07: Interface Moderna para Cálculos Atuariais
+
+## Lista de Tarefas - Progresso: 0/10 (0%)
+
+```markdown
+- [ ] Criar modelos Prisma para TabuaMortalidade e TaxaMortalidade no schema
+- [ ] Criar interface moderna de cálculos atuariais seguindo padrão shadcn/ui
+- [ ] Implementar calculadoras interativas com validação em tempo real
+- [ ] Criar visualizações de dados com recharts para resultados dos cálculos
+- [ ] Implementar sistema de importação/exportação de tábuas de mortalidade
+- [ ] Criar APIs para gestão de tábuas de mortalidade (CRUD completo)
+- [ ] Integrar calculadoras existentes com interface moderna
+- [ ] Implementar histórico de cálculos com persistência no banco
+- [ ] Criar sistema de relatórios em PDF com dados dos cálculos
+- [ ] Testar integração completa e atualizar progresso para 7/10 (70%)
+```
 
 ### 🔄 **Task 07 - Interface para Cálculos Atuariais** (EM ANDAMENTO)
 - [ ] Criar interface moderna para cálculos atuariais
