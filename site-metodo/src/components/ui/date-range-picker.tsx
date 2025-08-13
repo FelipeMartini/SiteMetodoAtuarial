@@ -12,6 +12,12 @@ import type { DateRange } from 'react-day-picker';
 
 export type { DateRange };
 
+interface DayComponentProps {
+  day: unknown;
+  modifiers: Record<string, boolean>;
+  className?: string;
+}
+
 interface DatePickerWithRangeProps {
   className?: string;
   date?: DateRange;
@@ -93,7 +99,7 @@ interface DatePickerWithRangeProps {
                 day: 'relative h-9 w-9 p-0 font-normal transition-all duration-200 ease-in-out hover:scale-110 hover:z-10 hover:shadow-lg',
               }}
               components={{
-                Day: ({ day, modifiers, ...rest }: { day: any; modifiers: any; className?: string }) => {
+                Day: ({ day, modifiers, ...rest }: DayComponentProps) => {
                   // day é CalendarDay, acessar .date
                   return (
                     <div className="relative group">

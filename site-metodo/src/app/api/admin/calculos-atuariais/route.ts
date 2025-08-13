@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { CalculadoraAtuarial } from '@/lib/calculadora-atuarial'
+import type { JsonValue } from '@prisma/client/runtime/library'
+
+interface CalculoResultado {
+  valor?: number;
+  detalhes?: Record<string, unknown>;
+  [key: string]: unknown;
+}
 
 export async function GET(request: NextRequest) {
   try {
@@ -123,7 +130,7 @@ export async function POST(request: NextRequest) {
       data: {
         tipo,
         parametros,
-        resultado: resultado as any,
+        resultado: resultado as JsonValue,
         tabuaId,
         userId: session.user.id,
         observacao: `Cálculo ${tipo} realizado automaticamente`

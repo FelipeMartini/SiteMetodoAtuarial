@@ -3,6 +3,16 @@ import { emailService } from '@/lib/email-service'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 
+interface EmailWhereClause {
+  status?: string;
+  priority?: string;
+  OR?: Array<{
+    to?: { contains: string };
+    subject?: { contains: string };
+    body?: { contains: string };
+  }>;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
@@ -20,7 +30,7 @@ export async function GET(request: NextRequest) {
     const skip = (page - 1) * limit;
 
     // Construir filtros
-    const where: any = {};
+    const where: EmailWhereClause = {};
 
     if (status) {
       where.status = status;

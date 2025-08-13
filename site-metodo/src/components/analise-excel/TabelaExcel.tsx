@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { PlanilhaExcel, CelulaExcel } from '@/types/analise-excel';
+import type { PlanilhaExcel } from '@/types/analise-excel';
 
 
 interface Props {
@@ -27,7 +27,6 @@ function exportarParaJSON(planilha: PlanilhaExcel) {
 export default function TabelaExcel({ planilha }: Props) {
   const [pagina, setPagina] = useState(1);
   const [busca, setBusca] = useState('');
-  const totalPaginas = Math.ceil(planilha.linhas.length / LINHAS_POR_PAGINA);
 
   const linhasFiltradas = useMemo(() => {
     if (!busca) return planilha.linhas;

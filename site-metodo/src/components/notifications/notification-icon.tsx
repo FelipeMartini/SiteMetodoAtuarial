@@ -21,7 +21,7 @@ import {
   Eye,
   Settings
 } from 'lucide-react';
-import { format, formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
 import Link from 'next/link';
 
@@ -30,10 +30,31 @@ interface Notification {
   title: string;
   message: string;
   type: 'info' | 'success' | 'warning' | 'error';
-  priority: 'low' | 'normal' | 'high' | 'urgent';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
   read: boolean;
-  readAt: Date | null;
   createdAt: Date;
+  readAt?: Date | null;
+  userId: string;
+  metadata?: Record<string, unknown>;
+}
+
+interface NotificationApiResponse {
+  success: boolean;
+  data: {
+    notifications: Array<{
+      id: string;
+      title: string;
+      message: string;
+      type: string;
+      priority: string;
+      read: boolean;
+      createdAt: string;
+      readAt?: string | null;
+      userId: string;
+      metadata?: Record<string, unknown>;
+    }>;
+    unreadCount: number;
+  };
 }
 
 interface NotificationIconProps {
@@ -43,18 +64,18 @@ interface NotificationIconProps {
 export function NotificationIcon({ className }: NotificationIconProps) {
   const [notifications, setNotifications] = React.useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = React.useState(0);
-  const [loading, setLoading] = React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   const loadNotifications = React.useCallback(async () => {
     try {
-      setLoading(true);
       const response = await fetch('/api/notifications?limit=10&unreadOnly=false');
       if (response.ok) {
-        const data = await response.json();
+        const data: NotificationApiResponse = await response.json();
         if (data.success && data.data) {
-          setNotifications(data.data.notifications.map((n: any) => ({
+          setNotifications(data.data.notifications.map((n) => ({
             ...n,
+            type: n.type as 'info' | 'success' | 'warning' | 'error',
+            priority: n.priority as 'low' | 'medium' | 'high' | 'urgent',
             createdAt: new Date(n.createdAt),
             readAt: n.readAt ? new Date(n.readAt) : null
           })));
@@ -63,8 +84,6 @@ export function NotificationIcon({ className }: NotificationIconProps) {
       }
     } catch (error) {
       console.error('Erro ao carregar notificações:', error);
-    } finally {
-      setLoading(false);
     }
   }, []);
 
