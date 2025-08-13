@@ -3,6 +3,18 @@
 import { simpleLogger } from '@/lib/simple-logger';
 import { prisma } from '@/lib/prisma';
 
+interface EmailLogWhereClause {
+  status?: string;
+  priority?: string;
+  templateType?: string;
+  to?: { contains: string };
+  subject?: { contains: string };
+  createdAt?: {
+    gte?: Date;
+    lte?: Date;
+  };
+}
+
 export interface EmailLogEntry {
   id?: string;
   to: string | string[];
@@ -144,7 +156,7 @@ class EmailLogger {
     offset?: number;
   } = {}): Promise<EmailLogEntry[]> {
     try {
-      const where: any = {};
+      const where: EmailLogWhereClause = {};
 
       if (filters.status) where.status = filters.status;
       if (filters.priority) where.priority = filters.priority;

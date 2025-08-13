@@ -17,8 +17,8 @@ export interface ResultadoSeguroVida {
 
 export interface ResultadoAtuarial {
   tipo: 'seguro_vida' | 'anuidade' | 'reserva'
-  parametros: any
-  resultado: any
+  parametros: Record<string, unknown>
+  resultado: Record<string, unknown>
   dataCalculo: Date
 }
 
@@ -194,9 +194,7 @@ export class CalculadoraAtuarial {
    */
   analiseMortalidade(
     idadeInicial: number,
-    idadeFinal: number,
-    valorCapital: number = 100000,
-    taxaJuros: number = 0.06
+    idadeFinal: number
   ): Array<{
     idade: number
     qx: number

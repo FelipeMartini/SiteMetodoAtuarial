@@ -1,6 +1,17 @@
 import ExcelJS from 'exceljs';
 import type { DadosAnaliseExcel } from '@/types/analise-excel';
 
+interface CelulaAnalise {
+  coluna: string;
+  valor: unknown;
+  formula: string | null;
+}
+
+interface LinhaAnalise {
+  numero: number;
+  celulas: CelulaAnalise[];
+}
+
 
 /**
  * Analisa um arquivo Excel a partir de um Buffer ou ArrayBuffer.
@@ -22,17 +33,17 @@ export async function analisarExcel(buffer: Buffer | ArrayBuffer | Uint8Array): 
   
   const workbook = new ExcelJS.Workbook();
   // Type assertion necessária devido a incompatibilidade de tipos entre Node.js Buffer e definições do ExcelJS
-  await workbook.xlsx.load(workbookBuffer as any);
+  await workbook.xlsx.load(workbookBuffer as Buffer);
   const planilhas = workbook.worksheets.map((sheet: ExcelJS.Worksheet) => {
     const colunas: string[] = [];
-    const linhas: any[] = [];
+    const linhas: LinhaAnalise[] = [];
     sheet.eachRow((row: ExcelJS.Row, rowNumber: number) => {
       if (rowNumber === 1) {
-        row.eachCell((cell: ExcelJS.Cell, colNumber: number) => {
+        row.eachCell((cell: ExcelJS.Cell) => {
           colunas.push(cell.address.replace(/\d+$/, ''));
         });
       }
-      const celulas: Array<{ coluna: string; valor: any; formula: string | null }> = [];
+      const celulas: CelulaAnalise[] = [];
       row.eachCell((cell: ExcelJS.Cell) => {
         let formula: string | null = null;
         if (cell.value && typeof cell.value === 'object' && 'formula' in cell.value) {
