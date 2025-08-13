@@ -25,10 +25,13 @@
     "types": ["node", "react", "react-dom"],
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
-      "@core/*": ["src/@core/*"],
-      "@/auth": ["src/auth.ts"],
-      "@mui/styled-engine": ["node_modules/@mui/styled-engine-sc"]
+  "@/*": ["src/*"],
+  "@core/*": ["src/@core/*"],
+  "@/auth": ["src/auth.ts"],
+  "@mui/styled-engine": ["node_modules/@mui/styled-engine-sc"],
+  "@components/*": ["components/*"],
+  "@libs/*": ["libs/*"],
+  "@types/*": ["types/*"]
     }
   },
   "include": ["next-env.d.ts", ".next/types/**/*.ts", "types/**/*.d.ts", "**/*.ts", "**/*.tsx"],
