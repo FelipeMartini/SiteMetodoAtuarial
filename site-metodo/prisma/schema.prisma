@@ -32,6 +32,7 @@ model User {
   accessLogs     AccessLog[]
   notifications  Notification[]
   emailLogs      EmailLog[]
+  notificationPreferences UserNotificationPreferences?
   calculos       CalculoAtuarial[]
 
   @@map("users")
@@ -127,6 +128,7 @@ model Notification {
   message   String
   type      String   // 'info', 'success', 'warning', 'error'
   priority  String   // 'low', 'normal', 'high', 'urgent'
+  status    String   @default("sent") // Campo faltante: 'sent', 'pending', 'failed'
   read      Boolean  @default(false)
   readAt    DateTime?
   metadata  Json?
@@ -139,21 +141,42 @@ model Notification {
 }
 
 model EmailLog {
-  id        String   @id @default(cuid())
-  to        String
-  subject   String
-  messageId String?
-  status    String   // 'sent', 'failed', 'pending'
-  error     String?
-  priority  String   @default("normal")
-  userId    String?
-  sentAt    DateTime?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id           String   @id @default(cuid())
+  to           String
+  cc           String?  // Campo faltante
+  bcc          String?  // Campo faltante
+  subject      String
+  templateType String?  // Campo faltante
+  messageId    String?
+  status       String   // 'sent', 'failed', 'pending'
+  error        String?
+  priority     String   @default("normal")
+  metadata     Json?    // Campo faltante
+  userId       String?
+  sentAt       DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
 
   @@map("email_logs")
+}
+
+model UserNotificationPreferences {
+  id          String  @id @default(cuid())
+  userId      String  @unique
+  email       Boolean @default(true)
+  inApp       Boolean @default(true)
+  push        Boolean @default(false)
+  sms         Boolean @default(false)
+  security    Boolean @default(true)
+  newsletter  Boolean @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("user_notification_preferences")
 }
 
 model TabuaMortalidade {
