@@ -1,5 +1,5 @@
 import ExcelJS from 'exceljs';
-import type { DadosAnaliseExcel } from '@types/analise-excel';
+import type { DadosAnaliseExcel } from '@/types/analise-excel';
 
 export async function analisarExcel(buffer: Buffer): Promise<DadosAnaliseExcel> {
   const workbook = new ExcelJS.Workbook();
