@@ -111,18 +111,18 @@ const adminMenuItems: AdminMenuItem[] = [
     badge: 'Novo',
     items: [
       {
-        title: 'Calculadora',
-        url: '/area-cliente/calculos-atuariais',
+        title: 'Calculadoras',
+        url: '/admin/calculos-atuariais',
         icon: Calculator,
       },
       {
-        title: 'Tabelas de Mortalidade',
-        url: '/area-cliente/calculos-atuariais',
+        title: 'Tábuas de Mortalidade',
+        url: '/admin/calculos-atuariais',
         icon: Database,
       },
       {
         title: 'Relatórios',
-        url: '/area-cliente/calculos-atuariais',
+        url: '/admin/calculos-atuariais',
         icon: TrendingUp,
       },
     ],

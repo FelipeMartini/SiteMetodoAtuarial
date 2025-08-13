@@ -1,6 +1,6 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
+import { NextRequest, NextResponse } from 'next/server'
+import { prisma } from '@/lib/prisma'
+import { auth } from '@/lib/auth'
 
 export async function PATCH(
   request: NextRequest,
@@ -43,16 +43,14 @@ export async function PATCH(
       await prisma.accessLog.create({
         data: {
           userId: session.user.id,
+          subject: session.user.email || '',
+          object: 'notification',
           action: 'READ_NOTIFICATION',
-          resource: 'notification',
-          resourceId: notificationId,
-          details: {
-            notificationType: notification.type,
-            notificationPriority: notification.priority
-          },
-          ipAddress: request.headers.get('x-forwarded-for') || 
-                    request.headers.get('x-real-ip') || 
-                    '127.0.0.1',
+          resource: notificationId,
+          allowed: true,
+          ip: request.headers.get('x-forwarded-for') || 
+              request.headers.get('x-real-ip') || 
+              '127.0.0.1',
           userAgent: request.headers.get('user-agent') || ''
         }
       });
