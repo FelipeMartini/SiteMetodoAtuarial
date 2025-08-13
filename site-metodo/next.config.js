@@ -43,7 +43,7 @@ const nextConfig = {
     'http://10.0.0.69:3000',
   ],
   
-  // Configuração para Casbin - evita problemas com fs no frontend
+  // Configuração para Casbin e nodemailer - evita problemas com fs e módulos nativos no frontend
   webpack: (config, { isServer }) => {
     if (!isServer) {
       config.resolve.fallback = {
@@ -51,6 +51,11 @@ const nextConfig = {
         fs: false,
         path: false,
         os: false,
+        net: false,
+        dns: false,
+        child_process: false,
+        tls: false,
+        crypto: false,
       }
     }
     return config

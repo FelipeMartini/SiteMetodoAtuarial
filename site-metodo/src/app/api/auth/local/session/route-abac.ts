@@ -1,7 +1,7 @@
 'use client'
 
 import { NextResponse } from 'next/server'
-import { auth } from '@/../auth-abac-puro'
+import { auth } from '@/auth'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
 export async function GET() {

@@ -1,5 +1,3 @@
-"use client"
-
 import { simpleLogger } from '@/lib/simple-logger';
 import { emailService } from '@/lib/email-service';
 import { emailLogger } from '@/lib/email-logger';
