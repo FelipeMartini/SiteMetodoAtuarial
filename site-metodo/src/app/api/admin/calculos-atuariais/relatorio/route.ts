@@ -36,7 +36,20 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Cálculo não encontrado' }, { status: 404 })
       }
 
-      return generateCalculationReport(calculo)
+      // Adaptar dados para o formato esperado pelo relatório
+      const dadosRelatorio = {
+        id: calculo.id,
+        tipo: calculo.tipo,
+        usuario: calculo.user ? {
+          name: calculo.user.name || undefined,
+          email: calculo.user.email
+        } : undefined,
+        createdAt: calculo.dataCalculo,
+        parametros: calculo.parametros as Record<string, unknown>,
+        resultados: calculo.resultado as Record<string, unknown>
+      }
+
+      return generateCalculationReport(dadosRelatorio)
     }
 
     // Relatório geral
@@ -90,12 +103,9 @@ function generateCalculationReport(calculo: {
   const basicInfo = [
     ['ID do Cálculo:', calculo.id],
     ['Tipo:', calculo.tipo.replace('_', ' ').toUpperCase()],
-    ['Data do Cálculo:', new Date(calculo.dataCalculo).toLocaleDateString('pt-BR')],
-    ['Usuário:', calculo.user?.name || 'N/A'],
-    ['Email:', calculo.user?.email || 'N/A'],
-    ['Tábua Utilizada:', calculo.tabua ? `${calculo.tabua.nome} (${calculo.tabua.ano})` : 'AT-2000 (Padrão)'],
-    ['Fonte da Tábua:', calculo.tabua?.fonte || 'SUSEP'],
-    ['Observação:', calculo.observacao || 'Nenhuma']
+    ['Data do Cálculo:', new Date(calculo.createdAt).toLocaleDateString('pt-BR')],
+    ['Usuário:', calculo.usuario?.name || 'N/A'],
+    ['Email:', calculo.usuario?.email || 'N/A']
   ]
   
   let yPos = 55
@@ -135,7 +145,7 @@ function generateCalculationReport(calculo: {
   doc.setFontSize(10)
   doc.setFont('helvetica', 'normal')
   
-  const resultado = calculo.resultado
+  const resultado = calculo.resultados
   if (resultado.valor !== undefined) {
     doc.setFont('helvetica', 'bold')
     doc.text('Valor Principal:', 20, yPos)

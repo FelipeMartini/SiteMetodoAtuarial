@@ -123,7 +123,7 @@ export async function POST(request: NextRequest) {
       data: {
         tipo,
         parametros,
-        resultado,
+        resultado: resultado as any,
         tabuaId,
         userId: session.user.id,
         observacao: `Cálculo ${tipo} realizado automaticamente`
