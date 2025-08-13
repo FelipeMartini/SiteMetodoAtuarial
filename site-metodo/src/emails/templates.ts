@@ -1,137 +1,95 @@
-interface EmailTemplateProps {
+"use client"
+
+import { render } from '@react-email/components';
+import WelcomeEmail from './welcome-email';
+import SecurityAlertEmail from './security-alert-email';
+import NotificationEmail from './notification-email';
+import PasswordResetEmail from './password-reset-email';
+
+export interface EmailTemplateProps {
   name?: string;
   email?: string;
   [key: string]: any;
 }
 
-// Template de Boas-vindas
+export type EmailTemplateType = 'welcome' | 'security-alert' | 'notification' | 'password-reset';
+
+/**
+ * Renderiza um template de email usando React Email
+ */
+export async function renderEmailTemplate(
+  templateType: EmailTemplateType, 
+  props: EmailTemplateProps
+): Promise<string> {
+  try {
+    switch (templateType) {
+      case 'welcome':
+        return await render(WelcomeEmail(props));
+        
+      case 'security-alert':
+        return await render(SecurityAlertEmail(props));
+        
+      case 'notification':
+        return await render(NotificationEmail(props));
+        
+      case 'password-reset':
+        return await render(PasswordResetEmail(props));
+        
+      default:
+        throw new Error(`Template ${templateType} não encontrado`);
+    }
+  } catch (error) {
+    console.error(`Erro ao renderizar template ${templateType}:`, error);
+    throw new Error(`Falha ao renderizar template: ${error instanceof Error ? error.message : String(error)}`);
+  }
+}
+
+/**
+ * Função legado mantida para compatibilidade - DEPRECATED
+ * @deprecated Use renderEmailTemplate() para novos desenvolvimentos
+ */
+
 export function createWelcomeEmailHtml(props: EmailTemplateProps): string {
+  console.warn('createWelcomeEmailHtml is deprecated. Use renderEmailTemplate("welcome", props) instead.');
   const { name = 'Usuário', email = 'usuario@exemplo.com', loginUrl = 'https://metodoatuarial.com/login' } = props;
   
-  return `
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bem-vindo ao Método Atuarial</title>
-    <style>
-        body { 
-            margin: 0; 
-            padding: 0; 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Ubuntu, sans-serif;
-            background-color: #f6f9fc;
-            line-height: 1.6;
-        }
-        .container { 
-            max-width: 600px; 
-            margin: 0 auto; 
-            background: #ffffff;
-            margin-bottom: 64px;
-        }
-        .header { 
-            padding: 32px 20px; 
-            text-align: center; 
-            border-bottom: 1px solid #e6ebf1; 
-        }
-        .logo { 
-            max-width: 150px; 
-            height: auto; 
-        }
-        .content { 
-            padding: 32px 20px; 
-        }
-        .title { 
-            color: #1d1c1d; 
-            font-size: 24px; 
-            font-weight: 600; 
-            text-align: center; 
-            margin: 0 0 20px; 
-        }
-        .text { 
-            color: #525f7f; 
-            font-size: 16px; 
-            margin: 0 0 16px; 
-        }
-        .button-section { 
-            text-align: center; 
-            margin: 32px 0; 
-        }
-        .button { 
-            display: inline-block; 
-            background-color: #007ee6; 
-            color: #ffffff; 
-            text-decoration: none; 
-            padding: 12px 24px; 
-            border-radius: 4px; 
-            font-weight: 600; 
-            font-size: 16px; 
-        }
-        .button:hover { 
-            background-color: #0056b3; 
-        }
-        .footer { 
-            border-top: 1px solid #e6ebf1; 
-            padding: 32px 20px 20px; 
-            text-align: center; 
-        }
-        .footer-text { 
-            color: #8898aa; 
-            font-size: 12px; 
-            margin: 0 0 8px; 
-        }
-        .link { 
-            color: #007ee6; 
-            text-decoration: underline; 
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="header">
-            <img src="https://metodoatuarial.com/logo.png" alt="Método Atuarial" class="logo">
-        </div>
-        
-        <div class="content">
-            <h1 class="title">Bem-vindo ao Método Atuarial!</h1>
-            
-            <p class="text">Olá <strong>${name}</strong>,</p>
-            
-            <p class="text">
-                Seja bem-vindo à plataforma Método Atuarial! Sua conta foi criada com sucesso 
-                e você já pode começar a utilizar nossos recursos de cálculos atuariais.
-            </p>
-            
-            <p class="text">
-                <strong>Email cadastrado:</strong> ${email}
-            </p>
-            
-            <div class="button-section">
-                <a href="${loginUrl}" class="button">Acessar Plataforma</a>
-            </div>
-            
-            <p class="text">
-                Se você não criou esta conta, pode ignorar este email com segurança.
-            </p>
-        </div>
-        
-        <div class="footer">
-            <p class="footer-text">
-                Este email foi enviado para ${email} como parte dos serviços do Método Atuarial.
-            </p>
-            
-            <p class="footer-text">
-                © 2024 Método Atuarial. Todos os direitos reservados.
-            </p>
-            
-            <p class="footer-text">
-                <a href="https://metodoatuarial.com/privacy" class="link">Política de Privacidade</a> | 
-                <a href="https://metodoatuarial.com/terms" class="link">Termos de Uso</a>
-            </p>
-        </div>
-    </div>
-</body>
-</html>`;
+  return render(WelcomeEmail({ name, email, loginUrl }));
+}
+
+export function createSecurityAlertEmailHtml(props: EmailTemplateProps): string {
+  console.warn('createSecurityAlertEmailHtml is deprecated. Use renderEmailTemplate("security-alert", props) instead.');
+  return render(SecurityAlertEmail(props));
+}
+
+export function createNotificationEmailHtml(props: EmailTemplateProps): string {
+  console.warn('createNotificationEmailHtml is deprecated. Use renderEmailTemplate("notification", props) instead.');
+  return render(NotificationEmail(props));
+}
+
+export function createPasswordResetEmailHtml(props: EmailTemplateProps): string {
+  console.warn('createPasswordResetEmailHtml is deprecated. Use renderEmailTemplate("password-reset", props) instead.');
+  return render(PasswordResetEmail(props));
+}
+
+/**
+ * Função utilitária para obter template por tipo - DEPRECATED
+ * @deprecated Use renderEmailTemplate() para novos desenvolvimentos
+ */
+export function getEmailTemplate(templateType: string, props: EmailTemplateProps): string {
+  console.warn('getEmailTemplate is deprecated. Use renderEmailTemplate() instead.');
+  
+  switch (templateType) {
+    case 'welcome':
+      return createWelcomeEmailHtml(props);
+    case 'security-alert':
+      return createSecurityAlertEmailHtml(props);
+    case 'notification':
+      return createNotificationEmailHtml(props);
+    case 'password-reset':
+      return createPasswordResetEmailHtml(props);
+    default:
+      throw new Error(`Template ${templateType} não encontrado`);
+  }
 }
 
 // Template de Alerta de Segurança
