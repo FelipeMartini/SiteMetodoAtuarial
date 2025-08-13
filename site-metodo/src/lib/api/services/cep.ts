@@ -1,9 +1,9 @@
 'use client'
 
 import { z } from 'zod'
-import { ApiClient, createApiClient } from '../client'
-import { apiMonitor } from '../monitor-simple'
-import { apiCache } from '../cache'
+import { ApiClient, createApiClient } from '@/lib/api/client'
+import { apiMonitor } from '@/lib/api/monitor-simple'
+import { apiCache } from '@/lib/api/cache'
 
 // Type definitions for CEP API
 export interface CepData {

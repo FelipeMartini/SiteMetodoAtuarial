@@ -1,7 +1,7 @@
 'use client'
 
 import { LRUCache } from 'lru-cache'
-import { simpleLogger } from '../simple-logger'
+import { simpleLogger } from '@libs/simple-logger'
 
 export interface CacheOptions {
   ttl?: number // Time to live in seconds

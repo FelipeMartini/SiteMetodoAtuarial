@@ -1,7 +1,7 @@
 // Logger compatibility shim para build
 // Importa logger simples e cria interface compatível
 
-import logger from './logger-simple'
+import logger from '@libs/logger-simple'
 
 // Interfaces de compatibilidade
 export interface LogMeta {

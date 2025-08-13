@@ -1,4 +1,4 @@
-import { simpleLogger } from './simple-logger'
+import { simpleLogger } from '@libs/simple-logger'
 
 interface PerformanceMetric {
   name: string

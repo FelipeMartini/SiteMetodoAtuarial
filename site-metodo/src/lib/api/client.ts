@@ -7,7 +7,7 @@ import axios, {
   AxiosError,
   InternalAxiosRequestConfig,
 } from 'axios'
-import { simpleLogger } from '../simple-logger'
+import { simpleLogger } from '@libs/simple-logger'
 
 // Types for API responses
 export interface ApiResponse<T = unknown> {
