@@ -1,7 +1,7 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { prisma } from '@/lib/prisma';
-import { auth } from '@/auth';
-import { emailService } from '@/lib/email-service';
+import { NextRequest, NextResponse } from 'next/server'
+import { emailService } from '@/lib/email-service'
+import { auth } from '@/lib/auth'
+import { prisma } from '@/lib/prisma'
 
 export async function GET(request: NextRequest) {
   try {
