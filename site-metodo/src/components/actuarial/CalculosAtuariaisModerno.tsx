@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Button } from '@/components/ui/button'
@@ -44,6 +44,18 @@ export function CalculosAtuariaisModerno() {
 
   const [activeTab, setActiveTab] = useState('calculadora')
   const [selectedTable, setSelectedTable] = useState<string>('')
+
+  // Estados para importação/exportação
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isImporting, setIsImporting] = useState(false)
+  const [isExporting, setIsExporting] = useState(false)
+  const [importForm, setImportForm] = useState({
+    nome: '',
+    ano: new Date().getFullYear(),
+    fonte: '',
+    sexo: 'AMBOS',
+    descricao: ''
+  })
 
   // Estados para formulários
   const [lifeInsuranceForm, setLifeInsuranceForm] = useState({
@@ -108,6 +120,110 @@ export function CalculosAtuariaisModerno() {
       await calcularReservaMatematica(reserveForm, selectedTable || undefined)
     } catch (error) {
       console.error('Erro no cálculo:', error)
+    }
+  }
+
+  // Função para importar tábua de mortalidade
+  const handleImportTable = async (file: File) => {
+    if (!importForm.nome || !importForm.fonte) {
+      alert('Preencha os campos obrigatórios: Nome e Fonte')
+      return
+    }
+
+    setIsImporting(true)
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('nome', importForm.nome)
+      formData.append('ano', importForm.ano.toString())
+      formData.append('fonte', importForm.fonte)
+      formData.append('sexo', importForm.sexo)
+      formData.append('descricao', importForm.descricao)
+
+      const response = await fetch('/api/admin/tabuas-mortalidade/import', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Erro ao importar tábua')
+      }
+
+      const result = await response.json()
+      alert(`Sucesso: ${result.message}`)
+      
+      // Limpar formulário
+      setImportForm({
+        nome: '',
+        ano: new Date().getFullYear(),
+        fonte: '',
+        sexo: 'AMBOS',
+        descricao: ''
+      })
+
+      // Recarregar tábuas (seria ideal usar invalidateQueries do React Query)
+      window.location.reload()
+      
+    } catch (error) {
+      console.error('Erro ao importar:', error)
+      alert('Erro ao importar tábua: ' + (error instanceof Error ? error.message : 'Erro desconhecido'))
+    } finally {
+      setIsImporting(false)
+    }
+  }
+
+  // Função para exportar tábua
+  const handleExportTable = async (tabuaId: string, nomeTabua: string) => {
+    setIsExporting(true)
+    try {
+      const response = await fetch(`/api/admin/tabuas-mortalidade/${tabuaId}/export`)
+      
+      if (!response.ok) {
+        throw new Error('Erro ao exportar tábua')
+      }
+
+      const blob = await response.blob()
+      const url = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = url
+      a.download = `tabua_${nomeTabua.replace(/[^a-zA-Z0-9]/g, '_')}.xlsx`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(url)
+      
+    } catch (error) {
+      console.error('Erro ao exportar:', error)
+      alert('Erro ao exportar tábua: ' + (error instanceof Error ? error.message : 'Erro desconhecido'))
+    } finally {
+      setIsExporting(false)
+    }
+  }
+
+  // Função para gerar relatório PDF
+  const handleGenerateReport = async (type: 'geral' | 'calculo', calculoId?: string) => {
+    try {
+      const url = `/api/admin/calculos-atuariais/relatorio?tipo=${type}${calculoId ? `&calculoId=${calculoId}` : ''}`
+      const response = await fetch(url)
+      
+      if (!response.ok) {
+        throw new Error('Erro ao gerar relatório')
+      }
+
+      const blob = await response.blob()
+      const downloadUrl = window.URL.createObjectURL(blob)
+      const a = document.createElement('a')
+      a.href = downloadUrl
+      a.download = `relatorio_${type}_${new Date().toISOString().split('T')[0]}.pdf`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+      window.URL.revokeObjectURL(downloadUrl)
+      
+    } catch (error) {
+      console.error('Erro ao gerar relatório:', error)
+      alert('Erro ao gerar relatório: ' + (error instanceof Error ? error.message : 'Erro desconhecido'))
     }
   }
 
@@ -488,16 +604,95 @@ export function CalculosAtuariaisModerno() {
               </p>
             </div>
             <div className="flex gap-2">
-              <Button variant="outline" size="sm" disabled>
+              <Button 
+                variant="outline" 
+                size="sm" 
+                onClick={() => fileInputRef.current?.click()}
+                disabled={isImporting}
+              >
                 <Upload className="h-4 w-4 mr-2" />
-                Importar Excel
-              </Button>
-              <Button variant="outline" size="sm" disabled>
-                <Download className="h-4 w-4 mr-2" />
-                Exportar
+                {isImporting ? 'Importando...' : 'Importar Excel'}
               </Button>
             </div>
           </div>
+
+          {/* Formulário de Importação */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Importar Nova Tábua</CardTitle>
+              <CardDescription>
+                Configure os dados da tábua antes de importar o arquivo Excel
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <Label htmlFor="import-nome">Nome da Tábua *</Label>
+                <Input
+                  id="import-nome"
+                  placeholder="Ex: BR-EMS 2010-2015"
+                  value={importForm.nome}
+                  onChange={(e) => setImportForm(prev => ({ ...prev, nome: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="import-ano">Ano de Referência *</Label>
+                <Input
+                  id="import-ano"
+                  type="number"
+                  value={importForm.ano}
+                  onChange={(e) => setImportForm(prev => ({ ...prev, ano: parseInt(e.target.value) || new Date().getFullYear() }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="import-fonte">Fonte *</Label>
+                <Input
+                  id="import-fonte"
+                  placeholder="Ex: IBGE, SUSEP, Instituto XYZ"
+                  value={importForm.fonte}
+                  onChange={(e) => setImportForm(prev => ({ ...prev, fonte: e.target.value }))}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="import-sexo">Sexo</Label>
+                <Select 
+                  value={importForm.sexo} 
+                  onValueChange={(value) => setImportForm(prev => ({ ...prev, sexo: value }))}
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="M">Masculino</SelectItem>
+                    <SelectItem value="F">Feminino</SelectItem>
+                    <SelectItem value="AMBOS">Ambos</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="space-y-2 col-span-2">
+                <Label htmlFor="import-descricao">Descrição</Label>
+                <Input
+                  id="import-descricao"
+                  placeholder="Descrição adicional da tábua (opcional)"
+                  value={importForm.descricao}
+                  onChange={(e) => setImportForm(prev => ({ ...prev, descricao: e.target.value }))}
+                />
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Input oculto para upload */}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".xlsx,.xls"
+            style={{ display: 'none' }}
+            onChange={(e) => {
+              const file = e.target.files?.[0]
+              if (file) {
+                handleImportTable(file)
+              }
+            }}
+          />
 
           {isLoadingTabuas ? (
             <div className="space-y-4">
@@ -529,13 +724,22 @@ export function CalculosAtuariaisModerno() {
                           <span>•</span>
                           <span>Taxas: {table._count?.taxas || 0}</span>
                         </div>
+                        {table.descricao && (
+                          <p className="text-sm text-muted-foreground">{table.descricao}</p>
+                        )}
                       </div>
                       <div className="flex items-center gap-2">
                         <Badge variant={table.status === 'ativa' ? 'default' : 'secondary'}>
                           {table.status}
                         </Badge>
-                        <Button variant="outline" size="sm" disabled>
-                          Visualizar
+                        <Button 
+                          variant="outline" 
+                          size="sm"
+                          onClick={() => handleExportTable(table.id, table.nome)}
+                          disabled={isExporting}
+                        >
+                          <Download className="h-4 w-4 mr-1" />
+                          {isExporting ? 'Exportando...' : 'Exportar'}
                         </Button>
                       </div>
                     </div>
@@ -621,23 +825,68 @@ export function CalculosAtuariaisModerno() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-3 gap-4">
-                <Button variant="outline" disabled>
+              <div className="grid grid-cols-2 gap-4">
+                <Button 
+                  variant="outline"
+                  onClick={() => handleGenerateReport('geral')}
+                >
                   <FileText className="h-4 w-4 mr-2" />
-                  Relatório PDF
+                  Relatório Geral (PDF)
                 </Button>
-                <Button variant="outline" disabled>
+                <Button 
+                  variant="outline"
+                  onClick={() => {
+                    const calculoId = calculos?.[0]?.id
+                    if (calculoId) {
+                      handleGenerateReport('calculo', calculoId)
+                    } else {
+                      alert('Nenhum cálculo encontrado para gerar relatório específico')
+                    }
+                  }}
+                  disabled={!calculos || calculos.length === 0}
+                >
                   <Download className="h-4 w-4 mr-2" />
-                  Exportar Excel
-                </Button>
-                <Button variant="outline" disabled>
-                  <TrendingUp className="h-4 w-4 mr-2" />
-                  Análise Comparativa
+                  Relatório do Último Cálculo
                 </Button>
               </div>
-              <p className="text-sm text-muted-foreground">
-                Recursos de exportação disponíveis em breve
-              </p>
+              
+              <div className="text-sm text-muted-foreground space-y-2">
+                <p><strong>Relatório Geral:</strong> Inclui estatísticas completas, distribuição por tipo de cálculo e tabela com todos os cálculos realizados.</p>
+                <p><strong>Relatório Específico:</strong> Detalhes completos de um cálculo individual, incluindo parâmetros utilizados e resultados.</p>
+              </div>
+
+              {calculos && calculos.length > 0 && (
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Relatórios Individuais</CardTitle>
+                    <CardDescription>
+                      Gere relatórios específicos para cada cálculo
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-2 max-h-60 overflow-y-auto">
+                      {calculos.slice(0, 10).map((calculo) => (
+                        <div key={calculo.id} className="flex justify-between items-center p-2 border rounded">
+                          <div className="text-sm">
+                            <span className="font-medium">{calculo.tipo.replace('_', ' ')}</span>
+                            <span className="text-muted-foreground ml-2">
+                              {new Date(calculo.dataCalculo).toLocaleDateString('pt-BR')}
+                            </span>
+                          </div>
+                          <Button 
+                            size="sm" 
+                            variant="outline"
+                            onClick={() => handleGenerateReport('calculo', calculo.id)}
+                          >
+                            <FileText className="h-3 w-3 mr-1" />
+                            PDF
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  </CardContent>
+                </Card>
+              )}
             </CardContent>
           </Card>
         </TabsContent>
