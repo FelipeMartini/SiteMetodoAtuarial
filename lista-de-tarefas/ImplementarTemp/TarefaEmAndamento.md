@@ -71,12 +71,25 @@ Este checklist será atualizado conforme cada etapa for concluída.
 - [x] Componente NotificationIcon para navbar
 - [x] Sistema de prioridades e tipos de notificação
 
-### 🔄 **Task 06 - Sistema de E-mails** (EM ANDAMENTO)
-- [ ] Modernizar templates de email com design responsivo
-- [ ] Integrar sistema de notificações com envio de emails
-- [ ] Criar interface para gerenciar templates de email
-- [ ] Implementar fila de emails com retry automático
-- [ ] Sistema de analytics para emails enviados
+### ✅ **Task 06 - Sistema de E-mails** (COMPLETA)
+- [x] Modernizar templates de email com design responsivo
+- [x] Integrar sistema de notificações com envio de emails
+- [x] Criar interface para gerenciar templates de email
+- [x] Implementar fila de emails com retry automático
+- [x] Sistema de analytics para emails enviados
+- [x] Templates HTML modernos (boas-vindas, segurança, notificações)
+- [x] Serviço de email com suporte a Nodemailer
+- [x] Interface administrativa completa (/admin/emails)
+- [x] APIs REST para envio e gerenciamento
+- [x] Integração com sistema de notificações
+- [x] Logs detalhados e estatísticas
+
+### 🔄 **Task 07 - Interface para Cálculos Atuariais** (EM ANDAMENTO)
+- [ ] Criar interface moderna para cálculos atuariais
+- [ ] Implementar visualizações de dados com gráficos
+- [ ] Sistema de importação/exportação de tábuas
+- [ ] Calculadoras interativas
+- [ ] Relatórios em PDF
 - [ ] Task 05 - Sistema de Notificações
 - [ ] Task 06 - Modernização de E-mails
 - [ ] Task 07 - Cálculos Atuariais Avançados
@@ -85,8 +98,8 @@ Este checklist será atualizado conforme cada etapa for concluída.
 - [ ] Task 10 - Auditoria Final e Testes
 
 ### 🏆 **STATUS ATUAL:**
-- **Tasks Concluídas:** 5/10
-- **Progresso:** 50% ✅
+- **Tasks Concluídas:** 6/10
+- **Progresso:** 60% ✅
 - **Servidor:** Rodando em localhost:3000
 - **Última Atualização:** Sistema de auditoria e logs com interface moderna, filtros avançados e gráficos em tempo real
 
