@@ -16,6 +16,7 @@ import { Bell, Search, Settings } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
+import { ThemeToggle } from '@/components/ui/theme-toggle'
 
 interface AdminLayoutProps {
   children: React.ReactNode
@@ -120,6 +121,9 @@ export function AdminLayout({ children }: AdminLayoutProps) {
               <Button variant='ghost' size='icon'>
                 <Settings className='h-4 w-4' />
               </Button>
+
+              {/* Alternância de tema acessível - mesmo padrão do Header */}
+              <ThemeToggle />
             </div>
           </header>
 
