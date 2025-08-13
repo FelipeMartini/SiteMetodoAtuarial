@@ -13,8 +13,8 @@
 
 
 ## Checklist Detalhado
-- [ ] corrigir item do menu superior para que fique consistente com o restante do layout, ou seja o o item do menu superiro de dashboard nao esta de acordo com o tema black e claro como é com o item do menu area cliente, eles devem ser iguais revise compare os dois e corrija o admin dashboard.
-- [ ] Garantir que a pagina admin abac, nao tenha loop infinito teste ela acessando no navegador do vscode  e garanta prevenção de loop infinito
+- [x] corrigir item do menu superior para que fique consistente com o restante do layout, ou seja o o item do menu superiro de dashboard nao esta de acordo com o tema black e claro como é com o item do menu area cliente, eles devem ser iguais revise compare os dois e corrija o admin dashboard.
+- [x] Garantir que a pagina admin abac, nao tenha loop infinito teste ela acessando no navegador do vscode  e garanta prevenção de loop infinito
 - [ ] (Item 3)
 - [ ] (Item 4)
 - [ ] (Item 5)
