@@ -12,9 +12,9 @@
  * Este arquivo substitui o sistema complexo de decorators por funções helper
  */
 
-import { apiCache } from './cache'
+import { apiCache } from '@libs/api/cache'
 // import { monitored } from './index' // Removido import não utilizado
-import { apiMonitor } from './monitor-simple'
+import { apiMonitor } from '@libs/api/monitor-simple'
 
 /**
  * Helper para adicionar cache a métodos de classe

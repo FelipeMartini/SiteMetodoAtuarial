@@ -9,7 +9,7 @@ export {
   type ApiError,
   type ApiClientConfig,
   type RequestOptions,
-} from './client'
+} from '@libs/api/client'
 
 export {
   ApiCache,
@@ -18,7 +18,7 @@ export {
   type CacheOptions,
   type CacheEntry,
   type CacheStats,
-} from './cache'
+} from '@libs/api/cache'
 
 export {
   SimpleApiMonitor as ApiMonitor,
@@ -27,17 +27,17 @@ export {
   type EndpointMetrics as ApiEndpoint,
   type SystemMetrics,
   type HealthCheckResult,
-} from './monitor-simple'
+} from '@libs/api/monitor-simple'
 
 // Import para export default
-import { ApiClient } from './client'
-import { ApiCache } from './cache'
-import { SimpleApiMonitor } from './monitor-simple'
-import { cepService } from './services/cep'
-import { exchangeService } from './services/exchange'
+import { ApiClient } from '@libs/api/client'
+import { ApiCache } from '@libs/api/cache'
+import { SimpleApiMonitor } from '@libs/api/monitor-simple'
+import { cepService } from '@libs/api/services/cep'
+import { exchangeService } from '@libs/api/services/exchange'
 // Import apiMonitor to use in monitored function
-import { apiMonitor } from './monitor-simple'
-import { apiCache } from './cache'
+import { apiMonitor } from '@libs/api/monitor-simple'
+import { apiCache } from '@libs/api/cache'
 
 // Compatibility function for monitored decorator
 export function monitored(name: string) {
@@ -63,14 +63,14 @@ export function monitored(name: string) {
 }
 
 // API Services
-export { CepService, cepService, type CepError } from './services/cep'
+export { CepService, cepService, type CepError } from '@libs/api/services/cep'
 export {
   ExchangeService,
   exchangeService,
   type ExchangeRates,
   type CurrencyConversion,
   type CurrencyInfo,
-} from './services/exchange'
+} from '@libs/api/services/exchange'
 
 // Utility functions and constants
 export const API_CONSTANTS = {

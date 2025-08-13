@@ -1,8 +1,8 @@
 'use client'
 
 import { z } from 'zod'
-import { ApiClient, createApiClient } from '../client'
-import { apiMonitor } from '../monitor-simple'
+import { ApiClient, createApiClient } from '@libs/api/client'
+import { apiMonitor } from '@libs/api/monitor-simple'
 
 // Type definitions for Exchange Rate API
 export interface ExchangeRates {
