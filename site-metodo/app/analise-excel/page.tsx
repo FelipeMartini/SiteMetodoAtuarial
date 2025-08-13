@@ -1,10 +1,10 @@
 // Página principal de análise de Excel
 'use client';
-import FormularioUploadExcel from '@/components/analise-excel/FormularioUploadExcel';
-import AbasPlanilhaExcel from '@/components/analise-excel/AbasPlanilhaExcel';
-import TabelaExcel from '@/components/analise-excel/TabelaExcel';
+import FormularioUploadExcel from '@components/analise-excel/FormularioUploadExcel';
+import AbasPlanilhaExcel from '@components/analise-excel/AbasPlanilhaExcel';
+import TabelaExcel from '@components/analise-excel/TabelaExcel';
 import { useState } from 'react';
-import { DadosAnaliseExcel, PlanilhaExcel } from '@/types/analise-excel';
+import type { DadosAnaliseExcel, PlanilhaExcel } from '@types/analise-excel';
 
 export default function PaginaAnaliseExcel() {
   const [dados, setDados] = useState<DadosAnaliseExcel | null>(null);

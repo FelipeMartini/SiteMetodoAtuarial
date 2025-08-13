@@ -1,5 +1,5 @@
 import React, { useRef, useState } from 'react';
-import { DadosAnaliseExcel } from '@/types/analise-excel';
+import type { DadosAnaliseExcel } from '@types/analise-excel';
 
 interface Props {
   onAnaliseConcluida: (dados: DadosAnaliseExcel) => void;

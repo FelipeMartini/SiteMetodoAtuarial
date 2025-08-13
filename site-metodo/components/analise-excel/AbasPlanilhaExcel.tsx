@@ -1,5 +1,5 @@
 import React from 'react';
-import { PlanilhaExcel } from '@/types/analise-excel';
+import type { PlanilhaExcel } from '@types/analise-excel';
 
 interface Props {
   planilhas: PlanilhaExcel[];
