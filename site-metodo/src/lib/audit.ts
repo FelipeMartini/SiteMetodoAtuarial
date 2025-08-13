@@ -65,9 +65,10 @@ export const auditService = {
     userEmail: string | null,
     method: string,
     path: string,
+    clientIp?: string,
     details: Record<string, unknown> = {}
   ): Promise<void> {
-    console.log('API access audit (stub):', { userEmail, method, path, details })
+    console.log('API access audit (stub):', { userEmail, method, path, clientIp, details })
   },
 
   async getAuditLogs(

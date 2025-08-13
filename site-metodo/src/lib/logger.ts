@@ -63,6 +63,15 @@ export const performanceLogger = {
   },
   timeEnd: (label: string) => {
     logger.debug(`PERF END: ${label}`)
+  },
+  api: (
+    pathname: string, 
+    method: string, 
+    responseTime: number, 
+    status: number, 
+    meta?: Record<string, unknown>
+  ) => {
+    logger.info(`API: ${method} ${pathname} - ${status} (${responseTime}ms)`, meta)
   }
 }
 
