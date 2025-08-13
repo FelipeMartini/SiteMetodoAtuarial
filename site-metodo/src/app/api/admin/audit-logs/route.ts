@@ -3,6 +3,19 @@ import { auth } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro';
 
+interface TimestampFilter {
+  gte?: Date;
+  lte?: Date;
+}
+
+interface AuditLogWhereClause {
+  userId?: string;
+  action?: string;
+  resource?: string;
+  allowed?: boolean;
+  timestamp?: TimestampFilter;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth();
@@ -54,12 +67,12 @@ export async function GET(request: NextRequest) {
     }
 
     if (startDate || endDate) {
-      where.timestamp = {} as any;
+      where.timestamp = {};
       if (startDate) {
-        (where.timestamp as any).gte = new Date(startDate);
+        (where.timestamp as TimestampFilter).gte = new Date(startDate);
       }
       if (endDate) {
-        (where.timestamp as any).lte = new Date(endDate);
+        (where.timestamp as TimestampFilter).lte = new Date(endDate);
       }
     }
 

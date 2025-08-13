@@ -9,7 +9,7 @@ import PasswordResetEmail from './password-reset-email';
 export interface EmailTemplateProps {
   name?: string;
   email?: string;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 export type EmailTemplateType = 'welcome' | 'security-alert' | 'notification' | 'password-reset';
@@ -93,7 +93,7 @@ function createWelcomeEmailSimple(props: EmailTemplateProps): string {
 }
 
 function createSecurityAlertEmailSimple(props: EmailTemplateProps): string {
-  const { name = 'Usuário', email = 'usuario@exemplo.com' } = props;
+  const { name = 'Usuário' } = props;
   
   return `
 <!DOCTYPE html>

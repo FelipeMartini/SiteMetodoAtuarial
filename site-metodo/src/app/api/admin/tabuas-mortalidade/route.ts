@@ -2,6 +2,21 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 
+interface TabuaWhereClause {
+  status?: string;
+  sexo?: string;
+}
+
+interface TaxaInput {
+  idade: number;
+  qx: number;
+  lx?: number;
+  dx?: number;
+  ex?: number;
+  px?: number;
+  observacao?: string;
+}
+
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()
@@ -13,7 +28,7 @@ export async function GET(request: NextRequest) {
     const status = searchParams.get('status')
     const sexo = searchParams.get('sexo')
 
-    const where: any = {}
+    const where: TabuaWhereClause = {}
     if (status) where.status = status
     if (sexo) where.sexo = sexo
 
@@ -93,7 +108,7 @@ export async function POST(request: NextRequest) {
 
     // Adicionar taxas se fornecidas
     if (taxas && Array.isArray(taxas)) {
-      const taxasData = taxas.map((taxa: any) => ({
+      const taxasData = taxas.map((taxa: TaxaInput) => ({
         tabuaId: tabua.id,
         idade: taxa.idade,
         qx: taxa.qx,

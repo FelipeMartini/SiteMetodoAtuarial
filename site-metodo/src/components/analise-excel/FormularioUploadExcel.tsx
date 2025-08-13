@@ -25,8 +25,9 @@ export default function FormularioUploadExcel({ onAnaliseConcluida }: Props) {
       if (!resp.ok) throw new Error('Falha ao analisar arquivo');
       const dados = await resp.json();
       onAnaliseConcluida(dados);
-    } catch (e: any) {
-      setErro(e.message);
+    } catch (e: unknown) {
+      const errorMessage = e instanceof Error ? e.message : 'Erro desconhecido';
+      setErro(errorMessage);
     } finally {
       setCarregando(false);
     }

@@ -3,6 +3,14 @@ import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import ExcelJS from 'exceljs'
 
+interface TaxaMortalidadeData {
+  idade: number;
+  qx: number;
+  lx?: number;
+  dx?: number;
+  ex?: number;
+}
+
 export async function POST(request: NextRequest) {
   try {
     const session = await auth()
@@ -122,7 +130,7 @@ export async function POST(request: NextRequest) {
         continue // Pular linhas inválidas
       }
 
-      const taxa: any = { idade, qx }
+      const taxa: TaxaMortalidadeData = { idade, qx }
 
       // Colunas opcionais
       if (lxCol) {
