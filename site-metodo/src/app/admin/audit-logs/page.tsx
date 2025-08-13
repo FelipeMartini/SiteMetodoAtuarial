@@ -9,7 +9,6 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { DataTable } from '@/components/admin/data-table';
 import { StatsCard } from '@/components/admin/stats-card';
-import { DatePickerWithRange } from '@/components/ui/date-range-picker';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { 
   Shield, 
@@ -29,7 +28,7 @@ import {
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
 import { ptBR } from 'date-fns/locale';
-import { DateRange } from 'react-day-picker';
+import { DatePickerWithRange, DateRange } from '@/components/ui/date-range-picker';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 
 interface AccessLog {
