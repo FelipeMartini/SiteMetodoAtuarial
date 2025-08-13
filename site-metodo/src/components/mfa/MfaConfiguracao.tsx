@@ -7,6 +7,10 @@ import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { LoadingCard, LoadingList } from '@/components/ui/loading-states'
+import { AsyncButton, ConfirmButton } from '@/components/ui/feedback-buttons'
+import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { useToast } from '@/hooks/useToast'
 import { 
   Shield, 
   ShieldCheck, 
@@ -44,31 +48,39 @@ export default function MfaConfiguracao() {
   const [manualKey, setManualKey] = useState('')
   const [token, setToken] = useState('')
   const [password, setPassword] = useState('')
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true) // Mudado para true inicialmente
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const [showSetup, setShowSetup] = useState(false)
+  const toast = useToast()
 
   useEffect(() => {
     fetchMfaStatus()
   }, [])
 
   const fetchMfaStatus = async () => {
+    setLoading(true)
     try {
       const response = await fetch('/api/admin/mfa/status')
       if (response.ok) {
         const data = await response.json()
         setMfaStatus(data)
+        setError('')
       } else {
-        setError('Erro ao carregar status do MFA')
+        const errorMsg = 'Erro ao carregar status do MFA'
+        setError(errorMsg)
+        toast.error(errorMsg)
       }
     } catch (err) {
-      setError('Erro ao carregar status do MFA')
+      const errorMsg = 'Erro ao carregar status do MFA'
+      setError(errorMsg)
+      toast.error(errorMsg)
+    } finally {
+      setLoading(false)
     }
   }
 
   const generateTotp = async () => {
-    setLoading(true)
     setError('')
     try {
       const response = await fetch('/api/admin/mfa/totp/generate', {
@@ -81,16 +93,20 @@ export default function MfaConfiguracao() {
       if (response.ok) {
         const data = await response.json()
         setQrCode(data.qrCode)
-        setManualKey(data.manualEntryKey)
+        setManualKey(data.manualKey)
         setShowSetup(true)
+        toast.success('QR Code gerado com sucesso!')
       } else {
         const errorData = await response.json()
-        setError(errorData.error || 'Erro ao gerar TOTP')
+        const errorMsg = errorData.error || 'Erro ao gerar TOTP'
+        setError(errorMsg)
+        toast.error(errorMsg)
       }
     } catch (err) {
-      setError('Erro ao gerar TOTP')
-    } finally {
-      setLoading(false)
+      const errorMsg = 'Erro ao gerar TOTP'
+      setError(errorMsg)
+      toast.error(errorMsg)
+      throw err // Re-throw para o AsyncButton tratar
     }
   }
 
@@ -175,6 +191,17 @@ export default function MfaConfiguracao() {
         <h1 className="text-3xl font-bold">Autenticação Multifator (MFA)</h1>
       </div>
 
+      {loading && !mfaStatus && (
+        <div className="space-y-4">
+          <LoadingCard rows={2} />
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <LoadingCard />
+            <LoadingCard />
+            <LoadingCard />
+          </div>
+        </div>
+      )}
+
       {error && (
         <Alert variant="destructive">
           <AlertTriangle className="h-4 w-4" />
@@ -189,7 +216,8 @@ export default function MfaConfiguracao() {
         </Alert>
       )}
 
-      <Tabs defaultValue="status" className="w-full">
+      {!loading && mfaStatus && (
+        <Tabs defaultValue="status" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="status">Status & Configuração</TabsTrigger>
           <TabsTrigger value="setup">Configurar TOTP</TabsTrigger>
@@ -253,43 +281,21 @@ export default function MfaConfiguracao() {
           </div>
 
           {/* Action Buttons */}
-          <div className="flex gap-4">
-            {!mfaStatus?.totpEnabled ? (
-              <Button onClick={generateTotp} disabled={loading}>
-                <QrCode className="h-4 w-4 mr-2" />
-                Configurar TOTP
-              </Button>
+          <div className="flex gap-3">
+            {!mfaStatus.totpEnabled ? (
+              <AsyncButton 
+                onAsyncClick={generateTotp}
+                loadingText="Gerando..."
+                successMessage="QR Code gerado!"
+              >
+                <QrCode className="mr-2 h-4 w-4" />
+                Gerar QR Code
+              </AsyncButton>
             ) : (
-              <div className="space-y-4">
-                <Alert>
-                  <AlertTriangle className="h-4 w-4" />
-                  <AlertDescription>
-                    Para desabilitar o MFA, você precisará inserir um código TOTP válido e sua senha.
-                  </AlertDescription>
-                </Alert>
-                <div className="flex gap-2">
-                  <Input
-                    type="text"
-                    placeholder="Código TOTP"
-                    value={token}
-                    onChange={(e) => setToken(e.target.value)}
-                    className="w-32"
-                  />
-                  <Input
-                    type="password"
-                    placeholder="Sua senha"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <Button 
-                    onClick={disableMfa} 
-                    disabled={loading}
-                    variant="destructive"
-                  >
-                    Desabilitar MFA
-                  </Button>
-                </div>
-              </div>
+              <Button variant="outline" onClick={() => setShowSetup(true)}>
+                <Settings className="mr-2 h-4 w-4" />
+                Reconfigurar
+              </Button>
             )}
           </div>
         </TabsContent>
@@ -395,6 +401,7 @@ export default function MfaConfiguracao() {
           </Card>
         </TabsContent>
       </Tabs>
+      )}
     </div>
   )
 }
