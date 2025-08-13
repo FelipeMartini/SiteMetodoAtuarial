@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import type { PlanilhaExcel, CelulaExcel } from '@types/analise-excel';
+import type { PlanilhaExcel, CelulaExcel } from '@/types/analise-excel';
 
 
 interface Props {

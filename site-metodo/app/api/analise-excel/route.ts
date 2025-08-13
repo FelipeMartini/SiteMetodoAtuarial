@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { analisarExcel } from '@libs/analise-excel/analisadorExcel';
+import { analisarExcel } from '@/lib/analise-excel/analisadorExcel';
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
