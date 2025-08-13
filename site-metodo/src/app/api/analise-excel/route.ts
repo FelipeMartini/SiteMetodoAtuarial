@@ -11,7 +11,7 @@ export async function POST(req: NextRequest) {
   try {
     const resultado = await analisarExcel(buffer);
     return NextResponse.json(resultado);
-  } catch (e) {
+  } catch {
     return NextResponse.json({ erro: 'Falha ao analisar o arquivo.' }, { status: 500 });
   }
 }

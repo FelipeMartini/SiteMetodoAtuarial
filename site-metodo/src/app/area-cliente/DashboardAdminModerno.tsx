@@ -4,20 +4,15 @@ import React, { useEffect, useState } from 'react'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import {
-  BarChart3,
   Users,
   Activity,
-  TrendingUp,
   UserCheck,
-  UserX,
   Shield,
   Database,
   Clock,
   AlertTriangle,
   CheckCircle2,
-  Calendar,
   Calculator,
-  FileText,
 } from 'lucide-react'
 import { StatsCard } from '@/components/admin/stats-card'
 import { RecentActivity } from '@/components/admin/recent-activity'

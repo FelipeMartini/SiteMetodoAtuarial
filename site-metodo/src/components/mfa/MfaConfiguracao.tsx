@@ -1,15 +1,14 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { LoadingCard, LoadingList } from '@/components/ui/loading-states'
-import { AsyncButton, ConfirmButton } from '@/components/ui/feedback-buttons'
-import { ConfirmDialog } from '@/components/ui/confirm-dialog'
+import { LoadingCard } from '@/components/ui/loading-states'
+import { AsyncButton } from '@/components/ui/feedback-buttons'
 import { useToast } from '@/hooks/useToast'
 import { 
   Shield, 
@@ -56,9 +55,9 @@ export default function MfaConfiguracao() {
 
   useEffect(() => {
     fetchMfaStatus()
-  }, [])
+  }, [fetchMfaStatus])
 
-  const fetchMfaStatus = async () => {
+  const fetchMfaStatus = useCallback(async () => {
     setLoading(true)
     try {
       const response = await fetch('/api/admin/mfa/status')
@@ -71,14 +70,14 @@ export default function MfaConfiguracao() {
         setError(errorMsg)
         toast.error(errorMsg)
       }
-    } catch (err) {
+    } catch {
       const errorMsg = 'Erro ao carregar status do MFA'
       setError(errorMsg)
       toast.error(errorMsg)
     } finally {
       setLoading(false)
     }
-  }
+  }, [])
 
   const generateTotp = async () => {
     setError('')
@@ -102,11 +101,11 @@ export default function MfaConfiguracao() {
         setError(errorMsg)
         toast.error(errorMsg)
       }
-    } catch (err) {
+    } catch {
       const errorMsg = 'Erro ao gerar TOTP'
       setError(errorMsg)
       toast.error(errorMsg)
-      throw err // Re-throw para o AsyncButton tratar
+      throw new Error(errorMsg) // Re-throw para o AsyncButton tratar
     }
   }
 
@@ -140,7 +139,7 @@ export default function MfaConfiguracao() {
         const errorData = await response.json()
         setError(errorData.error || 'Código inválido')
       }
-    } catch (err) {
+    } catch {
       setError('Erro ao verificar código')
     } finally {
       setLoading(false)

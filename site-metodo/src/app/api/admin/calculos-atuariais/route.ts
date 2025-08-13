@@ -14,7 +14,7 @@ export async function GET(request: NextRequest) {
     const tipo = searchParams.get('tipo')
     const limit = parseInt(searchParams.get('limit') || '10')
 
-    const where: any = {}
+    const where: Record<string, unknown> = {}
     if (tipo) where.tipo = tipo
     if (session.user?.id) where.userId = session.user.id
 
@@ -73,7 +73,7 @@ export async function POST(request: NextRequest) {
 
     // Realizar o cálculo
     const calculadora = new CalculadoraAtuarial()
-    const resultado: any = {}
+    const resultado: Record<string, unknown> = {}
 
     try {
       switch (tipo) {
