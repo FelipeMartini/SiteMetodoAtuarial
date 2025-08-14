@@ -36,6 +36,8 @@
 - [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
 - [ ] Validar logs e rastreio com testes unitários e de integração
 - [ ] Submeter código a revisão de especialista externo, se possível
+- [x] Skeletons de adapters para provedores (SES/SendGrid) adicionados e documentação inicial criada
+ - [x] Integrador de provider (`EMAIL_PROVIDER`) implementado e `README-EMAIL.md` criado
 
 ### 2. AUTENTICAÇÃO MULTIFATOR (MFA) MODERNA (03-mfa.md)
 - [ ] Refatorar sistema MFA para múltiplos métodos (TOTP, SMS, e-mail, push)

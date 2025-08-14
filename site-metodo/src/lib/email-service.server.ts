@@ -3,6 +3,8 @@ import { prisma } from '@/lib/prisma';
 import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
 import { simpleLogger } from '@/lib/simple-logger';
 import { emailLogger, logEmailSent, logEmailFailed, logEmailPending } from '@/lib/email-logger';
+import { sendWithSES } from '@/lib/email-adapters/ses-adapter.server';
+import { sendWithSendGrid } from '@/lib/email-adapters/sendgrid-adapter.server';
 
 export interface EmailOptions {
   to: string | string[];
@@ -180,7 +182,9 @@ class EmailService implements IEmailService {
         },
       });
 
-      if (!this.isSendEnabled()) {
+  const provider = String(process.env.EMAIL_PROVIDER || 'nodemailer').toLowerCase();
+
+  if (!this.isSendEnabled()) {
         const simulatedId = `dev-simulated-${Date.now()}`;
         await logEmailSent({
           to: options.to,
@@ -205,7 +209,64 @@ class EmailService implements IEmailService {
 
         return { success: true, messageId: simulatedId };
       }
+      // Se um provider específico foi configurado, delegar ao adapter
+      if (provider === 'sendgrid') {
+        const res = await sendWithSendGrid(options);
+        if (res.success) {
+          await logEmailSent({
+            to: options.to,
+            cc: options.cc,
+            bcc: options.bcc,
+            subject: options.subject,
+            messageId: res.messageId,
+            priority: options.priority || 'normal',
+            metadata: { userAgent: 'EmailServiceServer', provider: 'sendgrid', deliveryTime: Date.now() },
+            sentAt: new Date(),
+          });
+          simpleLogger.info('Email enviado via SendGrid (server)', { to: options.to, subject: options.subject, messageId: res.messageId });
+          return { success: true, messageId: res.messageId };
+        }
+        await logEmailFailed({
+          to: options.to,
+          cc: options.cc,
+          bcc: options.bcc,
+          subject: options.subject,
+          priority: options.priority || 'normal',
+          error: (res as any).error || 'sendgrid-failed',
+          metadata: { userAgent: 'EmailServiceServer', provider: 'sendgrid' },
+        });
+        return { success: false, error: (res as any).error || 'sendgrid-failed' };
+      }
 
+      if (provider === 'ses') {
+        const res = await sendWithSES(options);
+        if (res.success) {
+          await logEmailSent({
+            to: options.to,
+            cc: options.cc,
+            bcc: options.bcc,
+            subject: options.subject,
+            messageId: res.messageId,
+            priority: options.priority || 'normal',
+            metadata: { userAgent: 'EmailServiceServer', provider: 'ses', deliveryTime: Date.now() },
+            sentAt: new Date(),
+          });
+          simpleLogger.info('Email enviado via SES (server)', { to: options.to, subject: options.subject, messageId: res.messageId });
+          return { success: true, messageId: res.messageId };
+        }
+        await logEmailFailed({
+          to: options.to,
+          cc: options.cc,
+          bcc: options.bcc,
+          subject: options.subject,
+          priority: options.priority || 'normal',
+          error: (res as any).error || 'ses-failed',
+          metadata: { userAgent: 'EmailServiceServer', provider: 'ses' },
+        });
+        return { success: false, error: (res as any).error || 'ses-failed' };
+      }
+
+      // Default: nodemailer
       this.initializeTransporter();
       const info = await this.transporter!.sendMail({
         from: process.env.SMTP_FROM || process.env.SMTP_USER,
