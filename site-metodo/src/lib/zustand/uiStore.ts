@@ -7,7 +7,7 @@ import { createThemeSlice, ThemeSlice } from './slices/themeSlice'
 import { createSidebarSlice, SidebarSlice } from './slices/sidebarSlice'
 import { createModalSlice, ModalSlice } from './slices/modalSlice'
 import { createSessionSlice, SessionSlice } from './slices/sessionSlice'
-import { ThemeOption, CurrentUser } from './types'
+import { ThemeOption as _ThemeOption, CurrentUser as _CurrentUser } from './types'
 
 // Compondo slices para criar uma store modular e fácil de testar
 export type UIState = ThemeSlice & SidebarSlice & ModalSlice & SessionSlice

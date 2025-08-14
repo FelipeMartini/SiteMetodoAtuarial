@@ -1,5 +1,5 @@
 import useUIStore from './uiStore'
-import { ThemeOption, CurrentUser } from './types'
+import { ThemeOption as _ThemeOption, CurrentUser as _CurrentUser } from './types'
 
 export const useTheme = () => {
   const theme = useUIStore(state => state.theme)
