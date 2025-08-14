@@ -197,8 +197,21 @@ export class CalculadoraAtuarial {
     // Interpolação linear para idades intermediárias
     const idades = Object.keys(this.tabela).map(Number).sort((a, b) => a - b)
     
-    let idadeInferior = 0
-    let idadeSuperior = 100
+    // Validação de limites
+    const idadeMinima = idades[0]
+    const idadeMaxima = idades[idades.length - 1]
+    
+    // Se idade está fora dos limites, usa valores extremos
+    if (idade <= idadeMinima) {
+      return this.tabela[idadeMinima][campo]
+    }
+    if (idade >= idadeMaxima) {
+      return this.tabela[idadeMaxima][campo]
+    }
+    
+    // Encontra idades para interpolação
+    let idadeInferior = idadeMinima
+    let idadeSuperior = idadeMaxima
     
     for (const idadeTabela of idades) {
       if (idadeTabela <= idade && idadeTabela > idadeInferior) {
@@ -207,6 +220,15 @@ export class CalculadoraAtuarial {
       if (idadeTabela >= idade && idadeTabela < idadeSuperior) {
         idadeSuperior = idadeTabela
       }
+    }
+    
+    // Validação adicional
+    if (!this.tabela[idadeInferior] || !this.tabela[idadeSuperior]) {
+      // Fallback para idade mais próxima
+      const idadeMaisProxima = idades.reduce((prev, curr) => 
+        Math.abs(curr - idade) < Math.abs(prev - idade) ? curr : prev
+      )
+      return this.tabela[idadeMaisProxima][campo]
     }
     
     if (idadeInferior === idadeSuperior) {

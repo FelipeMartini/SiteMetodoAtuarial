@@ -3,6 +3,21 @@
  * Implementa funções fundamentais para seguros de vida e anuidades
  */
 
+import { Decimal } from 'decimal.js'
+
+// Configurar Decimal.js para máxima precisão
+Decimal.set({
+  precision: 28,
+  rounding: Decimal.ROUND_HALF_UP,
+  toExpNeg: -7,
+  toExpPos: 21,
+  minE: -9e15,
+  maxE: 9e15,
+  crypto: false,
+  modulo: Decimal.ROUND_DOWN,
+  defaults: true
+})
+
 export interface TaxaMortalidade {
   idade: number
   taxa: number
@@ -57,13 +72,21 @@ export class CalculadoraAtuarial {
 
   /**
    * Calcula o valor presente de 1 unidade monetária
+   * Usa Decimal.js para máxima precisão
    */
   valorPresente(taxa: number, periodo: number): number {
-    return Math.pow(1 + taxa, -periodo)
+    if (periodo === 0) return 1
+    if (taxa === 0) return 1
+    
+    // Usar Decimal.js para cálculos precisos
+    const taxaDecimal = new Decimal(1 + taxa)
+    const periodoDecimal = new Decimal(periodo)
+    return taxaDecimal.pow(periodoDecimal.neg()).toNumber()
   }
 
   /**
    * Calcula Ax - Seguro de vida inteira
+   * Fórmula corrigida: Ax = Σ(vt * dx / l0)
    */
   calcularSeguroVidaInteira(
     idadeInicial: number,
@@ -75,10 +98,18 @@ export class CalculadoraAtuarial {
     let lx = 100000 // Raiz da tabela de mortalidade
 
     for (let idade = idadeInicial; idade < idadeMaxima; idade++) {
-      const dx = lx * this.qx(idade)
-      const vt = this.valorPresente(taxaJuros, idade - idadeInicial + 1)
+      const qx = this.qx(idade)
+      const dx = lx * qx
+      
+      // Tempo até o pagamento (meio do ano para aproximação)
+      const t = idade - idadeInicial + 0.5
+      const vt = this.valorPresente(taxaJuros, t)
+      
       ax += (dx / 100000) * vt
-      lx -= dx
+      lx = lx * (1 - qx)
+      
+      // Parar se lx muito pequeno
+      if (lx < 1) break
     }
 
     return ax * valorCapital
@@ -86,6 +117,7 @@ export class CalculadoraAtuarial {
 
   /**
    * Calcula anuidade vitalícia
+   * Fórmula corrigida: ax = Σ(vt * lx / l0)
    */
   calcularAnuidadeVitalicia(
     idadeInicial: number,
@@ -97,9 +129,16 @@ export class CalculadoraAtuarial {
     let lx = 100000
 
     for (let idade = idadeInicial; idade < idadeMaxima; idade++) {
-      const vt = this.valorPresente(taxaJuros, idade - idadeInicial)
+      const t = idade - idadeInicial
+      const vt = this.valorPresente(taxaJuros, t)
       ax += (lx / 100000) * vt
-      lx *= this.px(idade)
+      
+      // Atualizar lx para próximo ano
+      const qx = this.qx(idade)
+      lx = lx * (1 - qx)
+      
+      // Parar se lx muito pequeno
+      if (lx < 1) break
     }
 
     return ax * valorAno
@@ -123,6 +162,8 @@ export class CalculadoraAtuarial {
 
   /**
    * Calcula reserva técnica
+   * Fórmula: Reserva = Ax(atual) - P * ax(restante)
+   * onde P é o prêmio puro (sem carregamento)
    */
   calcularReservaTecnica(
     idadeAtual: number,
@@ -133,18 +174,24 @@ export class CalculadoraAtuarial {
     periodoPagamento: number,
     idadeMaxima: number = 120
   ): number {
-    const axAtual = this.calcularSeguroVidaInteira(idadeAtual, valorCapital, taxaJuros, idadeMaxima)
-    
-    let anuidadeRestante = 0
-    if (idadeAtual < idadeInicial + periodoPagamento) {
-      anuidadeRestante = this.calcularAnuidadeVitalicia(
-        idadeAtual, 
-        premioAnual, 
-        taxaJuros, 
-        Math.min(idadeInicial + periodoPagamento, idadeMaxima)
-      )
+    // Se já passou do período de pagamento, a reserva é igual ao Ax atual
+    if (idadeAtual >= idadeInicial + periodoPagamento) {
+      return this.calcularSeguroVidaInteira(idadeAtual, valorCapital, taxaJuros, idadeMaxima)
     }
 
+    // Calcular o benefício futuro descontado
+    const axAtual = this.calcularSeguroVidaInteira(idadeAtual, valorCapital, taxaJuros, idadeMaxima)
+    
+    // Calcular anuidade dos prêmios restantes
+    const anosRestantes = (idadeInicial + periodoPagamento) - idadeAtual
+    const anuidadeRestante = this.calcularAnuidadeVitalicia(
+      idadeAtual, 
+      premioAnual, 
+      taxaJuros, 
+      Math.min(idadeAtual + anosRestantes, idadeMaxima)
+    )
+
+    // Reserva = Benefícios futuros - Prêmios futuros
     return axAtual - anuidadeRestante
   }
 
