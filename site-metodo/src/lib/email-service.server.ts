@@ -40,11 +40,105 @@ export interface EmailStats {
   lastSent?: Date;
 }
 
-class EmailService {
+export interface EmailLogsFilters {
+  status?: 'sent' | 'failed' | 'pending' | 'bounced' | 'delivered' | 'opened' | 'clicked';
+  priority?: 'low' | 'normal' | 'high' | 'critical';
+  templateType?: string;
+  to?: string;
+  subject?: string;
+  dateFrom?: Date;
+  dateTo?: Date;
+  limit?: number;
+  offset?: number;
+}
+
+export interface IEmailService {
+  sendEmail(options: EmailOptions): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  sendTemplateEmail(options: TemplateEmailOptions): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  sendBulkEmails(emails: EmailOptions[]): Promise<{ sent: number; failed: number; results: Array<{ success: boolean; messageId?: string; error?: string }> }>;
+  sendWelcomeEmail(to: string, name: string, email: string): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  sendSecurityAlert(to: string, name: string, alertType: string, details: Record<string, unknown>): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  sendNotificationEmail(to: string, name: string, notificationTitle: string, notificationMessage: string, notificationType?: 'info' | 'success' | 'warning' | 'error', priority?: 'low' | 'normal' | 'high'): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  sendPasswordResetEmail(to: string, name: string, resetUrl: string, expiresIn?: string): Promise<{ success: boolean; messageId?: string; error?: string }>;
+  verifyConnection(): Promise<{ success: boolean; error?: string }>;
+  getEmailStats(): Promise<EmailStats>;
+  getDetailedEmailStats(): Promise<any>;
+  getEmailLogs(filters?: EmailLogsFilters): Promise<any>;
+  cleanupOldEmailLogs(daysToKeep?: number): Promise<number>;
+}
+
+class EmailService implements IEmailService {
   private transporter?: nodemailer.Transporter;
 
   constructor() {
     // transporter será inicializado sob demanda
+  }
+
+  async sendBulkEmails(emails: EmailOptions[]): Promise<{ sent: number; failed: number; results: Array<{ success: boolean; messageId?: string; error?: string }> }> {
+    const results: Array<{ success: boolean; messageId?: string; error?: string }> = [];
+    let sent = 0;
+    let failed = 0;
+
+    for (const email of emails) {
+      const result = await this.sendEmail(email);
+      results.push(result);
+
+      if (result.success) sent++;
+      else failed++;
+
+      // Pequeno delay entre envios
+      await new Promise((resolve) => setTimeout(resolve, 100));
+    }
+
+    simpleLogger.info('Envio em lote concluído (server)', { sent, failed, total: emails.length });
+
+    return { sent, failed, results };
+  }
+
+  async sendWelcomeEmail(to: string, name: string, email: string): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    return await this.sendTemplateEmail({
+      templateType: 'welcome',
+      to,
+      subject: 'Bem-vindo ao Método Atuarial!',
+      templateData: { name, email, loginUrl: `${process.env.NEXTAUTH_URL}/login` },
+      priority: 'normal',
+    });
+  }
+
+  async sendSecurityAlert(
+    to: string,
+    name: string,
+    alertType: string,
+    details: Record<string, unknown>
+  ): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    const alertTitles: Record<string, string> = {
+      login_attempt: 'Tentativa de Login Detectada',
+      password_change: 'Senha Alterada',
+      suspicious_activity: 'Atividade Suspeita Detectada',
+    };
+
+    return await this.sendTemplateEmail({
+      templateType: 'security-alert',
+      to,
+      subject: `Alerta de Segurança: ${alertTitles[alertType] || alertType}`,
+      templateData: { name, email: to, alertType, ...details, actionUrl: `${process.env.NEXTAUTH_URL}/security` },
+      priority: 'high',
+    });
+  }
+
+  async sendPasswordResetEmail(
+    to: string,
+    name: string,
+    resetUrl: string,
+    expiresIn: string = '24 horas'
+  ): Promise<{ success: boolean; messageId?: string; error?: string }> {
+    return await this.sendTemplateEmail({
+      templateType: 'password-reset',
+      to,
+      subject: 'Redefinição de Senha - Método Atuarial',
+      templateData: { name, email: to, resetUrl, expiresIn, timestamp: new Date().toLocaleString('pt-BR') },
+      priority: 'high',
+    });
   }
 
   private initializeTransporter() {
@@ -299,9 +393,18 @@ class EmailService {
     }
   }
 
+  async getDetailedEmailStats() {
+    try {
+      return await emailLogger.getEmailStats();
+    } catch (error) {
+      simpleLogger.error('Erro ao obter estatísticas detalhadas de email (server)', { error });
+      throw error;
+    }
+  }
+
   async getEmailLogs(filters = {}) {
     try {
-      return await emailLogger.getEmailLogs(filters as any);
+  return await emailLogger.getEmailLogs(filters as any);
     } catch (error) {
       simpleLogger.error('Erro ao obter logs de email (server)', { error, filters });
       return [];
@@ -318,7 +421,7 @@ class EmailService {
   }
 }
 
-export const emailService = new EmailService();
+export const emailService: IEmailService = new EmailService();
 
 export async function sendNotificationByEmail(
   userId: string,

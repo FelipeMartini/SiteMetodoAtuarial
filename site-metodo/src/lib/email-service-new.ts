@@ -1,44 +1,10 @@
-import { emailService as emailServiceServer } from '@/lib/email-service.server';
+import { emailService as emailServiceServer, EmailOptions, TemplateEmailOptions, EmailAttachment, EmailStats, IEmailService } from '@/lib/email-service.server';
 import { prisma } from '@/lib/prisma';
 import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
 import { simpleLogger } from '@/lib/simple-logger';
 import { emailLogger, logEmailSent, logEmailFailed, logEmailPending } from '@/lib/email-logger';
 
-export interface EmailOptions {
-  to: string | string[];
-  cc?: string[];
-  bcc?: string[];
-  subject: string;
-  html?: string;
-  text?: string;
-  attachments?: EmailAttachment[];
-  priority?: 'low' | 'normal' | 'high';
-  replyTo?: string;
-}
-
-export interface EmailAttachment {
-  filename: string;
-  content: Buffer | string;
-  contentType?: string;
-  encoding?: string;
-  cid?: string; // Para imagens inline
-}
-
-export interface TemplateEmailOptions {
-  templateType: EmailTemplateType;
-  to: string | string[];
-  subject: string;
-  templateData: Record<string, unknown>;
-  priority?: 'low' | 'normal' | 'high';
-}
-
-export interface EmailStats {
-  total: number;
-  sent: number;
-  failed: number;
-  pending: number;
-  lastSent?: Date;
-}
+// Reusar tipos exportados pelo serviço server para garantir consistência de API
 
 // Este arquivo fornece uma API compatível (legacy) que delega
 // a toda a lógica de envio para o serviço server (`email-service.server`).
@@ -46,18 +12,20 @@ export interface EmailStats {
 // e para manter as tipagens apenas no server.
 
 // Instância compatível que apenas reexporta métodos do serviço server.
-export const emailService = {
-  sendEmail: async (options: EmailOptions) => emailServiceServer.sendEmail(options as any),
-  sendTemplateEmail: async (options: TemplateEmailOptions) => emailServiceServer.sendTemplateEmail(options as any),
-  sendBulkEmails: async (emails: EmailOptions[]) => emailServiceServer.sendBulkEmails(emails as any),
+export const emailService: IEmailService = {
+  sendEmail: async (options: EmailOptions) => emailServiceServer.sendEmail(options),
+  sendTemplateEmail: async (options: TemplateEmailOptions) => emailServiceServer.sendTemplateEmail(options),
+  sendBulkEmails: async (emails: EmailOptions[]) => emailServiceServer.sendBulkEmails(emails),
   sendWelcomeEmail: async (to: string, name: string, email: string) => emailServiceServer.sendWelcomeEmail(to, name, email),
   sendSecurityAlert: async (to: string, name: string, alertType: string, details: Record<string, unknown>) => emailServiceServer.sendSecurityAlert(to, name, alertType, details),
-  sendNotificationEmail: async (to: string, name: string, notificationTitle: string, notificationMessage: string, notificationType?: any, priority?: any) => emailServiceServer.sendNotificationEmail(to, name, notificationTitle, notificationMessage, notificationType, priority),
+  sendNotificationEmail: async (to: string, name: string, notificationTitle: string, notificationMessage: string, notificationType?: 'info' | 'success' | 'warning' | 'error', priority?: 'low' | 'normal' | 'high') =>
+    emailServiceServer.sendNotificationEmail(to, name, notificationTitle, notificationMessage, notificationType, priority),
   sendPasswordResetEmail: async (to: string, name: string, resetUrl: string, expiresIn?: string) => emailServiceServer.sendPasswordResetEmail(to, name, resetUrl, expiresIn),
   verifyConnection: async () => emailServiceServer.verifyConnection(),
   getEmailStats: async () => emailServiceServer.getEmailStats(),
   getEmailLogs: async (filters?: any) => emailServiceServer.getEmailLogs(filters),
   cleanupOldEmailLogs: async (daysToKeep?: number) => emailServiceServer.cleanupOldEmailLogs(daysToKeep),
+  getDetailedEmailStats: async () => (emailServiceServer as any).getDetailedEmailStats(),
 };
 
 // Função helper para integração com notificações (compat)
