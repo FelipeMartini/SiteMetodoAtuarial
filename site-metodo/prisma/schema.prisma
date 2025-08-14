@@ -8,33 +8,32 @@ datasource db {
 }
 
 model User {
-  id            String    @id @default(cuid())
-  name          String?
-  email         String    @unique
-  emailVerified DateTime?
-  image         String?
-  password      String?
-  isActive      Boolean   @default(true)
-  department    String?
-  location      String?
-  jobTitle      String?
-  validFrom     DateTime?
-  validUntil    DateTime?
-  mfaEnabled    Boolean   @default(false)
-  loginCount    Int       @default(0)
-  failedLogins  Int       @default(0)
-  lastLoginAt   DateTime?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-
-  accounts       Account[]
-  sessions       Session[]
-  accessLogs     AccessLog[]
-  notifications  Notification[]
-  emailLogs      EmailLog[]
+  id                      String                       @id @default(cuid())
+  name                    String?
+  email                   String                       @unique
+  emailVerified           DateTime?
+  image                   String?
+  password                String?
+  isActive                Boolean                      @default(true)
+  department              String?
+  location                String?
+  jobTitle                String?
+  validFrom               DateTime?
+  validUntil              DateTime?
+  mfaEnabled              Boolean                      @default(false)
+  loginCount              Int                          @default(0)
+  failedLogins            Int                          @default(0)
+  lastLoginAt             DateTime?
+  createdAt               DateTime                     @default(now())
+  updatedAt               DateTime                     @updatedAt
+  accessLogs              AccessLog[]
+  accounts                Account[]
+  calculos                CalculoAtuarial[]
+  emailLogs               EmailLog[]
+  mfaConfig               MfaConfig?
+  notifications           Notification[]
+  sessions                Session[]
   notificationPreferences UserNotificationPreferences?
-  calculos       CalculoAtuarial[]
-  mfaConfig      MfaConfig?
 
   @@map("users")
 }
@@ -123,140 +122,133 @@ model VerificationToken {
 }
 
 model Notification {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
   userId    String
   title     String
   message   String
-  type      String   // 'info', 'success', 'warning', 'error'
-  priority  String   // 'low', 'normal', 'high', 'urgent'
-  status    String   @default("sent") // Campo faltante: 'sent', 'pending', 'failed'
-  read      Boolean  @default(false)
+  type      String
+  priority  String
+  status    String    @default("sent")
+  read      Boolean   @default(false)
   readAt    DateTime?
   metadata  Json?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("notifications")
 }
 
 model EmailLog {
-  id           String   @id @default(cuid())
+  id           String    @id @default(cuid())
   to           String
-  cc           String?  // Campo faltante
-  bcc          String?  // Campo faltante
+  cc           String?
+  bcc          String?
   subject      String
-  templateType String?  // Campo faltante
+  templateType String?
   messageId    String?
-  status       String   // 'sent', 'failed', 'pending'
+  status       String
   error        String?
-  priority     String   @default("normal")
-  metadata     Json?    // Campo faltante
+  priority     String    @default("normal")
+  metadata     Json?
   userId       String?
   sentAt       DateTime?
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-
-  user User? @relation(fields: [userId], references: [id], onDelete: SetNull)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User?     @relation(fields: [userId], references: [id])
 
   @@map("email_logs")
 }
 
 model UserNotificationPreferences {
-  id          String  @id @default(cuid())
-  userId      String  @unique
-  email       Boolean @default(true)
-  inApp       Boolean @default(true)
-  push        Boolean @default(false)
-  sms         Boolean @default(false)
-  security    Boolean @default(true)
-  newsletter  Boolean @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id         String   @id @default(cuid())
+  userId     String   @unique
+  email      Boolean  @default(true)
+  inApp      Boolean  @default(true)
+  push       Boolean  @default(false)
+  sms        Boolean  @default(false)
+  security   Boolean  @default(true)
+  newsletter Boolean  @default(false)
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("user_notification_preferences")
 }
 
 model TabuaMortalidade {
-  id            String   @id @default(cuid())
-  nome          String   @unique
-  ano           Int
-  fonte         String
-  sexo          String   // 'M', 'F', 'AMBOS'
-  status        String   @default("ativa") // 'ativa', 'inativa', 'descontinuada'
-  descricao     String?
-  observacao    String?
-  dataImportacao DateTime @default(now())
-  criadoEm      DateTime @default(now())
-  atualizadoEm  DateTime @updatedAt
-
-  taxas         TaxaMortalidade[]
-  calculos      CalculoAtuarial[]
+  id             String            @id @default(cuid())
+  nome           String            @unique
+  ano            Int
+  fonte          String
+  sexo           String
+  status         String            @default("ativa")
+  descricao      String?
+  observacao     String?
+  dataImportacao DateTime          @default(now())
+  criadoEm       DateTime          @default(now())
+  atualizadoEm   DateTime          @updatedAt
+  calculos       CalculoAtuarial[]
+  taxas          TaxaMortalidade[]
 
   @@map("tabuas_mortalidade")
 }
 
 model TaxaMortalidade {
-  id       String  @id @default(cuid())
-  tabuaId  String
-  idade    Int
-  qx       Float   // Probabilidade de morte
-  lx       Float?  // Número de sobreviventes
-  dx       Float?  // Número de mortes
-  ex       Float?  // Expectativa de vida
-  px       Float?  // Probabilidade de sobrevivência (1 - qx)
+  id         String           @id @default(cuid())
+  tabuaId    String
+  idade      Int
+  qx         Float
+  lx         Float?
+  dx         Float?
+  ex         Float?
+  px         Float?
   observacao String?
-
-  tabua    TabuaMortalidade @relation(fields: [tabuaId], references: [id], onDelete: Cascade)
+  tabua      TabuaMortalidade @relation(fields: [tabuaId], references: [id], onDelete: Cascade)
 
   @@unique([tabuaId, idade])
   @@map("taxas_mortalidade")
 }
 
 model CalculoAtuarial {
-  id            String   @id @default(cuid())
-  tipo          String   // 'seguro_vida', 'renda_vitalicia', 'reserva', 'expectativa'
-  parametros    Json     // Parâmetros utilizados no cálculo
-  resultado     Json     // Resultado do cálculo
-  tabuaId       String?
-  userId        String?
-  dataCalculo   DateTime @default(now())
-  observacao    String?
-
-  tabua         TabuaMortalidade? @relation(fields: [tabuaId], references: [id], onDelete: SetNull)
-  user          User?             @relation(fields: [userId], references: [id], onDelete: SetNull)
+  id          String            @id @default(cuid())
+  tipo        String
+  parametros  Json
+  resultado   Json
+  tabuaId     String?
+  userId      String?
+  dataCalculo DateTime          @default(now())
+  observacao  String?
+  user        User?             @relation(fields: [userId], references: [id])
+  tabua       TabuaMortalidade? @relation(fields: [tabuaId], references: [id])
 
   @@map("calculos_atuariais")
 }
 
 model MfaConfig {
-  id                String   @id @default(cuid())
-  userId            String   @unique
-  totpSecret        String?  // Base32 encoded secret for TOTP
-  totpEnabled       Boolean  @default(false)
-  emailEnabled      Boolean  @default(false)
-  smsEnabled        Boolean  @default(false)
-  backupCodes       Json?    // Array of backup codes (hashed)
-  lastUsedAt        DateTime?
-  createdAt         DateTime @default(now())
-  updatedAt         DateTime @updatedAt
-
-  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String    @id @default(cuid())
+  userId       String    @unique
+  totpSecret   String?
+  totpEnabled  Boolean   @default(false)
+  emailEnabled Boolean   @default(false)
+  smsEnabled   Boolean   @default(false)
+  backupCodes  Json?
+  lastUsedAt   DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  user         User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("mfa_config")
 }
 
 model MfaLog {
-  id            String   @id @default(cuid())
-  userId        String
-  method        String   // 'totp', 'email', 'sms', 'backup_code'
-  success       Boolean
-  ipAddress     String?
-  userAgent     String?
-  timestamp     DateTime @default(now())
+  id        String   @id @default(cuid())
+  userId    String
+  method    String
+  success   Boolean
+  ipAddress String?
+  userAgent String?
+  timestamp DateTime @default(now())
 
   @@map("mfa_logs")
 }
