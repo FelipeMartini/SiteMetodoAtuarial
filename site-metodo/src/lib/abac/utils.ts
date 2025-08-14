@@ -9,7 +9,7 @@ export function sanitizePolicyField(value: unknown): string | null {
   s = s.trim()
   // Evitar que JSON mal formado quebre parser: se começar com { ou [ , tentar validar JSON
   if ((s.startsWith('{') || s.startsWith('['))) {
-    try { JSON.parse(s) } catch (e) { s = s.replace(/"/g, '\\"') }
+    try { JSON.parse(s) } catch (_e) { s = s.replace(/"/g, '\"') }
   }
   return s === '' ? null : s
 }

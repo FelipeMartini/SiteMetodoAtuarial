@@ -3,12 +3,10 @@
 import FormularioUploadExcel from '@/components/analise-excel/FormularioUploadExcel';
 import AbasPlanilhaExcel from '@/components/analise-excel/AbasPlanilhaExcel';
 import TabelaExcel from '@/components/analise-excel/TabelaExcel';
-import { useState } from 'react';
-import type { DadosAnaliseExcel } from '@/types/analise-excel';
+import { useExcelAnalysis } from '@/lib/zustand/hooks';
 
 export default function PaginaAnaliseExcel() {
-  const [dados, setDados] = useState<DadosAnaliseExcel | null>(null);
-  const [abaAtiva, setAbaAtiva] = useState<string | null>(null);
+  const { dadosAnaliseExcel: dados, setDadosAnaliseExcel: setDados, abaPlanilhaAtiva: abaAtiva, setAbaPlanilhaAtiva: setAbaAtiva } = useExcelAnalysis();
 
   return (
     <main className="container mx-auto py-8">
