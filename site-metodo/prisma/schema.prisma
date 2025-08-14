@@ -252,3 +252,201 @@ model MfaLog {
 
   @@map("mfa_logs")
 }
+
+// ========================================
+// NOVAS TABELAS PARA ANÁLISE DE MORTALIDADE
+// ========================================
+
+model MassaParticipantes {
+  id                String                @id @default(cuid())
+  matricula         String                @unique
+  nome              String?
+  sexo              Int                   // 1 = masculino, 2 = feminino
+  idade             Int
+  dataNascimento    DateTime?
+  anoIngressao      Int
+  anoCadastro       Int
+  categoria         String?
+  salario           Float?
+  situacao          String?               @default("ATIVO") // ATIVO, APOSENTADO, PENSIONISTA
+  dataUltimaAtu     DateTime              @default(now())
+  importacaoId      String?
+  observacoes       String?
+  createdAt         DateTime              @default(now())
+  updatedAt         DateTime              @updatedAt
+  obitos            ObitoRegistrado[]
+  calculos          CalculoMortalidade[]
+  importacao        ImportacaoMortalidade? @relation(fields: [importacaoId], references: [id])
+
+  @@index([sexo, idade])
+  @@index([situacao])
+  @@index([anoIngressao])
+  @@map("massa_participantes")
+}
+
+model ObitoRegistrado {
+  id                String             @id @default(cuid())
+  matricula         String
+  participanteId    String?
+  anoObito          Int
+  mesObito          Int?
+  idadeObito        Int
+  causaObito        String?
+  tipoObito         String?            @default("NATURAL") // NATURAL, ACIDENTAL
+  dataRegistro      DateTime           @default(now())
+  importacaoId      String?
+  observacoes       String?
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
+  participante      MassaParticipantes? @relation(fields: [participanteId], references: [id])
+  calculos          CalculoMortalidade[]
+  importacao        ImportacaoMortalidade? @relation(fields: [importacaoId], references: [id])
+
+  @@index([anoObito])
+  @@index([idadeObito])
+  @@index([matricula])
+  @@map("obitos_registrados")
+}
+
+model TabuaMortalidadeRef {
+  id               String                  @id @default(cuid())
+  nome             String                  @unique
+  descricao        String?
+  anoBase          Int
+  origem           String?                 // SUSEP, SOA, HMD, etc
+  tipo             String?                 @default("VIDA") // VIDA, INVALIDEZ, etc
+  populacao        String?                 // GERAL, SEGURADOS, etc
+  observacoes      String?
+  ativa            Boolean                 @default(true)
+  createdAt        DateTime                @default(now())
+  updatedAt        DateTime                @updatedAt
+  qxValores        QxMortalidade[]
+  analises         AnaliseAderencia[]
+
+  @@map("tabuas_mortalidade_ref")
+}
+
+model QxMortalidade {
+  id               String                @id @default(cuid())
+  tabuaId          String
+  idade            Int
+  qxMasculino      Float?
+  qxFeminino       Float?
+  qxGeral          Float?
+  lxMasculino      Float?
+  lxFeminino       Float?
+  lxGeral          Float?
+  exMasculino      Float?
+  exFeminino       Float?
+  exGeral          Float?
+  observacoes      String?
+  createdAt        DateTime              @default(now())
+  updatedAt        DateTime              @updatedAt
+  tabua            TabuaMortalidadeRef   @relation(fields: [tabuaId], references: [id], onDelete: Cascade)
+
+  @@unique([tabuaId, idade])
+  @@index([idade])
+  @@map("qx_mortalidade")
+}
+
+model AnaliseAderencia {
+  id                    String                    @id @default(cuid())
+  nome                  String
+  descricao             String?
+  tabuaRefId            String
+  tipoAnalise           String                    @default("CHI_QUADRADO")
+  nivelSignificancia    Float                     @default(0.05)
+  intervalIdade         Int                       @default(5) // 5, 10, etc
+  idadeMinima           Int?
+  idadeMaxima           Int?
+  agruparPorSexo        Boolean                   @default(true)
+  configuracao          Json?                     // Parâmetros específicos
+  resultado             Json?                     // Resultados da análise
+  status                String                    @default("PENDENTE") // PENDENTE, PROCESSANDO, CONCLUIDA, ERRO
+  dataExecucao          DateTime?
+  tempoProcessamento    Int?                      // em segundos
+  userId                String?
+  createdAt             DateTime                  @default(now())
+  updatedAt             DateTime                  @updatedAt
+  tabuaRef              TabuaMortalidadeRef       @relation(fields: [tabuaRefId], references: [id])
+  calculos              CalculoMortalidade[]
+  relatorios            RelatorioAderencia[]
+
+  @@index([status])
+  @@index([dataExecucao])
+  @@map("analises_aderencia")
+}
+
+model CalculoMortalidade {
+  id                    String               @id @default(cuid())
+  analiseId             String
+  participanteId        String?
+  obitoId               String?
+  faixaEtaria           String               // "25-29", "30-34", etc
+  sexo                  Int
+  idade                 Int
+  qxEsperado            Float
+  qxObservado           Float?
+  obitosEsperados       Float
+  obitosObservados      Int
+  contribuicaoChiQuad   Float?
+  residuoPadronizado    Float?
+  observacoes           String?
+  createdAt             DateTime             @default(now())
+  updatedAt             DateTime             @updatedAt
+  analise               AnaliseAderencia     @relation(fields: [analiseId], references: [id], onDelete: Cascade)
+  participante          MassaParticipantes?  @relation(fields: [participanteId], references: [id])
+  obito                 ObitoRegistrado?     @relation(fields: [obitoId], references: [id])
+
+  @@index([analiseId])
+  @@index([faixaEtaria])
+  @@index([sexo])
+  @@map("calculos_mortalidade")
+}
+
+model RelatorioAderencia {
+  id              String            @id @default(cuid())
+  analiseId       String
+  tipo            String            @default("COMPLETO") // COMPLETO, RESUMIDO, EXECUTIVO
+  formato         String            @default("PDF") // PDF, EXCEL, HTML
+  conteudo        Json?             // Estrutura do relatório
+  caminhoArquivo  String?
+  tamanhoArquivo  Int?
+  geradoEm        DateTime          @default(now())
+  baixadoEm       DateTime?
+  userId          String?
+  observacoes     String?
+  createdAt       DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
+  analise         AnaliseAderencia  @relation(fields: [analiseId], references: [id], onDelete: Cascade)
+
+  @@index([analiseId])
+  @@index([tipo])
+  @@map("relatorios_aderencia")
+}
+
+model ImportacaoMortalidade {
+  id                    String                @id @default(cuid())
+  nomeArquivo           String
+  tipoArquivo           String                @default("EXCEL") // EXCEL, CSV
+  tamanhoArquivo        Int
+  caminhoArquivo        String?
+  status                String                @default("PENDENTE") // PENDENTE, PROCESSANDO, CONCLUIDA, ERRO
+  totalRegistros        Int?
+  registrosImportados   Int?
+  registrosErro         Int?
+  logImportacao         Json?                 // Detalhes do processo
+  iniciadaEm            DateTime              @default(now())
+  concluidaEm           DateTime?
+  tempoProcessamento    Int?                  // em segundos
+  userId                String?
+  observacoes           String?
+  createdAt             DateTime              @default(now())
+  updatedAt             DateTime              @updatedAt
+  participantes         MassaParticipantes[]
+  obitos                ObitoRegistrado[]
+
+  @@index([status])
+  @@index([iniciadaEm])
+  @@map("importacoes_mortalidade")
+}

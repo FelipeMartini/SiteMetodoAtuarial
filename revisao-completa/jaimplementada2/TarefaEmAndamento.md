@@ -1,130 +1,29 @@
-# Controle de Progresso - Revisão Completa Site Método Atuarial
 
-## Status Geral: EM ANDAMENTO
+---
+applyTo: '**'
+---
 
-### Lista de Tarefas Principal
+AQUI ESTAO SUAS TAREFAS PRINCIPAIS DESMBEBRE ELAS EM PEQUENAS SUBTAREFAS E EXECUTE TODAS, A CADA TAREFA  PRINCIPAL CONCLUIDA, REVISE SUAS TAREFAS PRINCIPAIS NO ARQUIVO TAREFAS EM ANDAMENTO PARA VER SE NAO FOI INCLUIDA NOVAS E EXECUTE TODAS INCLUSIVE AS NOVAS ATE COMPLETAR TUDO, UTILIZE UM ARQUIVO CHAMADO TAREFAS-SECUNDARIAS PARA COMPOR SEU CHECKLIST DE TAREFAS SECUNDARIAS E IR MARCANDO AS CONCLUIDAS.
 
-- [x] **01 - Tarefas Iniciais**
-  - [x] Corrigir item do menu superior para consistência de layout - CONCLUÍDO: Adicionado ThemeToggle ao AdminLayout
-  - [x] Garantir que página admin ABAC não tenha loop infinito - CONCLUÍDO: Removido dependências infinitas do useEffect
-  - [x] Seguir ciclo de validação obrigatório - CONCLUÍDO: Type-check e lint passando
-  
-- [ ] **02 - Dashboard Admin & Página ABAC**
-  - [ ] Análise profunda do projeto referência: https://github.com/arhamkhnz/next-shadcn-admin-dashboard
-  - [ ] Refatorar TODOS os componentes para shadcn/ui
-  - [ ] Implementar dark/light mode unificado
-  - [ ] Adicionar widgets de métricas, logs e status
-  - [ ] Integrar TanStack Table para tabelas dinâmicas
-  - [ ] Garantir acessibilidade (WCAG 2.2+)
-  - [ ] Testar responsividade
-  - [ ] Documentar padrões
-  - [ ] Modernizar área do cliente integrada
-  - [ ] Exibir foto de perfil na barra superior
+## Checklist de Tarefas
+- [x] **Task 1:** Corrigir todos os erros de lint até que não haja mais avisos ou falhas ✅
+- [x] **Task 2:** Corrigir todos os erros de TypeScript até que não haja mais avisos ou falhas ✅
+- [x] **Task 3:** Corrigir todos os erros de build até que não haja mais falhas ✅
+- [x] **Task 4:** Implementar sistema ABAC completo removendo totalmente o uso de accessLevel do sistema ✅
+- [ ] **Task 5:** Otimizar performance geral do sistema  
+- [ ] **Task 6:** Implementar sistema de auditoria robusto  
+- [ ] **Task 7:** Melhorar interface do usuário e experiência  
+- [ ] **Task 8:** Implementar sistema de notificações push  
+- [ ] **Task 9:** Adicionar sistema de backup automático  
+- [ ] **Task 10:** Implementar rate limiting avançado  
+- [ ] **Task 11:** Melhorar sistema de logs  
+- [ ] **Task 12:** Implementar dashboard analytics  
+- [ ] **Task 13:** Adicionar testes automatizados
 
-- [ ] **03 - Área do Cliente**
-  - [ ] Refatorar TODOS os componentes para shadcn/ui
-  - [ ] Implementar dark/light mode
-  - [ ] Adicionar dashboard do usuário
-  - [ ] Integrar logs/auditoria em tempo real
-  - [ ] Garantir acessibilidade
-  - [ ] Testar responsividade
-  - [ ] Documentar padrões
-  - [ ] Garantir integração visual/técnica com admin
-  - [ ] Limpeza de arquivos temporários
-  - [ ] Revisão de variáveis e conflitos
 
-- [ ] **04 - Auditoria & Logs**
-  - [ ] Refatorar sistema para logs permanentes no BD
-  - [ ] Garantir tabela logs siga padrão ABAC puro
-  - [ ] Documentar estrutura da tabela
-  - [ ] Implementar consulta/exportação/auditoria
-  - [ ] Validar integração MFA/notificações
-  - [ ] Limpeza de arquivos
-  - [ ] Revisão de variáveis
 
-- [ ] **05 - Sistema de Notificações**
-  - [ ] Refatorar para notificações permanentes no BD
-  - [ ] Garantir tabela notificações ABAC puro
-  - [ ] Documentar estrutura
-  - [ ] Integrar com logs e auditoria
-  - [ ] Validar integração MFA/logs
-  - [ ] Limpeza de arquivos
-  - [ ] Revisão de variáveis
-
-- [ ] **06 - Sistema de E-mails**
-  - [ ] Refatorar templates de e-mail
-  - [ ] Adicionar logs de envio/rastreio
-  - [ ] Integrar com notificações
-  - [ ] Suporte múltiplos provedores
-  - [ ] Documentar arquitetura
-  - [ ] Limpeza de arquivos
-  - [ ] Revisão de variáveis
-
-- [ ] **07 - Cálculos Atuariais**
-  - [ ] Criar modelo Prisma para Tábuas de Mortalidade
-  - [ ] Implementar importação Excel
-  - [ ] Implementar exportação Excel/PDF
-  - [ ] Validar integridade das tábuas
-  - [ ] Integrar com cálculos existentes
-  - [ ] Adicionar testes unitários
-  - [ ] Documentar exemplos
-  - [ ] Validação manual completa
-
-- [ ] **08 - Autenticação Multifator (MFA)**
-  - [ ] Refatorar para múltiplos métodos
-  - [ ] Integrar com logs/auditoria
-  - [ ] Integrar com notificações
-  - [ ] Painel gerenciamento MFA
-  - [ ] Flows de recuperação
-  - [ ] Documentar arquitetura
-  - [ ] Revisar tabela MFA ABAC puro
-  - [ ] Limpeza e revisão
-
-- [ ] **09 - Limpeza Profunda & Refatoração**
-  - [ ] Mapear arquivos/pastas obsoletos
-  - [ ] Remover desnecessários
-  - [ ] Auditar arquivos em implementação
-  - [ ] Garantir ausência código morto
-  - [ ] Documentar mudanças estrutura
-  - [ ] Limpeza arquivos temporários
-  - [ ] Revisão variáveis
-
-- [ ] **10 - Auditoria Final & Validação**
-  - [ ] Lint e type-check completo
-  - [ ] Build sem erros
-  - [ ] Validar acessibilidade e responsividade
-  - [ ] Documentar todas mudanças
-  - [ ] Limpeza final
-  - [ ] Revisão variáveis final
-  - [ ] Teste manual todos links/endpoints
-
-## Instruções Obrigatórias Sempre Seguir:
-
-### Ciclo de Validação Obrigatório:
-1. Corrija TODOS os erros de type-check (TypeScript)
-2. Corrija TODOS os erros/avisos de lint
-3. Corrija TODOS os erros de build
-4. Repita até zerar erros
-5. Execute limpeza arquivos temporários/resíduos
-6. Revise variáveis para evitar conflitos (auth/endpoints)
-7. Acesse TODOS links/endpoints no navegador
-8. Só avance após 100% limpo
-
-### Tipagem Obrigatória:
-- Nunca usar `any`
-- Tipos `unknown` devem ser tipados explicitamente
-- Prefira tipagens oficiais das bibliotecas
-- Revise tipagem de funções, variáveis e props
-
-### Projeto de Referência Obrigatório:
-https://github.com/arhamkhnz/next-shadcn-admin-dashboard
-
-## Log de Atividades:
-- **[13/08/2025 - Início]** Criado arquivo de controle e iniciando leitura completa de documentação
-- **[13/08/2025 - Análise]** Analisou profundamente projeto de referência: https://github.com/arhamkhnz/next-shadcn-admin-dashboard
-- **[13/08/2025 - Tarefa 01]** INICIANDO TAREFA 01 - TAREFAS INICIAIS
-- **[13/08/2025 - Tarefa 01 CONCLUÍDA]** ✅ TAREFA 01 CONCLUÍDA COM SUCESSO
-  - ✅ Corrigido menu superior admin com ThemeToggle para consistência
-  - ✅ Corrigido loop infinito página ABAC removendo dependências infinitas
-  - ✅ Type-check e lint zerados
-  - ✅ Servidor funcionando corretamente
+- [ ] **Task 14:** VERIFICAR PORQUE FOI OCULTADO A JANELA DE ERRO DO WEBPACK, NAO É PARA SER OCULTADA, MOSTRE ELA NOVAMENTE, EU QUER É RESOLVER O ERRO DE SOBREPOSIÇÃO DE ESTILO GLOBAL QUE ESTA OCORRENDO PARA QUE A JANELA DE ERRO DO WEBPECK POSSSA SER VISTA E O ERRO DELA ANALISADO, E COPIADO, ELA DEVE FUNCIONAR PERFEITA MENTE E CONSEGUIR SER VIASUALIZADA, PESQUISE NO GOOGLE O PROBLEMA É QUE ELA NAO TA DANDO PARA SER VISUALIZADA PORQUE TA TENDO ALGUM ESTILO SENDO SOBREPOSTO NELA RESOLVA E ANALISE DE FORMA PROFUNDA PARA QUE O WEBPACK FUNCIONE PERFEITAMENTE.
+- [ ] **Task 15:** Entrar na pagina de gestao do sistema ABAC e conferir se tem permissão pois usuario felipemartinii@gmail.com tem acesso e aparece que nao tem permissão, certificar-se de que o acesso para esse usuario sempre sera permidido, mesmo se o banco de dados for restaurado acesso maximo a esse usuario, e confira se a proteção de link e acesso para pagina admin dashboard, ja esta utilizando ABAC puro.
+- [ ] **Task 16:** REVISAR TODO SISTEMA DE ABAC E ENDPOINT PROFUNDAMENTE E CONSULTAR FONTES OFICIAIS E VER SE NAO RESTA MAIS NADA DE SISTEMA HYBRIDO COM RBAC E ESTAMOS COM ABAC PURO CONSULTE A DOCUMENTAÇÂO DO CASBIN docs oficiais e git hub e exemplos de iplementaççao e garanta que nosso sistema esta seguindo as praticas mais modernas de abac puro, pois estou estranhando ainda termos acbac direto na tabela de usuarios isso deveria eu acho q ser tudo independende no abac puro, analise porque temos no banco de dados rolestype e roles, e depois temos uma tabela a parte com roles e types tambem revise todos campos de nossa tabela e certifique-se de que seguimos o padrao e praticas recomendada para CABIN PURO NAO HIBRIDO e readeque todo nosso sistema para o padrao como se estivesse instalando do zero, reorganize tudo nao se esqueça que tem q estar adaptado a auth.js puro, nosso sistema de gestao de sessão global, analise a fundo e revise o sistema de seccçao global e garanta que o CABIN esteja de acordo.
+- [ ] **Task 17:** revise todos arquivos e pastas dos diretorio site-metodo e garanta que nao ha pastas ou arquivos em branco ou marcados como deletados remova tudo que nao estiver sendo usado, faça uma limpeza profunda eliminando todos residuos de quaisquer alteração, dai execute a tarefa limpea geral e rode o build novamente para garantir que nao á mais nenhum erro nem de build nem de lint nem de tipagem, remova todos warnings e alertas completamente.
+- [ ] **Task 18 :** implemente de forma completa os calculos atuariais propostos no projeto, desenvolva a parte de poder importar as tabuas atuariais conforme os conceitos, com as idades o e nome e qx de cada uma, implemente tambem a parte de poder exportar os relarorios em pdf, e impemente pelo menos um simulador simples em que possa se inserir a idade e ter uma estimativa de expecativa de vida conforme cada tabua, tambem desenvolva para que possa num outro componente se calcule a anuidade atuarial, ou seja, voce insere sua idade e uma taxa de juros para a tabua e ela te calcula qual seria sua anuidade atuarial postecipada, consulte fontes a fundo na internet para saber realizar o calculo e melhores praticas para isso com javascript, analise a fundo o problema busque mais de 20 fontes no google para entender a fundo o problema
