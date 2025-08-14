@@ -6,7 +6,8 @@ import { Badge } from '@/components/ui/badge'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
-import { LucideIcon } from 'lucide-react'
+import type { ComponentType, SVGProps } from 'react'
+type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>
 
 interface ActivityItem {
   id: string

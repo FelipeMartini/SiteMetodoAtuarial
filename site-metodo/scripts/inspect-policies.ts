@@ -5,7 +5,7 @@ import { prisma } from '../src/lib/prisma'
 async function main() {
   const policies = await prisma.casbinRule.findMany()
   console.log('Total policies:', policies.length)
-  policies.forEach((p, i) => {
+  policies.forEach((p: any, i: number) => {
     console.log(`\nPolicy #${i + 1}:`)
     console.log('id:', p.id)
     console.log('ptype:', p.ptype)
