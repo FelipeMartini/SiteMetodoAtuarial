@@ -1,5 +1,3 @@
-"use client"
-
 import { render } from '@react-email/render';
 import WelcomeEmail from './welcome-email';
 import SecurityAlertEmail from './security-alert-email';

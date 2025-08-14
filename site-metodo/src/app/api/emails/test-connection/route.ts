@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { emailService } from '@/lib/email-service'
+import { emailService } from '@/lib/email-service.server'
 
 export async function POST() {
   try {
