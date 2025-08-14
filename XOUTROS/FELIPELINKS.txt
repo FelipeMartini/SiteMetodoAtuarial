@@ -9,5 +9,127 @@ e depois faça uma revisão profunda de tudo que temos de cálculos atuariais na
 
 O procedimento padrão envolve: tabular mortos esperados e ocorridos por faixa etária, calcular o qui-quadrado, comparar com o valor crítico e decidir sobre a aderência.
 
+Checkpoint: Adicionados stubs para 8 arquivos vazios tem isso dentro so:
+import { NextResponse } from 'next/server'
+
+export async function GET() {
+	return NextResponse.json({ error: 'Not implemented' }, { status: 501 })
+}
+
+sim faça isso com uma descrição de commit bem detalhada do commit mas o resto nao precisa vamos nos concentrar em primeiro isso 
+### 6. ANÁLISE PROFUNDA DE EXCEL: INTEGRAÇÃO NEXT.JS, NODE.JS (EXCELJS) E PYTHON (OPENPYXL) (06-analise-excel.md)
+> **ATENÇÃO ESPECIAL**: Esta tarefa já foi iniciada! Procure por "analise-excel" e melhore o que já foi implementado.
+
+- [ ] Importar e analisar os dois arquivos Excel de exemplo automaticamente:
+  - `revisao-completa/MASSA ASSISTIDOS EA.xlsx`
+  - `revisao-completa/MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx`
+- [ ] Implementar leitura de dados e fórmulas usando `exceljs` (Node.js/Next.js) - aprimorar implementação existente
+ - [x] Estado global para armazenar última análise (evita perda ao navegar)
+- [ ] Documentar limitações e avaliar resultados do exceljs
+- [ ] Implementar importador profundo em Python usando `openpyxl` (script separado)
+- [ ] Integrar chamada do script Python via API backend (Node.js `child_process`)
+- [ ] Garantir retorno em JSON para fácil consumo pelo frontend
+- [ ] Criar página separada para upload de arquivo, chamada da API e exibição dos dados/fórmulas
+- [ ] Exibir dados e fórmulas em tabela, com destaque para células com fórmulas
+- [ ] Permitir download do relatório extraído (CSV/JSON)
+- [ ] **ADICIONAL OBRIGATÓRIO**: O arquivo Excel MASSA deve poder ser importado para o banco de dados SQLite, salvando APENAS OS DADOS (não fórmulas) com todas suas colunas e linhas, e o usuário deve poder fazer isso também no mesmo padrão
+- [ ] Gerar arquivo com todos os dados e todas as fórmulas comentadas dos arquivos de exemplo
+- [ ] Documentar todo o fluxo, dependências e instruções de uso
+- [ ] Ajustar e otimizar conforme feedback dos testes
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar integração com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível   depois isso                      ANÁLISE PROFUNDA DE EXCEL: INTEGRAÇÃO NEXT.JS, NODE.JS (EXCELJS) E PYTHON (OPENPYXL) (06-analise-excel.md)
+> **ATENÇÃO ESPECIAL**: Esta tarefa já foi iniciada! Procure por "analise-excel" e melhore o que já foi implementado.
+
+- [ ] Importar e analisar os dois arquivos Excel de exemplo automaticamente:
+  - `revisao-completa/MASSA ASSISTIDOS EA.xlsx`
+  - `revisao-completa/MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx`
+- [ ] Implementar leitura de dados e fórmulas usando `exceljs` (Node.js/Next.js) - aprimorar implementação existente
+ - [x] Estado global para armazenar última análise (evita perda ao navegar)
+- [ ] Documentar limitações e avaliar resultados do exceljs
+- [ ] Implementar importador profundo em Python usando `openpyxl` (script separado)
+- [ ] Integrar chamada do script Python via API backend (Node.js `child_process`)
+- [ ] Garantir retorno em JSON para fácil consumo pelo frontend
+- [ ] Criar página separada para upload de arquivo, chamada da API e exibição dos dados/fórmulas
+- [ ] Exibir dados e fórmulas em tabela, com destaque para células com fórmulas
+- [ ] Permitir download do relatório extraído (CSV/JSON)
+- [ ] **ADICIONAL OBRIGATÓRIO**: O arquivo Excel MASSA deve poder ser importado para o banco de dados SQLite, salvando APENAS OS DADOS (não fórmulas) com todas suas colunas e linhas, e o usuário deve poder fazer isso também no mesmo padrão
+- [ ] Gerar arquivo com todos os dados e todas as fórmulas comentadas dos arquivos de exemplo
+- [ ] Documentar todo o fluxo, dependências e instruções de uso
+- [ ] Ajustar e otimizar conforme feedback dos testes
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar integração com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível
+
+### 7. ESTUDO PROFUNDO: ADERÊNCIA DE TÁBUAS DE MORTALIDADE (aderencia-mortalidade-comparacao-linguagens.md)
+- [ ] Tabular mortos esperados e ocorridos por faixa etária
+- [ ] Calcular o qui-quadrado
+- [ ] Comparar com o valor crítico
+- [ ] Decidir sobre a aderência
+- [ ] Implementar exemplos em Python Java e TypeScript/Node.js
+- [ ] Documentar vantagens e desvantagens de cada linguagem
+- [ ] Referenciar projetos e fórmulas no GitHub
+- [ ] Atualizar e documentar todas as fontes e referências
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar integração com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível                                         e depois isso 
+### 4. REVISÃO PROFUNDA DOS CÁLCULOS ATUARIAIS (05-tarefa-revisao-e-plano-calculos-atuariais.md)
+- [ ] Mapear todos os arquivos, componentes e hooks relacionados a cálculos atuariais (área de cálculos, links do menu/nav/top bar)
+- [ ] Identificar implementações incompletas, simplificadas, temporárias, não implementadas ou parcialmente desenvolvidas
+- [ ] Listar oportunidades de melhoria, refatoração, padronização e testes
+- [ ] Avaliar cobertura de testes e robustez dos algoritmos
+- [ ] Propor plano de desenvolvimento e revisão aprofundada
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para cada cálculo
+- [ ] Validar resultados com fontes confiáveis e calculadoras atuariais reconhecidas
+- [ ] Submeter código a revisão de especialista externo, se possível       /////////////////////////////////////////////////////////////////////////////////////////////////     CRIE UMA NOVA LISTA DE TAREFAS EM ANDAMENTO COM TUDO ISSO E VAMOS FOCAR NISSO, COMEÇANDO POR PESQUISAR A FUNDO CADA ASSUNTO BUSQUE 40 FONTES NA INTERNET, GOOG, TRABALHOS ACADEMICOS, FONTES OFICIAIS BUSQUE TUDO SOBRE E FOQUE NESSE PASSO 7 ANÁLISE PROFUNDA DE EXCEL: INTEGRAÇÃO NEXT.JS, NODE.JS (EXCELJS) E PYTHON (OPENPYXL) (06-analise-excel.md)
+> **ATENÇÃO ESPECIAL**: Esta tarefa já foi iniciada! Procure por "analise-excel" e melhore o que já foi implementado.
+
+- [ ] Importar e analisar os dois arquivos Excel de exemplo automaticamente:
+  - `revisao-completa/MASSA ASSISTIDOS EA.xlsx`
+  - `revisao-completa/MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx`
+- [ ] Implementar leitura de dados e fórmulas usando `exceljs` (Node.js/Next.js) - aprimorar implementação existente
+ - [x] Estado global para armazenar última análise (evita perda ao navegar)
+- [ ] Documentar limitações e avaliar resultados do exceljs
+- [ ] Implementar importador profundo em Python usando `openpyxl` (script separado)
+- [ ] Integrar chamada do script Python via API backend (Node.js `child_process`)
+- [ ] Garantir retorno em JSON para fácil consumo pelo frontend
+- [ ] Criar página separada para upload de arquivo, chamada da API e exibição dos dados/fórmulas
+- [ ] Exibir dados e fórmulas em tabela, com destaque para células com fórmulas
+- [ ] Permitir download do relatório extraído (CSV/JSON)
+- [ ] **ADICIONAL OBRIGATÓRIO**: O arquivo Excel MASSA deve poder ser importado para o banco de dados SQLite, salvando APENAS OS DADOS (não fórmulas) com todas suas colunas e linhas, e o usuário deve poder fazer isso também no mesmo padrão
+- [ ] Gerar arquivo com todos os dados e todas as fórmulas comentadas dos arquivos de exemplo
+- [ ] Documentar todo o fluxo, dependências e instruções de uso
+- [ ] Ajustar e otimizar conforme feedback dos testes
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar integração com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível
+
+### 7. ESTUDO PROFUNDO: ADERÊNCIA DE TÁBUAS DE MORTALIDADE (aderencia-mortalidade-comparacao-linguagens.md)
+- [ ] Tabular mortos esperados e ocorridos por faixa etária
+- [ ] Calcular o qui-quadrado
+- [ ] Comparar com o valor crítico
+- [ ] Decidir sobre a aderência
+- [ ] Implementar exemplos em Python Java e TypeScript/Node.js
+- [ ] Documentar vantagens e desvantagens de cada linguagem
+- [ ] Referenciar projetos e fórmulas no GitHub
+- [ ] Atualizar e documentar todas as fontes e referências
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [ ] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar integração com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível      ///////////////// CONSIDERE QUE TEREMOS UMASSA NUM ARQUIVO EXCEL" revisao-completa/MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx" , QUE PRECISAMOS PEGAR ESSA MASSA AGRUPAR POR DEIXAR SO OS CAMPOS DE MATRICULA, SEXO, IDADE, , DEIXAR TUDO COM A MESMA ESTRUTURA NECESSARIA PARA EFETUAR TODO CALCULO , DE OBTOS ESPERADOS E OCORRIDOS E EFETUAR TODOS OS CALCULOS PARA VER SE AS TABUAS SAO ADERENTES OU NAO,  NESSE ARQUIVO QUE PASSEI O CAMINHO ENCONTRAN-SE A MASSA DE PARTICIPATES, A LISTA DE OBITOS QUE OCORRERAM E OS qx das tabuas que devem ser usados, analise a fundo o arquivo utilizando os scripts que voce deve criar para poder buscar as variaveis desse arquivo, desenvolva as duas versoes, uma analise-excel que ja existe iimplementada usando exceljs e outra versao crie voce utilizando python, faça tudo de forma aprofundada e completa , crie uma nova lista de tarefas so pra tudo isso e começa fundalmenta e aprofundadamente por esse ITEM 7 o resto ve depis faça tudo de forma automatizada e completa , busque por 40 fontes de referencia sobre TESTE CHI QUADRADO, ESTUDO DE ADERENCIA DE MORTALIDADE, TABUAS ATUARIAIS, MASSA DE PARTICIPANTES, OBITOS ESPERADOS, TESTE DE HIPOTESES ESTATISTICOS E SOBRE AS BIBLIOTECAS DE EXCEL E DE CALCULOS QQUE JA TEMOS NO PROJETO ANALISE TUDO A FUNDO DESENVOLVA ISSO EM UMA PAGINA SALVA EM app/AderenciaTabua/ coloque tudo que for referente a isso la dentro
+
+
+
 
 

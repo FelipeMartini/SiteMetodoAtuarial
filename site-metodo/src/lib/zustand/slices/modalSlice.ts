@@ -5,15 +5,13 @@ export interface ModalSlice {
   closeModal: (id: string) => void
 }
 
-export const createModalSlice: StateCreator<any, [], [], ModalSlice> = (_set, _get) => ({
-  openModal: (_id: string) => {
-    // Placeholder: projetos maiores podem centralizar a fila de modais aqui
-    // Mantivemos simples para evitar breaking changes
+export const createModalSlice = <T extends ModalSlice>(): StateCreator<T, [], [], ModalSlice> => () => ({
+  openModal: (id: string) => {
     // eslint-disable-next-line no-console
-    console.log('openModal', _id)
+    console.log('openModal', id)
   },
-  closeModal: (_id: string) => {
+  closeModal: (id: string) => {
     // eslint-disable-next-line no-console
-    console.log('closeModal', _id)
+    console.log('closeModal', id)
   },
 })

@@ -6,8 +6,8 @@ export interface SidebarSlice {
   setSidebarOpen: (v: boolean) => void
 }
 
-export const createSidebarSlice: StateCreator<any, [], [], SidebarSlice> = (_set, _get) => ({
+export const createSidebarSlice = <T extends SidebarSlice>(): StateCreator<T, [], [], SidebarSlice> => (set) => ({
   sidebarOpen: true,
-  toggleSidebar: () => _set((s: any) => ({ sidebarOpen: !s.sidebarOpen })),
-  setSidebarOpen: (v: boolean) => _set({ sidebarOpen: v }),
+  toggleSidebar: () => set(s => ({ sidebarOpen: !(s as any).sidebarOpen } as Partial<T>)),
+  setSidebarOpen: (v: boolean) => set({ sidebarOpen: v } as Partial<T>),
 })

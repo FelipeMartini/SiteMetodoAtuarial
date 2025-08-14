@@ -27,3 +27,12 @@ export const useModalState = () => {
   const closeModal = useUIStore(state => state.closeModal)
   return { openModal, closeModal }
 }
+
+export const useExcelAnalysis = () => {
+  const dadosAnaliseExcel = useUIStore(state => state.dadosAnaliseExcel)
+  const abaPlanilhaAtiva = useUIStore(state => state.abaPlanilhaAtiva)
+  const setDadosAnaliseExcel = useUIStore(state => state.setDadosAnaliseExcel)
+  const setAbaPlanilhaAtiva = useUIStore(state => state.setAbaPlanilhaAtiva)
+  const clearAnaliseExcel = useUIStore(state => state.clearAnaliseExcel)
+  return { dadosAnaliseExcel, abaPlanilhaAtiva, setDadosAnaliseExcel, setAbaPlanilhaAtiva, clearAnaliseExcel }
+}

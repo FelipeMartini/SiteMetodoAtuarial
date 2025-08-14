@@ -7,8 +7,9 @@ export interface ThemeSlice {
   toggleTheme: () => void
 }
 
-export const createThemeSlice: StateCreator<any, [], [], ThemeSlice> = (_set, _get) => ({
+// Fabrica genérica para permitir composição sem conflitos de tipo
+export const createThemeSlice = <T extends ThemeSlice>(): StateCreator<T, [], [], ThemeSlice> => (set, get) => ({
   theme: 'system',
-  setTheme: (t: ThemeOption) => _set({ theme: t }),
-  toggleTheme: () => _set((state: any) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
+  setTheme: (t: ThemeOption) => set({ theme: t } as Partial<T>),
+  toggleTheme: () => set(() => ({ theme: (get() as any).theme === 'dark' ? 'light' : 'dark' } as Partial<T>)),
 })

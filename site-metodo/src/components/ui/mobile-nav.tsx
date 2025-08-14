@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation'
 import type { Session } from 'next-auth'
 
 import { cn } from '@/lib/utils'
+import useUIStore from '@/lib/zustand/uiStore'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import {
@@ -85,7 +86,19 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ session, onLogout }: MobileNavProps) {
-  const [open, setOpen] = React.useState(false)
+  const {
+    mobileMenuOpen: open,
+    setMobileMenuOpen,
+    toggleMobileMenu,
+    allowedNavItems,
+    hiddenNavItems,
+  } = useUIStore(s => ({
+    mobileMenuOpen: s.mobileMenuOpen,
+    setMobileMenuOpen: s.setMobileMenuOpen,
+    toggleMobileMenu: s.toggleMobileMenu,
+    allowedNavItems: s.allowedNavItems,
+    hiddenNavItems: s.hiddenNavItems,
+  }))
   const pathname = usePathname()
 
   const isActive = (href: string) => {
@@ -95,10 +108,30 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
     return pathname?.startsWith(href) || false
   }
 
+  // Aplica filtragem ABAC se disponível
+  const filteredNavigation = React.useMemo(() => {
+    let items = navigation
+    if (allowedNavItems && allowedNavItems.length > 0) {
+      const setAllowed = new Set(allowedNavItems)
+      items = items.filter(i => setAllowed.has(i.href))
+    }
+    if (!allowedNavItems && hiddenNavItems && hiddenNavItems.length > 0) {
+      const setHidden = new Set(hiddenNavItems)
+      items = items.filter(i => !setHidden.has(i.href))
+    }
+    return items
+  }, [allowedNavItems, hiddenNavItems])
+
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+    <Sheet open={open} onOpenChange={setMobileMenuOpen}>
       <SheetTrigger asChild>
-        <Button variant='ghost' size='icon' className='lg:hidden' aria-label='Abrir menu'>
+        <Button
+          variant='ghost'
+          size='icon'
+          className='lg:hidden'
+          aria-label='Abrir menu'
+          onClick={toggleMobileMenu}
+        >
           <Menu className='h-5 w-5' />
         </Button>
       </SheetTrigger>
@@ -116,13 +149,13 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
           {/* Navegação principal */}
           <nav className='flex-1 p-6'>
             <div className='space-y-1'>
-              {navigation.map(item => {
+      {filteredNavigation.map(item => {
                 const Icon = item.icon
                 return (
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={() => setOpen(false)}
+        onClick={() => setMobileMenuOpen(false)}
                     className={cn(
                       'flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground',
                       isActive(item.href) && 'bg-accent text-accent-foreground'
@@ -150,7 +183,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
                 </div>
 
                 <div className='space-y-2'>
-                  <Link href='/area-cliente' onClick={() => setOpen(false)}>
+                  <Link href='/area-cliente' onClick={() => setMobileMenuOpen(false)}>
                     <Button variant='secondary' size='sm' className='w-full justify-start'>
                       <Users className='mr-2 h-4 w-4' />
                       Área Cliente
@@ -161,7 +194,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
                   {/* Temporariamente comentado até implementar ABAC completo */}
                   {/* {(session.user.role?.includes('admin') ||
                     session.user.role?.includes('staff')) && ( */}
-                    <Link href='/area-cliente/dashboard-admin' onClick={() => setOpen(false)}>
+                    <Link href='/area-cliente/dashboard-admin' onClick={() => setMobileMenuOpen(false)}>
                       <Button variant='destructive' size='sm' className='w-full justify-start'>
                         <Building className='mr-2 h-4 w-4' />
                         Dashboard Admin
@@ -174,7 +207,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
                     size='sm'
                     onClick={() => {
                       onLogout?.()
-                      setOpen(false)
+                      setMobileMenuOpen(false)
                     }}
                     className='w-full justify-start'
                   >
@@ -184,13 +217,13 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
               </div>
             ) : (
               <div className='space-y-2'>
-                <Link href='/login' onClick={() => setOpen(false)}>
+                <Link href='/login' onClick={() => setMobileMenuOpen(false)}>
                   <Button variant='ghost' size='sm' className='w-full justify-start'>
                     <LogIn className='mr-2 h-4 w-4' />
                     Entrar
                   </Button>
                 </Link>
-                <Link href='/criar-conta' onClick={() => setOpen(false)}>
+                <Link href='/criar-conta' onClick={() => setMobileMenuOpen(false)}>
                   <Button size='sm' className='w-full justify-start'>
                     <UserPlus className='mr-2 h-4 w-4' />
                     Criar Conta

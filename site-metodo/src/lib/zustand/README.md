@@ -37,3 +37,19 @@ applyAbacAttributes(session.user?.attributes)
 ```
 
 Isso permite que atributos como `{ theme: 'dark', sidebarCollapsed: true }` ajustem a UI automaticamente.
+
+## Limpeza e refatoração recente
+
+Alterações realizadas (para auditoria):
+
+- Removido componente duplicado `src/components/theme/ThemeToggle.tsx` e unificado uso em `src/components/ui/theme-toggle.tsx`.
+- Removido arquivo legacy `src/app/admin/abac/page-old.tsx`.
+- Mantido `src/components/theme-provider.tsx` como wrapper de compatibilidade (sem lógica) para evitar que imports externos queiram quebrar; recomenda-se migrar imports para `useTheme` do Zustand.
+- Adicionado `excelSlice` (`src/lib/zustand/slices/excelSlice.ts`) para gerenciar estado de análises de Excel em memória (não persistido).
+
+Recomendações:
+
+- Atualizar imports que referenciem caminhos legacy (`components/theme`) para `components/ui/theme-toggle`.
+- Evitar persistir objetos grandes em localStorage (ex: resultado de análise Excel). Use slices em memória e rotas de download/export quando necessário.
+- Executar `npm run build` e `npm test` após alterações estruturais maiores para capturar quebras; já executado com sucesso nesta sessão.
+
