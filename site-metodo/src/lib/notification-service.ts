@@ -6,12 +6,15 @@ export interface UserInfo {
   id: string;
   name: string | null;
   email: string;
+  phone?: string;
 }
 
 export interface NotificationWhereClause {
   userId: string;
   read?: boolean;
   type?: string;
+  priority?: string;
+  readAt?: { not: null } | null;
   createdAt?: {
     gte?: Date;
     lte?: Date;
@@ -98,40 +101,67 @@ class NotificationService {
       const deliveryResults: NotificationDeliveryResult[] = [];
       const preferences = user.notificationPreferences;
 
-      // Verificar se está em horário de silêncio
-      const isQuietHours = this.isQuietHours(preferences);
-      
-      // Filtrar canais baseado nas preferências do usuário
-      const allowedChannels = this.filterChannelsByPreferences(options.channels, preferences, isQuietHours, options.priority);
+      // Se não há preferências definidas, criar padrões
+      if (!preferences) {
+        // Canal padrão in_app apenas se não há preferências
+        const result = await this.sendInAppNotification(notification.id, options);
+        deliveryResults.push(result);
+      } else {
+        // Mapear preferências do banco para interface interna
+        const mappedPreferences: NotificationPreferences = {
+          userId: preferences.userId,
+          inAppNotifications: preferences.inApp,
+          emailNotifications: preferences.email,
+          pushNotifications: preferences.push,
+          smsNotifications: preferences.sms,
+          emailTypes: {
+            security: preferences.security,
+            system: true, // padrão
+            marketing: preferences.newsletter,
+            updates: true, // padrão
+          },
+          quietHours: {
+            enabled: false, // padrão
+            startTime: '22:00',
+            endTime: '08:00',
+            timezone: 'America/Sao_Paulo', // padrão
+          },
+        };
 
-      // Enviar por cada canal permitido
-      for (const channel of allowedChannels) {
-        try {
-          let result: NotificationDeliveryResult;
+        // Verificar se está em horário de silêncio
+        const isQuietHours = this.isQuietHours(mappedPreferences);
+        
+        // Filtrar canais baseado nas preferências do usuário
+        const allowedChannels = this.filterChannelsByPreferences(options.channels, mappedPreferences, isQuietHours, options.priority);
 
-          switch (channel) {
-            case 'in_app':
-              result = await this.sendInAppNotification(notification.id, options);
-              break;
-            case 'email':
-              result = await this.sendEmailNotification(user, options);
-              break;
-            case 'push':
-              result = await this.sendPushNotification(user, options);
-              break;
-            case 'sms':
-              result = await this.sendSMSNotification(user, options);
-              break;
-            default:
-              throw new Error(`Canal não suportado: ${channel}`);
-          }
+        // Enviar por cada canal permitido
+        for (const channel of allowedChannels) {
+          try {
+            let result: NotificationDeliveryResult;
 
-          deliveryResults.push(result);
-        } catch (error) {
-          deliveryResults.push({
-            success: false,
-            channel,
-            error: error instanceof Error ? error.message : String(error),
+            switch (channel) {
+              case 'in_app':
+                result = await this.sendInAppNotification(notification.id, options);
+                break;
+              case 'email':
+                result = await this.sendEmailNotification(user, options);
+                break;
+              case 'push':
+                result = await this.sendPushNotification(user, options);
+                break;
+              case 'sms':
+                result = await this.sendSMSNotification(user, options);
+                break;
+              default:
+                throw new Error(`Canal não suportado: ${channel}`);
+            }
+
+            deliveryResults.push(result);
+          } catch (error) {
+            deliveryResults.push({
+              success: false,
+              channel,
+              error: error instanceof Error ? error.message : String(error),
             deliveredAt: new Date(),
           });
 
@@ -142,6 +172,7 @@ class NotificationService {
             error: error instanceof Error ? error.message : String(error),
           });
         }
+      }
       }
 
       // Atualizar status da notificação
@@ -162,7 +193,7 @@ class NotificationService {
       simpleLogger.info('Notificação processada', {
         userId: options.userId,
         notificationId: notification.id,
-        channels: allowedChannels,
+        channels: options.channels,
         success,
         deliveryCount: deliveryResults.filter(r => r.success).length,
       });
