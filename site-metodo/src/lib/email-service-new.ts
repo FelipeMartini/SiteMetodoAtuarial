@@ -3,9 +3,9 @@ import { prisma } from '@/lib/prisma';
 // Mantemos imports de templates e loggers por compatibilidade, mas alguns deles
 // não são usados diretamente aqui. Se removê-los causar erro em outros módulos,
 // favor avisar para ajustarmos a exportação central.
-import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
-import { simpleLogger } from '@/lib/simple-logger';
-import { emailLogger, logEmailSent, logEmailFailed, logEmailPending } from '@/lib/email-logger';
+import { renderEmailTemplate as _renderEmailTemplate, EmailTemplateType as _EmailTemplateType, getEmailTemplate as _getEmailTemplate } from '@/emails/templates';
+import { simpleLogger as _simpleLogger } from '@/lib/simple-logger';
+import { emailLogger as _emailLogger, logEmailSent as _logEmailSent, logEmailFailed as _logEmailFailed, logEmailPending as _logEmailPending } from '@/lib/email-logger';
 
 // Reusar tipos exportados pelo serviço server para garantir consistência de API
 

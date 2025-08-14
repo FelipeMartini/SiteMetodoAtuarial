@@ -25,6 +25,7 @@ import { getClientIP } from './src/lib/utils/ip'
 const PUBLIC_ROUTES = [
   '/',
   '/auth/signin',
+  '/login',
   '/auth/signup',
   '/auth/error',
   '/about',

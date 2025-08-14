@@ -335,7 +335,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   pages: {
-    signIn: '/auth/signin',
+  // Alinhar com a UI do projeto (página em src/app/login)
+  signIn: '/login',
     signOut: '/auth/signout',
     error: '/auth/error',
     verifyRequest: '/auth/verify-request',
