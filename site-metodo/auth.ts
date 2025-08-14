@@ -297,8 +297,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async session({ session, token }) {
-      // Verificar se usuário ainda está ativo
-      if (token.id) {
+      // Verificar se usuário ainda está ativo (protegendo caso token seja undefined)
+      if (token && token.id) {
         const user = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { isActive: true },
@@ -311,16 +311,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       // Estender sessão com dados ABAC
       if (session.user && token) {
-        session.user.id = token.id as string
-        session.user.isActive = token.isActive as boolean
-        session.user.department = token.department as string
-        session.user.location = token.location as string
-        session.user.jobTitle = token.jobTitle as string
-        session.user.validFrom = token.validFrom as Date
-        session.user.validUntil = token.validUntil as Date
-        session.user.mfaEnabled = token.mfaEnabled as boolean
-        session.user.loginCount = token.loginCount as number
-        session.user.lastLogin = token.lastLogin as Date
+  // Usar valores seguros com fallback para evitar undefined
+  // Garantir que session.user.id seja string (usar string vazia como fallback)
+  session.user.id = (token.id as string) ?? ''
+        session.user.isActive = (token.isActive as boolean) ?? false
+        session.user.department = (token.department as string) ?? 'unknown'
+        session.user.location = (token.location as string) ?? 'unknown'
+        session.user.jobTitle = (token.jobTitle as string) ?? ''
+        session.user.validFrom = (token.validFrom as Date) ?? null
+        session.user.validUntil = (token.validUntil as Date) ?? null
+        session.user.mfaEnabled = (token.mfaEnabled as boolean) ?? false
+        session.user.loginCount = (token.loginCount as number) ?? 0
+        session.user.lastLogin = (token.lastLogin as Date) ?? null
       }
 
       return session

@@ -19,6 +19,9 @@ import path from 'path'
 let cachedEnforcer: Enforcer | null = null
 let lastCacheTime = 0
 const CACHE_TTL = 5 * 60 * 1000 // 5 minutos
+// Cache simples para mapear email -> userId e evitar consultas repetidas
+const SUBJECT_CACHE_TTL = 5 * 60 * 1000 // 5 minutos
+const emailToUserIdCache: Map<string, { id: string; ts: number }> = new Map()
 
 // 📋 Caminho para o modelo ABAC/ASIC Casbin
 const ABAC_MODEL_PATH = path.join(process.cwd(), 'src/lib/abac/abac-model.conf')
@@ -132,14 +135,58 @@ async function initializeEnforcer(): Promise<Enforcer> {
     // Configurar adapter com versão compatível
     const adapter = await PrismaAdapter.newAdapter(prisma)
 
-    // Criar enforcer com modelo ABAC
-    const enforcer = await newEnforcer(ABAC_MODEL_PATH, adapter)
-    
+    // Criar enforcer com modelo ABAC sem adapter para evitar que newEnforcer
+    // carregue políticas automaticamente (caso o adapter tenha parsing issues)
+    const enforcer = await newEnforcer(ABAC_MODEL_PATH)
+
+    // Anexar adapter manualmente e então adicionar funções customizadas
+    // Use setAdapter para evitar comportamento de load automático
+    try {
+  // Desabilitar regra temporariamente e aplicar a diretiva TS para compatibilidade
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - setAdapter pode não ter tipagem completa em algumas versões do casbin adapter
+      await (enforcer as any).setAdapter(adapter)
+    } catch (setAdapterErr) {
+      structuredLogger.warn('setAdapter falhou, tentando continuar', { error: setAdapterErr instanceof Error ? setAdapterErr.message : String(setAdapterErr) })
+    }
+
     // Adicionar funções customizadas
     addCustomFunctions(enforcer)
-    
-    // Carregar políticas do banco
-    await enforcer.loadPolicy()
+
+    // Tentar carregar políticas do adapter/banco
+    try {
+      // loadPolicy pode falhar se o adapter retornar linhas mal formatadas
+      await enforcer.loadPolicy()
+    } catch (loadErr) {
+      // Fallback: se o loadPolicy falhar (ex: parsing error do modelo),
+      // fazemos carga manual das políticas vindas do banco para evitar erro de parsing.
+      structuredLogger.warn('enforcer.loadPolicy failed, attempting manual policy load', { error: loadErr instanceof Error ? loadErr.message : String(loadErr) })
+      try {
+        const dbPolicies = await prisma.casbinRule.findMany()
+        for (const p of dbPolicies) {
+          const parts: Array<string> = []
+          if (p.v0) parts.push(String(p.v0))
+          if (p.v1) parts.push(String(p.v1))
+          if (p.v2) parts.push(String(p.v2))
+          if (p.v3) parts.push(String(p.v3))
+          if (p.v4) parts.push(String(p.v4))
+          if (p.v5) parts.push(String(p.v5))
+
+          // Adiciona política diretamente no enforcer (mantendo formato existente)
+          try {
+            // ignorar retorno booleano
+            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+            // @ts-ignore - addPolicy aceita arrays variáveis e a tipagem pode não cobrir todos os casos
+            await enforcer.addPolicy(...parts)
+          } catch (addErr) {
+            structuredLogger.error('Failed to add policy during manual load', { error: addErr instanceof Error ? addErr.message : String(addErr), policy: parts })
+          }
+        }
+      } catch (dbErr) {
+        structuredLogger.error('Failed to read policies from DB for manual load', { error: dbErr instanceof Error ? dbErr.message : String(dbErr) })
+        throw dbErr
+      }
+    }
     
     const loadTime = Date.now() - startTime
     structuredLogger.info('ABAC enforcer initialized', {
@@ -186,9 +233,104 @@ export async function checkABACPermission(
   try {
     const enforcer = await getEnforcer()
     
-    // Verificar permissão sem contexto para simplificar
-    const allowed = await enforcer.enforce(subject, object, action)
-    
+  // Verificar permissão sem contexto para simplificar
+  let allowed = await enforcer.enforce(subject, object, action)
+
+    // Se não permitido inicialmente, tentar estratégias de compatibilidade
+    // 1) se o subject for um email, resolver userId (user:{id}) e tentar novamente
+    // 2) se o subject for user:{id}, tentar equivalentes por email (caso exista alguma política assim)
+    // 3) fallback por curingas (ex: user:* ou '*')
+    if (!allowed) {
+      const triedSubjects = new Set<string>()
+      triedSubjects.add(subject)
+
+      // Helper: resolver email -> userId com cache
+      const resolveEmailToUserId = async (email: string): Promise<string | null> => {
+        const cached = emailToUserIdCache.get(email)
+        const now = Date.now()
+        if (cached && (now - cached.ts) < SUBJECT_CACHE_TTL) return cached.id
+        try {
+          const user = await prisma.user.findUnique({ where: { email }, select: { id: true } })
+          if (user) {
+            emailToUserIdCache.set(email, { id: user.id, ts: now })
+            return user.id
+          }
+          return null
+        } catch (err) {
+          structuredLogger.error('Failed to resolve email to userId', { error: err instanceof Error ? err.message : String(err), email })
+          return null
+        }
+      }
+
+      // Se o subject parece um email
+      if (subject.includes('@')) {
+        const uid = await resolveEmailToUserId(subject)
+        if (uid) {
+          const alt = `user:${uid}`
+          if (!triedSubjects.has(alt)) {
+            try {
+              const res = await enforcer.enforce(alt, object, action)
+              triedSubjects.add(alt)
+              if (res) {
+                allowed = true
+              }
+            } catch (err) {
+              structuredLogger.error('Error enforcing alternative subject (email->user)', { error: err instanceof Error ? err.message : String(err), alt })
+            }
+          }
+        }
+      }
+
+      // Se o subject for user:{id}, tentar buscar email equivalente e testar
+      if (!allowed && subject.startsWith('user:')) {
+        const uid = subject.replace('user:', '')
+        try {
+          const user = await prisma.user.findUnique({ where: { id: uid }, select: { email: true } })
+          if (user?.email) {
+            const altEmail = user.email
+            if (!triedSubjects.has(altEmail)) {
+              try {
+                const res = await enforcer.enforce(altEmail, object, action)
+                triedSubjects.add(altEmail)
+                if (res) {
+                  allowed = true
+                }
+              } catch (err) {
+                structuredLogger.error('Error enforcing alternative subject (user->email)', { error: err instanceof Error ? err.message : String(err), alt: altEmail })
+              }
+            }
+          }
+        } catch (err) {
+          structuredLogger.error('Failed to lookup user email for alternative enforcement', { error: err instanceof Error ? err.message : String(err), userId: uid })
+        }
+      }
+
+      // Ainda não permitido? tentar fallback por curingas (ex: user:* ou '*')
+      try {
+        const policies = await enforcer.getPolicy()
+        for (const p of policies) {
+          const pSub = String(p[0] || '')
+          const pObj = String(p[1] || '')
+          const pAct = String(p[2] || '')
+          // Effect pode estar como p[3] em algumas inserções
+          const pEff = p[3] ? String(p[3]) : 'allow'
+
+          if (pEff !== 'allow') continue
+
+          const subMatch = (pSub === '*' || pSub === subject) || (pSub.endsWith('*') && subject.startsWith(pSub.slice(0, -1)))
+          const objMatch = (pObj === '*' || pObj === object) || (pObj.endsWith('*') && object.startsWith(pObj.slice(0, -1)))
+          const actMatch = (pAct === '*' || pAct === action) || (pAct.endsWith('*') && action.startsWith(pAct.slice(0, -1)))
+
+          if (subMatch && objMatch && actMatch) {
+            allowed = true
+            break
+          }
+        }
+      } catch (err) {
+        structuredLogger.error('Fallback policy check failed', { error: err instanceof Error ? err.message : String(err) })
+      }
+    }
+
     const responseTime = Date.now() - startTime
     
     // Log da decisão
@@ -279,8 +421,27 @@ async function saveAccessLog(
   result: AuthResult
 ): Promise<void> {
   try {
-    // Extrair userId do subject se possível
-    const userId = subject.startsWith('user:') ? subject.replace('user:', '') : null
+    // Extrair userId do subject se possível; se for email, tentar resolver
+    let userId: string | null = null
+    if (subject.startsWith('user:')) {
+      userId = subject.replace('user:', '')
+    } else if (subject.includes('@')) {
+      // tentar resolver email -> userId através de cache/DB
+      const cached = emailToUserIdCache.get(subject)
+      if (cached && (Date.now() - cached.ts) < SUBJECT_CACHE_TTL) {
+        userId = cached.id
+      } else {
+        try {
+          const user = await prisma.user.findUnique({ where: { email: subject }, select: { id: true } })
+          if (user) {
+            userId = user.id
+            emailToUserIdCache.set(subject, { id: user.id, ts: Date.now() })
+          }
+        } catch (err) {
+          structuredLogger.error('Failed to resolve email when saving access log', { error: err instanceof Error ? err.message : String(err), subject })
+        }
+      }
+    }
     
     await prisma.accessLog.create({
       data: {

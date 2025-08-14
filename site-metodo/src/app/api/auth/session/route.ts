@@ -13,9 +13,11 @@ export async function GET() {
       )
     }
 
-    // Check ABAC permission para acessar sessão - usar email do usuário
+    // Check ABAC permission para acessar sessão - usar sempre subject 'user:{id}'
+    // Isso torna a checagem compatível com políticas que usam 'user:*' ou 'user:{id}'
+    const subject = `user:${session.user.id}`
     const hasPermission = await checkABACPermission(
-      session.user.email || `user:${session.user.id}`,
+      subject,
       'session:read',
       'read',
       {

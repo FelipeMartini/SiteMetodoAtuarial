@@ -3,7 +3,7 @@
  * Seguindo as melhores práticas de testes financeiros com precisão decimal
  */
 
-import { CalculadoraAtuarial, TaxaMortalidade, ResultadoSeguroVida } from '../calculadora-atuarial'
+import { CalculadoraAtuarial, TaxaMortalidade } from '../calculadora-atuarial'
 import { Decimal } from 'decimal.js'
 
 // Configuração global do Decimal.js para máxima precisão
