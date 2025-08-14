@@ -1,0 +1,1039 @@
+{
+  "generatedAt": "2025-08-14T20:18:36.445Z",
+  "files": [
+    {
+      "file": "MASSA ASSISTIDOS EA.xlsx",
+      "sheets": [
+        {
+          "name": "MASSA TRABALHADA",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 2,
+            "sexo": 6,
+            "matricula": 1,
+            "data_obito": null
+          },
+          "rows": 1036,
+          "cols": 24,
+          "ageStats": {
+            "count": 1036,
+            "min": 0,
+            "max": 0,
+            "mean": 0,
+            "median": 0,
+            "std": 0
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 677,
+            "F": 359,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "CODPATRO",
+              "nonEmpty": 1036,
+              "unique": 2,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 1036
+            },
+            {
+              "index": 1,
+              "name": "MATRICULA",
+              "nonEmpty": 1036,
+              "unique": 766,
+              "numericCount": 39,
+              "numericAgeCount": 3,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 2,
+              "name": "NOME",
+              "nonEmpty": 1036,
+              "unique": 766,
+              "numericCount": 0,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 3,
+              "name": "FUND",
+              "nonEmpty": 1036,
+              "unique": 2,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 1036
+            },
+            {
+              "index": 4,
+              "name": "CPF",
+              "nonEmpty": 1036,
+              "unique": 766,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 5,
+              "name": "SITPART",
+              "nonEmpty": 957,
+              "unique": 4,
+              "numericCount": 957,
+              "numericAgeCount": 957,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 6,
+              "name": "SEXO",
+              "nonEmpty": 1036,
+              "unique": 2,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 1036
+            },
+            {
+              "index": 7,
+              "name": "DTNASCT",
+              "nonEmpty": 1036,
+              "unique": 733,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 8,
+              "name": "DTINCEMP",
+              "nonEmpty": 1036,
+              "unique": 332,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 9,
+              "name": "DTINSC",
+              "nonEmpty": 1036,
+              "unique": 56,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 10,
+              "name": "DTINBENF",
+              "nonEmpty": 1036,
+              "unique": 318,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 11,
+              "name": "TMPINSS",
+              "nonEmpty": 1036,
+              "unique": 45,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 12,
+              "name": "VLBEINSS",
+              "nonEmpty": 1036,
+              "unique": 375,
+              "numericCount": 8,
+              "numericAgeCount": 1,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 13,
+              "name": "VLCOMP",
+              "nonEmpty": 1036,
+              "unique": 1036,
+              "numericCount": 1,
+              "numericAgeCount": 21,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 14,
+              "name": "VLRBPS",
+              "nonEmpty": 1036,
+              "unique": 33,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 15,
+              "name": "RESPOUP",
+              "nonEmpty": 1036,
+              "unique": 279,
+              "numericCount": 748,
+              "numericAgeCount": 748,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 16,
+              "name": "FMRCBENF",
+              "nonEmpty": 1035,
+              "unique": 2,
+              "numericCount": 1035,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 1035
+            },
+            {
+              "index": 17,
+              "name": "PZRCRDTP",
+              "nonEmpty": 1035,
+              "unique": 15,
+              "numericCount": 1035,
+              "numericAgeCount": 973,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 18,
+              "name": "PENSAO",
+              "nonEmpty": 1036,
+              "unique": 2,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 1036
+            },
+            {
+              "index": 19,
+              "name": "DURACAO",
+              "nonEmpty": 1036,
+              "unique": 3,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 1007
+            },
+            {
+              "index": 20,
+              "name": "PLANO",
+              "nonEmpty": 1036,
+              "unique": 4,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 452
+            },
+            {
+              "index": 21,
+              "name": "CONTRIBEXTRA",
+              "nonEmpty": 1036,
+              "unique": 1,
+              "numericCount": 1036,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 22,
+              "name": "OBS",
+              "nonEmpty": 1036,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 23,
+              "name": "Thu Jan 30 2025 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+              "nonEmpty": 1036,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 1036,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "01 P 12",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 1,
+            "sexo": 1,
+            "matricula": 0,
+            "data_obito": null
+          },
+          "rows": 1035,
+          "cols": 3,
+          "ageStats": {
+            "count": 1035,
+            "min": 1,
+            "max": 4,
+            "mean": 2.6280193236714977,
+            "median": 3,
+            "std": 0.6413960013474294
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 13,
+            "F": 438,
+            "O": 584
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "Tue Dec 31 2024 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+              "nonEmpty": 1035,
+              "unique": 765,
+              "numericCount": 0,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 1,
+              "name": "Plano",
+              "nonEmpty": 1035,
+              "unique": 4,
+              "numericCount": 1035,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 451
+            },
+            {
+              "index": 2,
+              "name": "Sat Nov 30 2024 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+              "nonEmpty": 1035,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "01 P 02",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 1,
+            "sexo": 1,
+            "matricula": 0,
+            "data_obito": null
+          },
+          "rows": 1035,
+          "cols": 3,
+          "ageStats": {
+            "count": 1035,
+            "min": 1,
+            "max": 4,
+            "mean": 2.6280193236714977,
+            "median": 3,
+            "std": 0.6413960013474294
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 13,
+            "F": 438,
+            "O": 584
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "Tue Dec 31 2024 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+              "nonEmpty": 1035,
+              "unique": 765,
+              "numericCount": 0,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 1,
+              "name": "Plano",
+              "nonEmpty": 1035,
+              "unique": 4,
+              "numericCount": 1035,
+              "numericAgeCount": 1035,
+              "dateLike": 0,
+              "sexCount": 451
+            },
+            {
+              "index": 2,
+              "name": "Tue Dec 31 2024 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+              "nonEmpty": 0,
+              "unique": 0,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "file": "MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx",
+      "sheets": [
+        {
+          "name": "MASSA TRABALHADA UNIFICADA",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 2,
+            "sexo": 1,
+            "matricula": 0,
+            "data_obito": null
+          },
+          "rows": 4018,
+          "cols": 4,
+          "ageStats": {
+            "count": 4018,
+            "min": 55,
+            "max": 100,
+            "mean": 69.15082130413141,
+            "median": 68,
+            "std": 6.813533700345096
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 2565,
+            "F": 1453,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "MATRICULA",
+              "nonEmpty": 4018,
+              "unique": 741,
+              "numericCount": 266,
+              "numericAgeCount": 21,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 1,
+              "name": "SEXO",
+              "nonEmpty": 4018,
+              "unique": 2,
+              "numericCount": 4018,
+              "numericAgeCount": 4018,
+              "dateLike": 0,
+              "sexCount": 4018
+            },
+            {
+              "index": 2,
+              "name": "IDADE",
+              "nonEmpty": 4018,
+              "unique": 46,
+              "numericCount": 4018,
+              "numericAgeCount": 4018,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 3,
+              "name": "ANO CADASTRO",
+              "nonEmpty": 4018,
+              "unique": 6,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "qx",
+          "possibleHeader": false,
+          "guesses": {
+            "idade": 1,
+            "sexo": null,
+            "matricula": 1,
+            "data_obito": null
+          },
+          "rows": 119,
+          "cols": 6,
+          "ageStats": {
+            "count": 118,
+            "min": -2000,
+            "max": 2,
+            "mean": -16.83439149999999,
+            "median": 0.006063,
+            "std": 183.34391402610586
+          },
+          "missingAges": 1,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [],
+          "colStats": [
+            null,
+            {
+              "index": 1,
+              "name": "2",
+              "nonEmpty": 119,
+              "unique": 118,
+              "numericCount": 2,
+              "numericAgeCount": 117,
+              "dateLike": 0,
+              "sexCount": 2
+            },
+            {
+              "index": 2,
+              "name": "[object Object]",
+              "nonEmpty": 119,
+              "unique": 118,
+              "numericCount": 1,
+              "numericAgeCount": 117,
+              "dateLike": 0,
+              "sexCount": 1
+            },
+            {
+              "index": 3,
+              "name": "[object Object]",
+              "nonEmpty": 119,
+              "unique": 119,
+              "numericCount": 1,
+              "numericAgeCount": 117,
+              "dateLike": 0,
+              "sexCount": 1
+            },
+            {
+              "index": 4,
+              "name": "[object Object]",
+              "nonEmpty": 119,
+              "unique": 118,
+              "numericCount": 1,
+              "numericAgeCount": 117,
+              "dateLike": 0,
+              "sexCount": 1
+            },
+            {
+              "index": 5,
+              "name": "[object Object]",
+              "nonEmpty": 118,
+              "unique": 112,
+              "numericCount": 7,
+              "numericAgeCount": 117,
+              "dateLike": 0,
+              "sexCount": 7
+            }
+          ]
+        },
+        {
+          "name": "MORTOS",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 3,
+            "sexo": null,
+            "matricula": 1,
+            "data_obito": 2
+          },
+          "rows": 125,
+          "cols": 5,
+          "ageStats": {
+            "count": 125,
+            "min": 0,
+            "max": 0,
+            "mean": 0,
+            "median": 0,
+            "std": 0
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "MATRÍCULA",
+              "nonEmpty": 125,
+              "unique": 125,
+              "numericCount": 22,
+              "numericAgeCount": 2,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 1,
+              "name": "DATA NASCIMENTO",
+              "nonEmpty": 125,
+              "unique": 124,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 2,
+              "name": "DATA ÓBITO",
+              "nonEmpty": 125,
+              "unique": 122,
+              "numericCount": 0,
+              "numericAgeCount": 0,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 3,
+              "name": "IDADE NA DATA DO OBITO",
+              "nonEmpty": 125,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 125,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 4,
+              "name": "ANO DO OBITO",
+              "nonEmpty": 125,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 125,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "Calculos Massa qx",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 1,
+            "sexo": null,
+            "matricula": null,
+            "data_obito": null
+          },
+          "rows": 6399,
+          "cols": 9,
+          "ageStats": {
+            "count": 6399,
+            "min": 0,
+            "max": 0,
+            "mean": 0,
+            "median": 0,
+            "std": 0
+          },
+          "missingAges": 0,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            null,
+            {
+              "index": 1,
+              "name": "CADASTRO MASSA",
+              "nonEmpty": 6399,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 2,
+              "name": "CADASTRO MASSA",
+              "nonEmpty": 6399,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 3,
+              "name": "CADASTRO MASSA",
+              "nonEmpty": 6399,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 4,
+              "name": "TABUAS",
+              "nonEmpty": 6399,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 6398,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 5,
+              "name": "TABUAS",
+              "nonEmpty": 6399,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 6,
+              "name": "TABUAS",
+              "nonEmpty": 6399,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 7,
+              "name": "TABUAS",
+              "nonEmpty": 6399,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 8,
+              "name": "TABUAS",
+              "nonEmpty": 6399,
+              "unique": 1,
+              "numericCount": 0,
+              "numericAgeCount": 6399,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "Calculos Estatisticos",
+          "possibleHeader": false,
+          "guesses": {
+            "idade": 3,
+            "sexo": null,
+            "matricula": null,
+            "data_obito": null
+          },
+          "rows": 87,
+          "cols": 5,
+          "ageStats": {
+            "count": 73,
+            "min": 0,
+            "max": 90,
+            "mean": 7.191780821917808,
+            "median": 0,
+            "std": 22.2991231071812
+          },
+          "missingAges": 14,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [],
+          "colStats": [
+            null,
+            null,
+            null,
+            {
+              "index": 3,
+              "name": "DIFERENÇA DO ANO",
+              "nonEmpty": 73,
+              "unique": 13,
+              "numericCount": 8,
+              "numericAgeCount": 73,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 4,
+              "name": "Col 4",
+              "nonEmpty": 73,
+              "unique": 13,
+              "numericCount": 9,
+              "numericAgeCount": 72,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "Resumo FINAL",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 1,
+            "sexo": null,
+            "matricula": null,
+            "data_obito": null
+          },
+          "rows": 10,
+          "cols": 3,
+          "ageStats": {
+            "count": 9,
+            "min": 0,
+            "max": 0,
+            "mean": 0,
+            "median": 0,
+            "std": 0
+          },
+          "missingAges": 1,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            null,
+            {
+              "index": 1,
+              "name": "x² tabelado",
+              "nonEmpty": 10,
+              "unique": 6,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 2,
+              "name": "[object Object]",
+              "nonEmpty": 10,
+              "unique": 5,
+              "numericCount": 1,
+              "numericAgeCount": 10,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "tabela",
+          "possibleHeader": true,
+          "guesses": {
+            "idade": 11,
+            "sexo": null,
+            "matricula": 11,
+            "data_obito": null
+          },
+          "rows": 10,
+          "cols": 17,
+          "ageStats": {
+            "count": 9,
+            "min": 0.8,
+            "max": 11.03,
+            "mean": 5.885555555555555,
+            "median": 5.99,
+            "std": 3.390647631061755
+          },
+          "missingAges": 1,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [
+            "header_detected"
+          ],
+          "colStats": [
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            {
+              "index": 11,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 9,
+              "unique": 9,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 12,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 9,
+              "unique": 9,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 13,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 10,
+              "unique": 10,
+              "numericCount": 0,
+              "numericAgeCount": 10,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 14,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 9,
+              "unique": 9,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 15,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 9,
+              "unique": 9,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 16,
+              "name": "NIVEL DE CONFIANÇA",
+              "nonEmpty": 9,
+              "unique": 9,
+              "numericCount": 0,
+              "numericAgeCount": 9,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        },
+        {
+          "name": "curvas",
+          "possibleHeader": false,
+          "guesses": {
+            "idade": 2,
+            "sexo": null,
+            "matricula": null,
+            "data_obito": null
+          },
+          "rows": 52,
+          "cols": 6,
+          "ageStats": {
+            "count": 48,
+            "min": -2000,
+            "max": 0,
+            "mean": -41.666666666666664,
+            "median": 0,
+            "std": 285.65227501671
+          },
+          "missingAges": 4,
+          "sexoCounts": {
+            "M": 0,
+            "F": 0,
+            "O": 0
+          },
+          "adjustments": [],
+          "colStats": [
+            {
+              "index": 0,
+              "name": "2020",
+              "nonEmpty": 51,
+              "unique": 3,
+              "numericCount": 0,
+              "numericAgeCount": 50,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            null,
+            {
+              "index": 2,
+              "name": "AT-2000 M",
+              "nonEmpty": 48,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 47,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 3,
+              "name": "AT-2000 F",
+              "nonEmpty": 48,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 47,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 4,
+              "name": "AT2000 (Suav 10%)_MAS",
+              "nonEmpty": 48,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 47,
+              "dateLike": 0,
+              "sexCount": 0
+            },
+            {
+              "index": 5,
+              "name": "AT2000 (Suav 10%)_FEM",
+              "nonEmpty": 48,
+              "unique": 2,
+              "numericCount": 0,
+              "numericAgeCount": 47,
+              "dateLike": 0,
+              "sexCount": 0
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "errors": []
+}

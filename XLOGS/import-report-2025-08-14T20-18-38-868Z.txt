@@ -1,0 +1,46 @@
+Import report generated at 2025-08-14T20:18:36.445Z
+
+File: MASSA ASSISTIDOS EA.xlsx
+ Sheet: MASSA TRABALHADA — rows=1036 cols=24 header=true guesses={"idade":2,"sexo":6,"matricula":1,"data_obito":null}
+  Ages: count=1036 min=0 max=0 mean=0.00 median=0 std=0.00 missing=0
+  Sexo: M=677 F=359 O=0
+  Ajustes: header_detected
+ Sheet: 01 P 12 — rows=1035 cols=3 header=true guesses={"idade":1,"sexo":1,"matricula":0,"data_obito":null}
+  Ages: count=1035 min=1 max=4 mean=2.63 median=3 std=0.64 missing=0
+  Sexo: M=13 F=438 O=584
+  Ajustes: header_detected
+ Sheet: 01 P 02 — rows=1035 cols=3 header=true guesses={"idade":1,"sexo":1,"matricula":0,"data_obito":null}
+  Ages: count=1035 min=1 max=4 mean=2.63 median=3 std=0.64 missing=0
+  Sexo: M=13 F=438 O=584
+  Ajustes: header_detected
+
+File: MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx
+ Sheet: MASSA TRABALHADA UNIFICADA — rows=4018 cols=4 header=true guesses={"idade":2,"sexo":1,"matricula":0,"data_obito":null}
+  Ages: count=4018 min=55 max=100 mean=69.15 median=68 std=6.81 missing=0
+  Sexo: M=2565 F=1453 O=0
+  Ajustes: header_detected
+ Sheet: qx — rows=119 cols=6 header=false guesses={"idade":1,"sexo":null,"matricula":1,"data_obito":null}
+  Ages: count=118 min=-2000 max=2 mean=-16.83 median=0.006063 std=183.34 missing=1
+  Sexo: M=0 F=0 O=0
+ Sheet: MORTOS — rows=125 cols=5 header=true guesses={"idade":3,"sexo":null,"matricula":1,"data_obito":2}
+  Ages: count=125 min=0 max=0 mean=0.00 median=0 std=0.00 missing=0
+  Sexo: M=0 F=0 O=0
+  Ajustes: header_detected
+ Sheet: Calculos Massa qx — rows=6399 cols=9 header=true guesses={"idade":1,"sexo":null,"matricula":null,"data_obito":null}
+  Ages: count=6399 min=0 max=0 mean=0.00 median=0 std=0.00 missing=0
+  Sexo: M=0 F=0 O=0
+  Ajustes: header_detected
+ Sheet: Calculos Estatisticos — rows=87 cols=5 header=false guesses={"idade":3,"sexo":null,"matricula":null,"data_obito":null}
+  Ages: count=73 min=0 max=90 mean=7.19 median=0 std=22.30 missing=14
+  Sexo: M=0 F=0 O=0
+ Sheet: Resumo FINAL — rows=10 cols=3 header=true guesses={"idade":1,"sexo":null,"matricula":null,"data_obito":null}
+  Ages: count=9 min=0 max=0 mean=0.00 median=0 std=0.00 missing=1
+  Sexo: M=0 F=0 O=0
+  Ajustes: header_detected
+ Sheet: tabela — rows=10 cols=17 header=true guesses={"idade":11,"sexo":null,"matricula":11,"data_obito":null}
+  Ages: count=9 min=0.8 max=11.03 mean=5.89 median=5.99 std=3.39 missing=1
+  Sexo: M=0 F=0 O=0
+  Ajustes: header_detected
+ Sheet: curvas — rows=52 cols=6 header=false guesses={"idade":2,"sexo":null,"matricula":null,"data_obito":null}
+  Ages: count=48 min=-2000 max=0 mean=-41.67 median=0 std=285.65 missing=4
+  Sexo: M=0 F=0 O=0

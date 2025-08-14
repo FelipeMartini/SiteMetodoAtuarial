@@ -59,6 +59,9 @@ export default function DashboardAderenciaTabuas() {
   const [isUploading, setIsUploading] = useState(false)
   const [analiseResults, setAnaliseResults] = useState<AnaliseAderencia | null>(null)
   const [loading, setLoading] = useState(false)
+  const [previewData, setPreviewData] = useState<any | null>(null)
+  const [confirmSaving, setConfirmSaving] = useState(false)
+  const [manualMapping, setManualMapping] = useState<Record<string, number | null> | null>(null)
   
   // Configurações avançadas
   const [configuracao, setConfiguracao] = useState({
@@ -113,15 +116,12 @@ export default function DashboardAderenciaTabuas() {
     setUploadProgress(5)
 
     try {
+      // Upload + validar via novo endpoint: validar-upload
       const formData = new FormData()
       formData.append('arquivo', file)
-      formData.append('config', JSON.stringify({
-        tipoImportacao: 'COMPLETO',
-        sobrescreverExistentes: false,
-        validarDados: true
-      }))
+      formData.append('data_referencia', new Date().toISOString().slice(0,10))
 
-      const res = await fetch('/api/aderencia-tabuas/upload', {
+      const res = await fetch('/api/aderencia-tabuas/validar-upload', {
         method: 'POST',
         body: formData
       })
@@ -136,28 +136,21 @@ export default function DashboardAderenciaTabuas() {
       await carregarImportacoes()
       if (data.importacaoId) setImportacaoSelecionada(data.importacaoId)
 
-      // Opcional: iniciar análise automática pela rota ExcelJS
-      if (data.importacaoId) {
-        setUploadProgress(60)
-        try {
-          const analiseRes = await fetch('/api/aderencia-tabuas/analise-exceljs', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ importacaoId: data.importacaoId, configuracao: { mapeamentoColunas: {} } })
-          })
-
-          if (analiseRes.ok) {
-            const analiseData = await analiseRes.json()
-            // Se retornou dados processados, atualiza ui
-            if (analiseData.dadosProcessados) {
-              setAnaliseResults(prev => prev) // manter
-            }
-          } else {
-            console.warn('Análise ExcelJS retornou erro', analiseRes.status)
-          }
-        } catch (err) {
-          console.error('Erro ao iniciar análise ExcelJS:', err)
-        }
+      // Mostrar preview detectado
+      if (data.previewNormalizado) {
+        // armazenar em analiseResults temporariamente apenas para exibir
+        // adaptar shape mínimo
+        setAnaliseResults(prev => prev)
+        // guardar preview em state local para exibir e confirmar
+        setPreviewData(data)
+        // inicializar mapeamento manual a partir do detectado
+        setManualMapping({
+          matricula: data.mapeamentoDetectado?.matricula ?? null,
+          sexo: data.mapeamentoDetectado?.sexo ?? null,
+          idade: data.mapeamentoDetectado?.idade ?? null,
+          data_nascimento: data.mapeamentoDetectado?.data_nascimento ?? null,
+          data_obito: data.mapeamentoDetectado?.data_obito ?? null
+        })
       }
 
     } catch (error) {
@@ -234,6 +227,44 @@ export default function DashboardAderenciaTabuas() {
 
     } catch (error) {
       console.error('Erro na análise:', error)
+      alert((error as Error).message)
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const confirmarSalvarPreview = async () => {
+    if (!importacaoSelecionada || !previewData) {
+      alert('Nenhuma importação ou preview disponível')
+      return
+    }
+
+    setLoading(true)
+    try {
+      const payload = {
+        importacaoId: importacaoSelecionada,
+        dadosProcessados: {
+          massa_participantes: previewData.previewNormalizado
+        }
+      }
+
+      const res = await fetch('/api/aderencia-tabuas/salvar-dados', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}))
+        throw new Error(err.error || `Falha ao salvar: ${res.status}`)
+      }
+
+      const data = await res.json()
+      alert('Persistência concluída: ' + (data?.summary || 'Concluído'))
+      await carregarImportacoes()
+      setPreviewData(null)
+    } catch (error) {
+      console.error('Erro ao salvar preview:', error)
       alert((error as Error).message)
     } finally {
       setLoading(false)
@@ -400,6 +431,94 @@ export default function DashboardAderenciaTabuas() {
                     <span>{uploadProgress}%</span>
                   </div>
                   <Progress value={uploadProgress} className="w-full" />
+                </div>
+              )}
+
+              {/* Preview gerado pelo detector */}
+              {previewData && (
+                <div className="mt-4 p-4 border rounded-lg bg-slate-50">
+                  <h4 className="font-medium mb-2">Preview detectado</h4>
+                  <p className="text-sm text-muted-foreground mb-2">Mapeamento detectado: {JSON.stringify(previewData.mapeamentoDetectado)}</p>
+                  {/* Painel de mapeamento manual */}
+                  <div className="grid grid-cols-2 gap-3 mb-4">
+                    {['matricula','sexo','idade','data_nascimento','data_obito'].map((field) => (
+                      <div key={field} className="flex items-center gap-2">
+                        <Label className="w-40 text-right">{field.replace('_',' ').toUpperCase()}</Label>
+                        <Select value={(manualMapping && manualMapping[field] !== null) ? String(manualMapping[field]) : 'none'} onValueChange={(val) => {
+                          const v = val === 'none' ? null : Number(val)
+                          setManualMapping(prev => ({ ...(prev||{}), [field]: v }))
+                        }}>
+                          <SelectTrigger className="w-48">
+                            <SelectValue>{(manualMapping && manualMapping[field] !== null) ? String(manualMapping[field]) : 'Nenhuma'}</SelectValue>
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="none">Nenhuma</SelectItem>
+                            {(() => {
+                              const cols: {i:number; name:string}[] = (previewData?.amostraLinhas && previewData.amostraLinhas[0]) ? previewData.amostraLinhas[0].map((c:any, i:number) => ({ i, name: String(c || `Col ${i}`).slice(0,30) })) : []
+                              return cols.map((col:{i:number;name:string}) => <SelectItem key={col.i} value={String(col.i)}>#{col.i} - {col.name}</SelectItem>)
+                            })()}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="flex gap-2 mb-4">
+                    <Button onClick={() => {
+                      if (!previewData || !manualMapping) return
+                      const rows = previewData.amostraLinhas || []
+                      const possibleHeader = rows.length > 0 && rows[0].every((c:any) => typeof c === 'string')
+                      const start = possibleHeader ? 1 : 0
+                      const newPreview: any[] = []
+                      for (let r = start; r < Math.min(rows.length, start + 10); r++) {
+                        const raw = rows[r] || []
+                        const item:any = {}
+                        if (manualMapping.matricula !== null) item.matricula = raw[manualMapping.matricula]
+                        if (manualMapping.sexo !== null) item.sexo = String(raw[manualMapping.sexo]||'')
+                        if (manualMapping.idade !== null) {
+                          const rawv = String(raw[manualMapping.idade]||'').replace(/[^0-9.-]/g,'')
+                          item.idade = rawv.length ? Number(rawv) : null
+                        }
+                        if (manualMapping.data_nascimento !== null) item.data_nascimento = String(raw[manualMapping.data_nascimento]||'')
+                        if (manualMapping.data_obito !== null) item.data_obito = String(raw[manualMapping.data_obito]||'')
+                        newPreview.push(item)
+                      }
+                      setPreviewData((prev:any) => ({ ...prev, previewNormalizado: newPreview }))
+                    }}>Atualizar Preview</Button>
+                    <Button variant="ghost" onClick={() => setManualMapping(null)}>Resetar Mapeamento</Button>
+                  </div>
+                  <div className="overflow-auto max-h-48">
+                    <table className="w-full text-sm table-auto">
+                      <thead>
+                        <tr>
+                          <th className="text-left p-1">matricula</th>
+                          <th className="text-left p-1">sexo</th>
+                          <th className="text-left p-1">idade</th>
+                          <th className="text-left p-1">data_nascimento</th>
+                          <th className="text-left p-1">data_obito</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {previewData.previewNormalizado.map((row: any, idx: number) => (
+                          <tr key={idx} className="border-t">
+                            <td className="p-1">{row.matricula ?? ''}</td>
+                            <td className="p-1">{row.sexo ?? ''}</td>
+                            <td className="p-1">{row.idade ?? ''}</td>
+                            <td className="p-1">{row.data_nascimento ?? ''}</td>
+                            <td className="p-1">{row.data_obito ?? ''}</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="mt-3 flex gap-2">
+                    <Button onClick={confirmarSalvarPreview} disabled={loading}>
+                      {loading ? 'Salvando...' : 'Confirmar e Salvar no Banco'}
+                    </Button>
+                    <Button variant="ghost" onClick={() => setPreviewData(null)} disabled={loading}>
+                      Cancelar
+                    </Button>
+                  </div>
                 </div>
               )}
 
