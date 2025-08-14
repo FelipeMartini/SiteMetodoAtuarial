@@ -1,0 +1,130 @@
+[
+  {
+    "arquivo": "MASSA ASSISTIDOS EA.xlsx",
+    "linhasLidas": 50,
+    "mapeamentoDetectado": {
+      "matricula": 1,
+      "sexo": 6,
+      "idade": 0,
+      "data_nascimento": null,
+      "data_obito": null
+    },
+    "previewNormalizado": [
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 25321,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 4723,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 1
+      }
+    ],
+    "confianca": 0.6
+  },
+  {
+    "arquivo": "MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx",
+    "linhasLidas": 50,
+    "mapeamentoDetectado": {
+      "matricula": 0,
+      "sexo": 1,
+      "idade": 2,
+      "data_nascimento": null,
+      "data_obito": null
+    },
+    "previewNormalizado": [
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 72
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 62
+      },
+      {
+        "matricula": 25321,
+        "sexo": "1",
+        "idade": 73
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 73
+      },
+      {
+        "matricula": 4723,
+        "sexo": "1",
+        "idade": 64
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 72
+      },
+      {
+        "matricula": 9105,
+        "sexo": "1",
+        "idade": 63
+      },
+      {
+        "matricula": 2054,
+        "sexo": "1",
+        "idade": 69
+      },
+      {
+        "matricula": 14761,
+        "sexo": "1",
+        "idade": 65
+      },
+      {
+        "matricula": 3409,
+        "sexo": "1",
+        "idade": 67
+      }
+    ],
+    "confianca": 0.6
+  }
+]

@@ -25,20 +25,21 @@ async function main() {
     console.log('User exists', user.id)
   }
 
-  // Garantir políticas casbin (idempotente)
-  // Policies: allow read/write on admin dashboard and area-cliente
+  // Garantir políticas casbin (idempotente) — somente email como subject
+  // Policies básicas mantidas:
+  // - admin:dashboard (read, write) para o email do admin
+  // - area:cliente (read, write) para novos usuários (aplicado por email)
   const policies = [
-    { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'read', effect: 'allow' },
-    { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'write', effect: 'allow' },
-    { subject: `user:${user.id}`, object: 'area:cliente', action: 'read', effect: 'allow' },
-    { subject: `user:${user.id}`, object: 'area:cliente', action: 'write', effect: 'allow' },
-    // Também garantir políticas por email (compatibilidade)
     { subject: email, object: 'admin:dashboard', action: 'read', effect: 'allow' },
+    { subject: email, object: 'admin:dashboard', action: 'write', effect: 'allow' },
+  { subject: email, object: 'admin:abac', action: 'read', effect: 'allow' },
+  { subject: email, object: 'admin:abac', action: 'write', effect: 'allow' },
     { subject: email, object: 'area:cliente', action: 'read', effect: 'allow' },
+    { subject: email, object: 'area:cliente', action: 'write', effect: 'allow' },
   ]
 
   for (const p of policies) {
-    // Evitar duplicatas
+    // Evitar duplicatas (usar somente email no v0)
     const exists = await prisma.casbinRule.findFirst({
       where: {
         v0: p.subject,

@@ -15,8 +15,9 @@ export async function GET() {
     }
 
     // Verificar permissões ABAC para listar usuários
+    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
     const hasPermission = await checkABACPermission(
-      session.user.email || `user:${session.user.id}`,
+      subject,
       'admin:users',
       'read',
       {

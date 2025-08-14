@@ -26,8 +26,8 @@ export async function GET(request: NextRequest) {
     
     // Verificar permissão ABAC para incluir estatísticas globais
     const hasGlobalPermission = searchParams.get('includeGlobal') === 'true' 
-      ? await checkABACPermission(
-          session.user.email || '',
+    ? await checkABACPermission(
+      session.user.email ? String(session.user.email) : '',
           'resource:notifications:stats:global',
           'read',
           {

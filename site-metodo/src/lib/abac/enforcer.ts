@@ -165,7 +165,37 @@ async function initializeEnforcer(): Promise<AnyEnforcer> {
     addCustomFunctions(enforcer)
     
     // Carregar políticas do banco
-    await enforcer.loadPolicy()
+    try {
+      await enforcer.loadPolicy()
+    } catch (err) {
+      // Diagnóstico: tentar identificar a regra que quebra o parser
+      structuredLogger.error('loadPolicy failed, running per-row diagnostic', { error: err instanceof Error ? err.message : String(err) })
+      try {
+        const rows = await prisma.casbinRule.findMany({ select: { id: true, ptype: true, v0: true, v1: true, v2: true, v3: true, v4: true, v5: true } })
+        for (const r of rows) {
+          if (r.ptype !== 'p') continue
+          const policyParts: string[] = []
+          if (r.v0) policyParts.push(r.v0)
+          if (r.v1) policyParts.push(r.v1)
+          if (r.v2) policyParts.push(r.v2)
+          if (r.v3) policyParts.push(r.v3)
+          if (r.v4) policyParts.push(r.v4)
+          if (r.v5) policyParts.push(r.v5)
+          try {
+            // tentar adicionar a política individualmente para detectar parse error
+            // sem salvar no adapter (apenas em memória)
+            await enforcer.addPolicy(...policyParts)
+            await enforcer.clearPolicy()
+          } catch (innerErr) {
+            structuredLogger.error('Policy parse failed for casbin_rule', { id: r.id, row: r, error: innerErr instanceof Error ? innerErr.message : String(innerErr) })
+          }
+        }
+      } catch (diagErr) {
+        structuredLogger.error('Per-row diagnostic failed', { error: diagErr instanceof Error ? diagErr.message : String(diagErr) })
+      }
+      // rethrow original to preserve behavior
+      throw err
+    }
     
     const loadTime = Date.now() - startTime
     structuredLogger.info('ABAC enforcer initialized', {
@@ -445,30 +475,34 @@ export async function reloadABACPolicies(): Promise<boolean> {
  */
 
 // Verificar se usuário é admin (compatibilidade)
-export async function isAdmin(userId: string, context: ABACContext = {}): Promise<boolean> {
-  const result = await checkABACPermission(`user:${userId}`, 'system:admin', 'access', context)
+// Essas funções aceitam tanto userId quanto email; preferem email quando informado
+export async function isAdmin(userIdOrEmail: string, context: ABACContext = {}): Promise<boolean> {
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  const result = await checkABACPermission(subject, 'system:admin', 'access', context)
   return result.allowed
 }
 
 // Verificar se usuário pode acessar recurso
 export async function canAccess(
-  userId: string,
+  userIdOrEmail: string,
   resource: string,
   action: string = 'read',
   context: ABACContext = {}
 ): Promise<boolean> {
-  const result = await checkABACPermission(`user:${userId}`, resource, action, context)
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  const result = await checkABACPermission(subject, resource, action, context)
   return result.allowed
 }
 
 // Verificar se usuário pode fazer ação em recurso específico
 export async function hasPermission(
-  userId: string,
+  userIdOrEmail: string,
   resource: string,
   action: string,
   context: ABACContext = {}
 ): Promise<AuthResult> {
-  return await checkABACPermission(`user:${userId}`, resource, action, context)
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  return await checkABACPermission(subject, resource, action, context)
 }
 
 const abacEnforcer = {

@@ -26,7 +26,8 @@ const PageDashboardAdmin: React.FC = () => {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
-            subject: session.user.email || `user:${session.user.id}`,
+            // Usar apenas o email como subject (padronizar)
+            subject: session.user.email,
             object: 'admin:dashboard',
             action: 'read',
             context: {
