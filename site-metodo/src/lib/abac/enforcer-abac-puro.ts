@@ -68,11 +68,12 @@ async function initializeEnforcer(): Promise<any> {
     structuredLogger.warn('loadPolicy failed, attempting manual load', { error: err instanceof Error ? err.message : String(err) })
     // Tentativa automática de correção: sanitizar registros no DB e tentar recarregar
     try {
-      const spawn = require('child_process').spawnSync
+      // import dinâmico para evitar que bundlers interpretem require/exports e causem erro
+      const { spawnSync } = await import('child_process')
       const script = path.resolve(process.cwd(), 'scripts', 'sanitize-casbin-rules.cjs.js')
       structuredLogger.info('Running sanitize-casbin-rules script as auto-repair', { script })
-      const res = spawn('node', [script], { stdio: 'inherit' })
-      if (res.error) structuredLogger.error('sanitize script failed to execute', { error: res.error.message })
+      const res = spawnSync('node', [script], { stdio: 'inherit' })
+      if (res && (res as any).error) structuredLogger.error('sanitize script failed to execute', { error: (res as any).error.message })
       else structuredLogger.info('sanitize script executed, retrying enforcer.loadPolicy()')
       await enforcer.loadPolicy()
     } catch (repairErr) {
@@ -98,6 +99,7 @@ async function initializeEnforcer(): Promise<any> {
       structuredLogger.error('Failed to read policies from DB for manual load', { error: dbErr instanceof Error ? dbErr.message : String(dbErr) })
       throw dbErr
     }
+  }
   }
 
   structuredLogger.info('ABAC enforcer initialized', { loadTime: Date.now() - start })
