@@ -8,7 +8,7 @@ e depois faça uma revisão profunda de tudo que temos de cálculos atuariais na
 
 
 O procedimento padrão envolve: tabular mortos esperados e ocorridos por faixa etária, calcular o qui-quadrado, comparar com o valor crítico e decidir sobre a aderência.
-
+Atualmente análise é síncrona no endpoint (lê e processa diretamente). Para arquivos grandes, isso pode travar e deveria ter um job/background (futura melhoria).
 Checkpoint: Adicionados stubs para 8 arquivos vazios tem isso dentro so:
 import { NextResponse } from 'next/server'
 
