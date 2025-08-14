@@ -14,10 +14,8 @@ import {
   Search,
   Filter,
   Plus,
-  Calendar,
   File,
-  Folder,
-  MoreHorizontal
+  Folder
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { format } from 'date-fns';
@@ -140,7 +138,7 @@ export default function DocumentosPage() {
     {
       id: 'actions',
       header: 'Ações',
-      cell: ({ row }) => (
+      cell: ({ row: _row }) => (
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="sm">
             <Eye className="h-4 w-4" />
