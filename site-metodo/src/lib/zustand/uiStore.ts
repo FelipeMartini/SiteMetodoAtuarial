@@ -31,14 +31,14 @@ export const useUIStore = create<UIState>()(
         // eslint-disable-next-line no-console
         console.log('closeModal', _id)
       },
-  toggleTheme: () => set((state: UIState) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
-  setTheme: (t: ThemeOption) => set({ theme: t }),
-  toggleSidebar: () => set((state: UIState) => ({ sidebarOpen: !state.sidebarOpen })),
+      toggleTheme: () => set((state: UIState) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
+      setTheme: (t: ThemeOption) => set({ theme: t }),
+      toggleSidebar: () => set((state: UIState) => ({ sidebarOpen: !state.sidebarOpen })),
     }),
     {
       name: 'site-metodo-ui',
-  // Retorna apenas os campos que queremos persistir
-  // Cast necessário para compatibilidade com a versão de tipos instalada
+  // Retorna apenas os campos que queremos persistir (Partial é aceito pelo middleware)
+  // cast mínimo para compatibilidade com a definição de tipos do persist
   partialize: ((state: UIState) => ({ theme: state.theme, sidebarOpen: state.sidebarOpen })) as unknown as (state: UIState) => UIState,
     }
   )
