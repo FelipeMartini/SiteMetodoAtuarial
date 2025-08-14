@@ -31,18 +31,27 @@ export const viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang='pt-BR' suppressHydrationWarning>
+      <head>
+        {/* Inline script anti-FOUC: aplica classe `dark` no html antes da hidratação do React */}
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{
+            __html: `;(function(){try{var theme=localStorage.getItem('theme');if(theme===null){var m=window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)');if(m && m.matches){document.documentElement.classList.add('dark');} } else if(theme==='dark'){document.documentElement.classList.add('dark');} else if(theme==='light'){document.documentElement.classList.remove('dark');}}catch(e){}})()`
+          }}
+        />
+      </head>
       <body>
-  <>
+        <>
           <FeatureFlagProvider>
             <TanstackQueryProvider>
               <LayoutCliente>
                 <HydrateCurrentUser />
-    <ThemeProviderClient />
+                <ThemeProviderClient />
                 {children}
               </LayoutCliente>
             </TanstackQueryProvider>
           </FeatureFlagProvider>
-  </>
+        </>
       </body>
     </html>
   )

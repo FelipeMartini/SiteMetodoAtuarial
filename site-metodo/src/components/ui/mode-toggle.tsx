@@ -1,8 +1,8 @@
-'use client'
+ 'use client'
 
 import * as React from 'react'
 import { Moon, Sun, Monitor } from 'lucide-react'
-import { useTheme } from 'next-themes'
+import { useTheme } from '@/lib/zustand/hooks'
 
 import { Button } from '@/components/ui/button'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'

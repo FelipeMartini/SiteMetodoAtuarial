@@ -29,7 +29,7 @@ Este guia reúne as melhores práticas, principais conflitos e soluções para i
 ## 4. shadcn/ui + Tailwind v4 + Next.js 15
 - **Instalação**: Use CLI com `@canary` para Tailwind v4.
 - **Theming**: Adapte `global.css` para o novo `@theme`.
-- **Dark mode**: Use `next-themes`.
+- **Dark mode**: Gerenciado via `Zustand` (slice `theme`) com persistência em localStorage e script inline anti-FOUC no `<head>` do `app/layout.tsx`.
 - **Conflitos**: Componentes antigos, imports errados.
 
 ## 5. Unleash + Next.js 15

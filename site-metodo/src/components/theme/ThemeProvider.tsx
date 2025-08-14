@@ -1,21 +1,12 @@
 'use client'
 
 import * as React from 'react'
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
 
 interface ThemeProviderProps {
   children: React.ReactNode
 }
 
+// Compat wrapper: o controle de tema agora é feito via Zustand.
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  return (
-    <NextThemesProvider
-      attribute='class'
-      defaultTheme='system'
-      enableSystem={true}
-      disableTransitionOnChange={false}
-    >
-      {children}
-    </NextThemesProvider>
-  )
+  return <>{children}</>
 }

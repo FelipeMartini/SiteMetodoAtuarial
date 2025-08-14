@@ -1,34 +1,15 @@
 'use client'
 
 import * as React from 'react'
-import { ThemeProvider as NextThemesProvider } from 'next-themes'
+import { useTheme as useZustandTheme } from '@/lib/zustand/hooks'
 
 /**
- * Provider de tema customizado com configurações otimizadas
- * Baseado nos padrões do fuse-react com adaptações para shadcn/ui
+ * Provider de tema: anteriormente usamos `next-themes`. Agora a aplicação centraliza o tema em Zustand.
+ * Este componente é apenas um wrapper de compatibilidade e permite futuras extensões.
  */
-export function ThemeProvider({
-  children,
-  ...props
-}: {
-  children: React.ReactNode
-  [key: string]: unknown
-}) {
-  return (
-    <NextThemesProvider
-      attribute='class'
-      defaultTheme='system'
-      enableSystem={true}
-      storageKey='metodo-atuarial-theme'
-      disableTransitionOnChange
-      {...props}
-    >
-      {children}
-    </NextThemesProvider>
-  )
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  return <>{children}</>
 }
 
-/**
- * Hook customizado para usar o tema com tipagem melhorada
- */
-export { useTheme } from 'next-themes'
+// Reexporta o hook `useTheme` para compatibilidade com código que importa de `components/theme-provider`.
+export const useTheme = useZustandTheme
