@@ -2,7 +2,6 @@ import { NextRequest, NextResponse } from 'next/server'
 import { prisma } from '@/lib/prisma'
 import { auth } from '@/lib/auth'
 import { CalculadoraAtuarial } from '@/lib/calculadora-atuarial'
-import type { JsonValue } from '@prisma/client/runtime/library'
 
 export async function GET(request: NextRequest) {
   try {
@@ -95,7 +94,7 @@ export async function POST(request: NextRequest) {
           )
           break
         case 'expectativa_vida':
-          const analise = calculadora.analiseMortalidade(parametros.idade, parametros.idade, 100000, 0.06)
+          const analise = calculadora.analiseMortalidade(parametros.idade, parametros.idade)
           resultado.valor = analise[0]?.ex || 0
           break
         case 'probabilidade_sobrevivencia':
@@ -124,7 +123,7 @@ export async function POST(request: NextRequest) {
       data: {
         tipo,
         parametros,
-        resultado: resultado as JsonValue,
+        resultado: JSON.parse(JSON.stringify(resultado)),
         tabuaId,
         userId: session.user.id,
         observacao: `Cálculo ${tipo} realizado automaticamente`
