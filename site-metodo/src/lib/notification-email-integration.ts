@@ -55,13 +55,16 @@ class NotificationEmailIntegration {
         return;
       }
 
+      // Mapear prioridade para tipo compatível com email service
+      const emailPriority: 'low' | 'normal' | 'high' = (notification.priority as NotificationPriority) === 'urgent' ? 'high' : (notification.priority as 'low' | 'normal' | 'high');
+      
       // Enviar email
       const result = await sendNotificationByEmail(
         notification.userId,
         notification.title,
         notification.message,
         notification.type as NotificationType,
-        notification.priority as NotificationPriority
+        emailPriority
       );
 
       if (result.success) {

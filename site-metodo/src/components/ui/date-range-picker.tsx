@@ -110,22 +110,22 @@ interface DatePickerWithRangeProps {
                           modifiers.selected && 'bg-primary text-primary-foreground',
                           modifiers.range_start && 'rounded-l-md',
                           modifiers.range_end && 'rounded-r-md',
-                          isFeriado(day.date)
+                          isFeriado((day as { date: Date }).date)
                             ? 'bg-yellow-100 dark:bg-yellow-900 text-yellow-700 dark:text-yellow-200 border-2 border-yellow-400 dark:border-yellow-600'
                             : '',
                           rest.className
                         )}
                         tabIndex={0}
                         role="button"
-                        aria-label={formatDate(day.date)}
+                        aria-label={formatDate((day as { date: Date }).date)}
                       >
-                        {day.date.getDate()}
-                        {isFeriado(day.date) && (
+                        {(day as { date: Date }).date.getDate()}
+                        {isFeriado((day as { date: Date }).date) && (
                           <span className="absolute top-0 right-0 w-2 h-2 rounded-full bg-yellow-400 dark:bg-yellow-500 animate-pulse" title="Feriado" />
                         )}
                       </div>
                       <span className="absolute left-1/2 -translate-x-1/2 top-10 z-20 hidden group-hover:block bg-background text-foreground text-xs rounded px-2 py-1 shadow-lg border border-border animate-fade-in">
-                        {isFeriado(day.date) ? 'Feriado Nacional' : ''}
+                        {isFeriado((day as { date: Date }).date) ? 'Feriado Nacional' : ''}
                       </span>
                     </div>
                   );
