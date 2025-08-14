@@ -6,6 +6,7 @@ import ExcelJS from 'exceljs'
 interface TaxaMortalidadeData {
   idade: number;
   qx: number;
+  px?: number;
   lx?: number;
   dx?: number;
   ex?: number;
