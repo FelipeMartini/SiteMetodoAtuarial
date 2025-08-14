@@ -41,7 +41,7 @@
 - [ ] Submeter código a revisão de especialista externo, se possível
 
 ### 3. ESTADO GLOBAL UI/TEMA COM ZUSTAND E INTEGRAÇÃO ABAC (01-tarefa-zustand-global-ui-abac.md)
-- [ ] Remover totalmente o ThemeProvider e migrar o controle de tema para um slice Zustand, garantindo SSR e persistência
+ - [x] Remover totalmente o ThemeProvider e migrar o controle de tema para um slice Zustand, garantindo SSR e persistência
 - [ ] Separar todos os estados de UI em slices por módulo (sidebar, modais, status, preferências, etc)
 - [ ] Refatorar todos os componentes de UI para consumir o estado global via hooks do Zustand
 - [ ] Preparar slices para personalização via ABAC, permitindo que atributos de acesso do usuário personalizem menus, sidebars e componentes
@@ -52,6 +52,8 @@
 - [ ] Garantir documentação técnica clara e exemplos de uso para todos os slices
 - [ ] Validar integração com testes unitários e de integração
 - [ ] Submeter código a revisão de especialista externo, se possível
+
+> Nota de progresso: Implementado `ThemeProviderClient` (cliente) que sincroniza tema com o slice do Zustand e aplicado nos layouts principais; checagem de TypeScript, lint e build executadas localmente; ABAC (políticas para `felipemartinii@gmail.com`) sem duplicatas após deduplicação no banco (backup criado). Continuar com sistema de e-mails como próximo passo prioritário.
 
 ### 4. REVISÃO PROFUNDA DOS CÁLCULOS ATUARIAIS (05-tarefa-revisao-e-plano-calculos-atuariais.md)
 - [ ] Mapear todos os arquivos, componentes e hooks relacionados a cálculos atuariais (área de cálculos, links do menu/nav/top bar)
