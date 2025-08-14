@@ -304,7 +304,7 @@ class EmailLogger {
             // Implementar métricas por provider
             byProvider[metadata.provider] = await this.getEmailMetricsForProvider(metadata.provider);
           }
-        } catch (e) {
+        } catch (_e) {
           // Ignorar erros de parse JSON
         }
       }
@@ -358,7 +358,7 @@ class EmailLogger {
   /**
    * Métricas por provider
    */
-  private async getEmailMetricsForProvider(provider: string): Promise<EmailMetrics> {
+  private async getEmailMetricsForProvider(_provider: string): Promise<EmailMetrics> {
     // Implementação simplificada - pode ser expandida
     return this.getEmailMetrics('all');
   }
@@ -366,7 +366,7 @@ class EmailLogger {
   /**
    * Métricas por template
    */
-  private async getEmailMetricsForTemplate(templateType: string): Promise<EmailMetrics> {
+  private async getEmailMetricsForTemplate(_templateType: string): Promise<EmailMetrics> {
     // Implementação simplificada - pode ser expandida
     return this.getEmailMetrics('all');
   }
@@ -374,7 +374,7 @@ class EmailLogger {
   /**
    * Métricas por prioridade
    */
-  private async getEmailMetricsForPriority(priority: string): Promise<EmailMetrics> {
+  private async getEmailMetricsForPriority(_priority: string): Promise<EmailMetrics> {
     // Implementação simplificada - pode ser expandida
     return this.getEmailMetrics('all');
   }

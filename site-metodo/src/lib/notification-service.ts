@@ -1,7 +1,22 @@
 import { simpleLogger } from '@/lib/simple-logger';
 import { emailService } from '@/lib/email-service';
-import { emailLogger } from '@/lib/email-logger';
 import { prisma } from '@/lib/prisma';
+
+export interface UserInfo {
+  id: string;
+  name: string | null;
+  email: string;
+}
+
+export interface NotificationWhereClause {
+  userId: string;
+  read?: boolean;
+  type?: string;
+  createdAt?: {
+    gte?: Date;
+    lte?: Date;
+  };
+}
 
 export interface NotificationOptions {
   userId: string;
@@ -12,11 +27,11 @@ export interface NotificationOptions {
   channels: ('in_app' | 'email' | 'push' | 'sms')[];
   emailOptions?: {
     subject?: string;
-    templateData?: Record<string, any>;
+    templateData?: Record<string, unknown>;
     actionUrl?: string;
     actionText?: string;
   };
-  metadata?: Record<string, any>;
+  metadata?: Record<string, unknown>;
 }
 
 export interface NotificationPreferences {
@@ -172,7 +187,7 @@ class NotificationService {
    */
   private async sendInAppNotification(
     notificationId: string, 
-    options: NotificationOptions
+    _options: NotificationOptions
   ): Promise<NotificationDeliveryResult> {
     try {
       // A notificação in-app já foi criada no banco
@@ -200,7 +215,7 @@ class NotificationService {
    * Envia notificação por email
    */
   private async sendEmailNotification(
-    user: any, 
+    user: UserInfo, 
     options: NotificationOptions
   ): Promise<NotificationDeliveryResult> {
     try {
@@ -249,7 +264,7 @@ class NotificationService {
    * Envia notificação push
    */
   private async sendPushNotification(
-    user: any, 
+    user: UserInfo, 
     options: NotificationOptions
   ): Promise<NotificationDeliveryResult> {
     try {
@@ -281,7 +296,7 @@ class NotificationService {
    * Envia notificação por SMS
    */
   private async sendSMSNotification(
-    user: any, 
+    user: UserInfo, 
     options: NotificationOptions
   ): Promise<NotificationDeliveryResult> {
     try {
@@ -312,7 +327,7 @@ class NotificationService {
   /**
    * Verifica se está em horário de silêncio
    */
-  private isQuietHours(preferences: any): boolean {
+  private isQuietHours(preferences: NotificationPreferences): boolean {
     if (!preferences?.quietHours?.enabled) return false;
 
     const now = new Date();
@@ -333,7 +348,7 @@ class NotificationService {
    */
   private filterChannelsByPreferences(
     channels: NotificationOptions['channels'],
-    preferences: any,
+    preferences: NotificationPreferences,
     isQuietHours: boolean,
     priority: NotificationOptions['priority']
   ): NotificationOptions['channels'] {
@@ -390,7 +405,7 @@ class NotificationService {
     } = {}
   ) {
     try {
-      const where: any = { userId };
+      const where: NotificationWhereClause = { userId };
 
       if (filters.type) where.type = filters.type;
       if (filters.priority) where.priority = filters.priority;
@@ -487,7 +502,7 @@ export const notificationService = new NotificationService();
 export async function sendSecurityAlert(
   userId: string,
   alertType: string,
-  details: Record<string, any>
+  details: Record<string, unknown>
 ) {
   return notificationService.sendNotification({
     userId,

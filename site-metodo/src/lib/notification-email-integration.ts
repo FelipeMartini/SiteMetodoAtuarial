@@ -2,10 +2,13 @@ import { emailService, sendNotificationByEmail } from '@/lib/email-service';
 import { prisma } from '@/lib/prisma';
 import { simpleLogger } from '@/lib/simple-logger';
 
+export type NotificationType = 'info' | 'success' | 'warning' | 'error';
+export type NotificationPriority = 'low' | 'normal' | 'high' | 'urgent';
+
 export interface NotificationEmailIntegrationOptions {
   enabled: boolean;
-  types: Array<'info' | 'success' | 'warning' | 'error'>;
-  priorities: Array<'low' | 'normal' | 'high' | 'urgent'>;
+  types: Array<NotificationType>;
+  priorities: Array<NotificationPriority>;
   emailDelay?: number; // Delay em minutos antes de enviar email
 }
 
@@ -42,7 +45,7 @@ class NotificationEmailIntegration {
       }
 
       // Verificar se deve enviar email para este tipo e prioridade
-      if (!this.shouldSendEmail(notification.type as any, notification.priority as any)) {
+      if (!this.shouldSendEmail(notification.type as NotificationType, notification.priority as NotificationPriority)) {
         return;
       }
 
@@ -57,8 +60,8 @@ class NotificationEmailIntegration {
         notification.userId,
         notification.title,
         notification.message,
-        notification.type as any,
-        notification.priority as any
+        notification.type as NotificationType,
+        notification.priority as NotificationPriority
       );
 
       if (result.success) {
@@ -143,7 +146,7 @@ class NotificationEmailIntegration {
   async sendSecurityAlert(
     userId: string,
     alertType: string,
-    details: Record<string, any>
+    details: Record<string, unknown>
   ): Promise<{ success: boolean; error?: string }> {
     try {
       const user = await prisma.user.findUnique({
@@ -261,7 +264,7 @@ class NotificationEmailIntegration {
     return this.options.types.includes(type) && this.options.priorities.includes(priority);
   }
 
-  private async getUserEmailPreferences(userId: string): Promise<{ emailNotifications: boolean }> {
+  private async getUserEmailPreferences(_userId: string): Promise<{ emailNotifications: boolean }> {
     // Por agora, assumir que todos querem receber emails
     // No futuro, pode buscar de uma tabela de preferências
     return { emailNotifications: true };
@@ -304,7 +307,7 @@ export async function sendWelcomeEmailToUser(userId: string) {
 export async function sendSecurityAlertToUser(
   userId: string,
   alertType: string,
-  details: Record<string, any>
+  details: Record<string, unknown>
 ) {
   return await notificationEmailIntegration.sendSecurityAlert(userId, alertType, details);
 }
