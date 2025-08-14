@@ -101,7 +101,7 @@ export default function EmailManagementPage() {
           createdAt: new Date(log.createdAt),
           sentAt: log.sentAt ? new Date(log.sentAt) : undefined,
         })));
-        setStats(data.stats);
+        _setStats(data.stats);
       }
     } catch (error) {
       console.error('Erro ao carregar logs de email:', error);

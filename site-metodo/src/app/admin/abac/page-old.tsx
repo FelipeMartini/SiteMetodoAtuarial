@@ -61,57 +61,57 @@ function ABACManagementPageContent() {
   const [_error, _setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
-  // Mock data for demonstration
-  const mockPolicies: Policy[] = [
-    {
-      id: '1',
-      subject: 'admin@example.com',
-      object: 'admin:dashboard',
-      action: 'read',
-      effect: 'allow',
-      description: 'Administradores podem visualizar o dashboard',
-      createdAt: new Date('2024-01-01'),
-      updatedAt: new Date('2024-01-01'),
-    },
-    {
-      id: '2',
-      subject: 'user:*',
-      object: 'profile',
-      action: 'update',
-      effect: 'allow',
-      conditions: 'user.id == resource.owner_id',
-      description: 'Usuários podem editar seus próprios perfis',
-      createdAt: new Date('2024-01-02'),
-      updatedAt: new Date('2024-01-02'),
-    },
-    {
-      id: '3',
-      subject: 'role:guest',
-      object: 'admin:*',
-      action: '*',
-      effect: 'deny',
-      description: 'Convidados não podem acessar área administrativa',
-      createdAt: new Date('2024-01-03'),
-      updatedAt: new Date('2024-01-03'),
-    },
-  ]
-
-  const mockRoleAssignments: RoleAssignment[] = [
-    {
-      userEmail: 'admin@example.com',
-      userName: 'Administrador',
-      roleName: 'administrator',
-      assignedAt: new Date('2024-01-01'),
-    },
-    {
-      userEmail: 'user@example.com',
-      userName: 'Usuário Padrão',
-      roleName: 'user',
-      assignedAt: new Date('2024-01-02'),
-    },
-  ]
-
   useEffect(() => {
+    // Mock data for demonstration
+    const mockPolicies: Policy[] = [
+      {
+        id: '1',
+        subject: 'admin@example.com',
+        object: 'admin:dashboard',
+        action: 'read',
+        effect: 'allow',
+        description: 'Administradores podem visualizar o dashboard',
+        createdAt: new Date('2024-01-01'),
+        updatedAt: new Date('2024-01-01'),
+      },
+      {
+        id: '2',
+        subject: 'user:*',
+        object: 'profile',
+        action: 'update',
+        effect: 'allow',
+        conditions: 'user.id == resource.owner_id',
+        description: 'Usuários podem editar seus próprios perfis',
+        createdAt: new Date('2024-01-02'),
+        updatedAt: new Date('2024-01-02'),
+      },
+      {
+        id: '3',
+        subject: 'role:guest',
+        object: 'admin:*',
+        action: '*',
+        effect: 'deny',
+        description: 'Convidados não podem acessar área administrativa',
+        createdAt: new Date('2024-01-03'),
+        updatedAt: new Date('2024-01-03'),
+      },
+    ]
+
+    const mockRoleAssignments: RoleAssignment[] = [
+      {
+        userEmail: 'admin@example.com',
+        userName: 'Administrador',
+        roleName: 'administrator',
+        assignedAt: new Date('2024-01-01'),
+      },
+      {
+        userEmail: 'user@example.com',
+        userName: 'Usuário Padrão',
+        roleName: 'user',
+        assignedAt: new Date('2024-01-02'),
+      },
+    ]
+
     const timer = setTimeout(() => {
       setPolicies(mockPolicies)
       setRoleAssignments(mockRoleAssignments)
@@ -119,7 +119,7 @@ function ABACManagementPageContent() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [mockPolicies, mockRoleAssignments])
+  }, [])
 
   const filteredPolicies = policies.filter(
     policy =>
@@ -164,10 +164,10 @@ function ABACManagementPageContent() {
         </div>
 
         {/* Error Message */}
-        {error && (
+        {_error && (
           <div className='bg-destructive/15 border border-destructive text-destructive px-4 py-2 rounded-md flex items-center gap-2'>
             <AlertTriangle className='h-4 w-4' />
-            {error}
+            {_error}
           </div>
         )}
 
