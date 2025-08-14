@@ -3,7 +3,7 @@
 // Layout base da área cliente
 import { ReactNode } from 'react'
 import { Toaster } from '@/components/ui'
-import { ThemeProvider } from '@/components/theme-provider'
+import ThemeProviderClient from '@/components/ui/ThemeProviderClient'
 
 /**
  * Layout base para todas as páginas da área cliente.
@@ -11,7 +11,8 @@ import { ThemeProvider } from '@/components/theme-provider'
  */
 export default function ClienteLayout({ children }: { children: ReactNode }) {
   return (
-    <ThemeProvider>
+    <>
+      <ThemeProviderClient />
       <div className='min-h-screen flex bg-background'>
         {/* Sidebar de navegação (placeholder) */}
         <aside className='w-64 bg-card border-r hidden md:block'>
@@ -39,6 +40,6 @@ export default function ClienteLayout({ children }: { children: ReactNode }) {
         <main className='flex-1 p-4 md:p-8'>{children}</main>
         <Toaster />
       </div>
-    </ThemeProvider>
+    </>
   )
 }

@@ -1,7 +1,7 @@
 import './globals.css' // CSS global com Tailwind e variáveis CSS do tema
 import LayoutCliente from '@/app/LayoutCliente'
 
-import { ThemeProvider } from '@/components/theme-provider'
+import ThemeProviderClient from '@/components/ui/ThemeProviderClient'
 import { HydrateCurrentUser } from '@/components/ui/ThemeProviderZustand'
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider'
 import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider'
@@ -32,21 +32,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang='pt-BR' suppressHydrationWarning>
       <body>
-        <ThemeProvider
-          attribute='class'
-          defaultTheme='system'
-          enableSystem
-          disableTransitionOnChange
-        >
+  <>
           <FeatureFlagProvider>
             <TanstackQueryProvider>
               <LayoutCliente>
                 <HydrateCurrentUser />
+    <ThemeProviderClient />
                 {children}
               </LayoutCliente>
             </TanstackQueryProvider>
           </FeatureFlagProvider>
-        </ThemeProvider>
+  </>
       </body>
     </html>
   )
