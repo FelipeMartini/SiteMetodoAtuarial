@@ -3,7 +3,7 @@ import type { DadosAnaliseExcel } from '@/types/analise-excel';
 
 interface CelulaAnalise {
   coluna: string;
-  valor: unknown;
+  valor: string | number | null;
   formula: string | null;
 }
 
@@ -32,8 +32,8 @@ export async function analisarExcel(buffer: Buffer | ArrayBuffer | Uint8Array): 
   }
   
   const workbook = new ExcelJS.Workbook();
-  // Type assertion necessária devido a incompatibilidade de tipos entre Node.js Buffer e definições do ExcelJS
-  await workbook.xlsx.load(workbookBuffer as Buffer);
+  // @ts-expect-error - Incompatibilidade de tipos conhecida entre ExcelJS e Node.js Buffer
+  await workbook.xlsx.load(workbookBuffer);
   const planilhas = workbook.worksheets.map((sheet: ExcelJS.Worksheet) => {
     const colunas: string[] = [];
     const linhas: LinhaAnalise[] = [];
@@ -49,9 +49,10 @@ export async function analisarExcel(buffer: Buffer | ArrayBuffer | Uint8Array): 
         if (cell.value && typeof cell.value === 'object' && 'formula' in cell.value) {
           formula = cell.value.formula ?? null;
         }
+        const cellValue = cell.value && typeof cell.value === 'object' && 'formula' in cell.value ? cell.value.result : cell.value;
         celulas.push({
           coluna: cell.address.replace(/\d+$/, ''),
-          valor: cell.value && typeof cell.value === 'object' && 'formula' in cell.value ? cell.value.result : cell.value,
+          valor: typeof cellValue === 'string' || typeof cellValue === 'number' ? cellValue : cellValue === null ? null : String(cellValue),
           formula,
         });
       });
