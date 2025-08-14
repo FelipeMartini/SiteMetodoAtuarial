@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { emailService } from '@/lib/email-service'
+import { emailService } from '@/lib/email-service.server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 

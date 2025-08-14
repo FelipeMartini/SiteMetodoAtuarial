@@ -1,4 +1,4 @@
-import { emailService, sendNotificationByEmail } from '@/lib/email-service';
+import { emailService, sendNotificationByEmail } from '@/lib/email-service.server';
 import { prisma } from '@/lib/prisma';
 import { simpleLogger } from '@/lib/simple-logger';
 

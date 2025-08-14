@@ -3,13 +3,13 @@
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
 import type { ComponentType, SVGProps } from 'react'
-type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>
+type SVGIconComponent = ComponentType<SVGProps<SVGSVGElement>>
 
 interface StatsCardProps {
   title: string
   value: string | number
   description?: string
-  icon?: LucideIcon
+  icon?: SVGIconComponent
   change?: {
     value: number
     isPositive: boolean

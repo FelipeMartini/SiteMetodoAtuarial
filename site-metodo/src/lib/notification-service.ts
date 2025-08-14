@@ -1,5 +1,5 @@
 import { simpleLogger } from '@/lib/simple-logger';
-import { emailService } from '@/lib/email-service';
+import { emailService } from '@/lib/email-service.server';
 import { prisma } from '@/lib/prisma';
 
 export interface UserInfo {

@@ -1,5 +1,3 @@
-"use client"
-
 import { simpleLogger } from '@/lib/simple-logger';
 import { prisma } from '@/lib/prisma';
 

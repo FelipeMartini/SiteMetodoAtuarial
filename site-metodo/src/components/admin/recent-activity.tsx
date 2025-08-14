@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { formatDistanceToNow } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import type { ComponentType, SVGProps } from 'react'
-type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>
+type SVGIconComponent = ComponentType<SVGProps<SVGSVGElement>>
 
 interface ActivityItem {
   id: string
@@ -19,7 +19,7 @@ interface ActivityItem {
     name: string
     avatar?: string
   }
-  icon?: LucideIcon
+  icon?: SVGIconComponent
   severity?: 'low' | 'medium' | 'high' | 'critical'
 }
 
