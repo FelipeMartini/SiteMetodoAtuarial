@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // usar tipos locais para compatibilidade com diferentes versões das libs
 import { prisma } from '@/lib/prisma'
+import { sanitizePolicyArray } from './utils'
 
 type AnyModel = any
 
@@ -27,7 +28,7 @@ export class PrismaAdapter /* implements Adapter */ {
       
         for (const rule of rules) {
           const parts = [rule.v0, rule.v1, rule.v2, rule.v3, rule.v4, rule.v5]
-          const filtered = parts.filter((v): v is string => v !== null && v !== undefined)
+          const filtered = sanitizePolicyArray(parts)
           if (filtered.length === 0) continue
           model.addPolicy('p', 'p', filtered)
         }

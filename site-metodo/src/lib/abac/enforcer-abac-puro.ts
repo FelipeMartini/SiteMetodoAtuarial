@@ -66,6 +66,18 @@ async function initializeEnforcer(): Promise<any> {
     await enforcer.loadPolicy()
   } catch (err) {
     structuredLogger.warn('loadPolicy failed, attempting manual load', { error: err instanceof Error ? err.message : String(err) })
+    // Tentativa automática de correção: sanitizar registros no DB e tentar recarregar
+    try {
+      const spawn = require('child_process').spawnSync
+      const script = path.resolve(process.cwd(), 'scripts', 'sanitize-casbin-rules.cjs.js')
+      structuredLogger.info('Running sanitize-casbin-rules script as auto-repair', { script })
+      const res = spawn('node', [script], { stdio: 'inherit' })
+      if (res.error) structuredLogger.error('sanitize script failed to execute', { error: res.error.message })
+      else structuredLogger.info('sanitize script executed, retrying enforcer.loadPolicy()')
+      await enforcer.loadPolicy()
+    } catch (repairErr) {
+      structuredLogger.error('Automatic policy sanitization failed', { error: repairErr instanceof Error ? repairErr.message : String(repairErr) })
+      // segue para manual load
     try {
       const dbPolicies = await prisma.casbinRule.findMany()
       for (const p of dbPolicies) {
