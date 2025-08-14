@@ -25,6 +25,17 @@
 - [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
 - [ ] Validar logs e rastreio com testes unitários e de integração
 - [ ] Submeter código a revisão de especialista externo, se possível
+### 1. SISTEMA DE E-MAILS MODERNO (02-emails.md)
+- [x] Refatorar templates de e-mail (React Email, MJML, etc)
+- [x] Adicionar logs detalhados de envio, falha e rastreio
+- [x] Integrar com sistema de notificações e eventos críticos
+- [ ] Garantir suporte a múltiplos provedores (SMTP, SES, etc)
+- [ ] Documentar arquitetura de e-mails e exemplos de uso
+- [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
+- [x] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
+- [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
+- [ ] Validar logs e rastreio com testes unitários e de integração
+- [ ] Submeter código a revisão de especialista externo, se possível
 
 ### 2. AUTENTICAÇÃO MULTIFATOR (MFA) MODERNA (03-mfa.md)
 - [ ] Refatorar sistema MFA para múltiplos métodos (TOTP, SMS, e-mail, push)
@@ -53,7 +64,7 @@
 - [ ] Validar integração com testes unitários e de integração
 - [ ] Submeter código a revisão de especialista externo, se possível
 
-> Nota de progresso: Implementado `ThemeProviderClient` (cliente) que sincroniza tema com o slice do Zustand e aplicado nos layouts principais; checagem de TypeScript, lint e build executadas localmente; ABAC (políticas para `felipemartinii@gmail.com`) sem duplicatas após deduplicação no banco (backup criado). Continuar com sistema de e-mails como próximo passo prioritário.
+> Nota de progresso: Implementado `ThemeProviderClient` (cliente) que sincroniza tema com o slice do Zustand e aplicado nos layouts principais; checagem de TypeScript, lint e build executadas localmente; ABAC (políticas para `felipemartinii@gmail.com`) sem duplicatas após deduplicação no banco (backup criado). Iniciada refatoração do sistema de e-mails: templates migrados para React Email, serviço server-only implementado, rotas atualizadas para delegar ao serviço, logs de envio integrados e `.env.example` criado. Tipagens do serviço de e-mails normalizadas e interface `IEmailService` exportada para compatibilidade entre módulos. Próximos passos: implementar adapters multi-provedor (SES/SendGrid), adicionar testes de integração para envio (adiados por solicitação), ajustar documentação final e limpeza de artefatos.
 
 ### 4. REVISÃO PROFUNDA DOS CÁLCULOS ATUARIAIS (05-tarefa-revisao-e-plano-calculos-atuariais.md)
 - [ ] Mapear todos os arquivos, componentes e hooks relacionados a cálculos atuariais (área de cálculos, links do menu/nav/top bar)
