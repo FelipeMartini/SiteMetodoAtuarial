@@ -1,0 +1,27 @@
+[{"ptype":"p","v0":"department:admin","v1":"admin:*","v2":"*","v3":"allow","v4":"{\"time\":\"*\",\"location\":\"*\"}","v5":null,"cnt":14,"ids":"19,400,407,412,417,422,427,432,437,442,443,449,457,462"},
+{"ptype":"p","v0":"felipemartinii@gmail.com","v1":"admin:dashboard","v2":"read","v3":"allow","v4":null,"v5":null,"cnt":14,"ids":"96,402,408,413,418,423,428,433,438,444,445,450,458,463"},
+{"ptype":"p","v0":"felipemartinii@gmail.com","v1":"admin:dashboard","v2":"write","v3":"allow","v4":null,"v5":null,"cnt":14,"ids":"97,403,409,414,419,424,429,434,439,446,451,452,459,464"},
+{"ptype":"p","v0":"felipemartinii@gmail.com","v1":"area:cliente","v2":"read","v3":"allow","v4":null,"v5":null,"cnt":14,"ids":"98,404,410,415,420,425,430,435,440,447,453,454,460,465"},
+{"ptype":"p","v0":"felipemartinii@gmail.com","v1":"area:cliente","v2":"write","v3":"allow","v4":null,"v5":null,"cnt":14,"ids":"99,405,411,416,421,426,431,436,441,448,455,456,461,466"}]
+{
+  "ptype": "p",
+  "v0": "felipemartinii@gmail.com",
+  "v1": "admin:abac",
+  "v2": "read",
+  "v3": "allow",
+  "v4": null,
+  "v5": null,
+  "cnt": 14,
+  "ids": "96,402,408,413,418,423,428,433,438,444,445,450,458,463"
+},
+{
+  "ptype": "p",
+  "v0": "felipemartinii@gmail.com",
+  "v1": "admin:abac",
+  "v2": "write",
+  "v3": "allow",
+  "v4": null,
+  "v5": null,
+  "cnt": 14,
+  "ids": "96,402,408,413,418,423,428,433,438,444,445,450,458,463"
+},

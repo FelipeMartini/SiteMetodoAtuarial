@@ -1,0 +1,614 @@
+[
+  {
+    "arquivo": "MASSA ASSISTIDOS EA.xlsx",
+    "linhasLidas": 50,
+    "mapeamentoDetectado": {
+      "idade": 0,
+      "matricula": 1,
+      "sexo": 6,
+      "data_nascimento": null,
+      "data_obito": null
+    },
+    "previewNormalizado": [
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 25321,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 4723,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 1
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 1
+      }
+    ],
+    "confianca": 0.6,
+    "scores": [
+      {
+        "matricula": 3,
+        "sexo": 98,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 6,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 98,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 150
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 46,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 104,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 38,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 98,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 47,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 98,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 96,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 44,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      }
+    ],
+    "colStats": [
+      {
+        "header": "CODPATRO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 1
+      },
+      {
+        "header": "MATRICULA",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 35
+      },
+      {
+        "header": "NOME",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 35
+      },
+      {
+        "header": "FUND",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 2
+      },
+      {
+        "header": "CPF",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 35
+      },
+      {
+        "header": "SITPART",
+        "nonEmpty": 276,
+        "numericCount": 276,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 4
+      },
+      {
+        "header": "SEXO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 2
+      },
+      {
+        "header": "DTNASCT",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 35
+      },
+      {
+        "header": "DTINCEMP",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 28
+      },
+      {
+        "header": "DTINSC",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 10
+      },
+      {
+        "header": "DTINBENF",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 31
+      },
+      {
+        "header": "TMPINSS",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 264,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 22
+      },
+      {
+        "header": "VLBEINSS",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 19
+      },
+      {
+        "header": "VLCOMP",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 49
+      },
+      {
+        "header": "VLRBPS",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 3
+      },
+      {
+        "header": "RESPOUP",
+        "nonEmpty": 294,
+        "numericCount": 228,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 12
+      },
+      {
+        "header": "FMRCBENF",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 2
+      },
+      {
+        "header": "PZRCRDTP",
+        "nonEmpty": 294,
+        "numericCount": 282,
+        "numericAgeCount": 6,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 3
+      },
+      {
+        "header": "PENSAO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 2
+      },
+      {
+        "header": "DURACAO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 288,
+        "uniqueCount": 3
+      },
+      {
+        "header": "PLANO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 132,
+        "uniqueCount": 4
+      },
+      {
+        "header": "CONTRIBEXTRA",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 1
+      },
+      {
+        "header": "OBS",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 1
+      },
+      {
+        "header": "Thu Jan 30 2025 21:00:00 GMT-0300 (Horário Padrão de Brasília)",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 1
+      }
+    ]
+  },
+  {
+    "arquivo": "MORTALIDADE APOSENTADOS dez 2024 2019 A 2024 FELIPE qx masc e fem (Massa Janeiro).xlsx",
+    "linhasLidas": 50,
+    "mapeamentoDetectado": {
+      "idade": 2,
+      "matricula": 0,
+      "sexo": 1,
+      "data_nascimento": null,
+      "data_obito": null
+    },
+    "previewNormalizado": [
+      {
+        "matricula": 15237,
+        "sexo": "1",
+        "idade": 72
+      },
+      {
+        "matricula": 10820,
+        "sexo": "1",
+        "idade": 62
+      },
+      {
+        "matricula": 25321,
+        "sexo": "1",
+        "idade": 73
+      },
+      {
+        "matricula": 14753,
+        "sexo": "1",
+        "idade": 73
+      },
+      {
+        "matricula": 4723,
+        "sexo": "1",
+        "idade": 64
+      },
+      {
+        "matricula": 1449,
+        "sexo": "1",
+        "idade": 72
+      },
+      {
+        "matricula": 9105,
+        "sexo": "1",
+        "idade": 63
+      },
+      {
+        "matricula": 2054,
+        "sexo": "1",
+        "idade": 69
+      },
+      {
+        "matricula": 14761,
+        "sexo": "1",
+        "idade": 65
+      },
+      {
+        "matricula": 3409,
+        "sexo": "1",
+        "idade": 67
+      }
+    ],
+    "confianca": 0.6,
+    "scores": [
+      {
+        "matricula": 6,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 104,
+        "idade": 49,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 3,
+        "sexo": 0,
+        "idade": 52,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      },
+      {
+        "matricula": 0,
+        "sexo": 0,
+        "idade": 0,
+        "data_nascimento": 0,
+        "data_obito": 0,
+        "cpf": 0
+      }
+    ],
+    "colStats": [
+      {
+        "header": "MATRICULA",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 49
+      },
+      {
+        "header": "SEXO",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 294,
+        "uniqueCount": 2
+      },
+      {
+        "header": "IDADE",
+        "nonEmpty": 294,
+        "numericCount": 294,
+        "numericAgeCount": 294,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 20
+      },
+      {
+        "header": "ANO CADASTRO",
+        "nonEmpty": 294,
+        "numericCount": 0,
+        "numericAgeCount": 0,
+        "dateCount": 0,
+        "sexCount": 0,
+        "uniqueCount": 1
+      }
+    ]
+  }
+]

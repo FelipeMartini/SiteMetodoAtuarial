@@ -84,27 +84,46 @@ async function process() {
         cpf: ['cpf']
       }
 
-  const scores = Array.from({length: cols}, () => ({}))
+      const scores = Array.from({length: cols}, () => ({}))
+      const colStats = Array.from({length: cols}, () => ({ header: '', nonEmpty: 0, numericCount: 0, numericAgeCount: 0, dateCount: 0, sexCount: 0, unique: new Set() }))
       for (let c = 0; c < cols; c++) {
         const header = headerRow[c] || ''
+        colStats[c].header = String(header || '')
         const hnorm = normalizeHeader(header)
         for (const key of Object.keys(keywords)) {
           let sc = 0
           if (hnorm) {
             for (const kw of keywords[key]) if (hnorm.includes(kw)) sc += 3
           }
-          let numericCount = 0, dateCount = 0, sexCount = 0, cpfCount = 0
+          let numericCount = 0, dateCount = 0, sexCount = 0, cpfCount = 0, nonEmpty = 0
           for (let r = 1; r < Math.min(rows.length, 50); r++) {
             const val = rows[r][c]
             if (val === null || val === undefined) continue
             const sval = String(val).trim()
             if (!sval) continue
+            nonEmpty++
             if (/^\d{1,3}$/.test(sval) && Number(sval) >= 0 && Number(sval) <= 120) numericCount++
             if (/^\d{2}\/\d{2}\/\d{4}$/.test(sval) || /^\d{4}-\d{2}-\d{2}/.test(sval)) dateCount++
             if (/^m(asc)?$|^f(em)?$|^m$|^f$|^1$|^2$|^male$|^female$/i.test(sval)) sexCount++
             if (/^\d{11}$/.test(sval.replace(/\D/g,''))) cpfCount++
+            colStats[c].unique.add(sval)
+            colStats[c].nonEmpty++
+            if (/^\d{1,3}$/.test(sval) && Number(sval) >= 0 && Number(sval) <= 120) colStats[c].numericCount++
+            const num = Number(sval.replace(/[^0-9.-]/g,''))
+            if (!Number.isNaN(num) && num >= 18 && num <= 120) colStats[c].numericAgeCount++
+            if (/^\d{2}\/\d{2}\/\d{4}$/.test(sval) || /^\d{4}-\d{2}-\d{2}/.test(sval)) colStats[c].dateCount++
+            if (/^m(asc)?$|^f(em)?$|^m$|^f$|^1$|^2$|^male$|^female$/i.test(sval)) colStats[c].sexCount++
           }
-          if (key === 'idade') sc += numericCount
+          if (key === 'idade') {
+            sc += numericCount
+            // boost when header looks like date but column has many numeric ages
+            try {
+              const hdr = String(header || '')
+              const headerIsDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(hdr) || /^\d{4}-\d{2}-\d{2}/.test(hdr)
+              const ageProp = nonEmpty > 0 ? (numericCount / nonEmpty) : 0
+              if (headerIsDate && ageProp > 0.6) sc += 6
+            } catch (e) {}
+          }
           if (key === 'data_nascimento' || key === 'data_obito') sc += dateCount
           if (key === 'sexo') sc += sexCount * 2
           if (key === 'cpf') sc += cpfCount * 3
@@ -112,7 +131,9 @@ async function process() {
         }
       }
 
-      const mapping = {}
+  const mapping = {}
+  // transform unique sets to counts for output clarity
+  const colStatsOut = colStats.map(cs => ({ header: cs.header, nonEmpty: cs.nonEmpty, numericCount: cs.numericCount, numericAgeCount: cs.numericAgeCount, dateCount: cs.dateCount, sexCount: cs.sexCount, uniqueCount: cs.unique.size }))
       const keysOrder = ['matricula','sexo','idade','data_nascimento','data_obito']
       for (const key of keysOrder) {
         let best = -1, bestCol = null
@@ -127,6 +148,21 @@ async function process() {
           mapping[key] = null
         }
       }
+
+      // override AFTER score-based selection: prefer column with largest numericAgeCount when it exceeds threshold
+      try {
+        let bestAgeCol = -1, bestAgeCount = 0, bestNonEmpty = 1
+        for (let c = 0; c < cols; c++) {
+          const cs = colStats[c]
+          if (!cs) continue
+          if ((cs.numericAgeCount || 0) > bestAgeCount) { bestAgeCount = cs.numericAgeCount || 0; bestAgeCol = c; bestNonEmpty = cs.nonEmpty || 1 }
+        }
+        if (bestAgeCol >= 0) {
+          if (bestAgeCount >= 30 || bestAgeCount / Math.max(1, bestNonEmpty) > 0.6) {
+            mapping.idade = bestAgeCol
+          }
+        }
+      } catch (e) {}
 
       // build preview
       const nPreview = Math.min(10, Math.max(0, rows.length - (possibleHeader ? 1 : 0)))
@@ -148,7 +184,7 @@ async function process() {
       const found = ['matricula','sexo','idade','data_nascimento','data_obito'].filter(k => mapping[k] !== null).length
       const confidence = found / 5
 
-      results.push({ arquivo: fname, linhasLidas: Math.min(rows.length,50), mapeamentoDetectado: mapping, previewNormalizado: preview, confianca: confidence })
+  results.push({ arquivo: fname, linhasLidas: Math.min(rows.length,50), mapeamentoDetectado: mapping, previewNormalizado: preview, confianca: confidence, scores, colStats: colStatsOut })
     } catch (err) {
       console.error('Erro', err)
       results.push({ arquivo: fname, erro: String(err) })

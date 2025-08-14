@@ -245,7 +245,8 @@ export default function DashboardAderenciaTabuas() {
         importacaoId: importacaoSelecionada,
         dadosProcessados: {
           massa_participantes: previewData.previewNormalizado
-        }
+        },
+        manualMapping: manualMapping || undefined
       }
 
       const res = await fetch('/api/aderencia-tabuas/salvar-dados', {
@@ -451,13 +452,16 @@ export default function DashboardAderenciaTabuas() {
                           <SelectTrigger className="w-48">
                             <SelectValue>{(manualMapping && manualMapping[field] !== null) ? String(manualMapping[field]) : 'Nenhuma'}</SelectValue>
                           </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="none">Nenhuma</SelectItem>
-                            {(() => {
-                              const cols: {i:number; name:string}[] = (previewData?.amostraLinhas && previewData.amostraLinhas[0]) ? previewData.amostraLinhas[0].map((c:any, i:number) => ({ i, name: String(c || `Col ${i}`).slice(0,30) })) : []
-                              return cols.map((col:{i:number;name:string}) => <SelectItem key={col.i} value={String(col.i)}>#{col.i} - {col.name}</SelectItem>)
-                            })()}
-                          </SelectContent>
+                            <SelectContent>
+                              <SelectItem value="none">Nenhuma</SelectItem>
+                              {(() => {
+                                // preferir headers vindos de colStats quando disponíveis
+                                const cols: {i:number; name:string}[] = previewData?.colStats
+                                  ? previewData.colStats.map((c:any, i:number) => ({ i, name: String(c.header || `Col ${i}`).slice(0,40) }))
+                                  : (previewData?.amostraLinhas && previewData.amostraLinhas[0]) ? previewData.amostraLinhas[0].map((c:any, i:number) => ({ i, name: String(c || `Col ${i}`).slice(0,30) })) : []
+                                return cols.map((col:{i:number;name:string}) => <SelectItem key={col.i} value={String(col.i)}>#{col.i} - {col.name}</SelectItem>)
+                              })()}
+                            </SelectContent>
                         </Select>
                       </div>
                     ))}
@@ -519,6 +523,38 @@ export default function DashboardAderenciaTabuas() {
                       Cancelar
                     </Button>
                   </div>
+                  {/* Diagnostics: mostrar colStats e scores se disponíveis */}
+                  {previewData?.perColumnScores && previewData?.colStats && (
+                    <div className="mt-4 p-3 border rounded bg-white">
+                      <h5 className="font-medium mb-2">Diagnóstico por coluna</h5>
+                      <div className="overflow-auto max-h-48">
+                        <table className="w-full text-sm table-auto">
+                          <thead>
+                            <tr>
+                              <th className="p-1 text-left">#</th>
+                              <th className="p-1 text-left">Header</th>
+                              <th className="p-1 text-left">nonEmpty</th>
+                              <th className="p-1 text-left">numericAge</th>
+                              <th className="p-1 text-left">sexCount</th>
+                              <th className="p-1 text-left">Top scores</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {previewData.colStats.map((cs:any, i:number) => (
+                              <tr key={i} className="border-t">
+                                <td className="p-1">{i}</td>
+                                <td className="p-1 max-w-xs truncate">{cs.header}</td>
+                                <td className="p-1">{cs.nonEmpty}</td>
+                                <td className="p-1">{cs.numericAgeCount}</td>
+                                <td className="p-1">{cs.sexCount}</td>
+                                <td className="p-1">{(previewData.perColumnScores[i] && Object.entries(previewData.perColumnScores[i].scores || previewData.perColumnScores[i]).sort((a:any,b:any)=>b[1]-a[1]).slice(0,3).map((e:any)=>`${e[0]}:${e[1]}`).join(', ')) || ''}</td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  )}
                 </div>
               )}
 

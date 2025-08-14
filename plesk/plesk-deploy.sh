@@ -118,8 +118,8 @@ create_backup() {
         fi
         
         # Backup do banco de dados
-        if [[ -f "${PROJECT_ROOT}/site-metodo/prisma/dev.db" ]]; then
-            cp "${PROJECT_ROOT}/site-metodo/prisma/dev.db" "${backup_path}-database.db"
+        if [[ -f "${PROJECT_ROOT}/site-metodo/prisma/db/dev.db" ]]; then
+            cp "${PROJECT_ROOT}/site-metodo/prisma/db/dev.db" "${backup_path}-database.db"
             log "INFO" "Backup do banco criado: ${backup_path}-database.db"
         fi
         
@@ -316,7 +316,7 @@ rollback_deployment() {
         
         # Restaurar banco de dados se existir
         if [[ -f "${BACKUP_DIR}/${latest_backup}-database.db" ]]; then
-            cp "${BACKUP_DIR}/${latest_backup}-database.db" "${PROJECT_ROOT}/site-metodo/prisma/dev.db"
+            cp "${BACKUP_DIR}/${latest_backup}-database.db" "${PROJECT_ROOT}/site-metodo/prisma/db/dev.db"
         fi
         
         log "INFO" "Rollback concluído ✅"

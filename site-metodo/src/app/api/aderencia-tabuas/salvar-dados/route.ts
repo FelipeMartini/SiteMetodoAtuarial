@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { readFile } from 'fs/promises'
+import { readFile, writeFile, mkdir } from 'fs/promises'
+import { join } from 'path'
+import ExcelJS from 'exceljs'
 import { z } from 'zod'
 import { prisma } from '@/lib/prisma'
 
@@ -58,8 +60,10 @@ export async function POST(request: NextRequest) {
   const _transacao: any = null
   
   try {
-    const body = await request.json()
-    const dados = SalvarDadosSchema.parse(body)
+  const body = await request.json()
+  // aceitar manualMapping opcional no payload
+  const manualMapping = (body as any).manualMapping || undefined
+  const dados = SalvarDadosSchema.parse(body)
 
     // Buscar informações da importação
     const importacao = await prisma.importacaoMortalidade.findUnique({
@@ -75,7 +79,67 @@ export async function POST(request: NextRequest) {
 
     // Carregar dados do arquivo Python se não fornecidos diretamente
     let dadosParaSalvar = dados.dadosProcessados
-    
+    // Se não vier dadosProcessados mas vier manualMapping, reprocessar o arquivo salvo
+    if (!dadosParaSalvar && manualMapping) {
+      try {
+        // carregar arquivo salvo na importacao
+        const caminho = importacao.caminhoArquivo as string
+        const fileBuffer = await readFile(caminho)
+        const ext = (importacao.tipoArquivo || '').toLowerCase()
+  const rows: any[][] = []
+        if (ext === 'XLSX' || ext === 'XLS' || caminho.toLowerCase().endsWith('.xlsx') || caminho.toLowerCase().endsWith('.xls')) {
+          const workbook = new ExcelJS.Workbook()
+          await workbook.xlsx.load(fileBuffer as any)
+          const sheet = workbook.worksheets[0]
+          if (sheet) {
+            sheet.eachRow({ includeEmpty: false }, (row) => {
+              const vals = (row.values as any[]).slice(1).map((c:any) => (c && c.text) ? c.text : c)
+              rows.push(vals)
+            })
+          }
+        } else {
+          const text = fileBuffer.toString('utf8')
+          const lines = text.split(/\r?\n/).filter(l => l.trim().length > 0)
+          for (const l of lines) rows.push(l.split(',').map(v => v.replace(/^"|"$/g, '').trim()))
+        }
+
+        // detectar header provável (simples)
+        const headerRow = rows[0] || []
+        const cols = rows.length ? Math.max(...rows.map(r => r.length)) : 0
+        const headerLikeCount = headerRow.filter((c:any) => { if (c === null || c === undefined) return false; const s = String(c).trim(); if (!s) return false; if (/[A-Za-zÀ-ú]/.test(s)) return true; if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s) || /^\d{4}-\d{2}-\d{2}/.test(s)) return true; if (!/^[-+]?\d+(?:[.,]\d+)?$/.test(s)) return true; return false }).length
+        const possibleHeader = cols > 0 && headerLikeCount >= Math.ceil(cols / 2)
+
+        // converter manualMapping para formato esperado por normalizarLinha
+        const mappingForNormalizer: any = {}
+        if (manualMapping.matricula !== undefined) mappingForNormalizer.colunaMatricula = manualMapping.matricula
+        if (manualMapping.sexo !== undefined) mappingForNormalizer.colunaSexo = manualMapping.sexo
+        if (manualMapping.idade !== undefined) mappingForNormalizer.colunaIdade = manualMapping.idade
+        if (manualMapping.data_nascimento !== undefined) mappingForNormalizer.colunaDataNascimento = manualMapping.data_nascimento
+        if (manualMapping.data_obito !== undefined) mappingForNormalizer.colunaDataObito = manualMapping.data_obito
+
+  // normalizar linhas usando a função util do detector
+  // importar dinamicamente para evitar ciclos e sem usar require
+  const detectorMod = await import('@/lib/aderencia/detector-layout')
+  const { normalizarLinha } = detectorMod as any
+
+        const start = possibleHeader ? 1 : 0
+        const massa: any[] = []
+        for (let r = start; r < rows.length; r++) {
+          const raw = rows[r] || []
+          const normalized = normalizarLinha(raw, mappingForNormalizer)
+          // transformar sexo para padrão do schema
+          if (normalized.sexo === 'M') normalized.sexo = 'MASCULINO'
+          else if (normalized.sexo === 'F') normalized.sexo = 'FEMININO'
+          // garantir idade numérica
+          if (normalized.idade === null || normalized.idade === undefined || Number.isNaN(Number(normalized.idade))) normalized.idade = 0
+          massa.push({ idade: Number(normalized.idade || 0), sexo: normalized.sexo || 'MASCULINO', dataNascimento: normalized.data_nascimento || undefined, nome: normalized.matricula || undefined })
+        }
+
+        dadosParaSalvar = { origem: 'MANUAL_MAPPING', massaParticipantes: massa }
+      } catch (err) {
+        console.error('Erro ao reprocessar arquivo com manualMapping:', err)
+      }
+    }
     if (!dadosParaSalvar && dados.caminhoResultadoPython) {
       try {
         const resultadoPython = JSON.parse(await readFile(dados.caminhoResultadoPython, 'utf-8'))
@@ -104,9 +168,21 @@ export async function POST(request: NextRequest) {
       backup: null as string | null
     }
 
+    // preparar snapshot dos dados processados (primeiras 20 linhas) para logging
+    const snapshot = (dadosParaSalvar?.massaParticipantes && Array.isArray(dadosParaSalvar.massaParticipantes))
+      ? dadosParaSalvar.massaParticipantes.slice(0, 20)
+      : []
+
     // Criar backup se solicitado
     if (dados.configuracao.criarBackup) {
       resultadoSalvamento.backup = await criarBackupDados(dados.importacaoId)
+    }
+
+    // calcular estatísticas básicas da massa a ser salva e incluir no log
+    const stats = (dadosParaSalvar?.massaParticipantes && Array.isArray(dadosParaSalvar.massaParticipantes)) ? calcStatsFromMassa(dadosParaSalvar.massaParticipantes) : null
+    // incluir stats no snapshot (para facilitar auditoria)
+    if (stats) {
+      // anexar metadata
     }
 
     // Iniciar transação
@@ -147,7 +223,7 @@ export async function POST(request: NextRequest) {
       }
 
       // Atualizar importação com resultado do salvamento
-      await tx.importacaoMortalidade.update({
+  await tx.importacaoMortalidade.update({
         where: { id: dados.importacaoId },
         data: {
           status: 'DADOS_SALVOS',
@@ -157,8 +233,11 @@ export async function POST(request: NextRequest) {
             salvamentoDados: {
               processadoEm: new Date().toISOString(),
               configuracao: dados.configuracao,
-              resultado: resultadoSalvamento,
-              origem: dadosParaSalvar?.origem || 'API_DIRETA'
+      resultado: resultadoSalvamento,
+              origem: dadosParaSalvar?.origem || 'API_DIRETA',
+              manualMapping: manualMapping || null,
+      snapshot: snapshot,
+      stats: stats
             }
           }
         }
@@ -484,11 +563,41 @@ async function criarBackupDados(importacaoId: string): Promise<string> {
    */
   const timestamp = new Date().toISOString().replace(/[:.]/g, '-')
   const backupId = `backup_${importacaoId}_${timestamp}`
-  
-  // Implementar lógica de backup conforme necessário
-  // Por enquanto retorna apenas o ID do backup
-  
-  return backupId
+  try {
+    // recuperar registros atuais da massa associados à importacao
+    const existentes = await prisma.massaParticipantes.findMany({ where: { importacaoId } })
+    const backupsDir = join(process.cwd(), 'XLOGS', 'backups')
+    await mkdir(backupsDir, { recursive: true })
+    const filePath = join(backupsDir, `${backupId}.json`)
+    await writeFile(filePath, JSON.stringify({ backupId, createdAt: new Date().toISOString(), count: existentes.length, data: existentes }, null, 2), 'utf8')
+    return filePath
+  } catch (err) {
+    console.error('Erro ao criar backup:', err)
+    return backupId
+  }
+}
+
+function calcStatsFromMassa(massa: any[]) {
+  const ages = massa.map((p:any) => Number(p.idade)).filter((v:any)=>!Number.isNaN(v))
+  const count = ages.length
+  const missingAges = massa.length - count
+  const sorted = ages.slice().sort((a:any,b:any)=>a-b)
+  const sum = ages.reduce((a:any,b:any)=>a+b,0)
+  const mean = count ? sum / count : 0
+  const median = (() => { if (!count) return 0; const mid = Math.floor(count/2); return (count % 2 === 1) ? sorted[mid] : (sorted[mid-1]+sorted[mid])/2 })()
+  const min = count ? sorted[0] : 0
+  const max = count ? sorted[sorted.length-1] : 0
+  const std = (() => {
+    if (!count) return 0
+    const varSum = ages.reduce((acc:any,v:any)=> acc + Math.pow(v - mean, 2), 0)
+    return Math.sqrt(varSum / count)
+  })()
+  const sexoCounts: Record<string, number> = {}
+  for (const p of massa) {
+    const s = (p.sexo || '').toString()
+    sexoCounts[s] = (sexoCounts[s]||0) + 1
+  }
+  return { count, min, max, mean, median, std, missingAges, sexoCounts }
 }
 
 export async function GET() {

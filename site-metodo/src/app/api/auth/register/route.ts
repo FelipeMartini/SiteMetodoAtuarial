@@ -56,6 +56,22 @@ export async function POST(request: NextRequest) {
       createdAt: user.createdAt,
       updatedAt: user.updatedAt
     }
+    // Garantir políticas casbin básicas por email (idempotente)
+    try {
+      const emailSubject = user.email
+      const policies = [
+        { subject: emailSubject, object: 'area:cliente', action: 'read', effect: 'allow' },
+        { subject: emailSubject, object: 'area:cliente', action: 'write', effect: 'allow' },
+      ]
+      for (const p of policies) {
+        const exists = await prisma.casbinRule.findFirst({ where: { v0: p.subject, v1: p.object, v2: p.action, v3: p.effect } })
+        if (!exists) {
+          await prisma.casbinRule.create({ data: { ptype: 'p', v0: p.subject, v1: p.object, v2: p.action, v3: p.effect } })
+        }
+      }
+    } catch (err) {
+      console.error('Erro ao criar políticas casbin para novo usuário:', err)
+    }
 
     return NextResponse.json({
       message: 'Usuário criado com sucesso',

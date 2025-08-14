@@ -118,8 +118,8 @@ backup_local() {
             site-metodo
         
         # Backup do banco de dados
-        if [[ -f "${project_root}/site-metodo/prisma/dev.db" ]]; then
-            cp "${project_root}/site-metodo/prisma/dev.db" \
+        if [[ -f "${project_root}/site-metodo/prisma/db/dev.db" ]]; then
+            cp "${project_root}/site-metodo/prisma/db/dev.db" \
                "${BACKUP_DIR}/${backup_name}-database.db"
         fi
         

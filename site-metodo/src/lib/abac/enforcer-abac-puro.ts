@@ -267,9 +267,23 @@ export async function reloadABACPolicies(): Promise<boolean> {
   try { const enforcer = await getEnforcer(); await enforcer.loadPolicy(); cachedEnforcer = null; lastCacheTime = 0; structuredLogger.info('ABAC policies reloaded'); return true } catch (error) { structuredLogger.error('Failed to reload ABAC policies', { error: error instanceof Error ? error.message : String(error) }); return false }
 }
 
-export async function isAdmin(userId: string, context: ABACContext = {}): Promise<boolean> { const result = await checkABACPermission(`user:${userId}`, 'system:admin', 'access', context); return result.allowed }
-export async function canAccess(userId: string, resource: string, action: string = 'read', context: ABACContext = {}): Promise<boolean> { const result = await checkABACPermission(`user:${userId}`, resource, action, context); return result.allowed }
-export async function hasPermission(userId: string, resource: string, action: string, context: ABACContext = {}): Promise<AuthResult> { return await checkABACPermission(`user:${userId}`, resource, action, context) }
+// Essas funções aceitam um email (preferido) ou um userId. Se receber um email, usará ele como subject; caso contrário, prefixa com 'user:'.
+export async function isAdmin(userIdOrEmail: string, context: ABACContext = {}): Promise<boolean> {
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  const result = await checkABACPermission(subject, 'system:admin', 'access', context)
+  return result.allowed
+}
+
+export async function canAccess(userIdOrEmail: string, resource: string, action: string = 'read', context: ABACContext = {}): Promise<boolean> {
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  const result = await checkABACPermission(subject, resource, action, context)
+  return result.allowed
+}
+
+export async function hasPermission(userIdOrEmail: string, resource: string, action: string, context: ABACContext = {}): Promise<AuthResult> {
+  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
+  return await checkABACPermission(subject, resource, action, context)
+}
 
 
 const abacEnforcerPuro = { checkABACPermission, addABACPolicy, removeABACPolicy, getAllABACPolicies, reloadABACPolicies, isAdmin, canAccess, hasPermission }

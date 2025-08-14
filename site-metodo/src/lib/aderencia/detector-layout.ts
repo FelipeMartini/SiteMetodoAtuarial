@@ -137,8 +137,18 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
   rows = rows || []
   const headerRow = rows[0] || []
   const cols = rows.length ? Math.max(...rows.map((r) => r.length)) : 0
-  const headerTextCount = headerRow.filter((c: any) => typeof c === 'string' && /[A-Za-zÀ-ú]/.test(c) && String(c).trim().length > 0).length
-  const possibleHeader = cols > 0 && headerTextCount >= Math.ceil(cols / 2)
+  // Consider a header-like cell if it contains letters OR looks like a date (dd/mm/yyyy or yyyy-mm-dd) or is non-empty non-numeric
+  const headerLikeCount = headerRow.filter((c: any) => {
+    if (c === null || c === undefined) return false
+    const s = String(c).trim()
+    if (!s) return false
+    if (/[A-Za-zÀ-ú]/.test(s)) return true
+    if (/^\d{1,2}\/\d{1,2}\/\d{4}$/.test(s) || /^\d{4}-\d{2}-\d{2}/.test(s)) return true
+    // if it's not purely numeric (e.g., contains punctuation) consider header-like
+    if (!/^[-+]?\d+(?:[.,]\d+)?$/.test(s)) return true
+    return false
+  }).length
+  const possibleHeader = cols > 0 && headerLikeCount >= Math.ceil(cols / 2)
 
   const keywords: Record<string, string[]> = {
     matricula: ['matricula', 'matr', 'registro', 'id', 'codigo', 'cod', 'mat.'] ,
@@ -195,6 +205,14 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
         const ageProp = s.numericAgeCount / nonEmpty
         sc += Math.round(ageProp * 10)
         sc += Math.min(3, s.numericCount)
+        // If header looks like a date but the column has many numeric ages, boost idade score
+        try {
+          const hdr = String(s.header || '')
+          const headerIsDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(hdr) || /^\d{4}-\d{2}-\d{2}/.test(hdr)
+          if (headerIsDate && ageProp > 0.6) sc += 6
+        } catch (err) {
+          // ignore
+        }
       }
       if (key === 'sexo') {
         const sexProp = s.sexCount / nonEmpty
@@ -241,6 +259,28 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
     }
   }
 
+  // Heuristic override: if a column has many numericAgeCount values, prefer it for idade
+  try {
+    let bestAgeCol = -1
+    let bestAgeCount = 0
+    for (let c = 0; c < cols; c++) {
+      const s = stats[c]
+      if (!s) continue
+      if ((s.numericAgeCount || 0) > bestAgeCount) { bestAgeCount = s.numericAgeCount || 0; bestAgeCol = c }
+    }
+    if (bestAgeCol >= 0) {
+      const nonEmpty = Math.max(1, stats[bestAgeCol].nonEmpty || 1)
+      // threshold: at least 30 values or >60% non-empty are numeric ages
+      if (bestAgeCount >= 30 || bestAgeCount / nonEmpty > 0.6) {
+        mapping.colunaIdade = bestAgeCol
+        columnSummary[bestAgeCol].topKey = 'idade'
+        columnSummary[bestAgeCol].topScore = perColumnScores[bestAgeCol]?.idade ?? Math.round((bestAgeCount / nonEmpty) * 50)
+      }
+    }
+  } catch (err) {
+    // ignore
+  }
+
   const nPreview = Math.min(10, Math.max(0, rows.length - (possibleHeader ? 1 : 0)))
   const preview: any[] = []
   for (let r = (possibleHeader ? 1 : 0); r < (possibleHeader ? 1 : 0) + nPreview; r++) {
@@ -264,13 +304,24 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
   })
   const maxPossible = 15
   const confidence = chosenScores.reduce((a,b)=>a+b,0) / (maxPossible * chosenScores.length || 1)
+  // mapar stats para saída enxuta (sem amostras completas)
+  const colStats = stats.map(s => ({
+    header: s.header,
+    nonEmpty: s.nonEmpty,
+    numericCount: s.numericCount,
+    numericAgeCount: s.numericAgeCount,
+    dateCount: s.dateCount,
+    sexCount: s.sexCount,
+    uniqueCount: s.uniqueCount
+  }))
 
   return {
     mapeamentoDetectado: mapping,
     amostraLinhas: rows.slice(0, Math.min(rows.length, 10)),
     previewNormalizado: preview,
     confianca: Math.max(0, Math.min(1, confidence)),
-    perColumnScores: columnSummary
+    perColumnScores: columnSummary,
+    colStats
   }
 }
 

@@ -95,8 +95,9 @@ export async function POST(request: NextRequest) {
     }
 
     // Verifica permissão ABAC para criar notificações
+    const subject = session.user.email ? String(session.user.email) : ''
     const hasPermission = await checkABACPermission(
-      session.user.email || '',
+      subject,
       'resource:notifications',
       'create',
       {

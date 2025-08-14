@@ -36,13 +36,15 @@ export async function POST(req: NextRequest) {
 
     const resultado = await detectarLayout(buffer, file.name, { dataReferencia })
 
-    // persistir preview no log da importacao
+    // persistir preview no log da importacao (salvamos o detector completo)
     await prisma.importacaoMortalidade.update({
       where: { id: importacao.id },
       data: { logImportacao: { ...importacao.logImportacao, detector: resultado, updatedAt: new Date().toISOString() } }
     })
 
-    return NextResponse.json({ success: true, importacaoId: importacao.id, ...resultado })
+    // retornar resultado incluindo perColumnScores e colStats para UI diagnóstico
+    const { perColumnScores, colStats, ...rest } = resultado as any
+    return NextResponse.json({ success: true, importacaoId: importacao.id, ...rest, perColumnScores, colStats })
   } catch (error) {
     console.error('Erro validar-upload:', error)
     return NextResponse.json({ error: 'Erro interno no servidor' }, { status: 500 })

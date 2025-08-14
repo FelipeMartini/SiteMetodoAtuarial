@@ -216,21 +216,7 @@ async function seedABACPolicies() {
 /**
  * 🏃‍♂️ Executar seed
  */
-async function main() {
-  try {
-    await seedABACPolicies()
-    console.log('✅ Script de seed concluído')
-  } catch (error) {
-    console.error('❌ Erro no script de seed:', error)
-    process.exit(1)
-  } finally {
-    await prisma.$disconnect()
-  }
-}
-
-// Executar se chamado diretamente
-if (require.main === module) {
-  main()
-}
+// Este seed foi desativado intencionalmente. Use apenas `prisma/seed-abac-user.ts` para criar o usuário admin
+// e as políticas mínimas. Mantivemos o conteúdo para referência, mas não será executado automaticamente.
 
 export { seedABACPolicies }

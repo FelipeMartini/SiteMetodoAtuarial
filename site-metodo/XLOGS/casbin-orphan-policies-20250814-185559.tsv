@@ -1,0 +1,10 @@
+16|p|user:cme9393ab000083y90zydz4cg|*|*|allow|{"department":"admin","location":"*","time":"*"}|
+17|p|user:*|session:read|read|allow|{"time":"*","location":"*"}|
+18|p|user:*|area-cliente:*|*|allow|{"time":"business_hours","location":"*"}|
+20|p|user:*|api:abac:check|read|allow|{"time":"*","location":"*"}|
+300|p|user:bad|some,object|read|allow|{"time":"*"}|
+397|p|user:cme9393ab000083y90zydz4cg|*|*|allow|{"department":"admin","location":"*","time":"*"}|
+398|p|user:*|session:read|read|allow|{"time":"*","location":"*"}|
+399|p|user:*|area-cliente:*|*|allow|{"time":"business_hours","location":"*"}|
+401|p|user:*|api:abac:check|read|allow|{"time":"*","location":"*"}|
+406|p|user:bad|some,object|read|allow|{"time":"*"}|

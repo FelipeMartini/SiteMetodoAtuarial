@@ -16,12 +16,12 @@ async function main() {
   const tests = [
     { subject: email, object: 'admin:dashboard', action: 'read' },
     { subject: email, object: 'admin:dashboard', action: 'write' },
-    { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'read' },
-    { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'write' },
+  { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'read' },
+  { subject: `user:${user.id}`, object: 'admin:dashboard', action: 'write' },
     { subject: email, object: 'area:cliente', action: 'read' },
     { subject: email, object: 'area:cliente', action: 'write' },
-    { subject: `user:${user.id}`, object: 'area:cliente', action: 'read' },
-    { subject: `user:${user.id}`, object: 'area:cliente', action: 'write' },
+  { subject: `user:${user.id}`, object: 'area:cliente', action: 'read' },
+  { subject: `user:${user.id}`, object: 'area:cliente', action: 'write' },
   ]
 
   for (const t of tests) {
