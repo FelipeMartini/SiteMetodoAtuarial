@@ -4,6 +4,7 @@ import React, { useEffect } from 'react'
 import useUIStore from '@/lib/zustand/uiStore'
 import { Button } from '@/components/ui/button'
 import { Sun, Moon } from 'lucide-react'
+import { CurrentUser } from '@/lib/zustand/types'
 
 export function ThemeToggleZustand() {
   const theme = useUIStore((s) => s.theme)
@@ -34,7 +35,18 @@ export function HydrateCurrentUser() {
         if (data?.user) {
           // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
           const user = data.user
-          setCurrentUser({ id: String(user.id ?? user.sub ?? ''), email: String(user.email ?? '') })
+          const u = { id: String(user.id ?? user.sub ?? ''), email: String(user.email ?? '') } as CurrentUser
+          setCurrentUser(u)
+          try {
+            // Aplicar atributos ABAC se estiverem disponíveis
+            // import dinâmico para evitar bundling em contextos server
+            const { applyAbacAttributes } = await import('@/lib/zustand/abac')
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+            applyAbacAttributes(user.attributes)
+          } catch (err) {
+            // eslint-disable-next-line no-console
+            console.debug('applyAbacAttributes: erro ou módulo não encontrado', err)
+          }
         }
       } catch (err) {
         // eslint-disable-next-line no-console

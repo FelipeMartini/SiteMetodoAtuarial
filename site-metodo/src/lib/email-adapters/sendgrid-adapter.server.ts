@@ -10,9 +10,11 @@ export async function sendWithSendGrid(options: EmailOptions) {
 
   const apiKey = process.env.SENDGRID_API_KEY;
   if (!apiKey) throw new Error('SENDGRID_API_KEY não configurado');
-  // Import dinâmico para evitar erro de build se a lib não estiver instalada
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const sgMail: any = require('@sendgrid/mail');
+  // Import dinâmico (ESM) para evitar erro de build se a lib não estiver instalada
+  const sgModule: any = await import('@sendgrid/mail').catch((e) => {
+    throw new Error('Erro ao importar @sendgrid/mail: ' + String(e));
+  });
+  const sgMail: any = sgModule?.default ?? sgModule;
   sgMail.setApiKey(apiKey);
 
   const msg: any = {

@@ -1,12 +1,12 @@
-'use client'
+ 'use client'
 
 import * as React from 'react'
-import { useTheme } from 'next-themes'
+import { useTheme } from '@/lib/zustand/hooks'
 import { Button } from '@/components/ui/button'
 import { motion } from 'framer-motion'
 
 export function ThemeToggle() {
-  const { setTheme, resolvedTheme } = useTheme()
+  const { theme, setTheme, toggleTheme } = useTheme()
   const [mounted, setMounted] = React.useState(false)
 
   // Previne hydration mismatch
@@ -22,7 +22,11 @@ export function ThemeToggle() {
     )
   }
 
-  const isDark = resolvedTheme === 'dark'
+  const isDark = (() => {
+    if (typeof window === 'undefined') return theme === 'dark'
+    if (theme === 'system') return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
+    return theme === 'dark'
+  })()
 
   return (
     <motion.div
@@ -34,7 +38,11 @@ export function ThemeToggle() {
         variant='ghost'
         size='icon'
         aria-label={isDark ? 'Ativar modo claro' : 'Ativar modo escuro'}
-        onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        onClick={() => {
+          // Prefer toggleTheme for simplicity; fallback to setTheme
+          if (toggleTheme) toggleTheme()
+          else setTheme(isDark ? 'light' : 'dark')
+        }}
         className='w-9 h-9 transition-colors'
       >
         <motion.span

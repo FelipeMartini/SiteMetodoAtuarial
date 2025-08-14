@@ -1,5 +1,8 @@
-import { emailService as emailServiceServer, EmailOptions, TemplateEmailOptions, EmailAttachment, EmailStats, IEmailService } from '@/lib/email-service.server';
+import { emailService as emailServiceServer, EmailOptions, TemplateEmailOptions, IEmailService } from '@/lib/email-service.server';
 import { prisma } from '@/lib/prisma';
+// Mantemos imports de templates e loggers por compatibilidade, mas alguns deles
+// não são usados diretamente aqui. Se removê-los causar erro em outros módulos,
+// favor avisar para ajustarmos a exportação central.
 import { renderEmailTemplate, EmailTemplateType, getEmailTemplate } from '@/emails/templates';
 import { simpleLogger } from '@/lib/simple-logger';
 import { emailLogger, logEmailSent, logEmailFailed, logEmailPending } from '@/lib/email-logger';

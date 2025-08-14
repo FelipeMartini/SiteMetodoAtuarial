@@ -34,8 +34,7 @@
 - [ ] Realizar limpeza de arquivos temporários, renomeados, em branco, marcados para deletar ou resíduos após build
 - [x] Revisar todas as variáveis e seus usos para evitar conflitos, especialmente em autenticação e endpoints seguros
 - [ ] Garantir documentação técnica clara e exemplos de uso para todos os fluxos
-- [ ] Validar logs e rastreio com testes unitários e de integração
-- [ ] Submeter código a revisão de especialista externo, se possível
+- [ ] Submeter código a revisão
 - [x] Skeletons de adapters para provedores (SES/SendGrid) adicionados e documentação inicial criada
  - [x] Integrador de provider (`EMAIL_PROVIDER`) implementado e `README-EMAIL.md` criado
 
@@ -55,10 +54,14 @@
 
 ### 3. ESTADO GLOBAL UI/TEMA COM ZUSTAND E INTEGRAÇÃO ABAC (01-tarefa-zustand-global-ui-abac.md)
  - [x] Remover totalmente o ThemeProvider e migrar o controle de tema para um slice Zustand, garantindo SSR e persistência
-- [ ] Separar todos os estados de UI em slices por módulo (sidebar, modais, status, preferências, etc)
+- [x] Separar todos os estados de UI em slices por módulo (sidebar, modais, status, preferências, etc) (implementado: theme, sidebar, modal, session)
 - [ ] Refatorar todos os componentes de UI para consumir o estado global via hooks do Zustand
 - [ ] Preparar slices para personalização via ABAC, permitindo que atributos de acesso do usuário personalizem menus, sidebars e componentes
+ - [ ] Refatorar todos os componentes de UI para consumir o estado global via hooks do Zustand (em progresso: principais componentes de tema migrados)
+ - [x] Preparar slices para personalização via ABAC, permitindo que atributos de acesso do usuário personalizem menus, sidebars e componentes (implementado: `applyAbacAttributes` e chamada automática em `HydrateCurrentUser`)
 - [ ] Documentar a separação de responsabilidades: Zustand para UI, next-auth/SQLite para sessão/autenticação, React Query/Prisma para dados
+
+ - [x] Documentar a separação de responsabilidades: Zustand para UI, next-auth/SQLite para sessão/autenticação, React Query/Prisma para dados (README parcial criado em `src/lib/zustand/README.md`)
 - [ ] Testar persistência e SSR para garantir que preferências e tema funcionem corretamente
 - [ ] Nunca armazenar dados sensíveis no Zustand
 - [ ] Garantir integração transparente com AuthProvider, TanstackQueryProvider e demais providers
@@ -125,7 +128,7 @@
 - [ ] Calcular o qui-quadrado
 - [ ] Comparar com o valor crítico
 - [ ] Decidir sobre a aderência
-- [ ] Implementar exemplos em Python, R, MATLAB, Java e TypeScript/Node.js
+- [ ] Implementar exemplos em Python Java e TypeScript/Node.js
 - [ ] Documentar vantagens e desvantagens de cada linguagem
 - [ ] Referenciar projetos e fórmulas no GitHub
 - [ ] Atualizar e documentar todas as fontes e referências

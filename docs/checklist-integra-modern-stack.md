@@ -22,7 +22,7 @@ Este checklist serve para acompanhamento prático e incremental das melhorias e 
 - [ ] Atualizar todos componentes via CLI @canary
 - [ ] Corrigir imports para @/components/ui
 - [ ] Adaptar global.css para @theme
-- [ ] Garantir dark mode com next-themes
+- [ ] Garantir dark mode com abordagem baseada em `Zustand` (slice `theme`) e script anti-FOUC
 
 ## 5. Unleash
 - [ ] Atualizar SDK

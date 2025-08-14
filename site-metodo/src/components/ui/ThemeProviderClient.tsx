@@ -1,7 +1,8 @@
 "use client"
 
 import { useEffect } from 'react'
-import useUIStore, { ThemeOption } from '@/lib/zustand/uiStore'
+import useUIStore from '@/lib/zustand/uiStore'
+import { ThemeOption } from '@/lib/zustand/types'
 
 /**
  * Aplica a classe de tema (`dark`) no elemento root (<html>) com base no estado do Zustand.
