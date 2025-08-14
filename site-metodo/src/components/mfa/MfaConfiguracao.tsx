@@ -146,7 +146,7 @@ export default function MfaConfiguracao() {
     }
   }
 
-  const disableMfa = async () => {
+  const _disableMfa = async () => {
     if (!token || !password) {
       setError('Por favor, insira o código TOTP e sua senha')
       return
@@ -172,7 +172,7 @@ export default function MfaConfiguracao() {
         const errorData = await response.json()
         setError(errorData.error || 'Erro ao desabilitar MFA')
       }
-    } catch (err) {
+    } catch (_err) {
       setError('Erro ao desabilitar MFA')
     } finally {
       setLoading(false)

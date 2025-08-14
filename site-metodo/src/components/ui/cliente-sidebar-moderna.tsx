@@ -17,7 +17,6 @@ import {
   MessageSquare,
   Settings,
   HelpCircle,
-  User,
   Shield,
   Download,
   Plus,

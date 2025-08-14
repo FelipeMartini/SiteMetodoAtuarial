@@ -11,21 +11,15 @@ import { Separator } from '@/components/ui/separator';
 import { 
   User, 
   Activity, 
-  Shield, 
-  Calendar, 
   ArrowRight, 
-  TrendingUp, 
-  Clock, 
   Bell,
   FileText,
   Download,
   MessageSquare,
   Settings,
   ChevronRight,
-  Star,
   Eye,
   DollarSign,
-  BookOpen,
   Plus
 } from 'lucide-react';
 import { format } from 'date-fns';

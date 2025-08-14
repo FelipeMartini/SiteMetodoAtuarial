@@ -4,12 +4,6 @@ import { auth } from '@/lib/auth'
 import { CalculadoraAtuarial } from '@/lib/calculadora-atuarial'
 import type { JsonValue } from '@prisma/client/runtime/library'
 
-interface CalculoResultado {
-  valor?: number;
-  detalhes?: Record<string, unknown>;
-  [key: string]: unknown;
-}
-
 export async function GET(request: NextRequest) {
   try {
     const session = await auth()

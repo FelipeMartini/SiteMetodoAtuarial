@@ -53,7 +53,7 @@ interface EmailTemplate {
 export default function EmailManagementPage() {
   const [logs, setLogs] = React.useState<EmailLog[]>([]);
   const [loading, setLoading] = React.useState(true);
-  const [stats, setStats] = React.useState({
+  const [_stats, _setStats] = React.useState({
     total: 0,
     sent: 0,
     failed: 0,
@@ -257,7 +257,7 @@ export default function EmailManagementPage() {
   ];
 
   // Mock data para demonstração
-  const mockEmailLogs: EmailLog[] = [
+  const _mockEmailLogs: EmailLog[] = [
     {
       id: '1',
       to: 'usuario@exemplo.com',

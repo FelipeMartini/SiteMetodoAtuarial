@@ -58,7 +58,7 @@ function ABACManagementPageContent() {
   const [policies, setPolicies] = useState<Policy[]>([])
   const [roleAssignments, setRoleAssignments] = useState<RoleAssignment[]>([])
   const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [_error, _setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
 
   // Mock data for demonstration
@@ -119,7 +119,7 @@ function ABACManagementPageContent() {
     }, 1000)
 
     return () => clearTimeout(timer)
-  }, [])
+  }, [mockPolicies, mockRoleAssignments])
 
   const filteredPolicies = policies.filter(
     policy =>
