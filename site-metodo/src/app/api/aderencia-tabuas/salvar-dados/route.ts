@@ -250,8 +250,8 @@ async function processarResultadoPython(resultadoPython: any, _importacaoId: str
     const arr = resultadoPython.dados_extraitos?.obitos_registrados || resultadoPython.dados_extraidos.obitos_registrados
     datos:
     dadosProcessados.obituarios = Array.isArray(arr)
-      ? arr.map((o: any) => {
-          const idadeObito = Number(o.idadeObito ?? o.idade || o.age) || 0
+          ? arr.map((o: any) => {
+          const idadeObito = Number(((o.idadeObito ?? o.idade) || o.age)) || 0
           const sexo = mapperSexo(o.sexo ?? o.gender)
           const dataObito = o.dataObito || o.data_obito || o.date || undefined
           return {
