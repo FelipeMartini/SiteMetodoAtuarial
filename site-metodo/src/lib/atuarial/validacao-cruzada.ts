@@ -1,4 +1,4 @@
-import { Decimal } from 'decimal.js'
+// Decimal import removido: não utilizado diretamente neste módulo
 import { TABELA_MORTALIDADE_AT2000 } from '../atuarial/calculadora'
 
 /**
@@ -87,8 +87,8 @@ export class ValidadorTabelasMortalidade {
   public static compararTabelas(
     tabela1: Record<number, { qx_m: number; qx_f: number }>,
     tabela2: Record<number, { qx_m: number; qx_f: number }>,
-    nomeTabela1: string,
-    nomeTabela2: string,
+    _nomeTabela1: string,
+    _nomeTabela2: string,
     tolerancia: number = 0.15 // 15% de tolerância padrão
   ): ResultadoValidacaoCruzada {
     
@@ -152,8 +152,8 @@ export class ValidadorTabelasMortalidade {
     }
     
     return {
-      tabelaBase: nomeTabela1,
-      tabelaComparacao: nomeTabela2,
+      tabelaBase: _nomeTabela1,
+      tabelaComparacao: _nomeTabela2,
       dadosComparados,
       estatisticas: {
         diferencaMedia,
@@ -175,7 +175,7 @@ export class ValidadorTabelasMortalidade {
    */
   public static validarPropriedadesMatematicas(
     tabela: Record<number, { qx_m: number; qx_f: number }>,
-    nomeTabela: string
+    _nomeTabela: string
   ): { valido: boolean; erros: string[] } {
     const erros: string[] = []
     const idades = Object.keys(tabela).map(Number).sort((a, b) => a - b)
@@ -228,7 +228,7 @@ export class ValidadorTabelasMortalidade {
       let expectativa = 0
       let lx = 100000 // População inicial padrão
       
-      const campo = sexo === 'M' ? 'qx_m' : 'qx_f'
+  // campo local removido: usamos diretamente obterQxInterpolado
       const idades = Object.keys(tabela).map(Number).sort((a, b) => a - b)
       const idadeMaxima = Math.max(...idades)
       

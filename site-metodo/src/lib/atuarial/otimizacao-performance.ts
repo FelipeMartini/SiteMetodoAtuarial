@@ -192,9 +192,21 @@ export class OtimizadorPerformance {
     return this.executarBenchmark(
       'Interpolação de qx',
       () => {
-        // Testa interpolação para idades não tabuladas
+        // Testa interpolação para idades não tabuladas usando método público quando disponível
         for (let idade = 20.5; idade < 95; idade += 0.5) {
-          (this.calculadora as any).obterQx(idade, 'M')
+          // usar método público `calcularExpectativaVida` como proxy quando obterQx não for público
+          try {
+            // se existir método obterQx (possivelmente privado), chamamos de forma segura via tipo local
+            const calcLike = this.calculadora as unknown as { obterQx?: (idade: number, sexo: 'M' | 'F') => number }
+            if (calcLike && typeof calcLike.obterQx === 'function') {
+              calcLike.obterQx(idade, 'M')
+            } else {
+              // fallback: chamar cálculo leve para forçar acesso à tabela
+              this.calculadora.calcularExpectativaVida(Math.floor(idade), 'M')
+            }
+          } catch {
+            // swallow errors durante benchmark
+          }
         }
       },
       200
@@ -342,28 +354,28 @@ export class OtimizadorPerformance {
  * Cache para otimização de cálculos repetitivos
  */
 export class CacheCalculosAtuariais {
-  private static cache = new Map<string, any>()
+  private static cache = new Map<string, unknown>()
   private static maxSize = 1000
   
   /**
    * Gera chave de cache
    */
-  private static gerarChave(operacao: string, parametros: any): string {
+  private static gerarChave(operacao: string, parametros: unknown): string {
     return `${operacao}:${JSON.stringify(parametros)}`
   }
   
   /**
    * Obtém valor do cache
    */
-  public static obter<T>(operacao: string, parametros: any): T | undefined {
+  public static obter<T>(operacao: string, parametros: unknown): T | undefined {
     const chave = this.gerarChave(operacao, parametros)
-    return this.cache.get(chave)
+    return this.cache.get(chave) as T | undefined
   }
   
   /**
    * Armazena valor no cache
    */
-  public static armazenar<T>(operacao: string, parametros: any, valor: T): void {
+  public static armazenar<T>(operacao: string, parametros: unknown, valor: T): void {
     const chave = this.gerarChave(operacao, parametros)
     
     // Limita tamanho do cache
@@ -401,12 +413,12 @@ export class CacheCalculosAtuariais {
  * Decorator para cache automático
  */
 export function cacheable(operacao: string) {
-  return function (target: any, propertyName: string, descriptor: PropertyDescriptor) {
+  return function (target: unknown, propertyName: string, descriptor: PropertyDescriptor) {
     const method = descriptor.value
     
-    descriptor.value = function (...args: any[]) {
+    descriptor.value = function (...args: unknown[]) {
       // Tenta obter do cache
-      const cached = CacheCalculosAtuariais.obter(operacao, args)
+      const cached = CacheCalculosAtuariais.obter<unknown>(operacao, args)
       if (cached !== undefined) {
         return cached
       }
