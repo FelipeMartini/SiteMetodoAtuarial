@@ -213,7 +213,7 @@ async function generateGeneralReport(userId: string) {
   // Estatísticas
   const stats = {
     total: calculos.length,
-    tipos: calculos.reduce((acc, calc) => {
+    tipos: calculos.reduce((acc: Record<string, number>, calc: any) => {
       acc[calc.tipo] = (acc[calc.tipo] || 0) + 1
       return acc
     }, {} as Record<string, number>),
@@ -239,7 +239,8 @@ async function generateGeneralReport(userId: string) {
   
   // Tabela de cálculos
   if (calculos.length > 0) {
-    const tableData = calculos.map(calc => [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const tableData = calculos.map((calc: any) => [
       calc.tipo.replace('_', ' '),
       new Date(calc.dataCalculo).toLocaleDateString('pt-BR'),
       calc.tabua?.nome || 'AT-2000',

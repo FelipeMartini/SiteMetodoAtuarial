@@ -176,7 +176,7 @@ class EmailLogger {
         skip: filters.offset || 0,
       });
 
-      return logs.map(log => ({
+  return logs.map((log: any) => ({
         id: log.id,
         to: log.to.split(','),
         cc: log.cc?.split(','),

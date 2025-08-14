@@ -2,7 +2,8 @@
 
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { cn } from '@/lib/utils'
-import { LucideIcon } from 'lucide-react'
+import type { ComponentType, SVGProps } from 'react'
+type LucideIcon = ComponentType<SVGProps<SVGSVGElement>>
 
 interface StatsCardProps {
   title: string

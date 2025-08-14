@@ -70,7 +70,7 @@ async function setupABACPolicies() {
     const policies = await prisma.casbinRule.findMany()
     console.log(`📋 Total de políticas: ${policies.length}`)
     
-    policies.forEach((policy, index) => {
+    policies.forEach((policy: any, index: number) => {
       console.log(`${index + 1}. ${policy.ptype} ${policy.v0} ${policy.v1} ${policy.v2} ${policy.v3}`)
     })
 

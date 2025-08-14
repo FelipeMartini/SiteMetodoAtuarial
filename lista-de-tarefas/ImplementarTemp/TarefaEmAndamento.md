@@ -133,7 +133,17 @@ A Task 10 está **95% concluída** e o sistema está pronto para:
 - ✅ **Servidor Next.js:** Pronto para execução
 - 🎉 **TASK 9 CONCLUÍDA COM SUCESSO TOTAL!**
 
-### ✅ **Task 01 - Correções Iniciais** (COMPLETA)
+### ✅ **Task 01 - Correções Iniciais** (EM PROGRESSO)
+**Status recente:** Ajustes no Zustand global e hidratação do usuário no cliente implementados.
+
+- [x] Adicionar persistência e tipagem forte para UI store (tema, sidebar)
+- [x] Corrigir warnings 'implicit any' em uiStore.ts
+- [x] Implementar HydrateCurrentUser para buscar /api/auth/session no cliente e popular store
+- [ ] Hidratar store no layout raiz (inserido, requer build/cheque)
+- [ ] Testes: validar que currentUser está disponível em componentes (ex.: perfil, navbar)
+- [ ] Finalizar: remover quaisquer warnings remanescentes e rodar lint/type-check/build completos
+
+Próximos passos: validar em ambiente local (npm run dev) e executar testes unitários e type-check automáticos.
 - [x] Corrigir consistência visual dos menus
 - [x] Resolver loop infinito no sistema ABAC
 - [x] Implementar redirecionamento adequado

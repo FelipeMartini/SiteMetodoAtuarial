@@ -88,8 +88,8 @@ export async function GET(
       }
     })
 
-    // Dados das taxas
-    tabua.taxas.forEach((taxa, index) => {
+  // Dados das taxas
+  tabua.taxas.forEach((taxa: any, index: number) => {
       const row = headerRow + 1 + index
       
       worksheet.getCell(row, 1).value = taxa.idade // Idade
@@ -138,17 +138,17 @@ export async function GET(
     worksheet.getCell(statsStartRow, 1).font = { bold: true, size: 12 }
 
     worksheet.getCell(statsStartRow + 1, 1).value = 'Idade Mínima:'
-    worksheet.getCell(statsStartRow + 1, 2).value = Math.min(...tabua.taxas.map(t => t.idade))
+  worksheet.getCell(statsStartRow + 1, 2).value = Math.min(...tabua.taxas.map((t: any) => t.idade))
 
     worksheet.getCell(statsStartRow + 2, 1).value = 'Idade Máxima:'
-    worksheet.getCell(statsStartRow + 2, 2).value = Math.max(...tabua.taxas.map(t => t.idade))
+  worksheet.getCell(statsStartRow + 2, 2).value = Math.max(...tabua.taxas.map((t: any) => t.idade))
 
-    worksheet.getCell(statsStartRow + 3, 1).value = 'qx Médio:'
-    worksheet.getCell(statsStartRow + 3, 2).value = tabua.taxas.reduce((sum, t) => sum + t.qx, 0) / tabua.taxas.length
+  worksheet.getCell(statsStartRow + 3, 1).value = 'qx Médio:'
+  worksheet.getCell(statsStartRow + 3, 2).value = tabua.taxas.reduce((sum: number, t: any) => sum + t.qx, 0) / tabua.taxas.length
     worksheet.getCell(statsStartRow + 3, 2).numFmt = '0.000000'
 
-    worksheet.getCell(statsStartRow + 4, 1).value = 'qx Máximo:'
-    worksheet.getCell(statsStartRow + 4, 2).value = Math.max(...tabua.taxas.map(t => t.qx))
+  worksheet.getCell(statsStartRow + 4, 1).value = 'qx Máximo:'
+  worksheet.getCell(statsStartRow + 4, 2).value = Math.max(...tabua.taxas.map((t: any) => t.qx))
     worksheet.getCell(statsStartRow + 4, 2).numFmt = '0.000000'
 
     // Gerar arquivo Excel

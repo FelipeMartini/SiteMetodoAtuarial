@@ -8,19 +8,28 @@ export type ThemeOption = 'light' | 'dark' | 'system'
 interface UIState {
   theme: ThemeOption
   sidebarOpen: boolean
+  // Estado corrente do usuário no client (somente informações não sensíveis)
+  currentUser?: {
+    id: string
+    email: string
+    attributes?: Record<string, unknown>
+  }
   openModal: (id: string) => void
   closeModal: (id: string) => void
   toggleTheme: () => void
   setTheme: (t: ThemeOption) => void
   toggleSidebar: () => void
+  setCurrentUser: (u?: { id: string; email: string; attributes?: Record<string, unknown> }) => void
+  clearCurrentUser: () => void
 }
 
 // Store com persistência local (client-side) – mantém tipagem estrita
 export const useUIStore = create<UIState>()(
   persist<UIState>(
-    (set) => ({
+    (set: (partial: Partial<UIState> | ((state: UIState) => Partial<UIState>)) => void) => ({
       theme: 'system',
       sidebarOpen: true,
+  currentUser: undefined,
       openModal: (_id: string) => {
         // Implementação simples: poderia ser expandida para controladores de modais
         // deixamos placeholder para evitar any
@@ -34,6 +43,8 @@ export const useUIStore = create<UIState>()(
       toggleTheme: () => set((state: UIState) => ({ theme: state.theme === 'dark' ? 'light' : 'dark' })),
       setTheme: (t: ThemeOption) => set({ theme: t }),
       toggleSidebar: () => set((state: UIState) => ({ sidebarOpen: !state.sidebarOpen })),
+  setCurrentUser: (u?: { id: string; email: string; attributes?: Record<string, unknown> }) => set({ currentUser: u }),
+  clearCurrentUser: () => set({ currentUser: undefined }),
     }),
     {
       name: 'site-metodo-ui',

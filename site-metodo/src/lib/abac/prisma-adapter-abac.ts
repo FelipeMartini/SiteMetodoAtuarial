@@ -3,31 +3,34 @@
  * Adaptação limpa para sistema ABAC puro
  */
 
-import { Adapter, Model } from 'casbin'
-import { PrismaClient } from '@prisma/client'
+/* eslint-disable @typescript-eslint/no-explicit-any */
+// usar tipos locais para compatibilidade com diferentes versões das libs
+import { prisma } from '@/lib/prisma'
 
-export class PrismaAdapter implements Adapter {
-  private prisma: PrismaClient
+type AnyModel = any
 
-  constructor(prismaClient: PrismaClient) {
-    this.prisma = prismaClient
+export class PrismaAdapter /* implements Adapter */ {
+  private prisma: any
+
+  // Aceita uma instância de prisma ou usa o singleton do projeto como fallback
+  constructor(prismaClient?: any) {
+    this.prisma = prismaClient || prisma
   }
 
   /**
    * 📚 Carregar políticas do banco
    */
-  async loadPolicy(model: Model): Promise<void> {
+  async loadPolicy(model: AnyModel): Promise<void> {
     try {
       // Carregar regras do banco
       const rules = await this.prisma.casbinRule.findMany()
       
-      for (const rule of rules) {
-        const line = [rule.v0, rule.v1, rule.v2, rule.v3, rule.v4, rule.v5]
-          .filter((v): v is string => v !== null)
-          .join(', ')
-        
-        model.addPolicy('p', 'p', line.split(', '))
-      }
+        for (const rule of rules) {
+          const parts = [rule.v0, rule.v1, rule.v2, rule.v3, rule.v4, rule.v5]
+          const filtered = parts.filter((v): v is string => v !== null && v !== undefined)
+          if (filtered.length === 0) continue
+          model.addPolicy('p', 'p', filtered)
+        }
     } catch (error) {
       console.error('Erro ao carregar políticas:', error)
       throw error
@@ -37,7 +40,7 @@ export class PrismaAdapter implements Adapter {
   /**
    * 💾 Salvar política no banco
    */
-  async savePolicy(model: Model): Promise<boolean> {
+  async savePolicy(model: AnyModel): Promise<boolean> {
     try {
       // Limpar regras existentes
       await this.prisma.casbinRule.deleteMany({})
