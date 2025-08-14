@@ -30,7 +30,7 @@ export interface TemplateEmailOptions {
   templateType: EmailTemplateType;
   to: string | string[];
   subject: string;
-  templateData: Record<string, any>;
+  templateData: Record<string, unknown>;
   priority?: 'low' | 'normal' | 'high';
 }
 
@@ -268,7 +268,7 @@ class EmailService {
     to: string, 
     name: string, 
     alertType: string, 
-    details: Record<string, any>
+    details: Record<string, unknown>
   ): Promise<{ success: boolean; messageId?: string; error?: string }> {
     const alertTitles = {
       login_attempt: 'Tentativa de Login Detectada',
