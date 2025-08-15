@@ -4,8 +4,7 @@
 nextjs-app/
 # Ignorar diretório xlogs
 XLOGS/
-# Ignorar diretório antigo de app
-.site-metodo/tsconfig.tsbuildinfo
+
 # Cobertura do mesmo arquivo sem leading dot
 site-metodo/tsconfig.tsbuildinfo
 # Ignorar variáveis de ambiente locais
