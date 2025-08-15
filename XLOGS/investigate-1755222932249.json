@@ -1,0 +1,902 @@
+{
+  "target": "site-metodo/src/app/api/users/route.ts",
+  "targetExists": true,
+  "directImporters": [],
+  "fetchCallers": [
+    {
+      "file": "docs/EXEMPLOS.md",
+      "url": "/api/users"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/PLANOCRUD/EXEMPLOS-CODIGO.md",
+      "url": "/api/usuarios"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/dashboard/page.js",
+      "url": "/api/usuarios"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/usuarios/lista/page.js",
+      "url": "/api/usuarios/paginated?${b.toString()}"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/usuarios/lista/page.js",
+      "url": "/api/usuarios/${j.id}"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/perfil/page.js",
+      "url": "/api/usuarios/${a.user.email}"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/perfil/page.js",
+      "url": "/api/usuarios/${q.email}"
+    },
+    {
+      "file": "site-metodo/.next/static/chunks/app/admin/dashboard/page-07b7516e707dc6ec.js",
+      "url": "/api/usuarios"
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/useUsuarios.ts",
+      "url": "/api/usuarios"
+    },
+    {
+      "file": "site-metodo/src/app/admin/usuarios/hooks/useUsuariosPaginados.ts",
+      "url": "/api/usuarios/paginated?${params.toString()}"
+    },
+    {
+      "file": "site-metodo/src/app/admin/usuarios/lista/page.tsx",
+      "url": "/api/usuarios/${editing.id}"
+    },
+    {
+      "file": "site-metodo/src/components/ui/perfil-usuario-moderno.tsx",
+      "url": "/api/usuarios/${session.user.email}"
+    },
+    {
+      "file": "site-metodo/src/components/ui/perfil-usuario-moderno.tsx",
+      "url": "/api/usuarios/${profile.email}"
+    }
+  ],
+  "stringOccurrences": [
+    {
+      "file": "docs/DEPLOY.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "docs/DESENVOLVIMENTO.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "fuse-react/directory-structure.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "fuse-react/src/app/(public)/documentation/components/views/configuration/ConfigurationRoutingDoc.tsx",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "fuse-react/src/app/(public)/documentation/components/views/development/DirectoryStructureDoc.tsx",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "fuse-react/src/configs/routesConfig.tsx",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ABAC-Sistema-Completo-FINALIZADO.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/Analise-ABAC-ASIC.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/LINT/Lista-Geral.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/LINT/PROGRESSO-ATUAL.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/LINT/src-app-api-exchange-route.ts-lint-fix-20250812.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/LINT-CHECKLIST-URGENTE.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/PLANO-UNIFICACAO-EXCEL.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/TarefaEmAndamento-NOVO.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/ImplementarTemp/TarefaEmAndamento.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/PlanoAuthUnificacao.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/TarefaEmAndamento-AuthJS-V5-Completo.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/TarefaEmAndamento-AuthJS-V5-Puro.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/TarefaEmAndamento-AuthMigration-CONCLUIDA.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/TarefaEmAndamento-CorrecaoCompleta.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/MINHALISTA/ImplementarTemp/TarefaEmAndamento-novo.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/TarefaEmAndamento.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "lista-de-tarefas/JA IMPLEMENTADAS/Task10-SistemaLogsAuditoria.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "revisao-completa/jaimplementada2/TarefaEmAndamento-AuthJS-V5-Completo.md",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "scripts/investigate-flow.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/_not-found/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/aderencia-tabuas/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/abac/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/audit-logs/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/auditoria/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/calculos-atuariais/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/dashboard/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/emails/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/mfa/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/notifications/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/admin/usuarios/lista/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/analise-excel/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/check/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/check/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/policies/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/policies/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/roles/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/abac/roles/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/analise-exceljs/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/analise-exceljs/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/analise-python/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/analise-python/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/chi-quadrado/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/chi-quadrado/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/configuracao-avancada/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/configuracao-avancada/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/relatorio/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/relatorio/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/salvar-dados/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/salvar-dados/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/upload/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/upload/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/validar-upload/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/aderencia-tabuas/validar-upload/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/audit-logs/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/audit-logs/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/calculos-atuariais/relatorio/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/calculos-atuariais/relatorio/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/calculos-atuariais/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/calculos-atuariais/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/dashboard/config/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/dashboard/config/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/dashboard/stats/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/dashboard/stats/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/metrics/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/metrics/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/disable/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/disable/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/status/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/status/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/totp/generate/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/totp/generate/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/totp/verify/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/mfa/totp/verify/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/notifications/[id]/read/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/notifications/[id]/read/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/notifications/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/notifications/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/[id]/export/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/[id]/export/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/[id]/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/[id]/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/import/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/import/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/tabuas-mortalidade/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/users/[id]/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/users/[id]/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/users/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/admin/users/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/analise-excel/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/analise-excel/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/atuarial/calcular/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/atuarial/calcular/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/[...nextauth]/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/[...nextauth]/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/apple/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/apple/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/github/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/github/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/google/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/google/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/microsoft/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/microsoft/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/twitter/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-callbacks/twitter/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-signout/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/custom-signout/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/forgot-password/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/forgot-password/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/linked-accounts/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/linked-accounts/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/forgot-password/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/forgot-password/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/register/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/register/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/session/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/session/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/signout/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/local/signout/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/register/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/register/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/session/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/session/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-disable/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-disable/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-setup/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-setup/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-status/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-status/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-verify/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/totp-verify/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/unlink-provider/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/auth/unlink-provider/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/cep/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/cep/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/email/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/email/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/send/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/send/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/test-connection/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/emails/test-connection/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/exchange/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/exchange/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/health/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/health/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/monitoring/metrics/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/monitoring/metrics/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/[id]/read/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/[id]/read/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/[id]/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/[id]/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/bulk/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/bulk/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/push/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/push/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/read-all/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/read-all/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/stats/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/notifications/stats/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/permissoes/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/permissoes/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/test/apis/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/test/apis/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/users/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/users/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuario/definir-senha/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuario/definir-senha/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuario/foto/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuario/foto/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuarios/route.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/api/usuarios/route_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/account-linking/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/calculos-atuariais/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/dashboard-admin/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/documentos/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/perfil/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/area-cliente/totp-setup/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/auth/error/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/calculadora-atuarial/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/cliente/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/cliente/perfil/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/cliente/seguranca/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/cliente/sessoes/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/contato/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/criar-conta/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/dashboard/aderencia-tabuas/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/definir-senha/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/documentacao/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/login/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/politica-privacidade/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/recuperar-senha/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/relatorios-atuariais/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/servicos/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/sobre/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/sobre-nos/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/termos-uso/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/.next/server/app/unauthorized/page_client-reference-manifest.js",
+      "hint": "contains target filename or path"
+    },
+    {
+      "file": "site-metodo/Sistema-Login.md",
+      "hint": "contains target filename or path"
+    }
+  ],
+  "parentChains": []
+}

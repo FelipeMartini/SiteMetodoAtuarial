@@ -1,0 +1,780 @@
+middleware.ts:110 - default
+middleware.ts:284 - config
+scripts/seed-abac-policies.ts:222 - seedABACPolicies (used in module)
+scripts/seed-mortality-tables.ts:145 - seedMortalityTables (used in module)
+scripts/setup-abac.ts:71 - setupABACPolicies (used in module)
+src/actions/signin.ts:177 - signInEmail
+src/actions/signin.ts:170 - SignInEmailResult (used in module)
+src/app/layout.tsx:31 - default
+src/app/layout.tsx:13 - metadata
+src/app/layout.tsx:22 - viewport
+src/app/metadata.ts:2 - metadata
+src/app/not-found.tsx:15 - default
+src/app/page.tsx:92 - default
+src/app/Rodape.tsx:92 - default
+src/components/ErrorBoundary.tsx:13 - ErrorBoundary
+src/components/theme-provider.tsx:10 - ThemeProvider
+src/components/theme-provider.tsx:15 - useTheme (used in module)
+src/configs/layoutConfigTemplates.ts:3 - default
+src/configs/mfaConfig.ts:22 - isMfaObrigatorio
+src/configs/mfaConfig.ts:4 - MfaFlow (used in module)
+src/configs/mfaConfig.ts:12 - MfaConfig (used in module)
+src/configs/mfaConfig.ts:17 - mfaConfig (used in module)
+src/configs/navigationConfig.ts:2 - NavigationItem (used in module)
+src/configs/navigationConfig.ts:9 - default
+src/configs/settingsConfig.ts:3 - default
+src/configs/themeOptions.ts:2 - ThemeOption (used in module)
+src/configs/themeOptions.ts:8 - default
+src/contexts/AppContext.tsx:3 - AppContext
+src/emails/notification-email.tsx:30 - NotificationEmail (used in module)
+src/emails/password-reset-email.tsx:28 - PasswordResetEmail (used in module)
+src/emails/security-alert-email.tsx:29 - SecurityAlertEmail (used in module)
+src/emails/templates.ts:7 - EmailTemplateProps (used in module)
+src/emails/welcome-email.tsx:22 - WelcomeEmail (used in module)
+src/hooks/use-notifications.ts:384 - usePushNotifications
+src/hooks/useAuditLogs.ts:12 - useAuditLogs
+src/hooks/useCalculosAtuariais.ts:239 - CalculationParams (used in module)
+src/hooks/useCalculosAtuariais.ts:239 - CalculationResult (used in module)
+src/hooks/useCalculosAtuariais.ts:239 - MortalityTable (used in module)
+src/hooks/useRegistrarUsuario-abac.ts:139 - useRegistrarUsuario (used in module)
+src/hooks/useRegistrarUsuario-abac.ts:162 - useValidarAtributosABAC
+src/hooks/useRegistrarUsuario-abac.ts:185 - useVerificarEmailDisponivel
+src/hooks/useRegistrarUsuario-abac.ts:205 - default
+src/hooks/useRegistrarUsuario-abac.ts:209 - RegistroPayloadABAC (used in module)
+src/hooks/useRegistrarUsuario-abac.ts:210 - RegistroUserABAC (used in module)
+src/hooks/useRegistrarUsuario-abac.ts:211 - RegistroResultABAC (used in module)
+src/hooks/useRegistrarUsuario-backup-20250812-162717.ts:38 - useRegistrarUsuario
+src/hooks/useRegistrarUsuario.ts:162 - useValidarAtributosABAC
+src/hooks/useRegistrarUsuario.ts:185 - useVerificarEmailDisponivel
+src/hooks/useRegistrarUsuario.ts:205 - default
+src/hooks/useRegistrarUsuario.ts:209 - RegistroPayloadABAC (used in module)
+src/hooks/useRegistrarUsuario.ts:210 - RegistroUserABAC (used in module)
+src/hooks/useRegistrarUsuario.ts:211 - RegistroResultABAC (used in module)
+src/hooks/useSession.ts:3 - useSession
+src/hooks/useSessions.ts:3 - useSessions
+src/lib/audit.ts:3 - AuditEntry
+src/lib/auth.ts:4 - signIn
+src/lib/auth.ts:4 - signOut
+src/lib/calculadora-atuarial.ts:26 - ResultadoSeguroVida (used in module)
+src/lib/calculadora-atuarial.ts:33 - ResultadoAtuarial
+src/lib/calculadora-atuarial.ts:286 - calculadoraAtuarial
+src/lib/email-logger.ts:16 - EmailLogEntry (used in module)
+src/lib/email-logger.ts:45 - EmailMetrics (used in module)
+src/lib/email-logger.ts:60 - EmailStats (used in module)
+src/lib/email-service-new.ts:35 - sendNotificationByEmail
+src/lib/email-service-new.ts:18 - emailService (used in module)
+src/lib/email-service.server.ts:21 - EmailAttachment (used in module)
+src/lib/email-service.server.ts:37 - EmailStats (used in module)
+src/lib/email-service.server.ts:45 - EmailLogsFilters (used in module)
+src/lib/email-service.ts:440 - sendNotificationByEmail
+src/lib/email-service.ts:7 - EmailOptions (used in module)
+src/lib/email-service.ts:19 - EmailAttachment (used in module)
+src/lib/email-service.ts:27 - TemplateEmailOptions (used in module)
+src/lib/email-service.ts:35 - EmailStats (used in module)
+src/lib/email-service.ts:437 - emailService (used in module)
+src/lib/logger-simple.ts:18 - Logger (used in module)
+src/lib/logger-simple.ts:67 - logger (used in module)
+src/lib/logger-simple.ts:67 - LOG_LEVELS (used in module)
+src/lib/logger-winston-disabled.ts:112 - LogMeta (used in module)
+src/lib/logger-winston-disabled.ts:129 - StructuredLogger (used in module)
+src/lib/logger-winston-disabled.ts:239 - structuredLogger (used in module)
+src/lib/logger-winston-disabled.ts:242 - default
+src/lib/logger-winston-disabled.ts:245 - authLogger
+src/lib/logger-winston-disabled.ts:254 - auditLogger
+src/lib/logger-winston-disabled.ts:277 - performanceLogger
+src/lib/logger-winston-disabled.ts:289 - securityLogger
+src/lib/logger.ts:7 - LogMeta (used in module)
+src/lib/logger.ts:57 - default
+src/lib/logger.ts:79 - logHelpers
+src/lib/logger.ts:96 - StructuredLogger (used in module)
+src/lib/monitoring.ts:384 - withMonitoring
+src/lib/monitoring.ts:26 - MonitoringService (used in module)
+src/lib/monitoring.ts:422 - default
+src/lib/notification-email-integration.ts:306 - sendWelcomeEmailToUser
+src/lib/notification-email-integration.ts:310 - sendSecurityAlertToUser
+src/lib/notification-email-integration.ts:319 - processNotificationEmails
+src/lib/notification-email-integration.ts:5 - NotificationType (used in module)
+src/lib/notification-email-integration.ts:6 - NotificationPriority (used in module)
+src/lib/notification-email-integration.ts:8 - NotificationEmailIntegrationOptions (used in module)
+src/lib/notification-email-integration.ts:298 - notificationEmailIntegration (used in module)
+src/lib/notification-service.ts:533 - sendSecurityAlert
+src/lib/notification-service.ts:557 - sendWelcomeNotification
+src/lib/notification-service.ts:576 - sendSystemUpdate
+src/lib/notification-service.ts:5 - UserInfo (used in module)
+src/lib/notification-service.ts:12 - NotificationWhereClause (used in module)
+src/lib/notification-service.ts:24 - NotificationOptions (used in module)
+src/lib/notification-service.ts:40 - NotificationPreferences (used in module)
+src/lib/notification-service.ts:60 - NotificationDeliveryResult (used in module)
+src/lib/notification-service.ts:530 - notificationService (used in module)
+src/lib/simple-logger.ts:5 - LogMeta (used in module)
+src/lib/simple-logger.ts:9 - LogEntry (used in module)
+src/lib/simple-logger.ts:87 - authLogger
+src/lib/simple-logger.ts:95 - auditLogger
+src/lib/simple-logger.ts:117 - performanceLogger
+src/lib/simple-logger.ts:129 - securityLogger
+src/lib/simple-logger.ts:138 - default
+src/lib/validation.ts:25 - signUpSchema (used in module)
+src/lib/validation.ts:57 - totpSchema (used in module)
+src/lib/validation.ts:68 - SignInInput
+src/lib/validation.ts:69 - SignUpInput
+src/lib/validation.ts:70 - TotpInput
+src/middleware/logging.ts:18 - createLoggingMiddleware (used in module)
+src/middleware/logging.ts:117 - createAuditMiddleware (used in module)
+src/middleware/logging.ts:147 - createRateLimitMiddleware (used in module)
+src/middleware/logging.ts:224 - default
+src/styles/themes.ts:7 - Theme (used in module)
+src/styles/themes.ts:123 - lightTheme (used in module)
+src/styles/themes.ts:228 - darkTheme (used in module)
+src/styles/themes.ts:333 - ThemeName (used in module)
+src/styles/themes.ts:336 - themes (used in module)
+src/styles/themes.ts:339 - defaultTheme (used in module)
+src/styles/themes.ts:342 - getThemeByName
+src/styles/themes.ts:346 - getNextTheme
+src/styles/themes.ts:352 - availableThemes
+src/types/analise-excel.d.ts:11 - LinhaExcel (used in module)
+src/types/analise-excel.d.ts:16 - CelulaExcel (used in module)
+src/types/next-auth-abac.d.ts:110 - ABACContext (used in module)
+src/types/next-auth-abac.d.ts:149 - ABACResult (used in module)
+src/types/next-auth-abac.d.ts:162 - ABACRequest (used in module)
+src/types/next-auth-abac.d.ts:172 - ABACPolicy (used in module)
+src/types/next-auth-abac.d.ts:195 - ABACAccessLog (used in module)
+src/types/next-auth-abac.d.ts:213 - ABACauditEvent (used in module)
+src/types/next-auth-abac.d.ts:231 - ABACConfig (used in module)
+src/types/next-auth-abac.d.ts:242 - ABACStats (used in module)
+src/types/next-auth-abac.d.ts:255 - ABACMetrics (used in module)
+src/types/next-auth-abac.d.ts:270 - ABACMiddlewareOptions
+src/types/next-auth-abac.d.ts:281 - RouteProtection
+src/types/next-auth-abac.d.ts:291 - PermissionCheck (used in module)
+src/types/next-auth-abac.d.ts:306 - MigrationStatus (used in module)
+src/types/next-auth-abac.d.ts:320 - MigrationReport (used in module)
+src/types/next-auth-abac.d.ts:345 - User (used in module)
+src/types/next-auth-abac.d.ts:346 - AuthorizationPolicy
+src/types/next-auth-abac.d.ts:347 - AccessLog
+src/types/next-auth-abac.d.ts:348 - AuditLog
+src/types/next-auth-abac.d.ts:349 - CasbinRule
+src/types/next-auth-abac.d.ts:355 - AppUser (used in module)
+src/types/next-auth-abac.d.ts:360 - AppSession (used in module)
+src/types/next-auth-abac.d.ts:384 - default
+src/types/next-auth.d.ts:110 - ABACContext (used in module)
+src/types/next-auth.d.ts:149 - ABACResult (used in module)
+src/types/next-auth.d.ts:162 - ABACRequest (used in module)
+src/types/next-auth.d.ts:172 - ABACPolicy (used in module)
+src/types/next-auth.d.ts:195 - ABACAccessLog (used in module)
+src/types/next-auth.d.ts:213 - ABACauditEvent (used in module)
+src/types/next-auth.d.ts:231 - ABACConfig (used in module)
+src/types/next-auth.d.ts:242 - ABACStats (used in module)
+src/types/next-auth.d.ts:255 - ABACMetrics (used in module)
+src/types/next-auth.d.ts:270 - ABACMiddlewareOptions
+src/types/next-auth.d.ts:281 - RouteProtection
+src/types/next-auth.d.ts:291 - PermissionCheck (used in module)
+src/types/next-auth.d.ts:306 - MigrationStatus (used in module)
+src/types/next-auth.d.ts:320 - MigrationReport (used in module)
+src/types/next-auth.d.ts:345 - User (used in module)
+src/types/next-auth.d.ts:346 - AuthorizationPolicy
+src/types/next-auth.d.ts:347 - AccessLog
+src/types/next-auth.d.ts:348 - AuditLog
+src/types/next-auth.d.ts:349 - CasbinRule
+src/types/next-auth.d.ts:355 - AppUser (used in module)
+src/types/next-auth.d.ts:360 - AppSession (used in module)
+src/types/next-auth.d.ts:384 - default
+src/types/notifications.ts:60 - NotificationTemplate
+src/types/notifications.ts:74 - NotificationPreferences
+src/types/notifications.ts:90 - PushSubscription
+src/types/notifications.ts:102 - NotificationQueue
+src/types/notifications.ts:116 - CreateNotificationRequest
+src/types/notifications.ts:130 - BulkNotificationRequest
+src/types/notifications.ts:146 - EmailTemplate
+src/types/notifications.ts:159 - EmailData
+src/types/notifications.ts:173 - EmailAttachment (used in module)
+src/types/notifications.ts:188 - NotificationSocketData
+src/types/notifications.ts:194 - NotificationStats
+src/types/notifications.ts:208 - UserNotificationStats
+src/types/notifications.ts:218 - NotificationSystemConfig
+src/types/notifications.ts:242 - NotificationEvent
+src/types/notifications.ts:269 - NotificationSearchResult
+src/types/notifications.ts:302 - NotificationItemProps
+src/types/notifications.ts:310 - NotificationCenterProps
+src/types/notifications.ts:319 - NotificationBadgeProps
+src/utils/passwordStrength.ts:2 - PasswordStrength (used in module)
+src/utils/validation.ts:2 - emailValidation
+src/utils/validation.ts:10 - passwordValidation
+src/utils/validation.ts:18 - confirmPasswordValidation
+src/utils/validation.ts:23 - nameValidation
+src/validators/abacSchemas.ts:14 - departmentSchema (used in module)
+src/validators/abacSchemas.ts:25 - locationSchema (used in module)
+src/validators/abacSchemas.ts:32 - jobTitleSchema (used in module)
+src/validators/abacSchemas.ts:119 - abacSubjectSchema (used in module)
+src/validators/abacSchemas.ts:123 - abacObjectSchema (used in module)
+src/validators/abacSchemas.ts:127 - abacActionSchema (used in module)
+src/validators/abacSchemas.ts:142 - policyEffectSchema (used in module)
+src/validators/abacSchemas.ts:144 - abacConditionsSchema (used in module)
+src/validators/abacSchemas.ts:146 - abacPolicySchema (used in module)
+src/validators/abacSchemas.ts:175 - abacPolicyUpdateSchema (used in module)
+src/validators/abacSchemas.ts:182 - abacContextSchema (used in module)
+src/validators/abacSchemas.ts:223 - abacRequestSchema (used in module)
+src/validators/abacSchemas.ts:230 - abacBulkRequestSchema (used in module)
+src/validators/abacSchemas.ts:239 - loginABACSchema (used in module)
+src/validators/abacSchemas.ts:252 - registerABACSchema (used in module)
+src/validators/abacSchemas.ts:262 - accessLogQuerySchema (used in module)
+src/validators/abacSchemas.ts:278 - auditLogQuerySchema (used in module)
+src/validators/abacSchemas.ts:295 - adminActionSchema (used in module)
+src/validators/abacSchemas.ts:308 - migrationStepSchema (used in module)
+src/validators/abacSchemas.ts:355 - default (used in module)
+src/validators/abacSchemas.ts:360 - UsuarioABAC
+src/validators/abacSchemas.ts:361 - UsuarioUpdateABAC
+src/validators/abacSchemas.ts:362 - ABACPolicy
+src/validators/abacSchemas.ts:363 - ABACPolicyUpdate
+src/validators/abacSchemas.ts:364 - ABACContext
+src/validators/abacSchemas.ts:365 - ABACRequest
+src/validators/abacSchemas.ts:366 - LoginABAC
+src/validators/abacSchemas.ts:367 - RegisterABAC
+src/validators/abacSchemas.ts:368 - AccessLogQuery
+src/validators/abacSchemas.ts:369 - AuditLogQuery
+src/validators/abacSchemas.ts:370 - AdminAction
+src/validators/abacSchemas.ts:371 - MigrationStep
+src/validators/permissaoSchemas.ts:3 - permissaoSchema
+src/validators/usuarioSchemas.ts:3 - usuarioSchema
+src/validators/usuarioSchemas.ts:10 - usuarioUpdateSchema
+src/app/aderencia-tabuas/page.tsx:51 - default
+src/app/analise-excel/layout.tsx:4 - default
+src/app/analise-excel/page.tsx:8 - default
+src/app/area-cliente/CheckboxCustom.tsx:34 - default
+src/app/area-cliente/DashboardAdminModerno.tsx:342 - default
+src/app/area-cliente/FotoPerfilUploader.tsx:86 - default
+src/app/area-cliente/layout.tsx:6 - default
+src/app/area-cliente/page.tsx:10 - default
+src/app/area-cliente/page.tsx:2 - dynamic
+src/app/calculadora-atuarial/page.tsx:21 - default
+src/app/cliente/layout.tsx:12 - default
+src/app/cliente/page.tsx:14 - default
+src/app/cliente/page.tsx:2 - dynamic
+src/app/contato/metadata.ts:2 - metadata
+src/app/contato/page.tsx:10 - default
+src/app/criar-conta/page.tsx:10 - default
+src/app/definir-senha/page.tsx:93 - default
+src/app/documentacao/page.tsx:23 - default
+src/app/login/page.tsx:258 - default
+src/app/login/TotpPrompt.tsx:8 - default
+src/app/politica-privacidade/page.tsx:9 - default
+src/app/recuperar-senha/page.tsx:15 - default
+src/app/recuperar-senha/PageRecuperacao.tsx:4 - default
+src/app/relatorios-atuariais/page.tsx:16 - default
+src/app/servicos/metadata.ts:2 - metadata
+src/app/servicos/page.tsx:9 - default
+src/app/sobre/metadata.ts:2 - metadata
+src/app/sobre/page.tsx:9 - default
+src/app/sobre-nos/page.tsx:10 - default
+src/app/termos-uso/page.tsx:7 - default
+src/app/unauthorized/page.tsx:13 - default
+src/app/unauthorized/page.tsx:2 - dynamic
+src/components/actuarial/ActuarialCalculator.tsx:30 - ActuarialCalculator
+src/components/actuarial/ActuarialReports.tsx:48 - ActuarialReports
+src/components/actuarial/MortalityTableImporter.tsx:42 - MortalityTableImporter
+src/components/admin/ApiMonitoringDashboard.tsx:405 - default
+src/components/admin/AuditDashboard.tsx:72 - AuditDashboard
+src/components/admin/MonitoringDashboard.tsx:83 - default
+src/components/analise-excel/PopoverFormulaCelula.tsx:2 - default
+src/components/auth/AuthGuard.tsx:124 - AuthGuard (used in module)
+src/components/auth/AuthGuard.tsx:331 - withAuthGuard
+src/components/auth/AuthGuard.tsx:346 - default (used in module)
+src/components/auth/schemas.ts:6 - senhaSchema (used in module)
+src/components/notifications/notification-badge.tsx:27 - NotificationBadge
+src/components/notifications/notification-badge.tsx:108 - SimpleNotificationBadge
+src/components/notifications/notification-badge.tsx:162 - NotificationIndicator
+src/components/notifications/notification-icon.tsx:64 - NotificationIcon
+src/components/theme/ThemeProvider.tsx:10 - ThemeProvider
+src/components/theme/ThemeToggle.tsx:7 - ThemeToggle
+src/components/ui/alert-dialog.tsx:125 - AlertDialogPortal (used in module)
+src/components/ui/alert-dialog.tsx:126 - AlertDialogOverlay (used in module)
+src/components/ui/alert.tsx:71 - AlertTitle (used in module)
+src/components/ui/avatar-custom.tsx:106 - default
+src/components/ui/badge.tsx:37 - badgeVariants (used in module)
+src/components/ui/breadcrumb.tsx:101 - BreadcrumbEllipsis (used in module)
+src/components/ui/button-custom.tsx:69 - buttonVariants (used in module)
+src/components/ui/calendar.tsx:9 - CalendarProps (used in module)
+src/components/ui/card.tsx:41 - CardProps (used in module)
+src/components/ui/card.tsx:126 - CardAction (used in module)
+src/components/ui/card.tsx:127 - cardVariants (used in module)
+src/components/ui/chart.tsx:11 - ChartConfig (used in module)
+src/components/ui/chart.tsx:347 - ChartContainer (used in module)
+src/components/ui/chart.tsx:348 - ChartTooltip (used in module)
+src/components/ui/chart.tsx:349 - ChartTooltipContent (used in module)
+src/components/ui/chart.tsx:350 - ChartLegend (used in module)
+src/components/ui/chart.tsx:351 - ChartLegendContent (used in module)
+src/components/ui/chart.tsx:352 - ChartStyle (used in module)
+src/components/ui/ComponenteBase.tsx:46 - ComponenteBaseProps (used in module)
+src/components/ui/dashboard-usuario-widget.tsx:16 - DashboardUsuarioWidget
+src/components/ui/dialog.tsx:120 - DialogClose (used in module)
+src/components/ui/dialog.tsx:122 - DialogDescription (used in module)
+src/components/ui/dialog.tsx:125 - DialogOverlay (used in module)
+src/components/ui/dialog.tsx:126 - DialogPortal (used in module)
+src/components/ui/dialog.tsx:128 - DialogTrigger (used in module)
+src/components/ui/dropdown-menu.tsx:214 - DropdownMenuPortal (used in module)
+src/components/ui/dropdown-menu.tsx:217 - DropdownMenuGroup (used in module)
+src/components/ui/dropdown-menu.tsx:221 - DropdownMenuRadioGroup (used in module)
+src/components/ui/dropdown-menu.tsx:222 - DropdownMenuRadioItem (used in module)
+src/components/ui/dropdown-menu.tsx:224 - DropdownMenuShortcut (used in module)
+src/components/ui/dropdown-menu.tsx:225 - DropdownMenuSub (used in module)
+src/components/ui/dropdown-menu.tsx:226 - DropdownMenuSubTrigger (used in module)
+src/components/ui/dropdown-menu.tsx:227 - DropdownMenuSubContent (used in module)
+src/components/ui/form-field.tsx:24 - FormFieldProps (used in module)
+src/components/ui/form-field.tsx:115 - FormContainer (used in module)
+src/components/ui/form-field.tsx:141 - FormSection (used in module)
+src/components/ui/form-field.tsx:160 - FormField (used in module)
+src/components/ui/form-field.tsx:160 - formFieldVariants (used in module)
+src/components/ui/index.ts:4 - Separator
+src/components/ui/index.ts:5 - Avatar
+src/components/ui/index.ts:5 - AvatarImage
+src/components/ui/index.ts:5 - AvatarFallback
+src/components/ui/index.ts:6 - ComponenteBase
+src/components/ui/index.ts:7 - Label
+src/components/ui/index.ts:9 - Skeleton
+src/components/ui/index.ts:10 - Progress
+src/components/ui/index.ts:12 - Tooltip
+src/components/ui/index.ts:13 - TooltipContent
+src/components/ui/index.ts:14 - TooltipProvider
+src/components/ui/index.ts:15 - TooltipTrigger
+src/components/ui/index.ts:18 - AlertDialog
+src/components/ui/index.ts:19 - AlertDialogAction
+src/components/ui/index.ts:20 - AlertDialogCancel
+src/components/ui/index.ts:21 - AlertDialogContent
+src/components/ui/index.ts:22 - AlertDialogDescription
+src/components/ui/index.ts:23 - AlertDialogFooter
+src/components/ui/index.ts:24 - AlertDialogHeader
+src/components/ui/index.ts:25 - AlertDialogTitle
+src/components/ui/index.ts:26 - AlertDialogTrigger
+src/components/ui/index.ts:31 - LoadingCard
+src/components/ui/index.ts:32 - LoadingTable
+src/components/ui/index.ts:33 - LoadingList
+src/components/ui/index.ts:34 - LoadingStats
+src/components/ui/index.ts:35 - LoadingPage
+src/components/ui/index.ts:37 - AsyncButton
+src/components/ui/index.ts:37 - ConfirmButton
+src/components/ui/index.ts:38 - ConfirmDialog
+src/components/ui/index.ts:38 - InfoDialog
+src/components/ui/index.ts:39 - PageWrapper
+src/components/ui/index.ts:39 - AsyncWrapper
+src/components/ui/input.tsx:65 - inputVariants (used in module)
+src/components/ui/loading.tsx:28 - LoadingSpinnerProps (used in module)
+src/components/ui/loading.tsx:82 - PageLoading
+src/components/ui/loading.tsx:103 - ButtonLoading
+src/components/ui/loading.tsx:107 - LoadingSpinner (used in module)
+src/components/ui/loading.tsx:107 - loadingVariants (used in module)
+src/components/ui/mode-toggle.tsx:15 - ModeToggle
+src/components/ui/navigation-menu.tsx:159 - NavigationMenuIndicator (used in module)
+src/components/ui/navigation-menu.tsx:160 - NavigationMenuViewport (used in module)
+src/components/ui/navigation-menu.tsx:161 - navigationMenuTriggerStyle (used in module)
+src/components/ui/pagination.tsx:120 - Pagination (used in module)
+src/components/ui/pagination.tsx:121 - PaginationContent (used in module)
+src/components/ui/pagination.tsx:122 - PaginationLink (used in module)
+src/components/ui/pagination.tsx:123 - PaginationItem (used in module)
+src/components/ui/pagination.tsx:124 - PaginationPrevious (used in module)
+src/components/ui/pagination.tsx:125 - PaginationNext (used in module)
+src/components/ui/pagination.tsx:126 - PaginationEllipsis (used in module)
+src/components/ui/popover.tsx:47 - PopoverAnchor (used in module)
+src/components/ui/scroll-area.tsx:46 - ScrollBar (used in module)
+src/components/ui/select.tsx:162 - SelectGroup (used in module)
+src/components/ui/select.tsx:164 - SelectLabel (used in module)
+src/components/ui/select.tsx:165 - SelectScrollDownButton (used in module)
+src/components/ui/select.tsx:166 - SelectScrollUpButton (used in module)
+src/components/ui/select.tsx:167 - SelectSeparator (used in module)
+src/components/ui/sheet.tsx:124 - SheetClose (used in module)
+src/components/ui/sheet.tsx:127 - SheetFooter (used in module)
+src/components/ui/sidebar.tsx:674 - SidebarGroupAction (used in module)
+src/components/ui/sidebar.tsx:678 - SidebarInput (used in module)
+src/components/ui/sidebar.tsx:679 - SidebarInset (used in module)
+src/components/ui/sidebar.tsx:681 - SidebarMenuAction (used in module)
+src/components/ui/sidebar.tsx:685 - SidebarMenuSkeleton (used in module)
+src/components/ui/sidebar.tsx:690 - SidebarRail (used in module)
+src/components/ui/sidebar.tsx:691 - SidebarSeparator (used in module)
+src/components/ui/sidebar.tsx:693 - useSidebar (used in module)
+src/components/ui/skeleton.tsx:5 - SkeletonProps (used in module)
+src/components/ui/switch.tsx:6 - SwitchProps (used in module)
+src/components/ui/ThemeProviderZustand.tsx:9 - ThemeToggleZustand (used in module)
+src/components/ui/ThemeProviderZustand.tsx:20 - default
+src/lib/abac/enforcer-abac-puro.ts:250 - removeABACPolicy (used in module)
+src/lib/abac/enforcer-abac-puro.ts:262 - getAllABACPolicies (used in module)
+src/lib/abac/enforcer-abac-puro.ts:271 - isAdmin (used in module)
+src/lib/abac/enforcer-abac-puro.ts:277 - canAccess (used in module)
+src/lib/abac/enforcer-abac-puro.ts:283 - hasPermission (used in module)
+src/lib/abac/enforcer-abac-puro.ts:291 - default
+src/lib/abac/hoc.tsx:28 - withABAC
+src/lib/abac/hoc.tsx:109 - usePermission (used in module)
+src/lib/abac/hoc.tsx:142 - PermissionGate
+src/lib/abac/hoc.tsx:177 - useRole
+src/lib/abac/hoc.tsx:17 - WithABACOptions (used in module)
+src/lib/abac/middleware.ts:93 - abacMiddleware (used in module)
+src/lib/abac/middleware.ts:222 - createABACMiddleware
+src/lib/abac/middleware.ts:271 - checkPermission
+src/lib/abac/middleware.ts:10 - ABACMiddlewareConfig (used in module)
+src/lib/abac/prisma-adapter-abac.ts:13 - PrismaAdapter
+src/lib/abac/types.ts:9 - Subject (used in module)
+src/lib/abac/types.ts:19 - Resource (used in module)
+src/lib/abac/types.ts:27 - Context (used in module)
+src/lib/abac/types.ts:38 - PolicyRule (used in module)
+src/lib/abac/types.ts:50 - RoleDefinition
+src/lib/abac/types.ts:60 - AuthorizationRequest (used in module)
+src/lib/abac/types.ts:67 - AuthorizationResult (used in module)
+src/lib/abac/types.ts:75 - PolicyManager
+src/lib/abac/types.ts:84 - Enforcer (used in module)
+src/lib/abac/types.ts:92 - AuthorizedRoute (used in module)
+src/lib/abac/types.ts:101 - AuthorizationMiddlewareConfig
+src/lib/abac/types.ts:109 - AttributeEvaluator (used in module)
+src/lib/abac/types.ts:111 - AttributeRule
+src/lib/abac/types.ts:118 - AccessLog (used in module)
+src/lib/abac/types.ts:131 - AuditLogger
+src/lib/abac/types.ts:142 - AuthorizationError (used in module)
+src/lib/abac/types.ts:153 - PolicyNotFoundError
+src/lib/abac/types.ts:159 - InsufficientPermissionsError
+src/lib/abac/types.ts:170 - Permission (used in module)
+src/lib/abac/types.ts:176 - UserPermissions
+src/lib/abac/utils.ts:2 - sanitizePolicyField (used in module)
+src/lib/actuarial/calculations.ts:229 - FinancialMath
+src/lib/actuarial/calculations.ts:268 - MortalityTableUtils
+src/lib/actuarial/sample-data.ts:325 - getTableByName
+src/lib/actuarial/sample-data.ts:332 - getTablesByCountry
+src/lib/actuarial/sample-data.ts:12 - BR_EMS_MALE_2020 (used in module)
+src/lib/actuarial/sample-data.ts:106 - BR_EMS_FEMALE_2020 (used in module)
+src/lib/actuarial/sample-data.ts:203 - BR_DISABILITY_2020 (used in module)
+src/lib/actuarial/sample-data.ts:299 - EXAMPLE_LIFE_INSURANCE
+src/lib/actuarial/sample-data.ts:308 - EXAMPLE_ANNUITY
+src/lib/analise-excel/formatadoresExcel.ts:2 - formatarValor
+src/lib/api/cache-simple.ts:3 - CacheEntry
+src/lib/api/cache-simple.ts:9 - CacheStats (used in module)
+src/lib/api/cache-simple.ts:21 - SimpleApiCache (used in module)
+src/lib/api/cache.ts:334 - default
+src/lib/api/client.ts:380 - default
+src/lib/api/helpers.ts:22 - withCache (used in module)
+src/lib/api/helpers.ts:49 - withMonitoring (used in module)
+src/lib/api/helpers.ts:74 - withCacheAndMonitoring
+src/lib/api/helpers.ts:91 - withRateLimit (used in module)
+src/lib/api/helpers.ts:121 - withRetry (used in module)
+src/lib/api/helpers.ts:152 - withTimeout (used in module)
+src/lib/api/helpers.ts:169 - withFullEnhancement
+src/lib/api/index.ts:43 - monitored
+src/lib/api/index.ts:5 - ApiClient (used in module)
+src/lib/api/index.ts:6 - createApiClient
+src/lib/api/index.ts:7 - clients
+src/lib/api/index.ts:8 - ApiResponse
+src/lib/api/index.ts:9 - ApiError
+src/lib/api/index.ts:10 - ApiClientConfig
+src/lib/api/index.ts:11 - RequestOptions
+src/lib/api/index.ts:15 - ApiCache (used in module)
+src/lib/api/index.ts:16 - apiCache (used in module)
+src/lib/api/index.ts:17 - cached
+src/lib/api/index.ts:18 - CacheOptions
+src/lib/api/index.ts:19 - CacheEntry
+src/lib/api/index.ts:20 - CacheStats
+src/lib/api/index.ts:24 - ApiMonitor (used in module)
+src/lib/api/index.ts:25 - apiMonitor (used in module)
+src/lib/api/index.ts:26 - ApiMetrics
+src/lib/api/index.ts:27 - ApiEndpoint
+src/lib/api/index.ts:28 - SystemMetrics
+src/lib/api/index.ts:29 - HealthCheckResult
+src/lib/api/index.ts:66 - CepService
+src/lib/api/index.ts:66 - cepService (used in module)
+src/lib/api/index.ts:66 - CepError
+src/lib/api/index.ts:68 - ExchangeService
+src/lib/api/index.ts:69 - exchangeService (used in module)
+src/lib/api/index.ts:70 - ExchangeRates
+src/lib/api/index.ts:71 - CurrencyConversion
+src/lib/api/index.ts:72 - CurrencyInfo
+src/lib/api/index.ts:76 - API_CONSTANTS
+src/lib/api/index.ts:85 - ApiHelpers (used in module)
+src/lib/api/index.ts:219 - ApiHealthChecker (used in module)
+src/lib/api/index.ts:304 - DEFAULT_CONFIGS
+src/lib/api/index.ts:351 - default
+src/lib/atuarial/calculadora.ts:34 - ResultadoAtuarial (used in module)
+src/lib/atuarial/calculos-financeiros.ts:28 - IntervaloConfianca (used in module)
+src/lib/atuarial/calculos-financeiros.ts:33 - ProjecaoFinanceira (used in module)
+src/lib/atuarial/calculos-financeiros.ts:38 - AnaliseRisco (used in module)
+src/lib/atuarial/calculos-financeiros.ts:45 - ResumoExecutivo (used in module)
+src/lib/atuarial/otimizacao-performance.ts:415 - cacheable
+src/lib/atuarial/otimizacao-performance.ts:15 - ResultadoBenchmark (used in module)
+src/lib/atuarial/otimizacao-performance.ts:28 - RelatorioPerformance (used in module)
+src/lib/atuarial/otimizacao-performance.ts:47 - OtimizadorPerformance
+src/lib/atuarial/otimizacao-performance.ts:356 - CacheCalculosAtuariais (used in module)
+src/lib/atuarial/validacao-cruzada.ts:54 - ResultadoValidacaoCruzada (used in module)
+src/lib/audit/auditLogger.ts:99 - useAuditLogger
+src/lib/audit/auditLogger.ts:10 - AuditAction (used in module)
+src/lib/audit/auditLogger.ts:22 - AuditData (used in module)
+src/lib/audit/auditLogger.ts:38 - AuditLogger (used in module)
+src/lib/audit/auditLogger.ts:103 - default
+src/lib/notifications/notification-service.ts:3 - NotificationRequest (used in module)
+src/lib/notifications/notification-service.ts:12 - BulkNotificationRequest (used in module)
+src/lib/notifications/notification-service.ts:17 - NotificationStats (used in module)
+src/lib/notifications/notification-service.ts:25 - NotificationService (used in module)
+src/lib/notifications/notification-service.ts:127 - default
+src/lib/notifications/push-service.ts:3 - PushSubscription (used in module)
+src/lib/notifications/push-service.ts:18 - PushNotificationData (used in module)
+src/lib/notifications/push-service.ts:32 - PushNotificationService (used in module)
+src/lib/notifications/push-service.ts:99 - default
+src/lib/notifications/websocket-server.ts:430 - getWebSocketServer
+src/lib/notifications/websocket-server.ts:437 - initWebSocketServer
+src/lib/notifications/websocket-server.ts:16 - NotificationWebSocketServer (used in module)
+src/lib/performance/bundleOptimization.ts:28 - dynamicImportWithRetry (used in module)
+src/lib/performance/bundleOptimization.ts:53 - preloadModule
+src/lib/performance/bundleOptimization.ts:63 - lazyWithPreload
+src/lib/performance/bundleOptimization.ts:87 - createTreeShakableExport
+src/lib/performance/bundleOptimization.ts:128 - getChunkForRoute
+src/lib/performance/bundleOptimization.ts:82 - PURE
+src/lib/performance/bundleOptimization.ts:108 - ROUTE_CHUNKS (used in module)
+src/lib/performance/cacheStrategy.tsx:118 - useOptimisticCache
+src/lib/performance/cacheStrategy.tsx:134 - useInvalidateCache
+src/lib/performance/cacheStrategy.tsx:170 - prefetchCriticalData
+src/lib/performance/cacheStrategy.tsx:189 - prefetchAdminData
+src/lib/performance/cacheStrategy.tsx:213 - CacheProvider
+src/lib/performance/cacheStrategy.tsx:20 - queryClient (used in module)
+src/lib/performance/cacheStrategy.tsx:53 - STATIC_CACHE_CONFIG (used in module)
+src/lib/performance/cacheStrategy.tsx:62 - DYNAMIC_CACHE_CONFIG (used in module)
+src/lib/performance/cacheStrategy.tsx:71 - CRITICAL_CACHE_CONFIG (used in module)
+src/lib/performance/cacheStrategy.tsx:80 - QUERY_KEYS (used in module)
+src/lib/performance/imageOptimization.tsx:226 - generateResponsiveSizes
+src/lib/performance/imageOptimization.tsx:233 - supportsWebP (used in module)
+src/lib/performance/imageOptimization.tsx:243 - supportsAVIF (used in module)
+src/lib/performance/imageOptimization.tsx:256 - optimizeImageUrl
+src/lib/performance/imageOptimization.tsx:282 - preloadCriticalImages
+src/lib/performance/imageOptimization.tsx:297 - useLazyImageLoading
+src/lib/performance/imageOptimization.tsx:14 - IMAGE_SIZES (used in module)
+src/lib/performance/imageOptimization.tsx:35 - IMAGE_QUALITY (used in module)
+src/lib/performance/imageOptimization.tsx:64 - OptimizedImage (used in module)
+src/lib/performance/imageOptimization.tsx:153 - OptimizedAvatar (used in module)
+src/lib/performance/imageOptimization.tsx:201 - OptimizedBanner (used in module)
+src/lib/performance/lazyComponents.tsx:33 - withLazyLoading (used in module)
+src/lib/performance/lazyComponents.tsx:9 - AdminUsersTable (used in module)
+src/lib/performance/lazyComponents.tsx:13 - AdminDashboard (used in module)
+src/lib/performance/lazyComponents.tsx:16 - CalculosAtuariais (used in module)
+src/lib/performance/lazyComponents.tsx:19 - AuditoriaPage (used in module)
+src/lib/performance/lazyComponents.tsx:22 - ABACAdmin (used in module)
+src/lib/performance/lazyComponents.tsx:25 - DashboardAdmin (used in module)
+src/lib/performance/lazyComponents.tsx:28 - PerfilUsuarioModerno (used in module)
+src/lib/performance/lazyComponents.tsx:57 - LazyAdminUsersTable
+src/lib/performance/lazyComponents.tsx:58 - LazyAdminDashboard
+src/lib/performance/lazyComponents.tsx:59 - LazyCalculosAtuariais
+src/lib/performance/lazyComponents.tsx:60 - LazyAuditoriaPage
+src/lib/performance/lazyComponents.tsx:61 - LazyABACAdmin
+src/lib/performance/lazyComponents.tsx:62 - LazyDashboardAdmin
+src/lib/performance/lazyComponents.tsx:63 - LazyPerfilUsuarioModerno
+src/lib/performance/lighthouseConfig.ts:288 - analyzeLighthouseResult (used in module)
+src/lib/performance/lighthouseConfig.ts:358 - evaluateMetrics
+src/lib/performance/lighthouseConfig.ts:407 - generatePerformanceReport
+src/lib/performance/lighthouseConfig.ts:514 - validateCIResult
+src/lib/performance/lighthouseConfig.ts:74 - LIGHTHOUSE_CONFIG (used in module)
+src/lib/performance/lighthouseConfig.ts:194 - CRITICAL_PAGES
+src/lib/performance/lighthouseConfig.ts:246 - CORE_WEB_VITALS_THRESHOLDS (used in module)
+src/lib/performance/lighthouseConfig.ts:471 - CI_CONFIG (used in module)
+src/lib/performance/lighthouseConfig.ts:530 - MONITORING_CONFIG
+src/lib/performance/routePrefetch.tsx:74 - useSmartPrefetch (used in module)
+src/lib/performance/routePrefetch.tsx:109 - useHoverPrefetch (used in module)
+src/lib/performance/routePrefetch.tsx:131 - useVisibilityPrefetch (used in module)
+src/lib/performance/routePrefetch.tsx:255 - prefetchWithRetry (used in module)
+src/lib/performance/routePrefetch.tsx:280 - getRoutePriority (used in module)
+src/lib/performance/routePrefetch.tsx:312 - batchPrefetch
+src/lib/performance/routePrefetch.tsx:345 - useConnectionAwarePrefetch
+src/lib/performance/routePrefetch.tsx:35 - CRITICAL_ROUTES (used in module)
+src/lib/performance/routePrefetch.tsx:40 - ROLE_BASED_ROUTES (used in module)
+src/lib/performance/routePrefetch.tsx:50 - PREFETCH_CONFIG (used in module)
+src/lib/performance/routePrefetch.tsx:169 - SmartLink (used in module)
+src/lib/performance/routePrefetch.tsx:214 - SmartNavigation (used in module)
+src/lib/performance/serviceWorkerUtils.ts:19 - registerServiceWorker (used in module)
+src/lib/performance/serviceWorkerUtils.ts:53 - unregisterServiceWorker
+src/lib/performance/serviceWorkerUtils.ts:77 - clearServiceWorkerCache (used in module)
+src/lib/performance/serviceWorkerUtils.ts:91 - updateServiceWorker (used in module)
+src/lib/performance/serviceWorkerUtils.ts:124 - requestNotificationPermission (used in module)
+src/lib/performance/serviceWorkerUtils.ts:145 - subscribeToPushNotifications
+src/lib/performance/serviceWorkerUtils.ts:177 - isOffline
+src/lib/performance/serviceWorkerUtils.ts:184 - useOnlineStatus
+src/lib/performance/serviceWorkerUtils.ts:206 - useServiceWorkerStatus
+src/lib/performance/serviceWorkerUtils.ts:239 - addToBackgroundSync
+src/lib/performance/serviceWorkerUtils.ts:271 - precacheResources (used in module)
+src/lib/performance/serviceWorkerUtils.ts:290 - isResourceCached
+src/lib/performance/serviceWorkerUtils.ts:304 - initializeServiceWorker
+src/lib/validations/auth.ts:12 - LoginSchema (used in module)
+src/lib/validations/auth.ts:17 - RegisterData
+src/lib/validations/auth.ts:18 - LoginData
+src/lib/zustand/hooks.ts:11 - useSidebarState
+src/lib/zustand/hooks.ts:18 - useSessionState
+src/lib/zustand/hooks.ts:25 - useModalState
+src/lib/zustand/uiStore.ts:13 - UIState (used in module)
+src/server/services/audit.server.ts:30 - auditLog (used in module)
+src/server/services/audit.server.ts:52 - listarAuditoria
+src/app/admin/abac/page-old.tsx:441 - default
+src/app/admin/audit-logs/page.tsx:56 - default
+src/app/admin/calculos-atuariais/page.tsx:7 - default
+src/app/admin/dashboard/QueryProvider.tsx:5 - default
+src/app/admin/emails/page.tsx:53 - default
+src/app/admin/mfa/page.tsx:7 - default
+src/app/admin/notifications/page.tsx:48 - default
+src/app/api/analise-excel/route.ts:4 - POST
+src/app/api/cep/route.ts:22 - GET
+src/app/api/cep/route.ts:98 - POST
+src/app/api/cep/route.ts:175 - PATCH
+src/app/api/email/route.ts:3 - POST
+src/app/api/emails/route.ts:16 - GET
+src/app/api/emails/route.ts:89 - POST
+src/app/api/exchange/route.ts:50 - GET
+src/app/api/exchange/route.ts:157 - POST
+src/app/api/health/route.ts:6 - GET
+src/app/api/notifications/route.ts:36 - GET
+src/app/api/notifications/route.ts:88 - POST
+src/app/api/permissoes/route.ts:43 - GET
+src/app/api/permissoes/route.ts:57 - POST
+src/app/api/permissoes/route.ts:77 - PUT
+src/app/api/permissoes/route.ts:97 - DELETE
+src/app/api/users/route.ts:4 - GET
+src/app/api/users/route.ts:8 - POST
+src/app/api/usuarios/route.ts:38 - GET
+src/app/api/usuarios/route.ts:114 - POST
+src/app/api/usuarios/route.ts:226 - PUT
+src/app/api/usuarios/route.ts:337 - DELETE
+src/app/area-cliente/account-linking/page.tsx:8 - default
+src/app/area-cliente/dashboard-admin/page-moderno.tsx:17 - default
+src/app/area-cliente/dashboard-admin/PageDashboardAdmin.tsx:2 - dynamic
+src/app/area-cliente/dashboard-admin/UsuariosTable.tsx:41 - default
+src/app/area-cliente/dashboard-admin/UsuariosTableFilters.tsx:12 - default
+src/app/area-cliente/documentos/page.tsx:74 - default
+src/app/area-cliente/perfil/page.tsx:11 - default
+src/app/area-cliente/perfil/page.tsx:2 - dynamic
+src/app/area-cliente/totp-setup/page.tsx:9 - default
+src/app/area-cliente/totp-status/TotpStatus.tsx:6 - default
+src/app/auth/error/page.tsx:132 - default
+src/app/cliente/perfil/page.tsx:13 - default
+src/app/cliente/perfil/page.tsx:2 - dynamic
+src/app/cliente/seguranca/page.tsx:14 - default
+src/app/cliente/seguranca/page.tsx:2 - dynamic
+src/app/cliente/sessoes/page.tsx:12 - default
+src/app/cliente/sessoes/page.tsx:2 - dynamic
+src/app/dashboard/aderencia-tabuas/page.tsx:55 - default
+src/components/admin/data-table/DataTableBase.tsx:46 - DataTableBase (used in module)
+src/components/admin/data-table/exportPdf.ts:14 - exportarUsuariosParaPdf
+src/lib/api/services/cep-simple.ts:16 - CepData (used in module)
+src/lib/api/services/cep-simple.ts:18 - CepLookupOptions (used in module)
+src/lib/api/services/cep-simple.ts:103 - CepService (used in module)
+src/lib/api/services/cep.ts:9 - CepData (used in module)
+src/lib/api/services/cep.ts:352 - default (used in module)
+src/lib/api/services/exchange-simple.ts:10 - ExchangeRates
+src/lib/api/services/exchange-simple.ts:12 - ExchangeOptions (used in module)
+src/lib/api/services/exchange-simple.ts:18 - ConversionResult (used in module)
+src/lib/api/services/exchange-simple.ts:30 - ExchangeService (used in module)
+src/lib/api/services/exchange.ts:432 - default
+src/app/admin/dashboard/api/acessos-semana.ts:31 - OPTIONS
+src/app/admin/dashboard/api/acessos-semana.ts:35 - GET
+src/app/admin/dashboard/api/acessos.ts:30 - OPTIONS
+src/app/admin/dashboard/api/acessos.ts:34 - GET
+src/app/admin/dashboard/api/atividades.ts:30 - OPTIONS
+src/app/admin/dashboard/api/atividades.ts:34 - GET
+src/app/admin/dashboard/api/permissoes.ts:42 - OPTIONS
+src/app/admin/dashboard/api/permissoes.ts:46 - GET
+src/app/admin/dashboard/api/permissoes.ts:56 - POST
+src/app/admin/dashboard/api/permissoes.ts:73 - PUT
+src/app/admin/dashboard/api/permissoes.ts:93 - DELETE
+src/app/admin/dashboard/api/schemas.ts:9 - Usuario
+src/app/admin/dashboard/api/schemas.ts:16 - Permissao
+src/app/admin/dashboard/api/usuarios.ts:41 - OPTIONS
+src/app/admin/dashboard/api/usuarios.ts:46 - GET
+src/app/admin/dashboard/api/usuarios.ts:57 - POST
+src/app/admin/dashboard/api/usuarios.ts:73 - PUT
+src/app/admin/dashboard/api/usuarios.ts:93 - DELETE
+src/app/admin/dashboard/components/GraficoUsuarios.tsx:20 - GraficoUsuarios
+src/app/admin/dashboard/components/index.ts:17 - GraficoSimples
+src/app/admin/dashboard/hooks/index.ts:4 - useUsuarios
+src/app/admin/dashboard/hooks/index.ts:4 - useAtividades
+src/app/admin/dashboard/hooks/index.ts:4 - usePermissoes
+src/app/admin/dashboard/hooks/index.ts:4 - useAcessos
+src/app/admin/dashboard/hooks/index.ts:4 - useAcessosSemana
+src/app/admin/usuarios/hooks/useUsuariosPaginados.ts:4 - UsuarioPaginado (used in module)
+src/app/admin/usuarios/lista/page.tsx:91 - default
+src/app/api/abac/check/route.ts:13 - POST
+src/app/api/abac/policies/route.ts:26 - GET (used in module)
+src/app/api/abac/policies/route.ts:44 - POST (used in module)
+src/app/api/abac/policies/route.ts:81 - DELETE (used in module)
+src/app/api/abac/policies/route.ts:116 - protectedGET
+src/app/api/abac/policies/route.ts:117 - protectedPOST
+src/app/api/abac/policies/route.ts:118 - protectedDELETE
+src/app/api/abac/roles/route.ts:21 - GET (used in module)
+src/app/api/abac/roles/route.ts:45 - POST (used in module)
+src/app/api/abac/roles/route.ts:80 - DELETE (used in module)
+src/app/api/abac/roles/route.ts:113 - protectedGET
+src/app/api/abac/roles/route.ts:114 - protectedPOST
+src/app/api/abac/roles/route.ts:115 - protectedDELETE
+src/app/api/aderencia-tabuas/analise-exceljs/route.ts:207 - POST
+src/app/api/aderencia-tabuas/analise-exceljs/route.ts:319 - GET
+src/app/api/aderencia-tabuas/analise-python/route.ts:73 - POST
+src/app/api/aderencia-tabuas/analise-python/route.ts:211 - GET
+src/app/api/aderencia-tabuas/chi-quadrado/route.ts:194 - POST
+src/app/api/aderencia-tabuas/chi-quadrado/route.ts:267 - GET
+src/app/api/aderencia-tabuas/configuracao-avancada/route.ts:94 - POST
+src/app/api/aderencia-tabuas/configuracao-avancada/route.ts:576 - GET
+src/app/api/aderencia-tabuas/relatorio/route.ts:86 - POST
+src/app/api/aderencia-tabuas/relatorio/route.ts:772 - GET
+src/app/api/aderencia-tabuas/salvar-dados/route.ts:59 - POST
+src/app/api/aderencia-tabuas/salvar-dados/route.ts:603 - GET
+src/app/api/aderencia-tabuas/upload/route.ts:14 - POST
+src/app/api/aderencia-tabuas/upload/route.ts:117 - GET
+src/app/api/aderencia-tabuas/validar-upload/route.ts:7 - POST
+src/app/api/aderencia-tabuas/validar-upload/route.ts:54 - GET
+src/app/api/admin/audit-logs/route.ts:4 - GET
+src/app/api/admin/calculos-atuariais/route.ts:6 - GET
+src/app/api/admin/calculos-atuariais/route.ts:41 - POST
+src/app/api/admin/metrics/route.ts:5 - GET
+src/app/api/admin/notifications/route.ts:4 - GET
+src/app/api/admin/tabuas-mortalidade/route.ts:20 - GET
+src/app/api/admin/tabuas-mortalidade/route.ts:59 - POST
+src/app/api/admin/users/route.ts:6 - GET
+src/app/api/atuarial/calcular/route.ts:4 - POST
+src/app/api/atuarial/calcular/route.ts:66 - GET
+src/app/api/auth/[...nextauth]/route.ts:3 - GET
+src/app/api/auth/[...nextauth]/route.ts:3 - POST
+src/app/api/auth/custom-signout/route.ts:9 - POST
+src/app/api/auth/forgot-password/route.ts:8 - POST
+src/app/api/auth/linked-accounts/route.ts:5 - GET
+src/app/api/auth/register/route-abac.ts:8 - POST
+src/app/api/auth/register/route.ts:8 - POST
+src/app/api/auth/session/route-abac.ts:5 - GET
+src/app/api/auth/session/route.ts:5 - GET
+src/app/api/auth/totp-disable/route.ts:5 - POST
+src/app/api/auth/totp-setup/route.ts:7 - POST
+src/app/api/auth/totp-status/route.ts:5 - GET
+src/app/api/auth/totp-verify/route.ts:10 - POST
+src/app/api/auth/unlink-provider/route.ts:5 - POST
+src/app/api/emails/send/route.ts:5 - POST
+src/app/api/emails/test-connection/route.ts:5 - POST
+src/app/api/monitoring/metrics/route.ts:68 - GET
+src/app/api/monitoring/metrics/route.ts:300 - POST
+src/app/api/notifications/[id]/route.ts:14 - PATCH
+src/app/api/notifications/[id]/route.ts:57 - DELETE
+src/app/api/notifications/bulk/route.ts:14 - POST
+src/app/api/notifications/push/route.ts:26 - POST
+src/app/api/notifications/push/route.ts:94 - DELETE
+src/app/api/notifications/push/route.ts:132 - GET
+src/app/api/notifications/read-all/route.ts:5 - PATCH
+src/app/api/notifications/stats/route.ts:15 - GET
+src/app/api/test/apis/route.ts:6 - GET
+src/app/api/test/apis/route.ts:60 - POST
+src/app/api/usuario/definir-senha/route.ts:11 - POST
+src/app/api/usuario/foto/route.ts:8 - POST
+src/app/api/admin/calculos-atuariais/relatorio/route.ts:14 - GET
+src/app/api/admin/dashboard/config/route.ts:3 - GET
+src/app/api/admin/dashboard/stats/route.ts:4 - GET
+src/app/api/admin/mfa/disable/route.ts:6 - POST
+src/app/api/admin/mfa/status/route.ts:5 - GET
+src/app/api/admin/tabuas-mortalidade/[id]/route.ts:9 - GET
+src/app/api/admin/tabuas-mortalidade/[id]/route.ts:46 - PUT
+src/app/api/admin/tabuas-mortalidade/[id]/route.ts:111 - DELETE
+src/app/api/admin/tabuas-mortalidade/import/route.ts:15 - POST
+src/app/api/admin/users/[id]/route.ts:4 - GET
+src/app/api/auth/custom-callbacks/apple/route.ts:5 - POST
+src/app/api/auth/custom-callbacks/github/route.ts:5 - GET
+src/app/api/auth/custom-callbacks/microsoft/route.ts:5 - GET
+src/app/api/auth/custom-callbacks/twitter/route.ts:5 - GET
+src/app/api/auth/local/forgot-password/route.ts:8 - POST
+src/app/api/auth/local/register/route-abac.ts:8 - POST
+src/app/api/auth/local/register/route.ts:8 - POST
+src/app/api/auth/local/session/route-abac.ts:7 - GET
+src/app/api/auth/local/session/route.ts:7 - GET
+src/app/api/auth/local/signout/route.ts:9 - POST
+src/app/api/notifications/[id]/read/route.ts:5 - PATCH
+src/app/api/admin/mfa/totp/generate/route.ts:7 - POST
+src/app/api/admin/mfa/totp/verify/route.ts:6 - POST
+src/app/api/admin/notifications/[id]/read/route.ts:4 - POST
+src/app/api/admin/tabuas-mortalidade/[id]/export/route.ts:6 - GET

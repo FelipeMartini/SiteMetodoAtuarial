@@ -9,7 +9,7 @@ import Credentials from 'next-auth/providers/credentials'
 import bcryptjs from 'bcryptjs'
 import { signInSchema } from './src/lib/validation'
 import { prisma } from './src/lib/prisma'
-import { checkABACPermission } from './src/lib/abac/enforcer-abac-puro'
+import { checkABACPermission } from './src/lib/abac/enforcer'
 
 /**
  * 🚀 Auth.js v5 - Configuração ABAC Pura
@@ -133,7 +133,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
           const passwordMatch = await bcryptjs.compare(password, user.password || '')
           if (!passwordMatch) {
             console.log('🚫 Senha incorreta para:', email)
-
+            
             // Incrementar tentativas de login falharam
             await prisma.user.update({
               where: { id: user.id },
@@ -141,7 +141,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
                 failedLogins: user.failedLogins + 1,
               },
             })
-
+            
             return null
           }
 
@@ -297,8 +297,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
     },
 
     async session({ session, token }) {
-      // Verificar se usuário ainda está ativo (protegendo caso token seja undefined)
-      if (token && token.id) {
+      // Verificar se usuário ainda está ativo
+      if (token.id) {
         const user = await prisma.user.findUnique({
           where: { id: token.id as string },
           select: { isActive: true },
@@ -311,18 +311,16 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       // Estender sessão com dados ABAC
       if (session.user && token) {
-  // Usar valores seguros com fallback para evitar undefined
-  // Garantir que session.user.id seja string (usar string vazia como fallback)
-  session.user.id = (token.id as string) ?? ''
-        session.user.isActive = (token.isActive as boolean) ?? false
-        session.user.department = (token.department as string) ?? 'unknown'
-        session.user.location = (token.location as string) ?? 'unknown'
-        session.user.jobTitle = (token.jobTitle as string) ?? ''
-        session.user.validFrom = (token.validFrom as Date) ?? null
-        session.user.validUntil = (token.validUntil as Date) ?? null
-        session.user.mfaEnabled = (token.mfaEnabled as boolean) ?? false
-        session.user.loginCount = (token.loginCount as number) ?? 0
-        session.user.lastLogin = (token.lastLogin as Date) ?? null
+        session.user.id = token.id as string
+        session.user.isActive = token.isActive as boolean
+        session.user.department = token.department as string
+        session.user.location = token.location as string
+        session.user.jobTitle = token.jobTitle as string
+        session.user.validFrom = token.validFrom as Date
+        session.user.validUntil = token.validUntil as Date
+        session.user.mfaEnabled = token.mfaEnabled as boolean
+        session.user.loginCount = token.loginCount as number
+        session.user.lastLogin = token.lastLogin as Date
       }
 
       return session
@@ -335,8 +333,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
 
   pages: {
-  // Alinhar com a UI do projeto (página em src/app/login)
-  signIn: '/login',
+    signIn: '/auth/signin',
     signOut: '/auth/signout',
     error: '/auth/error',
     verifyRequest: '/auth/verify-request',

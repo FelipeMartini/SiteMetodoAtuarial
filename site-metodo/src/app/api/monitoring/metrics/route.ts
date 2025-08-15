@@ -5,7 +5,7 @@ import { auth } from '@/lib/auth'
 import { monitoring } from '@/lib/monitoring'
 import logger from '@/lib/logger-simple'
 import { getClientIP } from '@/lib/utils/ip'
-import { checkABACPermission } from '@/lib/abac/enforcer'
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'
 
 interface SessionWithUser {
