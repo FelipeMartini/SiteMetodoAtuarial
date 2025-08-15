@@ -20,7 +20,7 @@ export default function PaginaAnaliseExcel() {
             onTrocarAba={setAbaAtiva}
           />
           {abaAtiva && (
-            <TabelaExcel planilha={dados.planilhas.find(p => p.nome === abaAtiva)!} />
+            <TabelaExcel planilha={dados.planilhas.find((p: any) => p.nome === abaAtiva)!} />
           )}
         </>
       )}

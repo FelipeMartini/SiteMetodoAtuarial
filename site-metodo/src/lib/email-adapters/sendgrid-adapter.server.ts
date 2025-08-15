@@ -10,14 +10,14 @@ export async function sendWithSendGrid(options: EmailOptions) {
 
   const apiKey = process.env.SENDGRID_API_KEY;
   if (!apiKey) throw new Error('SENDGRID_API_KEY não configurado');
-    // Import dinâmico (ESM) com construção de string para evitar que bundlers resolvam o pacote estaticamente
-    // import dinâmico intencional: construir nome do pacote para evitar resolução estática por bundlers
-    // eslint-disable-next-line @typescript-eslint/no-var-requires
-    const pkgName = ['@sendgrid', 'mail'].join('/')
-    const sgModule: any = await import(pkgName).catch((e) => {
-      throw new Error('Erro ao importar @sendgrid/mail: ' + String(e));
-    });
-    const sgMail: any = sgModule?.default ?? sgModule;
+    // Import dinâmico estático - evita uso de expressão no import que quebra o bundle
+    let sgMail: any
+    try {
+      const sgModule = await import('@sendgrid/mail')
+      sgMail = sgModule?.default ?? sgModule
+    } catch (e) {
+      throw new Error('Erro ao importar @sendgrid/mail: ' + String(e))
+    }
   sgMail.setApiKey(apiKey);
 
   const msg: any = {

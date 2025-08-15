@@ -5,7 +5,7 @@
   "environment": "production",
   "project": {
     "name": "Site Método Atuarial",
-    "domain": "metodoactuarial.com",
+    "domain": "metodoatuarial.com.br",
     "subdomain": "www",
     "ssl": true,
     "nodejs_version": "18.x",
@@ -13,9 +13,9 @@
   },
   "plesk": {
     "server": {
-      "host": "servidor.metodoactuarial.com",
+      "host": "plesk.metodoatuarial.com.br",
       "port": 22,
-      "username": "admin",
+      "username": "felipe",
       "control_panel_port": 8443,
       "api_version": "1.6.3.0"
     },
@@ -53,7 +53,7 @@
   },
   "monitoring": {
     "health_check_url": "/api/health",
-    "notification_email": "admin@metodoactuarial.com",
+    "notification_email": "felipe@metodoatuarial.com.br",
     "alerts": {
       "disk_usage": 85,
       "memory_usage": 90,

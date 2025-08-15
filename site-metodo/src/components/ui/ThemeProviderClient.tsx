@@ -9,7 +9,7 @@ import { ThemeOption } from '@/lib/zustand/types'
  * Suporta três opções: 'light' | 'dark' | 'system'.
  */
 export default function ThemeProviderClient() {
-  const theme = useUIStore((s) => s.theme)
+  const theme = useUIStore((s: any) => s.theme)
 
   useEffect(() => {
     const root = document.documentElement

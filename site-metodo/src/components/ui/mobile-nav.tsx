@@ -92,25 +92,26 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
 
   const [devOpen, setDevOpen] = React.useState(false)
 
+  // Sempre chamar o hook para manter a ordem dos Hooks; depois aplicamos o fallback dev
+  const store = useUIStore(
+    (s: any) => ({
+      mobileMenuOpen: s.mobileMenuOpen,
+      setMobileMenuOpen: s.setMobileMenuOpen,
+      toggleMobileMenu: s.toggleMobileMenu,
+      allowedNavItems: s.allowedNavItems,
+      hiddenNavItems: s.hiddenNavItems,
+    }),
+    shallow
+  )
+
   const { mobileMenuOpen: open, setMobileMenuOpen, toggleMobileMenu } = isDev
     ? { mobileMenuOpen: devOpen, setMobileMenuOpen: (v: boolean) => setDevOpen(v), toggleMobileMenu: () => setDevOpen(o => !o) }
-    : useUIStore<any>(
-        s => ({
-          mobileMenuOpen: s.mobileMenuOpen,
-          setMobileMenuOpen: s.setMobileMenuOpen,
-          toggleMobileMenu: s.toggleMobileMenu,
-        }),
-        shallow
-      )
+    : store
 
   // Selecionamos lista de navegação separadamente para reduzir re-renders quando abrir/fechar o menu
   const { allowedNavItems, hiddenNavItems } = isDev
     ? { allowedNavItems: undefined as string[] | undefined, hiddenNavItems: undefined as string[] | undefined }
-    : useUIStore<any>(s => ({
-        allowedNavItems: s.allowedNavItems,
-        hiddenNavItems: s.hiddenNavItems,
-      }),
-      shallow)
+    : { allowedNavItems: store.allowedNavItems, hiddenNavItems: store.hiddenNavItems }
   const pathname = usePathname()
 
   const isActive = (href: string) => {

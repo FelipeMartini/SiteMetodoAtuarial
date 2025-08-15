@@ -22,6 +22,17 @@ export async function registerServiceWorker(): Promise<ServiceWorkerRegistration
     return null
   }
 
+  // Não registrar service worker em desenvolvimento por padrão; pode provocar
+  // comportamento inesperado como múltiplos fetches a /api/auth/session.
+  // Detectar ambiente de desenvolvimento no cliente (hostname localhost) para evitar
+  // referenciar `process.env` diretamente no bundle do cliente e causar erros de tipo.
+  const isDev = typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+  const disabledFlag = typeof window !== 'undefined' && (window as any).__NEXT_PUBLIC_DISABLE_SERVICE_WORKER === '1'
+  if (isDev || disabledFlag) {
+    console.log('Service Worker desabilitado em desenvolvimento ou por NEXT_PUBLIC_DISABLE_SERVICE_WORKER')
+    return null
+  }
+
   try {
     const registration = await navigator.serviceWorker.register('/sw.js')
 
@@ -56,13 +67,30 @@ export async function unregisterServiceWorker(): Promise<boolean> {
   }
 
   try {
-    const registration = await navigator.serviceWorker.getRegistration()
-    if (registration) {
-      const result = await registration.unregister()
-      console.log('Service Worker desregistrado:', result)
-      return result
+    // Obter todas as registrations e tentar desregistrar cada uma para ser mais resiliente
+    const regs = await navigator.serviceWorker.getRegistrations()
+    if (!regs || regs.length === 0) return false
+
+    let anyUnregistered = false
+    for (const r of regs) {
+      try {
+        // Alguns navegadores/workers podem rejeitar com AbortError (Worker disallowed)
+        // Não falhamos por isso; apenas logamos e continuamos para não travar o client.
+        const res = await r.unregister()
+        console.log('Service Worker desregistrado (scope):', r.scope, res)
+        anyUnregistered = anyUnregistered || !!res
+      } catch (err: any) {
+        // Ignorar AbortError e outros erros não críticos
+        if (err && err.name === 'AbortError') {
+          console.warn('Ignorado AbortError ao desregistrar SW (provavelmente Worker disallowed):', r.scope)
+          anyUnregistered = anyUnregistered || false
+          continue
+        }
+        console.error('Erro ao desregistrar Service Worker (scope):', r.scope, String(err))
+      }
     }
-    return false
+
+    return anyUnregistered
   } catch (_error) {
     console.error('Erro ao desregistrar Service Worker:', String(_error))
     return false
@@ -152,7 +180,8 @@ export async function subscribeToPushNotifications(): Promise<PushSubscription |
   try {
     const subscription = await registration.pushManager.subscribe({
       userVisibleOnly: true,
-      applicationServerKey: process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY,
+  // NEXT_PUBLIC_VAPID_PUBLIC_KEY é injetada pelo Next no cliente; acessamos via window fallback
+  applicationServerKey: (window as any).__NEXT_PUBLIC_VAPID_PUBLIC_KEY || '',
     })
 
     // Enviar subscription para o servidor

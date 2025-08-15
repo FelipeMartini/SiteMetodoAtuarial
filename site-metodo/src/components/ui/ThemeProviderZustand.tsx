@@ -7,8 +7,8 @@ import { Sun, Moon } from 'lucide-react'
 import { CurrentUser } from '@/lib/zustand/types'
 
 export function ThemeToggleZustand() {
-  const theme = useUIStore((s) => s.theme)
-  const toggleTheme = useUIStore((s) => s.toggleTheme)
+  const theme = useUIStore((s: any) => s.theme)
+  const toggleTheme = useUIStore((s: any) => s.toggleTheme)
 
   return (
     <Button variant='ghost' size='icon' onClick={toggleTheme} aria-label='Alternar tema'>
@@ -21,7 +21,7 @@ export default ThemeToggleZustand
 
 // Hydrate currentUser on client mount
 export function HydrateCurrentUser() {
-  const setCurrentUser = useUIStore((s) => s.setCurrentUser)
+  const setCurrentUser = useUIStore((s: any) => s.setCurrentUser)
 
   useEffect(() => {
     let mounted = true

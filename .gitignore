@@ -11,6 +11,9 @@ site-metodo/tsconfig.tsbuildinfo
 .env.local
 # Ignorar env files que contenham segredos
 .env
+
+plesk-config.json
+
 # Ignorar dependências
 node_modules/
 # Ignorar relatórios de cobertura de testes

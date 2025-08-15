@@ -20,8 +20,10 @@ export async function GET(request: NextRequest) {
         // se o handler retornou 200 e payload.user, usar essa sessão
         if (status === 200 && payload?.user) {
           const session = { user: payload.user }
-          request && console.log('[session-route] got session from handlers.GET for user:', payload.user?.email || payload.user?.id)
-          ;(request as any)._sessionFromAuth = session
+          if (request) {
+            console.log('[session-route] got session from handlers.GET for user:', payload.user?.email || payload.user?.id)
+          }
+          (request as any)._sessionFromAuth = session
         } else {
           console.warn('[session-route] handlers.GET did not return an authenticated session', { status, payload })
         }
