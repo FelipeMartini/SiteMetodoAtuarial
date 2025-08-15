@@ -34,8 +34,8 @@ async function main() {
     { subject: email, object: 'admin:dashboard', action: 'write', effect: 'allow' },
   { subject: email, object: 'admin:abac', action: 'read', effect: 'allow' },
   { subject: email, object: 'admin:abac', action: 'write', effect: 'allow' },
-    { subject: email, object: 'area:cliente', action: 'read', effect: 'allow' },
-    { subject: email, object: 'area:cliente', action: 'write', effect: 'allow' },
+  { subject: email, object: 'usuario:areacliente', action: 'read', effect: 'allow' },
+  { subject: email, object: 'usuario:areacliente', action: 'write', effect: 'allow' },
   ]
 
   for (const p of policies) {
