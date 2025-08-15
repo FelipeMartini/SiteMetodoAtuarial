@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
-import { checkABACPermission } from '@/lib/abac/enforcer'
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
 export async function GET() {
   try {

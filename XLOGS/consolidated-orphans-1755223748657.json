@@ -1,0 +1,3974 @@
+{
+  "generatedAt": "2025-08-15T02:09:08.657Z",
+  "items": [
+    {
+      "file": "src/lib/api/index.ts",
+      "count": 33,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/index.ts",
+      "count": 32,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/validators/abacSchemas.ts",
+      "count": 32,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/types/next-auth-abac.d.ts",
+      "count": 22,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/types/next-auth.d.ts",
+      "count": 22,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/types.ts",
+      "count": 20,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/types/notifications.ts",
+      "count": 18,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/lazyComponents.tsx",
+      "count": 15,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/serviceWorkerUtils.ts",
+      "count": 13,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/routePrefetch.tsx",
+      "count": 12,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/imageOptimization.tsx",
+      "count": 11,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/cacheStrategy.tsx",
+      "count": 10,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/notification-service.ts",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/lighthouseConfig.ts",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/styles/themes.ts",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/dropdown-menu.tsx",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/sidebar.tsx",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/logger-winston-disabled.ts",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/chart.tsx",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useRegistrarUsuario-abac.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/actuarial/sample-data.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/helpers.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/notification-email-integration.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/performance/bundleOptimization.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/simple-logger.ts",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/abac/policies/route.ts",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/abac/roles/route.ts",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useRegistrarUsuario.ts",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/enforcer-abac-puro.ts",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/email-service.ts",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/permissoes.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/usuarios.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/hooks/index.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/dialog.tsx",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/form-field.tsx",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/loading.tsx",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/select.tsx",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/hoc.tsx",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/atuarial/otimizacao-performance.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/audit/auditLogger.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/notifications/notification-service.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/validation.ts",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/permissoes/route.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/usuarios/route.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/configs/mfaConfig.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/middleware.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/services/exchange-simple.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/atuarial/calculos-financeiros.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/logger.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/notifications/push-service.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/middleware/logging.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/utils/validation.ts",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/tabuas-mortalidade/[id]/route.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/cep/route.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/push/route.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/layout.tsx",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/auth/AuthGuard.tsx",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/notifications/notification-badge.tsx",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/card.tsx",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/navigation-menu.tsx",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useCalculosAtuariais.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/cache-simple.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/services/cep-simple.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/calculadora-atuarial.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/email-logger.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/email-service.server.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/logger-simple.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/monitoring.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/notifications/websocket-server.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/validations/auth.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/zustand/hooks.ts",
+      "count": 3,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "middleware.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/actions/signin.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/acessos-semana.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/acessos.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/atividades.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/api/schemas.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/analise-exceljs/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/analise-python/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/chi-quadrado/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/configuracao-avancada/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/relatorio/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/salvar-dados/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/upload/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/aderencia-tabuas/validar-upload/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/calculos-atuariais/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/tabuas-mortalidade/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/atuarial/calcular/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/[...nextauth]/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/emails/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/exchange/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/monitoring/metrics/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/[id]/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/test/apis/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/users/route.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/perfil/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/cliente/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/cliente/perfil/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/cliente/seguranca/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/cliente/sessoes/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/unauthorized/page.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/theme-provider.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/alert-dialog.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/sheet.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/ThemeProviderZustand.tsx",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/configs/navigationConfig.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/configs/themeOptions.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/actuarial/calculations.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/services/cep.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/auth.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/email-service-new.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/server/services/audit.server.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/types/analise-excel.d.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/validators/usuarioSchemas.ts",
+      "count": 2,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "scripts/seed-abac-policies.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "scripts/seed-mortality-tables.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "scripts/setup-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "site-metodo/babel-jest.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/commitlint.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/coverage/lcov-report/block-navigation.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/coverage/lcov-report/prettify.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/coverage/lcov-report/sorter.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/jest.config.auth.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/jest.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/jest.setup.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/middleware.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/next.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/postcss.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/postcss.config.mjs",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/prisma/seed-abac-user.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/prisma/seeds/seed.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/public/sw.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/adapter-helper-diagnostic.cjs.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/adapter-parse-diagnostic.cjs.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/add-admin-policy.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/build-abac-temp-csv.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/check-casbin-policies.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/create-test-user.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/diagnose-abac-policies.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/find-broken-casbin-abac.cjs.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/find-broken-casbin.cjs.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/fix-abac-policies-format.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/generate-import-report.cjs",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/inspect-abac-raw-bytes.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/inspect-policies.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/normalize-abac-v4.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/run-detector-samples.cjs",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/run-detector-samples.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/sanitize-casbin-rules.cjs.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/seed-abac-policies.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/seed-mortality-tables.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/setup-abac-policies.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/setup-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/test-abac-checks.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/scripts/test-enforcer-init.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/actions/signin.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/abac/page-old.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/acessos-semana.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/acessos.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/atividades.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/permissoes.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/schemas.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/api/usuarios.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/components/CardMetrica.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/components/GraficoUsuarios.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/components/UsuariosCard.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/index.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/useAcessos.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/useAtividades.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/usePermissoes.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/hooks/useUsuarios.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/queryClient.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/QueryProvider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/admin/dashboard/widgets/AtividadesRecentes.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/local/register/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/local/session/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/middleware.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/register/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/session/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/api/auth/signin/providers.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/AreaClienteConteudo-moderno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/CheckboxCustom.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/dashboard-admin/page-moderno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/dashboard-admin/PageDashboardAdmin.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/dashboard-admin/UsuariosTable.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/dashboard-admin/UsuariosTableFilters.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/DashboardAdmin.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/DashboardAdminModerno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/FotoPerfilUploader.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/area-cliente/totp-status/TotpStatus.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/contato/metadata.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/hooks/useAuth.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/layout.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/LayoutCliente.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/login/TotpPrompt.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/metadata.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/not-found.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/page.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/providers/AuthProvider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/providers/TanstackQueryProvider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/recuperar-senha/PageRecuperacao.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/Rodape.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/servicos/metadata.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/app/sobre/metadata.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/actuarial/ActuarialCalculator.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/actuarial/ActuarialReports.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/actuarial/CalculosAtuariaisModerno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/actuarial/MortalityTableImporter.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin-layout.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin-sidebar.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/ApiMonitoringDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/AuditDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/dashboard-stats.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/DataTableBase.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/exportCsv.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/exportExcel.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/exportPdf.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/types.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/data-table/usePersistenciaTabela.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/MonitoringDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/recent-activity.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/stats-card.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/users-table-columns.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/admin/users-table.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/analise-excel/AbasPlanilhaExcel.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/analise-excel/FormularioUploadExcel.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/analise-excel/PopoverFormulaCelula.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/analise-excel/TabelaExcel.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/auth/AuthGuard.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/auth/FormularioCriarConta.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/auth/schemas.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ErrorBoundary.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/feature-flags/BannerNovaHome.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/feature-flags/FeatureFlagProvider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/feature-flags/FeatureFlagStatus.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/Header.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/mfa/MfaConfiguracao.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/notifications/notification-badge.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/notifications/notification-center.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/notifications/notification-icon.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/Servicos.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/SocialLoginBox.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/theme-provider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/theme/ThemeProvider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/theme/ThemeToggle.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/alert-dialog.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/alert.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/avatar-custom.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/avatar.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/badge.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/breadcrumb.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/button-custom.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/button.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/calendar.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/card.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/chart.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/checkbox.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/cliente-dashboard-moderno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/cliente-sidebar-moderna.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/collapsible.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/ComponenteBase.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/confirm-dialog.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/dashboard-usuario-widget.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/date-range-picker.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/dialog.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/dropdown-menu.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/feedback-buttons.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/form-field.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/index.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/input.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/label.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/loading-spinner.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/loading-states.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/loading.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/main-navigation.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/mobile-nav.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/mode-toggle.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/navigation-menu.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/page-header.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/page-wrapper.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/pagination.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/perfil-usuario-moderno.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/popover.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/progress.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/scroll-area.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/select.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/separator.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/sheet.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/sidebar.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/skeleton.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/slider.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/sonner.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/switch.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/table.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/tabs.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/textarea.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/theme-toggle.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/ThemeProviderClient.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/ThemeProviderZustand.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/ui/tooltip.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/components/util/ClientOnly.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/configs/layoutConfigTemplates.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/configs/mfaConfig.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/configs/navigationConfig.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/configs/settingsConfig.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/configs/themeOptions.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/contexts/AppContext.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/coverage/lcov-report/block-navigation.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/coverage/lcov-report/prettify.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/coverage/lcov-report/sorter.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/emails/notification-email.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/emails/password-reset-email.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/emails/security-alert-email.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/emails/templates.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/emails/welcome-email.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/use-mobile.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/use-notifications.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/use-toast.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useAuditLogs.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useAuth.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useCalculosAtuariais.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useCurrentUser.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useMfaStatus.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useRegistrarUsuario-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useRegistrarUsuario-backup-20250812-162717.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useRegistrarUsuario.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useSession.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useSessions.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/hooks/useToast.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/client.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/hoc.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/middleware.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/prisma-adapter-abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/types.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/abac/utils.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/actuarial/calculations.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/actuarial/sample-data.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/actuarial/store.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/aderencia/detector-layout.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/analise-excel/analisadorExcel.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/analise-excel/formatadoresExcel.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/cache-simple.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/cache.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/client.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/helpers.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/index.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/monitor-simple.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/services/cep-simple.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/services/cep.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/services/exchange-simple.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/services/exchange.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/api/test-helper.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/atuarial/calculadora.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/atuarial/calculos-financeiros.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/atuarial/otimizacao-performance.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/atuarial/validacao-cruzada.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/audit.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/audit/auditLogger.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/auth.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/calculadora-atuarial.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-adapters/sendgrid-adapter.server.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-adapters/ses-adapter.server.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-logger.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-service-new.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-service.server.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/email-service.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/logger-simple.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/logger-winston-disabled.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/logger.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/monitoring.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/notification-email-integration.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/notification-service.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/notifications/websocket-server.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/bundleOptimization.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/cacheStrategy.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/imageOptimization.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/lazyComponents.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/lighthouseConfig.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/routePrefetch.tsx",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/performance/serviceWorkerUtils.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/queryClient.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/rateLimit.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/simple-logger.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/utils.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/utils/ip.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/validations/auth.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/abac.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/hooks.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/excelSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/modalSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/navigationSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/sessionSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/sidebarSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/slices/themeSlice.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/types.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/lib/zustand/uiStore.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/middleware/logging.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/server/services/audit.server.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/styles/themes.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/types/notifications.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/authErrors.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/cn.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/passwordStrength.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/rateLimit.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/security.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/utils/validation.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/validators/abacSchemas.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/validators/permissaoSchemas.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/src/validators/usuarioSchemas.ts",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "site-metodo/tailwind.config.js",
+      "count": 1,
+      "sources": [
+        "our-orphans-script"
+      ]
+    },
+    {
+      "file": "src/app/aderencia-tabuas/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/abac/page-old.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/audit-logs/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/calculos-atuariais/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/components/GraficoUsuarios.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/components/index.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/dashboard/QueryProvider.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/emails/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/mfa/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/notifications/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/usuarios/hooks/useUsuariosPaginados.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/admin/usuarios/lista/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/analise-excel/layout.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/analise-excel/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/abac/check/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/audit-logs/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/calculos-atuariais/relatorio/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/dashboard/config/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/dashboard/stats/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/metrics/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/mfa/disable/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/mfa/status/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/mfa/totp/generate/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/mfa/totp/verify/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/notifications/[id]/read/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/notifications/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/tabuas-mortalidade/[id]/export/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/tabuas-mortalidade/import/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/users/[id]/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/admin/users/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/analise-excel/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/custom-callbacks/apple/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/custom-callbacks/github/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/custom-callbacks/microsoft/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/custom-callbacks/twitter/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/custom-signout/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/forgot-password/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/linked-accounts/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/forgot-password/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/register/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/register/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/session/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/session/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/local/signout/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/register/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/register/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/session/route-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/session/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/totp-disable/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/totp-setup/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/totp-status/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/totp-verify/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/auth/unlink-provider/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/email/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/emails/send/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/emails/test-connection/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/health/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/[id]/read/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/bulk/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/read-all/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/notifications/stats/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/usuario/definir-senha/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/api/usuario/foto/route.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/account-linking/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/CheckboxCustom.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/dashboard-admin/page-moderno.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/dashboard-admin/PageDashboardAdmin.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/dashboard-admin/UsuariosTable.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/dashboard-admin/UsuariosTableFilters.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/DashboardAdminModerno.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/documentos/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/FotoPerfilUploader.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/layout.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/totp-setup/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/area-cliente/totp-status/TotpStatus.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/auth/error/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/calculadora-atuarial/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/cliente/layout.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/contato/metadata.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/contato/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/criar-conta/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/dashboard/aderencia-tabuas/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/definir-senha/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/documentacao/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/login/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/login/TotpPrompt.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/metadata.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/not-found.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/politica-privacidade/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/recuperar-senha/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/recuperar-senha/PageRecuperacao.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/relatorios-atuariais/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/Rodape.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/servicos/metadata.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/servicos/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/sobre-nos/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/sobre/metadata.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/sobre/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/app/termos-uso/page.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/actuarial/ActuarialCalculator.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/actuarial/ActuarialReports.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/actuarial/MortalityTableImporter.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/admin/ApiMonitoringDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/admin/AuditDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/admin/data-table/DataTableBase.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/admin/data-table/exportPdf.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/admin/MonitoringDashboard.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/analise-excel/PopoverFormulaCelula.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/auth/schemas.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ErrorBoundary.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/notifications/notification-icon.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/theme/ThemeProvider.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/theme/ThemeToggle.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/alert.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/avatar-custom.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/badge.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/breadcrumb.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/button-custom.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/calendar.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/ComponenteBase.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/dashboard-usuario-widget.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/input.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/mode-toggle.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/popover.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/scroll-area.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/skeleton.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/components/ui/switch.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/configs/layoutConfigTemplates.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/configs/settingsConfig.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/contexts/AppContext.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/emails/notification-email.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/emails/password-reset-email.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/emails/security-alert-email.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/emails/templates.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/emails/welcome-email.tsx",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/use-notifications.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useAuditLogs.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useRegistrarUsuario-backup-20250812-162717.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useSession.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/hooks/useSessions.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/prisma-adapter-abac.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/abac/utils.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/analise-excel/formatadoresExcel.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/cache.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/client.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/api/services/exchange.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/atuarial/calculadora.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/atuarial/validacao-cruzada.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/audit.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/lib/zustand/uiStore.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/utils/passwordStrength.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    },
+    {
+      "file": "src/validators/permissaoSchemas.ts",
+      "count": 1,
+      "sources": [
+        "ts-prune"
+      ]
+    }
+  ]
+}
