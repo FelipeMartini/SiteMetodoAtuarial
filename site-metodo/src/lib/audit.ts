@@ -1,98 +1,38 @@
-// Stub temporário para auditService enquanto o sistema ABAC está sendo implementado
+import simpleLogger, { auditLogger as _auditLogger } from './simple-logger'
 
-export interface AuditEntry {
-  userId?: string
-  userEmail?: string
-  action: string
-  resource?: string
-  details?: Record<string, unknown>
-  ip?: string
-  userAgent?: string
-  success?: boolean
-}
-
-// Implementação stub do auditService
+// Arquivado: audit.ts original foi movido para lista-de-tarefas/ImplementarTemp/archive/batch-H/audit.ts
+// Substituído por shim que força falha explícita se usada sem migração.
 export const auditService = {
-  async logAuthEvent(
-    action: string,
-    userEmail?: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('Audit (stub):', { action, userEmail, details })
+  async logAuthEvent() { throw new Error('auditService.logAuthEvent: impl arquivada — use o auditLogger ou implemente a integração real'); },
+  async logUserEvent() { throw new Error('auditService.logUserEvent: impl arquivada'); },
+  async logSecurityEvent() { throw new Error('auditService.logSecurityEvent: impl arquivada'); },
+  async logSessionEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
+    simpleLogger.info(`session:${action}`, { userEmail, ...details })
   },
 
-  async logUserEvent(
-    action: string,
-    userEmail: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('Audit (stub):', { action, userEmail, details })
+  async logOAuthEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
+    simpleLogger.info(`oauth:${action}`, { userEmail, ...details })
   },
 
-  async logSecurityEvent(
-    action: string,
-    details: Record<string, unknown> = {},
-    userEmail?: string
-  ): Promise<void> {
-    console.log('Security audit (stub):', { action, userEmail, details })
+  async logMFAEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
+    simpleLogger.info(`mfa:${action}`, { userEmail, ...details })
   },
 
-  async logSessionEvent(
-    action: string,
-    userEmail: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('Session audit (stub):', { action, userEmail, details })
-  },
-
-  async logOAuthEvent(
-    action: string,
-    userEmail: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('OAuth audit (stub):', { action, userEmail, details })
-  },
-
-  async logMFAEvent(
-    action: string,
-    userEmail: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('MFA audit (stub):', { action, userEmail, details })
-  },
-
-  async logApiAccess(
-    userEmail: string | null,
-    method: string,
-    path: string,
-    clientIp?: string,
-    details: Record<string, unknown> = {}
-  ): Promise<void> {
-    console.log('API access audit (stub):', { userEmail, method, path, clientIp, details })
-  },
-
-  async getAuditLogs(
-    filters: Record<string, unknown> = {},
-    pagination = { page: 1, limit: 50 }
-  ) {
-    console.log('Get audit logs (stub):', { filters, pagination })
-    return {
-      logs: [],
-      total: 0,
-      page: pagination.page,
-      limit: pagination.limit,
-      pages: 0
+  async logApiAccess(userEmail: string | null, method: string, path: string, clientIp?: string, details: Record<string, unknown> = {}) {
+    // usa o helper auditLogger.apiAccess do simple-logger
+    try {
+      _auditLogger.apiAccess?.(userEmail || 'anonymous', method, path, { clientIp, ...(details || {}) })
+    } catch (e) {
+      simpleLogger.warn('auditService.logApiAccess fallback', { userEmail, method, path })
     }
+  },
+
+  async getAuditLogs(filters: Record<string, unknown> = {}, pagination = { page: 1, limit: 50 }) {
+    // implementação mínima: retorna vazia; integracão completa deve buscar do DB/Prisma
+    return { logs: [], total: 0, page: pagination.page, limit: pagination.limit, pages: 0 }
   },
 
   async getAuditStats(filters: Record<string, unknown> = {}) {
-    console.log('Get audit stats (stub):', { filters })
-    return {
-      totalEvents: 0,
-      successfulLogins: 0,
-      failedLogins: 0,
-      actionsByType: [],
-      eventsByDay: []
-    }
-  }
+    return { totalEvents: 0, successfulLogins: 0, failedLogins: 0 }
+  },
 }
