@@ -1,0 +1,890 @@
+{
+  "source": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/XLOGS/filtered-orphans-src-1755223948809.json",
+  "generatedAt": "2025-08-15T02:20:16.637Z",
+  "total": 269,
+  "byKind": {
+    "lib": 51,
+    "component": 45,
+    "validator": 3,
+    "types": 3,
+    "other": 47,
+    "style": 1,
+    "hook": 8,
+    "api-route": 75,
+    "page": 33,
+    "layout": 3
+  },
+  "byRec": {
+    "review": 18,
+    "manual": 140,
+    "keep": 111
+  },
+  "top": [
+    {
+      "file": "src/lib/api/index.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/api/index.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 33,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "import",
+        "monitored",
+        "API_CONSTANTS",
+        "ApiHelpers",
+        "ApiHealthChecker",
+        "DEFAULT_CONFIGS",
+        "apiExports"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/components/ui/index.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/index.ts",
+      "exists": true,
+      "kind": "component",
+      "count": 32,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/validators/abacSchemas.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/validators/abacSchemas.ts",
+      "exists": true,
+      "kind": "validator",
+      "count": 32,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "departmentSchema",
+        "locationSchema",
+        "jobTitleSchema",
+        "usuarioABACSchema",
+        "usuarioUpdateABACSchema",
+        "abacSubjectSchema",
+        "abacObjectSchema",
+        "abacActionSchema"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/types/next-auth-abac.d.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/types/next-auth-abac.d.ts",
+      "exists": true,
+      "kind": "types",
+      "count": 22,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ABACContext",
+        "ABACResult",
+        "ABACRequest",
+        "ABACPolicy",
+        "ABACAccessLog",
+        "ABACauditEvent",
+        "ABACConfig",
+        "ABACStats"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/types/next-auth.d.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/types/next-auth.d.ts",
+      "exists": true,
+      "kind": "types",
+      "count": 22,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ABACContext",
+        "ABACResult",
+        "ABACRequest",
+        "ABACPolicy",
+        "ABACAccessLog",
+        "ABACauditEvent",
+        "ABACConfig",
+        "ABACStats"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/abac/types.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/abac/types.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 20,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "Subject",
+        "Resource",
+        "Context",
+        "PolicyRule",
+        "RoleDefinition",
+        "AuthorizationRequest",
+        "AuthorizationResult",
+        "PolicyManager"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/types/notifications.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/types/notifications.ts",
+      "exists": true,
+      "kind": "other",
+      "count": 18,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "NotificationData",
+        "NotificationTemplate",
+        "NotificationPreferences",
+        "PushSubscription",
+        "NotificationQueue",
+        "CreateNotificationRequest",
+        "BulkNotificationRequest",
+        "EmailTemplate"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/lazyComponents.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/lazyComponents.tsx",
+      "exists": true,
+      "kind": "lib",
+      "count": 15,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "AdminUsersTable",
+        "AdminDashboard",
+        "CalculosAtuariais",
+        "AuditoriaPage",
+        "ABACAdmin",
+        "DashboardAdmin",
+        "PerfilUsuarioModerno",
+        "withLazyLoading"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/serviceWorkerUtils.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/serviceWorkerUtils.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 13,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "isOffline",
+        "useOnlineStatus",
+        "useServiceWorkerStatus"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/routePrefetch.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/routePrefetch.tsx",
+      "exists": true,
+      "kind": "lib",
+      "count": 12,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "CRITICAL_ROUTES",
+        "ROLE_BASED_ROUTES",
+        "PREFETCH_CONFIG",
+        "useSmartPrefetch",
+        "useHoverPrefetch",
+        "useVisibilityPrefetch",
+        "SmartLink",
+        "SmartNavigation"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/imageOptimization.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/imageOptimization.tsx",
+      "exists": true,
+      "kind": "lib",
+      "count": 11,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "IMAGE_SIZES",
+        "IMAGE_QUALITY",
+        "OptimizedImage",
+        "OptimizedAvatar",
+        "OptimizedBanner",
+        "generateResponsiveSizes",
+        "supportsWebP",
+        "supportsAVIF"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/cacheStrategy.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/cacheStrategy.tsx",
+      "exists": true,
+      "kind": "lib",
+      "count": 10,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "queryClient",
+        "STATIC_CACHE_CONFIG",
+        "DYNAMIC_CACHE_CONFIG",
+        "CRITICAL_CACHE_CONFIG",
+        "QUERY_KEYS",
+        "useOptimisticCache",
+        "useInvalidateCache",
+        "prefetchCriticalData"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/notification-service.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/notification-service.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "UserInfo",
+        "NotificationWhereClause",
+        "NotificationOptions",
+        "NotificationPreferences",
+        "NotificationDeliveryResult",
+        "notificationService"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/performance/lighthouseConfig.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/lighthouseConfig.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "LIGHTHOUSE_CONFIG",
+        "CRITICAL_PAGES",
+        "CORE_WEB_VITALS_THRESHOLDS",
+        "analyzeLighthouseResult",
+        "evaluateMetrics",
+        "generatePerformanceReport",
+        "CI_CONFIG",
+        "validateCIResult"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/styles/themes.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/styles/themes.ts",
+      "exists": true,
+      "kind": "style",
+      "count": 9,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "Theme",
+        "lightTheme",
+        "darkTheme",
+        "ThemeName",
+        "themes",
+        "defaultTheme",
+        "getThemeByName",
+        "getNextTheme"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/components/ui/dropdown-menu.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/dropdown-menu.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/components/ui/sidebar.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/sidebar.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/lib/logger-winston-disabled.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/logger-winston-disabled.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 8,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "LogMeta",
+        "StructuredLogger",
+        "structuredLogger",
+        "structuredLogger",
+        "authLogger",
+        "auditLogger",
+        "performanceLogger",
+        "securityLogger"
+      ],
+      "recommendation": "review"
+    },
+    {
+      "file": "src/components/ui/chart.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/chart.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ChartConfig"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/components/ui/pagination.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/pagination.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/hooks/useRegistrarUsuario-abac.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/hooks/useRegistrarUsuario-abac.ts",
+      "exists": true,
+      "kind": "hook",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "useRegistrarUsuario",
+        "useValidarAtributosABAC",
+        "useVerificarEmailDisponivel",
+        "useRegistrarUsuario"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/actuarial/sample-data.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/actuarial/sample-data.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "BR_EMS_MALE_2020",
+        "BR_EMS_FEMALE_2020",
+        "BR_DISABILITY_2020",
+        "EXAMPLE_LIFE_INSURANCE",
+        "EXAMPLE_ANNUITY",
+        "AVAILABLE_TABLES",
+        "getTableByName",
+        "getTablesByCountry"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/api/helpers.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/api/helpers.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "withCache",
+        "withMonitoring",
+        "withCacheAndMonitoring",
+        "withRateLimit",
+        "withRetry",
+        "withTimeout",
+        "withFullEnhancement"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/notification-email-integration.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/notification-email-integration.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "NotificationType",
+        "NotificationPriority",
+        "NotificationEmailIntegrationOptions",
+        "notificationEmailIntegration"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/performance/bundleOptimization.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/performance/bundleOptimization.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "dynamicImportWithRetry",
+        "preloadModule",
+        "lazyWithPreload",
+        "PURE",
+        "createTreeShakableExport",
+        "ROUTE_CHUNKS",
+        "getChunkForRoute"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/simple-logger.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/simple-logger.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 7,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "LogMeta",
+        "LogEntry",
+        "simpleLogger",
+        "authLogger",
+        "auditLogger",
+        "performanceLogger",
+        "securityLogger",
+        "simpleLogger"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/app/api/abac/policies/route.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/api/abac/policies/route.ts",
+      "exists": true,
+      "kind": "api-route",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "protectedGET",
+        "protectedPOST",
+        "protectedDELETE"
+      ],
+      "recommendation": "keep"
+    },
+    {
+      "file": "src/app/api/abac/roles/route.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/api/abac/roles/route.ts",
+      "exists": true,
+      "kind": "api-route",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "protectedGET",
+        "protectedPOST",
+        "protectedDELETE"
+      ],
+      "recommendation": "keep"
+    },
+    {
+      "file": "src/hooks/useRegistrarUsuario.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/hooks/useRegistrarUsuario.ts",
+      "exists": true,
+      "kind": "hook",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "useRegistrarUsuario",
+        "useValidarAtributosABAC",
+        "useVerificarEmailDisponivel",
+        "useRegistrarUsuario"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/abac/enforcer-abac-puro.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/abac/enforcer-abac-puro.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "abacEnforcerPuro"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/email-service.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/email-service.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 6,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "EmailOptions",
+        "EmailAttachment",
+        "TemplateEmailOptions",
+        "EmailStats",
+        "emailService"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/app/admin/dashboard/api/permissoes.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/admin/dashboard/api/permissoes.ts",
+      "exists": true,
+      "kind": "other",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/app/admin/dashboard/api/usuarios.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/admin/dashboard/api/usuarios.ts",
+      "exists": true,
+      "kind": "other",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/app/admin/dashboard/hooks/index.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/admin/dashboard/hooks/index.ts",
+      "exists": true,
+      "kind": "other",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/components/ui/dialog.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/dialog.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/components/ui/form-field.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/form-field.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "FormFieldProps",
+        "FormContainer",
+        "FormSection"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/components/ui/loading.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/loading.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "LoadingSpinnerProps",
+        "PageLoading",
+        "ButtonLoading"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/components/ui/select.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/components/ui/select.tsx",
+      "exists": true,
+      "kind": "component",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/abac/hoc.tsx",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/abac/hoc.tsx",
+      "exists": true,
+      "kind": "lib",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "WithABACOptions",
+        "withABAC",
+        "usePermission",
+        "PermissionGate",
+        "useRole",
+        "ABACProtectedPage"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/atuarial/otimizacao-performance.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/atuarial/otimizacao-performance.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ResultadoBenchmark",
+        "RelatorioPerformance",
+        "OtimizadorPerformance",
+        "CacheCalculosAtuariais",
+        "cacheable"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/audit/auditLogger.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/audit/auditLogger.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "AuditData",
+        "AuditLogger",
+        "auditLogger",
+        "useAuditLogger",
+        "auditLogger"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/notifications/notification-service.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/notifications/notification-service.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "NotificationRequest",
+        "BulkNotificationRequest",
+        "NotificationStats",
+        "NotificationService",
+        "notificationService",
+        "getNotificationService",
+        "notificationService"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/validation.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/validation.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 5,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "signInSchema",
+        "signUpSchema",
+        "totpSchema",
+        "SignInInput",
+        "SignUpInput",
+        "TotpInput"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/app/api/permissoes/route.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/api/permissoes/route.ts",
+      "exists": true,
+      "kind": "api-route",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "keep"
+    },
+    {
+      "file": "src/app/api/usuarios/route.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/app/api/usuarios/route.ts",
+      "exists": true,
+      "kind": "api-route",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [],
+      "recommendation": "keep"
+    },
+    {
+      "file": "src/configs/mfaConfig.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/configs/mfaConfig.ts",
+      "exists": true,
+      "kind": "other",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "MfaFlow",
+        "MfaConfig",
+        "mfaConfig",
+        "isMfaObrigatorio"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/abac/middleware.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/abac/middleware.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ABACMiddlewareConfig",
+        "createABACMiddleware",
+        "withABACAuthorization"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/api/services/exchange-simple.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/api/services/exchange-simple.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "ExchangeRates",
+        "ExchangeOptions",
+        "ConversionResult",
+        "ExchangeService",
+        "exchangeService"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/atuarial/calculos-financeiros.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/atuarial/calculos-financeiros.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "DadosAnuidade",
+        "DadosSeguro",
+        "IntervaloConfianca",
+        "ProjecaoFinanceira",
+        "AnaliseRisco",
+        "ResumoExecutivo",
+        "RelatorioCompleto",
+        "CalculosFinanceirosAtuariais"
+      ],
+      "recommendation": "manual"
+    },
+    {
+      "file": "src/lib/logger.ts",
+      "absPath": "/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/lib/logger.ts",
+      "exists": true,
+      "kind": "lib",
+      "count": 4,
+      "sources": [
+        "ts-prune"
+      ],
+      "exports": [
+        "LogMeta",
+        "structuredLogger",
+        "structuredLogger",
+        "performanceLogger",
+        "logHelpers"
+      ],
+      "recommendation": "manual"
+    }
+  ]
+}
