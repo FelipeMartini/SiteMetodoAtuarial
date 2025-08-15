@@ -1,8 +1,9 @@
 import auditLogger, { AuditAction, AuditSeverity } from './audit/auditLogger'
 
-// auditService: adapter que expõe a API esperada pelos call-sites, delegando ao
-// auditLogger (implementação canônica). Mantemos métodos compatíveis para evitar
-// quebras durante a remoção agressiva de shims.
+// Merge resolution: preferimos a implementação local que delega ao auditLogger
+// de forma segura (usa operadores opcionais). A versão remota (cleanup/remove-api-users)
+// substituiu por shims que lançavam erros; optamos por manter compatibilidade
+// preservando a API e fallback silencioso para evitar que o sistema quebre.
 export const auditService = {
   async logAuthEvent(userEmail?: string, success?: boolean, details?: Record<string, unknown>) {
     // Usa userCreated/logAuth em scenarios simplificados
