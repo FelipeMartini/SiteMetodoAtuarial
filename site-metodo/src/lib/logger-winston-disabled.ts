@@ -1,52 +1,13 @@
-import winston from 'winston'
-import { format } from 'winston'
-import path from 'path'
+// Arquivado: conteúdo movido para
+// lista-de-tarefas/ImplementarTemp/archive/batch-G/loggers/logger-winston-disabled.ts
+// Este arquivo foi substituído por um stub para evitar dependência direta de 'winston'
+// durante o build. Se precisar usar a implementação antiga, consulte o arquivo no archive.
 
-// Definir níveis de log
-const logLevels = {
-  error: 0,
-  warn: 1,
-  info: 2,
-  http: 3,
-  audit: 4,
-  debug: 5,
+export const structuredLogger = {
+  info: () => { throw new Error('logger-winston-disabled is archived; use logger-simple instead') },
 }
 
-const logColors = {
-  error: 'red',
-  warn: 'yellow',
-  info: 'green',
-  http: 'magenta',
-  audit: 'cyan',
-  debug: 'blue',
-}
-
-// Adicionar cores aos níveis
-winston.addColors(logColors)
-
-// Formato para desenvolvimento
-const devFormat = format.combine(
-  format.timestamp({ format: 'YYYY-MM-DD HH:mm:ss:ms' }),
-  format.colorize({ all: true }),
-  format.printf(info => `${info.timestamp} ${info.level}: ${info.message}`)
-)
-
-// Formato para produção (JSON estruturado)
-const prodFormat = format.combine(
-  format.timestamp(),
-  format.errors({ stack: true }),
-  format.json(),
-  format.printf(info => {
-    return JSON.stringify({
-      timestamp: info.timestamp,
-      level: info.level,
-      message: info.message,
-      service: 'metodo-atuarial',
-      environment: process.env.NODE_ENV,
-      ...(info.meta && typeof info.meta === 'object' ? info.meta : {}),
-    })
-  })
-)
+export default structuredLogger
 
 // Criar diretório de logs se não existir
 const logsDir = path.join(process.cwd(), 'logs')
