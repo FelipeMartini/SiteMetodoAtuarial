@@ -138,7 +138,7 @@ function shouldAuditEndpoint(pathname: string, method: string): boolean {
   }
 
   // Auditar endpoints específicos de leitura sensível
-  const sensitiveEndpoints = ['/api/users', '/api/admin', '/api/auth', '/api/abac', '/api/audit']
+  const sensitiveEndpoints = ['/api/usuarios', '/api/admin', '/api/auth', '/api/abac', '/api/audit']
 
   return sensitiveEndpoints.some(endpoint => pathname.startsWith(endpoint))
 }

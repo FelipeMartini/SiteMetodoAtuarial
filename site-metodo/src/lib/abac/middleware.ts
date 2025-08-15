@@ -27,7 +27,7 @@ const defaultConfig: ABACMiddlewareConfig = {
     '/api/auth/*',
   ],
   adminPaths: ['/admin/*', '/api/admin/*'],
-  protectedPaths: ['/area-cliente/*', '/api/users/*', '/api/usuario/*'],
+  protectedPaths: ['/area-cliente/*', '/api/usuarios/*', '/api/usuario/*'],
   enableLogging: true,
 }
 
