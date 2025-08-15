@@ -275,4 +275,23 @@ Notas finais
 
 ---
 
-Status atual: análise top30 concluída e registrada; aguardando sua aprovação para começar Batch A (arquivos críticos) ou Batch E (consolidação de duplicatas) — qual prefere começar?
+## Relatório rápido de referências — Batch A
+
+Resumo: rodei buscas por símbolos/exports críticos dos arquivos do Batch A (`abacSchemas`, `types ABAC`, `cacheStrategy`, `enforcer-abac-puro`) dentro de `site-metodo/`.
+
+- `src/validators/abacSchemas.ts` — Referências encontradas: import direto em `src/app/api/usuarios/route.ts` e usos em endpoints de usuários. Conclusão: arquivo em uso ativo => NÃO remover.
+- `src/lib/abac/enforcer-abac-puro.ts` — Muitas referências: importado por `auth.ts`, múltiplos endpoints (`/api/usuarios`, `/api/notifications`, `/api/admin/users`, `/app/api/abac/*`) e scripts (`scripts/add-admin-policy.ts`, `scripts/test-enforcer-init.ts`). Conclusão: CRÍTICO => NÃO remover.
+- `src/lib/performance/cacheStrategy.tsx` — Referências encontradas: `queryClient` e `CacheProvider` usados em `app/providers/TanstackQueryProvider.tsx` e no admin dashboard `app/admin/dashboard/*`. Conclusão: importante para react-query => manter e revisar distante.
+- `src/lib/abac/types.ts` e `src/types/next-auth-abac.d.ts`/`src/types/next-auth.d.ts` — Arquivos de tipos referenciados por muitos módulos e usados implicitamente; NÃO remover.
+
+Próximo passo sugerido: no branch `cleanup/batch-A-top30` eu movo para `lista-de-tarefas/ImplementarTemp/archive/batch-A/` apenas os arquivos do Batch B (menos críticos) como teste, ou alternadamente podemos começar pela consolidação de duplicatas (Batch E).
+
+Observação de segurança: mantive o branch de backup `backup/pre-limpeza-top30` e a branch de trabalho `cleanup/batch-A-top30`. Não fiz nenhum commit de remoção ainda.
+
+### Ação executada (Batch E)
+
+- Branch de trabalho criado: `cleanup/batch-E-duplicates`.
+- Commit: `f1db78e` — "chore(cleanup): archive batch-E duplicates (useRegistrarUsuario-abac, backup)" (arquivei `useRegistrarUsuario-abac.ts` e `useRegistrarUsuario-backup-20250812-162717.ts` em `lista-de-tarefas/ImplementarTemp/archive/batch-E/`).
+- Resultado das validações: `npm run type-check` e `npm run build` passaram (build com warnings). `npm run lint` exibiu apenas warnings não bloqueantes.
+
+Nota sobre temas: você mencionou que o projeto migrou para usar Zustand para gerenciamento de tema; farei uma inspeção rápida em `src/components/theme` e `src/components/ui/ThemeProviderClient.tsx` para confirmar e, se confirmado, mover `src/styles/themes.ts` e `src/components/theme/ThemeProvider.tsx` para archive no mesmo batch E para revisão final (não farei commit/push sem sua autorização).

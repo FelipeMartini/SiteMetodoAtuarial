@@ -1,0 +1,2 @@
+e6be695 chore(cleanup): archive legacy theme wrappers and styles (themes.ts, ThemeProvider)
+f1db78e chore(cleanup): archive batch-E duplicates (useRegistrarUsuario-abac, backup)

@@ -1,0 +1,20 @@
+diff --git a/site-metodo/src/components/theme/ThemeProvider.tsx b/lista-de-tarefas/ImplementarTemp/archive/batch-E/ThemeProvider.tsx
+similarity index 100%
+rename from site-metodo/src/components/theme/ThemeProvider.tsx
+rename to lista-de-tarefas/ImplementarTemp/archive/batch-E/ThemeProvider.tsx
+diff --git a/site-metodo/src/components/theme-provider.tsx b/lista-de-tarefas/ImplementarTemp/archive/batch-E/theme-provider.tsx
+similarity index 100%
+rename from site-metodo/src/components/theme-provider.tsx
+rename to lista-de-tarefas/ImplementarTemp/archive/batch-E/theme-provider.tsx
+diff --git a/site-metodo/src/styles/themes.ts b/lista-de-tarefas/ImplementarTemp/archive/batch-E/themes.ts
+similarity index 100%
+rename from site-metodo/src/styles/themes.ts
+rename to lista-de-tarefas/ImplementarTemp/archive/batch-E/themes.ts
+diff --git a/site-metodo/src/hooks/useRegistrarUsuario-abac.ts b/lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-abac.ts
+similarity index 100%
+rename from site-metodo/src/hooks/useRegistrarUsuario-abac.ts
+rename to lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-abac.ts
+diff --git a/site-metodo/src/hooks/useRegistrarUsuario-backup-20250812-162717.ts b/lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-backup-20250812-162717.ts
+similarity index 100%
+rename from site-metodo/src/hooks/useRegistrarUsuario-backup-20250812-162717.ts
+rename to lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-backup-20250812-162717.ts

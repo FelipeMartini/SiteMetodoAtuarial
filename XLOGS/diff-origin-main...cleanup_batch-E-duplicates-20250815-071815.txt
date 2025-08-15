@@ -1,0 +1,5 @@
+R100	site-metodo/src/components/theme/ThemeProvider.tsx	lista-de-tarefas/ImplementarTemp/archive/batch-E/ThemeProvider.tsx
+R100	site-metodo/src/components/theme-provider.tsx	lista-de-tarefas/ImplementarTemp/archive/batch-E/theme-provider.tsx
+R100	site-metodo/src/styles/themes.ts	lista-de-tarefas/ImplementarTemp/archive/batch-E/themes.ts
+R100	site-metodo/src/hooks/useRegistrarUsuario-abac.ts	lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-abac.ts
+R100	site-metodo/src/hooks/useRegistrarUsuario-backup-20250812-162717.ts	lista-de-tarefas/ImplementarTemp/archive/batch-E/useRegistrarUsuario-backup-20250812-162717.ts
