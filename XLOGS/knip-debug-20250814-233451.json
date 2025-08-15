@@ -1,0 +1,27 @@
+[*] Unresolved configuration (from CLI arguments)
+{
+  cacheLocation: [32m'/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src/node_modules/.cache/knip'[39m,
+  cwd: [32m'/home/felipe/Área de Trabalho/GitHub/SiteMetodoAtuarial/site-metodo/src'[39m,
+  excludedIssueTypes: [],
+  fixTypes: [],
+  gitignore: [33mtrue[39m,
+  includedIssueTypes: [ [32m'files'[39m ],
+  isCache: [33mfalse[39m,
+  isDebug: [33mtrue[39m,
+  isDependenciesShorthand: [33mfalse[39m,
+  isExportsShorthand: [33mfalse[39m,
+  isFilesShorthand: [33mfalse[39m,
+  isFix: [33mfalse[39m,
+  isFormat: [33mfalse[39m,
+  isIncludeEntryExports: [33mfalse[39m,
+  isIncludeLibs: [33mfalse[39m,
+  isIsolateWorkspaces: [33mfalse[39m,
+  isProduction: [33mfalse[39m,
+  isRemoveFiles: [33mfalse[39m,
+  isShowProgress: [33mfalse[39m,
+  isStrict: [33mfalse[39m,
+  isWatch: [33mfalse[39m,
+  tags: [ [], [] ],
+  tsConfigFile: [32m'./tsconfig.json'[39m,
+  workspace: [90mundefined[39m
+}
