@@ -2,10 +2,16 @@
 .next/
 # Ignorar diretório antigo de app
 nextjs-app/
+# Ignorar diretório xlogs
+XLOGS/
 # Ignorar diretório antigo de app
-fuse-react/
+.site-metodo/tsconfig.tsbuildinfo
+# Cobertura do mesmo arquivo sem leading dot
+site-metodo/tsconfig.tsbuildinfo
 # Ignorar variáveis de ambiente locais
 .env.local
+# Ignorar env files que contenham segredos
+.env
 # Ignorar dependências
 node_modules/
 # Ignorar relatórios de cobertura de testes
