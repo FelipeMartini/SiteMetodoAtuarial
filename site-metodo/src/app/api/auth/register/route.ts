@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
     try {
       const emailSubject = user.email
       const policies = [
-        { subject: emailSubject, object: 'area:cliente', action: 'read', effect: 'allow' },
-        { subject: emailSubject, object: 'area:cliente', action: 'write', effect: 'allow' },
+        { subject: emailSubject, object: 'usuario:areacliente', action: 'read', effect: 'allow' },
+        { subject: emailSubject, object: 'usuario:areacliente', action: 'write', effect: 'allow' },
       ]
       for (const p of policies) {
         const exists = await prisma.casbinRule.findFirst({ where: { v0: p.subject, v1: p.object, v2: p.action, v3: p.effect } })
