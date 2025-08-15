@@ -1,0 +1,19 @@
+node_modules/
+.next/
+dist/
+
+# TypeScript incremental build
+tsconfig.tsbuildinfo
+
+# Environment
+.env.local
+.env
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+
+# Prisma
+/prisma/.schema
