@@ -1,4 +1,5 @@
-// Stub temporário para auditLogger enquanto o sistema ABAC está sendo implementado
+// Implementação compatível delegando ao simple-logger
+import simpleLogger, { auditLogger as _auditLogger } from '../simple-logger'
 
 export enum AuditSeverity {
   LOW = 'LOW',
@@ -28,76 +29,57 @@ export interface AuditData {
   userEmail?: string
   resource?: string
   details?: Record<string, unknown>
-  ip?: string
-  userAgent?: string
+  // Campos adicionais usados em vários call-sites
   description?: string
   target?: string
   metadata?: Record<string, unknown>
+  performedBy?: string
+  changes?: Record<string, unknown>
+  [key: string]: any
 }
 
-export class AuditLogger {
-  private static instance: AuditLogger
+export const auditLogger = {
+  async log(data: AuditData) {
+    simpleLogger.info(`audit:${data.action}`, { ...data })
+  },
 
-  public static getInstance(): AuditLogger {
-    if (!AuditLogger.instance) {
-      AuditLogger.instance = new AuditLogger()
-    }
-    return AuditLogger.instance
-  }
+  async logAuth(action: AuditAction, userEmail: string, success: boolean, details?: Record<string, unknown>) {
+    _auditLogger.userCreated?.(userEmail, userEmail, details as any)
+  },
 
-  async log(data: AuditData): Promise<void> {
-    console.log('Audit Log (stub):', data)
-  }
+  async logLogout(userEmail: string, details?: Record<string, unknown>) {
+    simpleLogger.info('audit:logout', { userEmail, ...details })
+  },
 
-  async logAuth(action: AuditAction, userEmail: string, success: boolean, details?: Record<string, unknown>): Promise<void> {
-    console.log('Auth Audit (stub):', { action, userEmail, success, details })
-  }
+  async logAccess(userEmail: string, resource: string, granted: boolean, details?: Record<string, unknown>) {
+    _auditLogger.apiAccess?.(userEmail || 'unknown', 'GET', resource, details as any)
+  },
 
-  async logLogout(userEmail: string, details?: Record<string, unknown>): Promise<void> {
-    console.log('Logout Audit (stub):', { userEmail, details })
-  }
+  async logDataAccess(userEmail: string, resource: string, action: string, details?: Record<string, unknown>) {
+    simpleLogger.info('audit:data_access', { userEmail, resource, action, ...details })
+  },
 
-  async logAccess(userEmail: string, resource: string, granted: boolean, details?: Record<string, unknown>): Promise<void> {
-    console.log('Access Audit (stub):', { userEmail, resource, granted, details })
-  }
+  async logUserManagement(action: string, targetUserEmail: string, adminEmail: string, details?: Record<string, unknown>) {
+    simpleLogger.info('audit:user_management', { action, targetUserEmail, adminEmail, ...details })
+  },
 
-  async logDataAccess(userEmail: string, resource: string, action: string, details?: Record<string, unknown>): Promise<void> {
-    console.log('Data Access Audit (stub):', { userEmail, resource, action, details })
-  }
+  async logPermissionChange(userEmail: string, resource: string, oldPermissions: unknown, newPermissions: unknown, adminEmail: string) {
+    simpleLogger.info('audit:permission_change', { userEmail, resource, oldPermissions, newPermissions, adminEmail })
+  },
 
-  async logUserManagement(action: string, targetUserEmail: string, adminEmail: string, details?: Record<string, unknown>): Promise<void> {
-    console.log('User Management Audit (stub):', { action, targetUserEmail, adminEmail, details })
-  }
-
-  async logPermissionChange(userEmail: string, resource: string, oldPermissions: unknown, newPermissions: unknown, adminEmail: string): Promise<void> {
-    console.log('Permission Change Audit (stub):', { userEmail, resource, oldPermissions, newPermissions, adminEmail })
-  }
-
-  async logSecurityEvent(message: string, severity: AuditSeverity, details?: Record<string, unknown>): Promise<void> {
-    console.log('Security Event Audit (stub):', { message, severity, details })
-  }
+  async logSecurityEvent(message: string, severity: AuditSeverity, details?: Record<string, unknown>) {
+    simpleLogger.warn(`security:${severity}`, { message, ...details })
+  },
 
   async getAuditLogs(filters?: Record<string, unknown>, pagination?: { page: number; limit: number }) {
-    console.log('Get Audit Logs (stub):', { filters, pagination })
-    return []
-  }
+    return [] as any
+  },
 
   async getAuditStats() {
-    console.log('Get Audit Stats (stub)')
-    return {
-      totalEvents: 0,
-      failedLogins: 0,
-      successfulEvents: 0,
-      actionsByType: [],
-      eventsByDay: []
-    }
+    return { totalEvents: 0 } as any
   }
 }
 
-export const auditLogger = AuditLogger.getInstance()
-
-export function useAuditLogger() {
-  return auditLogger
-}
+export function useAuditLogger() { return auditLogger }
 
 export default auditLogger
