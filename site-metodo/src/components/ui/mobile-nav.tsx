@@ -7,6 +7,7 @@ import type { Session } from 'next-auth'
 
 import { cn } from '@/lib/utils'
 import useUIStore from '@/lib/zustand/uiStore'
+import { shallow } from 'zustand/shallow'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import {
@@ -86,19 +87,30 @@ interface MobileNavProps {
 }
 
 export function MobileNav({ session, onLogout }: MobileNavProps) {
-  const {
-    mobileMenuOpen: open,
-    setMobileMenuOpen,
-    toggleMobileMenu,
-    allowedNavItems,
-    hiddenNavItems,
-  } = useUIStore(s => ({
-    mobileMenuOpen: s.mobileMenuOpen,
-    setMobileMenuOpen: s.setMobileMenuOpen,
-    toggleMobileMenu: s.toggleMobileMenu,
-    allowedNavItems: s.allowedNavItems,
-    hiddenNavItems: s.hiddenNavItems,
-  }))
+  // Em desenvolvimento, opcionalmente use um fallback local para isolar problemas com a store
+  const isDev = process.env.NODE_ENV === 'development'
+
+  const [devOpen, setDevOpen] = React.useState(false)
+
+  const { mobileMenuOpen: open, setMobileMenuOpen, toggleMobileMenu } = isDev
+    ? { mobileMenuOpen: devOpen, setMobileMenuOpen: (v: boolean) => setDevOpen(v), toggleMobileMenu: () => setDevOpen(o => !o) }
+    : useUIStore<any>(
+        s => ({
+          mobileMenuOpen: s.mobileMenuOpen,
+          setMobileMenuOpen: s.setMobileMenuOpen,
+          toggleMobileMenu: s.toggleMobileMenu,
+        }),
+        shallow
+      )
+
+  // Selecionamos lista de navegação separadamente para reduzir re-renders quando abrir/fechar o menu
+  const { allowedNavItems, hiddenNavItems } = isDev
+    ? { allowedNavItems: undefined as string[] | undefined, hiddenNavItems: undefined as string[] | undefined }
+    : useUIStore<any>(s => ({
+        allowedNavItems: s.allowedNavItems,
+        hiddenNavItems: s.hiddenNavItems,
+      }),
+      shallow)
   const pathname = usePathname()
 
   const isActive = (href: string) => {

@@ -1,7 +1,8 @@
-'use server'
+"use server"
 
 import { redirect } from 'next/navigation'
-import { signIn } from '../../auth'
+import { signIn as authSignIn } from '@/lib/auth'
+
 
 /**
  * Server action for credentials sign in with Auth.js v5 - ESTRATÉGIA HÍBRIDA
@@ -29,22 +30,11 @@ export async function signInCredentials(
       }
     }
 
-    console.log('[SignIn] Tentando login credentials para:', email)
+  console.log('[SignIn] Tentando login credentials para:', email)
 
-    const result = await signIn('credentials', {
-      email,
-      password,
-      redirect: false,
-    })
-
-    console.log('[SignIn] Resultado do login credentials:', result)
-
-    if (!result) {
-      return {
-        status: 'error',
-        errorMessage: 'Falha na autenticação. Verifique suas credenciais.',
-      }
-    }
+  // Redirecionar para o endpoint do Auth.js que processa credentials
+  // Usamos redirect direto para que o browser envie o formulário ao endpoint
+  redirect('/api/auth/signin/credentials')
   } catch (_error) {
     console.error('[SignIn] Erro na autenticação credentials:', String(_error))
 
@@ -116,21 +106,19 @@ export async function signInOAuth({ providerId }: { providerId: string }) {
       } as const
     }
 
-    const redirectUrl = await signIn(providerId, {
-      redirect: false,
-      callbackUrl: '/area-cliente',
-    })
-
-    console.log('[SignIn] URL de redirecionamento OAuth:', redirectUrl)
-
-    if (!redirectUrl) {
+    // Usar a função signIn() do NextAuth para iniciar o fluxo corretamente (ela dispara um POST internamente)
+    // callbackUrl garante retorno para /area-cliente após sucesso
+    try {
+      await authSignIn(providerId, { callbackUrl: '/area-cliente' } as any)
+    } catch (err) {
+      // signIn pode lançar o redirect (NEXT_REDIRECT) — re-throw para permitir o redirect acontecer
+      if (err instanceof Error && err.message === 'NEXT_REDIRECT') throw err
+      console.error('[SignIn] authSignIn error:', String(err))
       return {
         status: 'error',
-        errorMessage: 'Falha no login, URL de redirecionamento não encontrada',
+        errorMessage: 'Falha ao iniciar o fluxo OAuth',
       } as const
     }
-
-    redirect(redirectUrl)
   } catch (_error) {
     // O redirect() do Next.js gera uma exceção NEXT_REDIRECT que é normal
     if (_error instanceof Error && _error.message === 'NEXT_REDIRECT') {
@@ -190,17 +178,8 @@ export async function signInEmail(
 
     console.log('[SignIn] Tentando login por email para:', email)
 
-    const redirectUrl = await signIn('email', {
-      redirect: false,
-      email,
-    })
-
-    if (!redirectUrl) {
-      return {
-        status: 'error',
-        errorMessage: 'Falha no envio do email de login',
-      }
-    }
+  // Redirecionar para o endpoint de email sign-in
+  redirect(`/api/auth/signin/email?email=${encodeURIComponent(String(email))}`)
   } catch (_error) {
     console.error('[SignIn] Erro no login por email:', String(_error))
     return {

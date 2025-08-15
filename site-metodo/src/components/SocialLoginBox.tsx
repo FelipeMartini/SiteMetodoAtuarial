@@ -11,8 +11,39 @@ import { Button } from '@/components/ui/button'
 import { cn } from '@/utils/cn'
 
 // Função helper para redirecionar via Auth.js v5 handler
-function loginSocial(provider: string) {
-  window.location.href = `/api/auth/signin/${provider}`
+async function loginSocial(provider: string) {
+  // Auth.js v5 espera um POST com csrfToken para iniciar o fluxo de signin para provedores OAuth
+  try {
+    const res = await fetch('/api/auth/csrf')
+    const data = await res.json().catch(() => ({}))
+    const csrfToken = (data && (data as any).csrfToken) || ''
+
+    const form = document.createElement('form')
+    form.method = 'POST'
+    form.action = `/api/auth/signin/${provider}`
+
+    // callbackUrl garante retorno para /area-cliente após sucesso
+    const inputCb = document.createElement('input')
+    inputCb.type = 'hidden'
+    inputCb.name = 'callbackUrl'
+    inputCb.value = '/area-cliente'
+    form.appendChild(inputCb)
+
+    // csrf token que o Auth.js espera
+    if (csrfToken) {
+      const inputCsrf = document.createElement('input')
+      inputCsrf.type = 'hidden'
+      inputCsrf.name = 'csrfToken'
+      inputCsrf.value = csrfToken
+      form.appendChild(inputCsrf)
+    }
+
+    document.body.appendChild(form)
+    form.submit()
+  } catch (err) {
+    // fallback para GET se não conseguirmos o csrf (pior caso)
+    window.location.href = `/api/auth/signin/${provider}`
+  }
 }
 
 interface ProviderInfo {

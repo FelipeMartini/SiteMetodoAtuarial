@@ -1,0 +1,33 @@
+/* Arquivo de debug: estilos mínimos para usar em desenvolvimento quando precisamos isolar problemas causados por globals.css
+   - Não deve ser usado em produção. Permite desativar Tailwind / regras que criam novos containing blocks.
+   - Use-o apenas temporariamente para verificar se o dev overlay volta ao normal.
+*/
+:root {
+  --background: 0 0% 100%;
+  --foreground: 222.2 84% 4.9%;
+}
+html, body, #__next {
+  height: 100%;
+}
+/* restaurar box-sizing padrão e reset mínimo */
+*, *::before, *::after { box-sizing: border-box; }
+body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+
+/* Evita regras perigosas para o overlay durante debug */
+* { transform: none !important; transform-style: initial !important; }
+
+/* Remove overflow hidden on common containers */
+#__next, body { overflow: visible !important; }
+
+/* Garanta que position: fixed funcione corretamente */
+body > * { position: static !important; }
+
+/* Dev overlay fix: caso o overlay seja injetado no body, force-o a ocupar a viewport */
+.__nextjs-overlay, #__nextjs-overlay-root, .react-error-overlay, .next-dev-overlay, .webpack-dev-server-client-overlay, .nextjs-dev-overlay {
+  all: initial !important;
+  position: fixed !important;
+  inset: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 2147483647 !important;
+}

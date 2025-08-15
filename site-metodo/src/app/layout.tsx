@@ -1,4 +1,6 @@
-import './globals.css' // CSS global com Tailwind e variáveis CSS do tema
+// Import estático de CSS global (produção e dev). Em dev injetamos apenas regras de overlay via componente client-side.
+import './globals.css'
+import DevOverlayFix from '@/components/DevOverlayFix'
 import LayoutCliente from '@/app/LayoutCliente'
 
 import ThemeProviderClient from '@/components/ui/ThemeProviderClient'
@@ -47,6 +49,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               <LayoutCliente>
                 <HydrateCurrentUser />
                 <ThemeProviderClient />
+                <DevOverlayFix />
                 {children}
               </LayoutCliente>
             </TanstackQueryProvider>

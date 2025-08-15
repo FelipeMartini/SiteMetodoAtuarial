@@ -46,7 +46,7 @@ export async function GET(req: NextRequest) {
 
     // Verificação ABAC: usuário pode listar usuários
     const context = buildABACContext(req, session as SessionWithUser)
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const subject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       subject,
       'resource:users',
@@ -122,7 +122,7 @@ export async function POST(req: NextRequest) {
 
     // Verificação ABAC: usuário pode criar usuários
     const context = buildABACContext(req, session as SessionWithUser)
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const subject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       subject,
       'resource:users',
@@ -248,7 +248,7 @@ export async function PUT(req: NextRequest) {
 
     // Verificação ABAC: usuário pode atualizar usuários
     const context = buildABACContext(req, session as SessionWithUser)
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const subject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       subject,
       `resource:users:${targetUserId}`,
@@ -354,7 +354,7 @@ export async function DELETE(req: NextRequest) {
 
     // Verificação ABAC: usuário pode deletar usuários
     const context = buildABACContext(req, session as SessionWithUser)
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const subject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       subject,
       `resource:users:${targetUserId}`,

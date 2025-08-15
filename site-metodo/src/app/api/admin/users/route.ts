@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server'
-import { auth } from '@/../auth'
+import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 
@@ -15,7 +15,8 @@ export async function GET() {
     }
 
     // Verificar permissões ABAC para listar usuários
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  // Use only email as ABAC subject. If no email, deny.
+  const subject = session.user?.email ? String(session.user.email) : ''
     const hasPermission = await checkABACPermission(
       subject,
       'admin:users',

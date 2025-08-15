@@ -117,6 +117,38 @@ export async function getEnforcer(): Promise<any> {
 export async function checkABACPermission(subject: string, object: string, action: string, context: ABACContext = {}): Promise<AuthResult> {
   const start = Date.now()
   try {
+  // Enforce strict email-only policy: attempt to normalize user:{id} -> email,
+    // but always use email as the enforcement subject. Do not accept plain
+    // user:{id} subjects for policy evaluation to avoid RBAC-style checks.
+    const originalSubject = subject
+    try {
+      if (subject.startsWith('user:')) {
+        const uid = subject.replace('user:', '')
+        const u = await prisma.user.findUnique({ where: { id: uid }, select: { email: true } })
+        if (u?.email) subject = u.email
+        else {
+          // If we cannot resolve to an email, set subject to an empty string so
+          // that enforcer checks will fail (no RBAC fallback to user:id).
+          subject = ''
+        }
+      }
+    } catch (err) {
+      structuredLogger.warn('Failed to normalize subject to email', { error: err instanceof Error ? err.message : String(err), subject: originalSubject })
+      subject = ''
+    }
+
+    // Runtime enforcement: if subject is missing or not an email, in production
+    // return denied immediately to avoid accidental RBAC access. In dev, warn
+    // and continue (optionally allowing dev fallback elsewhere).
+    if (!subject || !subject.includes('@')) {
+      const msg = `ABAC subject not email-like after normalization: "${originalSubject}" -> "${subject}"`
+      if (process.env.NODE_ENV === 'production') {
+        structuredLogger.error(msg)
+        return { allowed: false, reason: 'Invalid subject for ABAC (email required)', appliedPolicies: [], context, timestamp: new Date(), responseTime: Date.now() - start }
+      } else {
+        structuredLogger.warn(msg)
+      }
+    }
     const enforcer = await getEnforcer()
     let allowed = false
 
@@ -126,44 +158,16 @@ export async function checkABACPermission(subject: string, object: string, actio
       structuredLogger.warn('Primary enforce failed, will try fallbacks', { error: err instanceof Error ? err.message : String(err), subject, object, action })
     }
 
-    if (!allowed) {
-      // email -> user:{id}
-      if (subject.includes('@')) {
-        const cached = emailToUserIdCache.get(subject)
-        let uid: string | null = null
-        if (cached && (Date.now() - cached.ts) < SUBJECT_CACHE_TTL) uid = cached.id
-        else {
-          try {
-            const u = await prisma.user.findUnique({ where: { email: subject }, select: { id: true } })
-            if (u) { uid = u.id; emailToUserIdCache.set(subject, { id: u.id, ts: Date.now() }) }
-          } catch (err) {
-            structuredLogger.error('Failed to resolve email to userId', { error: err instanceof Error ? err.message : String(err), subject })
-          }
-        }
-        if (uid) { try { if (await enforcer.enforce(`user:${uid}`, object, action)) allowed = true } catch (_) {} }
-      }
-
-      // user:{id} -> email
-      if (!allowed && subject.startsWith('user:')) {
-        const uid = subject.replace('user:', '')
-        try {
-          const u = await prisma.user.findUnique({ where: { id: uid }, select: { email: true } })
-          if (u?.email) {
-            const altEmail = u.email
-            try {
-              const res = await enforcer.enforce(altEmail, object, action)
-              if (res) allowed = true
-            } catch (err) {
-              structuredLogger.error('Error enforcing alternative subject (user->email)', { error: err instanceof Error ? err.message : String(err), alt: altEmail })
-            }
-          }
-        } catch (err) {
-          structuredLogger.error('Failed to lookup user email for alternative enforcement', { error: err instanceof Error ? err.message : String(err), userId: uid })
-        }
-      }
-
-      // fallback by scanning policies
-      if (!allowed) {
+  if (!allowed) {
+      // Strict policy evaluation: do not attempt RBAC-like fallbacks. Only
+      // evaluate using the normalized email subject. However, keep a very small
+      // fallback: if the subject is an empty string (couldn't normalize), we
+      // skip additional checks and return denied.
+      if (!subject) {
+        // nothing more to do; denied
+      } else {
+        // fallback by scanning policies limited to email subjects (preserve
+        // wildcard support but do not try user:id matches)
         try {
           const policies = await enforcer.getPolicy()
           for (const p of policies) {
@@ -181,11 +185,12 @@ export async function checkABACPermission(subject: string, object: string, actio
       }
     }
 
-    const responseTime = Date.now() - start
-    const result: AuthResult = { allowed, reason: allowed ? 'Access granted by ABAC policy' : 'Access denied by ABAC policy', appliedPolicies: await getAppliedPolicies(enforcer, subject, object, action), context, timestamp: new Date(), responseTime }
+  const responseTime = Date.now() - start
+  const result: AuthResult = { allowed, reason: allowed ? 'Access granted by ABAC policy' : 'Access denied by ABAC policy', appliedPolicies: await getAppliedPolicies(enforcer, subject, object, action), context, timestamp: new Date(), responseTime }
 
-    structuredLogger.audit('ABAC_DECISION', { subject, object, action, context, allowed: result.allowed, responseTime: result.responseTime, appliedPolicies: result.appliedPolicies, performedBy: subject })
-    await saveAccessLog(subject, object, action, result)
+  // Log the decision using the normalized subject (email when available)
+  structuredLogger.audit('ABAC_DECISION', { subject, object, action, context, allowed: result.allowed, responseTime: result.responseTime, appliedPolicies: result.appliedPolicies, performedBy: subject })
+  await saveAccessLog(subject, object, action, result)
     return result
   } catch (error) {
     structuredLogger.error('ABAC permission check failed', { error: error instanceof Error ? error.message : String(error), subject, object, action, context })

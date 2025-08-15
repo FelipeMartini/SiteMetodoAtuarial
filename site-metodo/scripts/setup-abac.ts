@@ -42,17 +42,10 @@ async function setupABACPolicies() {
       console.log(`✅ Política criada: ${policy.v0} -> ${policy.v1} ${policy.v2}`)
     }
 
-    // Políticas padrão para usuários logados
-    const userPolicies = [
-      // Qualquer usuário logado pode ler sessões próprias
-      { ptype: 'p', v0: 'user:*', v1: 'session:read', v2: 'read' },
-      { ptype: 'p', v0: 'user:*', v1: 'area-cliente', v2: 'read' },
-    ]
-
-    for (const policy of userPolicies) {
-      await prisma.casbinRule.create({ data: policy })
-      console.log(`✅ Política de usuário criada: ${policy.v0} -> ${policy.v1} ${policy.v2}`)
-    }
+  // Nota: removemos políticas 'user:*' (RBAC) para forçar uso estrito por
+  // email (ABAC puro). Se desejar políticas que permitam leitura de sessão
+  // por qualquer usuário, crie políticas explícitas por email ou por
+  // atributos contextuais.
 
     console.log('🎉 Políticas ABAC configuradas com sucesso!')
 

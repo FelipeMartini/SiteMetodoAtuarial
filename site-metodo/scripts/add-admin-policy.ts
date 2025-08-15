@@ -8,7 +8,11 @@ async function main() {
   console.log('Adicionando política admin para', userId)
 
   // Preferir email se soubermos qual é; caso contrário, usar user:{id}
-  const subject = process.env.ADMIN_EMAIL || `user:${userId}`
+  const subject = process.env.ADMIN_EMAIL || ''
+  if (!subject) {
+    console.warn('ADMIN_EMAIL not set; add-admin-policy will not add policies by userId to avoid RBAC usage')
+    return
+  }
   const added = await addABACPolicy(
     subject,
     '*',

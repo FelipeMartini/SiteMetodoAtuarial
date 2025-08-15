@@ -16,50 +16,23 @@ async function setupABACPolicies() {
   console.log('🚀 Iniciando setup de políticas ABAC...')
 
   try {
-    // 1. Política admin universal para felipemartinii@gmail.com
-    await addABACPolicy(
-      'user:cme9393ab000083y90zydz4cg', // ID do usuário Felipe
-      '*', // Todos os objetos
-      '*', // Todas as ações
-      'allow',
-      { department: 'admin', location: '*', time: '*' }
-    )
+  // 1. Política admin universal para felipemartinii@gmail.com
+  const adminEmail = 'felipemartinii@gmail.com'
+  await addABACPolicy(adminEmail, '*', '*', 'allow', { department: 'admin', location: '*', time: '*' })
 
-    // 2. Política para acesso de sessão (todos os usuários autenticados)
-    await addABACPolicy(
-      'user:*',
-      'session:read',
-      'read',
-      'allow',
-      { time: '*', location: '*' }
-    )
+  // 2. Política para acesso de sessão (admin explicit)
+  await addABACPolicy(adminEmail, 'session:read', 'read', 'allow', { time: '*', location: '*' })
+  await addABACPolicy(adminEmail, 'session:write', 'write', 'allow', { time: '*', location: '*' })
 
-    // 3. Política para área cliente (usuários ativos)
-    await addABACPolicy(
-      'user:*',
-      'area-cliente:*',
-      '*',
-      'allow',
-      { time: 'business_hours', location: '*' }
-    )
+  // 3. Política para área cliente (admin explicit)
+  await addABACPolicy(adminEmail, 'area-cliente', 'read', 'allow', { time: 'business_hours', location: '*' })
 
-    // 4. Política para admin dashboard (apenas admins)
-    await addABACPolicy(
-      'department:admin',
-      'admin:*',
-      '*',
-      'allow',
-      { time: '*', location: '*' }
-    )
+  // 4. Política para admin:abac (admin explicit)
+  await addABACPolicy(adminEmail, 'admin:abac', 'read', 'allow', { time: '*', location: '*' })
+  await addABACPolicy(adminEmail, 'admin:abac', 'write', 'allow', { time: '*', location: '*' })
 
-    // 5. Política específica para endpoint ABAC check
-    await addABACPolicy(
-      'user:*',
-      'api:abac:check',
-      'read',
-      'allow',
-      { time: '*', location: '*' }
-    )
+  // 5. Política específica para endpoint ABAC check (admin only)
+  await addABACPolicy(adminEmail, 'api:abac:check', 'read', 'allow', { time: '*', location: '*' })
 
     // Recarregar políticas
     await reloadABACPolicies()

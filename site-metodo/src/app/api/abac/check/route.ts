@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { auth } from '../../../../../auth'
+import { auth } from '@/lib/auth'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'
 

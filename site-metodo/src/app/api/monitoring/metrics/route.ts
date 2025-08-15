@@ -75,7 +75,7 @@ export async function GET(request: NextRequest) {
 
     // Verificação ABAC: usuário pode acessar métricas do sistema
     const context = buildABACContext(request, session)
-    const subject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const subject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       subject,
       'resource:system:metrics',
@@ -109,7 +109,7 @@ export async function GET(request: NextRequest) {
     // Se métrica específica foi solicitada
     if (params.metric) {
       // Verificação ABAC adicional para métrica específica
-      const metricSubject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const metricSubject = session.user?.email ? String(session.user.email) : ''
       const metricAuthResult = await checkABACPermission(
         metricSubject,
         `resource:system:metrics:${params.metric}`,
@@ -162,7 +162,7 @@ export async function GET(request: NextRequest) {
     for (const metricName of availableMetrics) {
       // Para métricas sensíveis, verificar permissão individual
       if (metricName.includes('security') || metricName.includes('auth') || metricName.includes('user')) {
-        const metricSub = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const metricSub = session.user?.email ? String(session.user.email) : ''
         const metricAuthResult = await checkABACPermission(
           metricSub,
           `resource:system:metrics:${metricName}`,
@@ -185,7 +185,7 @@ export async function GET(request: NextRequest) {
     let health: unknown = null
     let healthHistory: unknown = null
 
-    const healthSubject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const healthSubject = session.user?.email ? String(session.user.email) : ''
     const healthAuthResult = await checkABACPermission(
       healthSubject,
       'resource:system:health',
@@ -307,7 +307,7 @@ export async function POST(request: NextRequest) {
     const context = buildABACContext(request, session)
     
     // Verificação ABAC: usuário pode executar ações administrativas em métricas
-    const postSubject = session.user.email ? String(session.user.email) : `user:${session.user.id}`
+  const postSubject = session.user?.email ? String(session.user.email) : ''
     const authResult = await checkABACPermission(
       postSubject,
       'resource:system:metrics',

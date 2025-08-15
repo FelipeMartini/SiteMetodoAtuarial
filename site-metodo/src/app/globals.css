@@ -1,14 +1,9 @@
 @import 'tailwindcss';
 @import '../styles/cursor-global.css';
 
-/* Fix Next.js error overlay interference in development */
-.nextjs-toast-errors-parent {
-  display: none !important;
-}
-
-nextjs-portal {
-  display: none !important;
-}
+/* Nota: anteriormente havia regras que escondiam o overlay de erro do Next.js.
+  Elas foram removidas para permitir que o overlay do Webpack/React Fast Refresh
+  apareça normalmente durante o desenvolvimento. */
 
 @layer base {
   :root {
@@ -265,5 +260,44 @@ nextjs-portal {
       opacity: 1;
       transform: translateY(0);
     }
+  }
+}
+
+/* Dev overlay fix: garantir que o overlay injetado por Next.js / webpack-dev-server
+   não seja afetado por transform/stacking contexts globais (ex: transform-style)
+   e apareça em tamanho legível e posicionado em relação ao viewport.
+   Essas regras visam apenas elementos de overlay usados em desenvolvimento. */
+
+@layer base {
+  /* Seletores conhecidos para overlays/portals usados por Next/webpack/react-refresh */
+  body > .nextjs-portal,
+  body > #nextjs-portal,
+  body > #__nextjs-overlay-root,
+  body > #webpack-dev-server-client-overlay,
+  body > iframe[id^="webpack-dev-server-client-overlay"],
+  body > .react-dev-overlay,
+  body > .react-error-overlay,
+  body > .nextjs-toast-errors-parent {
+    all: initial !important;
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    transform: none !important;
+    z-index: 2147483647 !important; /* garantir topo */
+    font-size: 16px !important; /* legibilidade */
+    pointer-events: auto !important;
+    -webkit-font-smoothing: antialiased !important;
+    -moz-osx-font-smoothing: grayscale !important;
+  }
+
+  /* Forçar que elementos internos do overlay não herdem transform/escala */
+  body > .nextjs-portal *,
+  body > #__nextjs-overlay-root *,
+  body > #webpack-dev-server-client-overlay *,
+  body > .react-error-overlay * {
+    transform: none !important;
+    position: static !important;
+    box-sizing: border-box !important;
   }
 }

@@ -32,6 +32,8 @@ async function main() {
   const policies = [
     { subject: email, object: 'admin:dashboard', action: 'read', effect: 'allow' },
     { subject: email, object: 'admin:dashboard', action: 'write', effect: 'allow' },
+  { subject: email, object: 'session:read', action: 'read', effect: 'allow' },
+  { subject: email, object: 'session:write', action: 'write', effect: 'allow' },
   { subject: email, object: 'admin:abac', action: 'read', effect: 'allow' },
   { subject: email, object: 'admin:abac', action: 'write', effect: 'allow' },
   { subject: email, object: 'usuario:areacliente', action: 'read', effect: 'allow' },
