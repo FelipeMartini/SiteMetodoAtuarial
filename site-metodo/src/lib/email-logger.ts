@@ -1,4 +1,4 @@
-import { structuredLogger, DatabaseLogger } from '@/lib/logger';
+import { structuredLogger } from '@/lib/logger';
 import { prisma } from '@/lib/prisma';
 
 interface EmailLogWhereClause {

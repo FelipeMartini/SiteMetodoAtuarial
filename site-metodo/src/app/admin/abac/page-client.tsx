@@ -5,28 +5,11 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Alert, AlertDescription } from '@/components/ui/alert';
+// removidos imports não utilizados: Label, Tabs, Textarea, Select, AlertDescription, Breadcrumbs
 import { DataTable } from '@/components/admin/data-table';
+import { Alert } from '@/components/ui/alert';
 import { StatsCard } from '@/components/admin/stats-card';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { 
-  Shield, 
-  Users, 
-  Lock, 
-  CheckCircle, 
-  XCircle, 
-  Activity,
-  UserCheck,
-  Settings,
-  Eye,
-  Trash2,
-  Plus,
-  RefreshCw
-} from 'lucide-react';
+import { Shield, Users, Lock, Trash2 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 
 interface Policy {
@@ -51,7 +34,7 @@ interface PermissionTestResult {
 
 export default function ABACPage() {
   const [policies, setPolicies] = useState<Policy[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
   const [testResult, setTestResult] = useState<PermissionTestResult | null>(null);
   const [testLoading, setTestLoading] = useState(false);
   
@@ -59,7 +42,7 @@ export default function ABACPage() {
   const [testSubject, setTestSubject] = useState('');
   const [testObject, setTestObject] = useState('');
   const [testAction, setTestAction] = useState('');
-  const [testContext, setTestContext] = useState('{}');
+  const [testContext, _setTestContext] = useState('{}');
 
   // Policy form state
   const [newPolicy, setNewPolicy] = useState({
@@ -118,7 +101,7 @@ export default function ABACPage() {
     }
   };
 
-  const addPolicy = async () => {
+  const _addPolicy = async () => {
     try {
       const response = await fetch('/api/admin/abac/policies', {
         method: 'POST',

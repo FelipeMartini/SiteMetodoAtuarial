@@ -1,22 +1,11 @@
-import { auth } from '@/lib/auth'
-import { serverCheckPermissionDetailed } from '@/lib/abac/server'
+"use client"
 
-export default async function ABACPageServer() {
-  const session = await auth()
-  if (!session?.user?.email) {
-    return new Response(null, { status: 302, headers: { Location: '/login' } })
-  }
+import ABACClient from './page-client'
 
-  const authResult = await serverCheckPermissionDetailed(session.user.email, 'admin:abac', 'read')
-  if (!authResult.allowed) {
-    return new Response(null, { status: 302, headers: { Location: '/unauthorized' } })
-  }
-
-  const { default: ABACClient } = await import('./page-client')
-  const ABACClientComp = ABACClient
-  return (
-    <ABACClientComp />
-  )
+export default function ABACPageClientWrapper() {
+  // Renderiza o componente cliente ABAC; autenticação e permissões
+  // devem ser tratadas no próprio componente cliente ou via middleware.
+  return <ABACClient />
 }
 /*
   O resto do arquivo contia a versão client-side do admin ABAC com JSX e

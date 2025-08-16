@@ -1,14 +1,12 @@
 "use client"
-import { useEffect, useState, useMemo } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { ColumnDef } from '@tanstack/react-table'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Badge } from '@/components/ui/badge'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Card, CardContent } from '@/components/ui/card'
+import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
-import { Download, RefreshCw, Filter } from 'lucide-react'
+import { Download, RefreshCw } from 'lucide-react'
 import { DataTable } from '@/components/admin/data-table'
 
 interface ObservabilidadeTabsClientProps { type: string }
@@ -76,8 +74,6 @@ export default function ObservabilidadeTabsClient({ type }: ObservabilidadeTabsC
     return () => { abort = true }
   }, [queryString])
 
-  if (loading) return <div className="space-y-2"><Skeleton className="h-6 w-40"/><Skeleton className="h-10 w-full"/><Skeleton className="h-10 w-full"/></div>
-  if (error) return <div className="text-sm text-red-500">Erro: {error}</div>
 
   const exportar = (formato: 'csv'|'json') => {
     const url = `/api/admin/observability?${queryString}&export=${formato}`
@@ -116,61 +112,65 @@ export default function ObservabilidadeTabsClient({ type }: ObservabilidadeTabsC
     const baseDate: ColumnDef<any, any> = {
       id: 'createdAt',
       header: 'Data',
-      accessorFn: r => r.createdAt,
-      cell: ({ getValue }) => <span className="whitespace-nowrap">{new Date(getValue() as string).toLocaleString()}</span>
+      accessorFn: (r: any) => r.createdAt,
+      cell: ({ getValue }: { getValue: () => any }) => <span className="whitespace-nowrap">{new Date(getValue() as string).toLocaleString()}</span>
     }
     switch (type) {
-      case 'sistema':
+        case 'sistema':
         return [
           baseDate,
-          { id: 'level', header: 'Nível', accessorKey: 'level', cell: ({ row }) => <Badge variant={levelVariant(row.original.level)}>{row.original.level}</Badge> },
-          { id: 'message', header: 'Mensagem', accessorKey: 'message', cell: ({ row }) => <div title={row.original.message} className="truncate max-w-[240px]">{row.original.message}</div> },
+          { id: 'level', header: 'Nível', accessorKey: 'level', cell: ({ row }: { row: any }) => <Badge variant={levelVariant(row.original.level)}>{row.original.level}</Badge> },
+          { id: 'message', header: 'Mensagem', accessorKey: 'message', cell: ({ row }: { row: any }) => <div title={row.original.message} className="truncate max-w-[240px]">{row.original.message}</div> },
           { id: 'module', header: 'Módulo', accessorKey: 'module' }
         ]
-      case 'auditoria':
+        case 'auditoria':
         return [
           baseDate,
-            { id: 'action', header: 'Ação', accessorKey: 'action', cell: ({ row }) => <Badge variant="outline">{row.original.action}</Badge> },
+            { id: 'action', header: 'Ação', accessorKey: 'action', cell: ({ row }: { row: any }) => <Badge variant="outline">{row.original.action}</Badge> },
             { id: 'resource', header: 'Recurso', accessorKey: 'resource' },
-            { id: 'userId', header: 'User', accessorFn: r => r.userId, cell: ({ getValue }) => {
+            { id: 'userId', header: 'User', accessorFn: (r: any) => r.userId, cell: ({ getValue }: { getValue: () => any }) => {
               const v = getValue() as string | undefined
               return v ? v.slice(0,8) : '-'
             } }
         ]
-      case 'performance':
+        case 'performance':
         return [
           baseDate,
           { id: 'operation', header: 'Operação', accessorKey: 'operation' },
           { id: 'duration', header: 'Duração(ms)', accessorKey: 'duration' },
-          { id: 'path', header: 'Path', accessorKey: 'path', cell: ({ row }) => <div title={row.original.path} className="truncate max-w-[160px]">{row.original.path}</div> },
+          { id: 'path', header: 'Path', accessorKey: 'path', cell: ({ row }: { row: any }) => <div title={row.original.path} className="truncate max-w-[160px]">{row.original.path}</div> },
         ]
-      case 'email':
+        case 'email':
         return [
           baseDate,
-          { id: 'to', header: 'Para', accessorKey: 'to', cell: ({ row }) => <div title={row.original.to} className="truncate max-w-[140px]">{row.original.to}</div> },
-          { id: 'subject', header: 'Assunto', accessorKey: 'subject', cell: ({ row }) => <div title={row.original.subject} className="truncate max-w-[160px]">{row.original.subject}</div> },
-          { id: 'status', header: 'Status', accessorKey: 'status', cell: ({ row }) => <Badge variant={statusVariant(row.original.status)}>{row.original.status}</Badge> },
+          { id: 'to', header: 'Para', accessorKey: 'to', cell: ({ row }: { row: any }) => <div title={row.original.to} className="truncate max-w-[140px]">{row.original.to}</div> },
+          { id: 'subject', header: 'Assunto', accessorKey: 'subject', cell: ({ row }: { row: any }) => <div title={row.original.subject} className="truncate max-w-[160px]">{row.original.subject}</div> },
+          { id: 'status', header: 'Status', accessorKey: 'status', cell: ({ row }: { row: any }) => <Badge variant={statusVariant(row.original.status)}>{row.original.status}</Badge> },
         ]
-      case 'notificacoes':
+        case 'notificacoes':
         return [
           baseDate,
-          { id: 'title', header: 'Título', accessorKey: 'title', cell: ({ row }) => <div title={row.original.title} className="truncate max-w-[160px]">{row.original.title}</div> },
-          { id: 'userId', header: 'Usuário', accessorKey: 'userId', cell: ({ row }) => row.original.userId?.slice(0,8) },
-          { id: 'status', header: 'Status', accessorKey: 'status', cell: ({ row }) => <Badge variant={statusVariant(row.original.status)}>{row.original.status}</Badge> },
+          { id: 'title', header: 'Título', accessorKey: 'title', cell: ({ row }: { row: any }) => <div title={row.original.title} className="truncate max-w-[160px]">{row.original.title}</div> },
+          { id: 'userId', header: 'Usuário', accessorKey: 'userId', cell: ({ row }: { row: any }) => row.original.userId?.slice(0,8) },
+          { id: 'status', header: 'Status', accessorKey: 'status', cell: ({ row }: { row: any }) => <Badge variant={statusVariant(row.original.status)}>{row.original.status}</Badge> },
         ]
-      case 'seguranca':
+        case 'seguranca':
         return [
           baseDate,
-          { id: 'level', header: 'Nível', accessorKey: 'level', cell: ({ row }) => <Badge variant={levelVariant(row.original.level)}>{row.original.level}</Badge> },
-          { id: 'message', header: 'Mensagem', accessorKey: 'message', cell: ({ row }) => <div title={row.original.message} className="truncate max-w-[240px]">{row.original.message}</div> },
+          { id: 'level', header: 'Nível', accessorKey: 'level', cell: ({ row }: { row: any }) => <Badge variant={levelVariant(row.original.level)}>{row.original.level}</Badge> },
+          { id: 'message', header: 'Mensagem', accessorKey: 'message', cell: ({ row }: { row: any }) => <div title={row.original.message} className="truncate max-w-[240px]">{row.original.message}</div> },
         ]
       default:
         return [
           baseDate,
-          { id: 'info', header: 'Info', accessorFn: r => JSON.stringify(r).slice(0,60) }
+          { id: 'info', header: 'Info', accessorFn: (r: any) => JSON.stringify(r).slice(0,60) }
         ]
     }
   }, [type])
+
+  // Mostrar estados de loading/erro sempre após todas as hooks declaradas
+  if (loading) return <div className="space-y-2"><Skeleton className="h-6 w-40"/><Skeleton className="h-10 w-full"/><Skeleton className="h-10 w-full"/></div>
+  if (error) return <div className="text-sm text-red-500">Erro: {error}</div>
 
   if (rows.length === 0) return (
     <div className="space-y-3">
@@ -185,31 +185,31 @@ export default function ObservabilidadeTabsClient({ type }: ObservabilidadeTabsC
         <div className="flex flex-wrap gap-2 items-end">
           <div className="flex flex-col w-28">
             <label className="text-[10px] uppercase font-medium">Nível</label>
-            <Input value={nivel} onChange={e=>setNivel(e.target.value)} placeholder="info" className="h-8" />
+            <Input value={nivel} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setNivel(e.target.value)} placeholder="info" className="h-8" />
           </div>
           <div className="flex flex-col w-32">
             <label className="text-[10px] uppercase font-medium">Ação</label>
-            <Input value={acao} onChange={e=>setAcao(e.target.value)} placeholder="LOGIN" className="h-8" />
+            <Input value={acao} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setAcao(e.target.value)} placeholder="LOGIN" className="h-8" />
           </div>
             <div className="flex flex-col w-32">
             <label className="text-[10px] uppercase font-medium">Recurso</label>
-            <Input value={recurso} onChange={e=>setRecurso(e.target.value)} placeholder="auth" className="h-8" />
+            <Input value={recurso} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setRecurso(e.target.value)} placeholder="auth" className="h-8" />
           </div>
           <div className="flex flex-col w-32">
             <label className="text-[10px] uppercase font-medium">Status</label>
-            <Input value={statusFiltro} onChange={e=>setStatusFiltro(e.target.value)} placeholder="ok" className="h-8" />
+            <Input value={statusFiltro} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setStatusFiltro(e.target.value)} placeholder="ok" className="h-8" />
           </div>
           <div className="flex flex-col w-36">
             <label className="text-[10px] uppercase font-medium">Search</label>
-            <Input value={search} onChange={e=>setSearch(e.target.value)} placeholder="texto..." className="h-8" />
+            <Input value={search} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setSearch(e.target.value)} placeholder="texto..." className="h-8" />
           </div>
           <div className="flex flex-col w-36">
             <label className="text-[10px] uppercase font-medium">De</label>
-            <Input type="date" value={dateFrom} onChange={e=>setDateFrom(e.target.value)} className="h-8" />
+            <Input type="date" value={dateFrom} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setDateFrom(e.target.value)} className="h-8" />
           </div>
           <div className="flex flex-col w-36">
             <label className="text-[10px] uppercase font-medium">Até</label>
-            <Input type="date" value={dateTo} onChange={e=>setDateTo(e.target.value)} className="h-8" />
+            <Input type="date" value={dateTo} onChange={(e: React.ChangeEvent<HTMLInputElement>)=>setDateTo(e.target.value)} className="h-8" />
           </div>
           <div className="flex items-center gap-2 ml-auto">
             <Button size="sm" variant="outline" onClick={()=>{setPage(1);}} title="Recarregar"><RefreshCw className="h-4 w-4" /></Button>

@@ -16,7 +16,8 @@ export const AdminDashboard = lazy(() => import('@/app/admin/dashboard/page'))
 export const CalculosAtuariais = lazy(() => import('@/app/area-cliente/calculos-atuariais/page'))
 
 // Componentes de auditoria
-export const AuditoriaPage = lazy(() => import('@/app/admin/auditoria/page'))
+// auditoria page agora é um redirect server-side que não exporta componente React; apontar para um stub client que faz redirect
+export const AuditoriaPage = lazy(() => import('@/app/admin/auditoria/page-client').then(m => ({ default: m.default })))
 
 // Componente de ABAC admin (client-side) - precisa apontar para o arquivo client
 // Garantimos retorno no formato { default: Component } para satisfazer React.lazy

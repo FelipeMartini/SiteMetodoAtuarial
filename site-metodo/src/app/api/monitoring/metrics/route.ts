@@ -4,7 +4,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { monitoring } from '@/lib/monitoring'
-import { structuredLogger as logger, performanceLogger } from '@/lib/logger'
+import { structuredLogger as logger, performanceLogger as _performanceLogger } from '@/lib/logger'
 import { getClientIP } from '@/lib/utils/ip'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'

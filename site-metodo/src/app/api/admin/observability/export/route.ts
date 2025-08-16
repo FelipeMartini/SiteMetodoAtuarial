@@ -34,7 +34,7 @@ export async function GET(request: NextRequest) {
       return NextResponse.json({ error: 'Parâmetros inválidos', issues: parsed.error.issues }, { status: 400 })
     }
     params = { ...parsed.data, type: parsed.data.type.toLowerCase(), all: raw.all }
-  } catch (e) {
+  } catch (_e) {
     await structuredLogger.warn('Observability export parse fail', { correlationId })
     return NextResponse.json({ error: 'Invalid parameters' }, { status: 400 })
   }
