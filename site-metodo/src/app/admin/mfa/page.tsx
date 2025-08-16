@@ -6,7 +6,7 @@ import { LoadingSpinner } from '@/components/ui/loading-spinner'
 
 export default function MfaPage() {
   return (
-    <div className="min-h-screen bg-gray-50">
+  <div className="min-h-screen bg-background">
       <Suspense fallback={<LoadingSpinner />}>
         <MfaConfiguracao />
       </Suspense>

@@ -29,7 +29,7 @@ function UnauthorizedPageContent() {
   }
 
   return (
-    <div className='min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center p-4'>
+  <div className='min-h-screen bg-gradient-to-br from-background to-muted/5 flex items-center justify-center p-4'>
       <Card className='w-full max-w-md'>
         <CardHeader className='text-center'>
           <div className='mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100'>

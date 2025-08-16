@@ -1,6 +1,41 @@
-// Implementação compatível delegando ao simple-logger
-import simpleLogger, { auditLogger as _auditLogger } from '../simple-logger'
+/**
+ * Logger de auditoria que delega para o sistema de logging com banco de dados
+ * Mantém compatibilidade com a interface anterior enquanto usa o novo sistema
+ */
+import DatabaseLogger, { type LogContext, type AuditLogData, type SystemLogData } from '../logging/database-logger';
 
+// Interface de compatibilidade para auditoria
+export interface AuditEvent {
+  action: string;
+  resource: string;
+  userId?: string;
+  details?: any;
+  metadata?: any;
+  success?: boolean;
+  error?: string;
+}
+
+export interface GetAuditLogsParams {
+  page?: number;
+  limit?: number;
+  userId?: string;
+  action?: string;
+  resource?: string;
+  startDate?: Date;
+  endDate?: Date;
+}
+
+export interface AuditLogResponse {
+  logs: any[];
+  pagination: {
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  };
+}
+
+// Enums de compatibilidade
 export enum AuditSeverity {
   LOW = 'LOW',
   MEDIUM = 'MEDIUM',
@@ -21,66 +56,269 @@ export enum AuditAction {
 }
 
 export interface AuditData {
-  action: AuditAction
-  severity: AuditSeverity
-  success: boolean
-  message?: string
-  userId?: string
-  userEmail?: string
-  resource?: string
-  details?: Record<string, unknown>
-  // Campos adicionais usados em vários call-sites
-  description?: string
-  target?: string
-  metadata?: Record<string, unknown>
-  performedBy?: string
-  changes?: Record<string, unknown>
-  [key: string]: any
+  action: AuditAction;
+  severity: AuditSeverity;
+  success: boolean;
+  message?: string;
+  userId?: string;
+  userEmail?: string;
+  resource?: string;
+  details?: Record<string, unknown>;
+  description?: string;
+  target?: string;
+  metadata?: Record<string, unknown>;
+  performedBy?: string;
+  changes?: Record<string, unknown>;
+  [key: string]: any;
 }
 
-export const auditLogger = {
-  async log(data: AuditData) {
-    simpleLogger.info(`audit:${data.action}`, { ...data })
-  },
+/**
+ * Sistema de auditoria com logging em banco de dados
+ */
+export class AuditLogger {
+  /**
+   * Registra um evento de auditoria
+   */
+  static async logEvent(event: AuditEvent, context?: LogContext): Promise<void> {
+    try {
+      // Mapeia a ação para os tipos padrão
+      const actionMapping: Record<string, AuditLogData['action']> = {
+        'create': 'CREATE',
+        'update': 'UPDATE', 
+        'delete': 'DELETE',
+        'view': 'VIEW',
+        'access': 'ACCESS',
+        'login': 'LOGIN',
+        'logout': 'LOGOUT',
+      };
 
-  async logAuth(action: AuditAction, userEmail: string, success: boolean, details?: Record<string, unknown>) {
-    _auditLogger.userCreated?.(userEmail, userEmail, details as any)
-  },
+      const auditData: AuditLogData = {
+        action: actionMapping[event.action.toLowerCase()] || 'ACCESS',
+        resource: event.resource,
+        success: event.success,
+        errorMessage: event.error,
+        newValues: event.details,
+        context: {
+          ...context,
+          userId: event.userId || context?.userId,
+          metadata: { ...event.metadata, ...context?.metadata },
+        },
+      };
 
-  async logLogout(userEmail: string, details?: Record<string, unknown>) {
-    simpleLogger.info('audit:logout', { userEmail, ...details })
-  },
+      await DatabaseLogger.logAudit(auditData);
 
-  async logAccess(userEmail: string, resource: string, granted: boolean, details?: Record<string, unknown>) {
-    _auditLogger.apiAccess?.(userEmail || 'unknown', 'GET', resource, details as any)
-  },
+      // Se for um erro, também registra no log de sistema
+      if (!event.success && event.error) {
+        const systemData: SystemLogData = {
+          level: 'ERROR',
+          message: `Falha na operação: ${event.action} ${event.resource}`,
+          module: 'audit',
+          operation: event.action,
+          error: event.error,
+          context,
+        };
 
-  async logDataAccess(userEmail: string, resource: string, action: string, details?: Record<string, unknown>) {
-    simpleLogger.info('audit:data_access', { userEmail, resource, action, ...details })
-  },
+        await DatabaseLogger.logSystem(systemData);
+      }
+    } catch (error) {
+      console.error('[AuditLogger] Falha ao registrar evento:', error);
+      // Fallback para console
+      console.log(`[AUDIT] ${event.action} ${event.resource}`, {
+        userId: event.userId,
+        success: event.success,
+        error: event.error,
+      });
+    }
+  }
 
-  async logUserManagement(action: string, targetUserEmail: string, adminEmail: string, details?: Record<string, unknown>) {
-    simpleLogger.info('audit:user_management', { action, targetUserEmail, adminEmail, ...details })
-  },
+  /**
+   * Obtém logs de auditoria com paginação
+   */
+  static async getAuditLogs(params: GetAuditLogsParams = {}): Promise<AuditLogResponse> {
+    try {
+      return await DatabaseLogger.getAuditLogs({
+        page: params.page,
+        limit: params.limit,
+        action: params.action,
+        resource: params.resource,
+        userId: params.userId,
+        startDate: params.startDate,
+        endDate: params.endDate,
+      });
+    } catch (error) {
+      console.error('[AuditLogger] Falha ao buscar logs:', error);
+      return {
+        logs: [],
+        pagination: {
+          page: params.page || 1,
+          limit: params.limit || 50,
+          total: 0,
+          totalPages: 0,
+        },
+      };
+    }
+  }
 
-  async logPermissionChange(userEmail: string, resource: string, oldPermissions: unknown, newPermissions: unknown, adminEmail: string) {
-    simpleLogger.info('audit:permission_change', { userEmail, resource, oldPermissions, newPermissions, adminEmail })
-  },
+  /**
+   * Obtém estatísticas de auditoria
+   */
+  static async getAuditStats() {
+    try {
+      const [recentErrors, totalLogs] = await Promise.all([
+        DatabaseLogger.getRecentErrors(5),
+        DatabaseLogger.getAuditLogs({ limit: 1 }),
+      ]);
 
-  async logSecurityEvent(message: string, severity: AuditSeverity, details?: Record<string, unknown>) {
-    simpleLogger.warn(`security:${severity}`, { message, ...details })
-  },
-
-  async getAuditLogs(_filters?: Record<string, unknown>, _pagination?: { page: number; limit: number }) {
-    // FUTURO: implementar consulta real (ex: Prisma AccessLog) com paginação
-    return [] as any
-  },
-
-  async getAuditStats() {
-    return { totalEvents: 0 } as any
+      return {
+        recentErrors: recentErrors.length,
+        totalLogs: totalLogs.pagination.total,
+        lastLogDate: totalLogs.logs[0]?.createdAt || null,
+      };
+    } catch (error) {
+      console.error('[AuditLogger] Falha ao obter estatísticas:', error);
+      return {
+        recentErrors: 0,
+        totalLogs: 0,
+        lastLogDate: null,
+      };
+    }
   }
 }
 
-export function useAuditLogger() { return auditLogger }
+// Compatibilidade com interface anterior
+export const auditLogger = {
+  async log(data: AuditData, context?: LogContext) {
+    const actionMap: Record<AuditAction, string> = {
+      [AuditAction.LOGIN_SUCCESS]: 'login',
+      [AuditAction.LOGIN_FAILED]: 'login',
+      [AuditAction.ACCESS_GRANTED]: 'access',
+      [AuditAction.ACCESS_DENIED]: 'access',
+      [AuditAction.DATA_ACCESS]: 'access',
+      [AuditAction.PERMISSION_CHANGE]: 'update',
+      [AuditAction.USER_CREATE]: 'create',
+      [AuditAction.USER_UPDATE]: 'update',
+      [AuditAction.USER_DELETE]: 'delete',
+    };
 
-export default auditLogger
+    await AuditLogger.logEvent({
+      action: actionMap[data.action] || 'access',
+      resource: data.resource || 'system',
+      userId: data.userId,
+      success: data.success,
+      details: data.details,
+      metadata: {
+        severity: data.severity,
+        message: data.message,
+        userEmail: data.userEmail,
+        description: data.description,
+        target: data.target,
+        performedBy: data.performedBy,
+        changes: data.changes,
+        ...data.metadata,
+      },
+    }, context);
+  },
+
+  async logAuth(action: AuditAction, userEmail: string, success: boolean, details?: Record<string, unknown>, context?: LogContext) {
+    await this.log({
+      action,
+      severity: success ? AuditSeverity.LOW : AuditSeverity.HIGH,
+      success,
+      userEmail,
+      resource: 'authentication',
+      details,
+    }, context);
+  },
+
+  async logLogout(userEmail: string, _details?: Record<string, unknown>, context?: LogContext) {
+    await AuditLogger.logEvent({
+      action: 'logout',
+      resource: 'user_session',
+      userId: userEmail,
+      success: true,
+      metadata: { logoutAction: true },
+    }, context);
+  },
+
+  async logAccess(userEmail: string, resource: string, granted: boolean, details?: Record<string, unknown>, context?: LogContext) {
+    await AuditLogger.logEvent({
+      action: 'access',
+      resource,
+      userId: userEmail,
+      success: granted,
+      details,
+      metadata: { resourceAccess: true },
+    }, context);
+  },
+
+  async logDataAccess(userEmail: string, resource: string, action: string, details?: Record<string, unknown>, context?: LogContext) {
+    await AuditLogger.logEvent({
+      action: 'access',
+      resource,
+      userId: userEmail,
+      success: true,
+      details,
+      metadata: { dataAccessType: action },
+    }, context);
+  },
+
+  async logUserManagement(action: string, targetUserEmail: string, adminEmail: string, details?: Record<string, unknown>, context?: LogContext) {
+    await AuditLogger.logEvent({
+      action,
+      resource: 'user',
+      userId: adminEmail,
+      success: true,
+      details,
+      metadata: { targetUser: targetUserEmail, adminAction: true },
+    }, context);
+  },
+
+  async logPermissionChange(userEmail: string, resource: string, oldPermissions: unknown, newPermissions: unknown, adminEmail: string, context?: LogContext) {
+    const auditData: AuditLogData = {
+      action: 'UPDATE',
+      resource: 'permissions',
+      oldValues: { userEmail, resource, permissions: oldPermissions },
+      newValues: { userEmail, resource, permissions: newPermissions },
+      success: true,
+      context: {
+        ...context,
+        userId: adminEmail,
+        metadata: { permissionUpdate: true, ...context?.metadata },
+      },
+    };
+
+    await DatabaseLogger.logAudit(auditData);
+  },
+
+  async logSecurityEvent(message: string, severity: AuditSeverity, details?: Record<string, unknown>, context?: LogContext) {
+    await DatabaseLogger.logSystem({
+      level: severity === AuditSeverity.CRITICAL ? 'ERROR' : 'WARN',
+      message: `Evento de segurança: ${message}`,
+      module: 'security',
+      operation: 'security_event',
+      context: {
+        ...context,
+        metadata: { severity, ...details },
+      },
+    });
+  },
+
+  async getAuditLogs(_filters?: Record<string, unknown>, _pagination?: { page: number; limit: number }) {
+    return await AuditLogger.getAuditLogs({
+      page: _pagination?.page,
+      limit: _pagination?.limit,
+      ..._filters,
+    });
+  },
+
+  async getAuditStats() {
+    return await AuditLogger.getAuditStats();
+  },
+};
+
+export function useAuditLogger() { 
+  return auditLogger;
+}
+
+// Exporta compatibilidade com implementação anterior
+export default auditLogger;

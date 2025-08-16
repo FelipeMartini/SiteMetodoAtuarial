@@ -13,7 +13,7 @@ export default function AbasPlanilhaExcel({ planilhas, abaAtiva, onTrocarAba }: 
       {planilhas.map((p) => (
         <button
           key={p.nome}
-          className={`px-4 py-2 rounded ${abaAtiva === p.nome ? 'bg-blue-600 text-white' : 'bg-gray-200'}`}
+          className={`px-4 py-2 rounded ${abaAtiva === p.nome ? 'bg-blue-600 text-white' : 'bg-muted/10'}`}
           onClick={() => onTrocarAba(p.nome)}
         >
           {p.nome}

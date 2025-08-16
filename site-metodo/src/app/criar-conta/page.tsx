@@ -56,7 +56,7 @@ export default function CriarContaPage() {
               <Separator className='my-6' />
 
               <div className='text-center'>
-                <p className='text-xs text-gray-500 leading-relaxed'>
+                <p className='text-xs text-muted-foreground leading-relaxed'>
                   Ao criar uma conta, você concorda com nossos{' '}
                   <Link href='/termos' className='text-blue-600 hover:text-blue-700 underline'>
                     Termos de Uso
@@ -73,7 +73,7 @@ export default function CriarContaPage() {
 
         {/* Rodapé informativo */}
         <div className='text-center mt-8'>
-          <p className='text-sm text-gray-500'>
+          <p className='text-sm text-muted-foreground'>
             Tendo problemas?{' '}
             <Link href='/contato' className='text-blue-600 hover:text-blue-700 underline'>
               Entre em contato conosco

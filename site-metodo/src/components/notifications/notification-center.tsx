@@ -223,12 +223,12 @@ export function NotificationCenter({
 
   const getPriorityColor = (priority: NotificationPriority) => {
     const colors = {
-      low: 'text-gray-500',
+  low: 'text-muted-foreground',
       normal: 'text-blue-500',
       high: 'text-orange-500',
       urgent: 'text-red-500',
     }
-    return colors[priority] || 'text-gray-500'
+  return colors[priority] || 'text-muted-foreground'
   }
 
   if (error) {
@@ -357,7 +357,7 @@ export function NotificationCenter({
                 </div>
               ))
             ) : notifications.length === 0 ? (
-              <div className='p-8 text-center text-gray-500'>
+              <div className='p-8 text-center text-muted-foreground'>
                 <BellOff className='h-12 w-12 mx-auto mb-4 text-gray-300' />
                 <p>Nenhuma notificação encontrada</p>
               </div>
@@ -419,7 +419,7 @@ function NotificationItem({
   return (
     <div
       className={cn(
-        'p-4 border-b hover:bg-gray-50 transition-colors cursor-pointer',
+  'p-4 border-b hover:bg-muted/10 transition-colors cursor-pointer',
         isUnread && 'bg-blue-50 border-l-4 border-l-blue-500',
         isSelected && 'bg-blue-100'
       )}
@@ -460,7 +460,7 @@ function NotificationItem({
           <p
             className={cn(
               'text-sm mt-1 line-clamp-2',
-              isUnread ? 'text-gray-700' : 'text-gray-500'
+              isUnread ? 'text-foreground' : 'text-muted-foreground'
             )}
           >
             {notification.message}

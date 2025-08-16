@@ -95,7 +95,7 @@ function DirectoryStructureDoc() {
 			>
 				When creating a new file, ask yourself these questions in order:
 			</Typography>
-			<Paper className="mb-6 bg-gray-50 p-4">
+			<Paper className="mb-6 bg-muted/10 p-4">
 				<ol className="list-inside list-decimal space-y-2">
 					<li>
 						<strong>API-related?</strong> → <code>api/</code> (always create this folder)

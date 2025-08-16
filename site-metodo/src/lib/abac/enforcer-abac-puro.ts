@@ -5,6 +5,9 @@ import { newEnforcer } from 'casbin'
 import { PrismaAdapter } from 'casbin-prisma-adapter'
 import { prisma } from '@/lib/prisma'
 import { structuredLogger } from '@/lib/logger'
+import DatabaseLogger from '@/lib/logging/database-logger'
+
+const logger = structuredLogger
 
 const ABAC_MODEL_PATH = path.join(process.cwd(), 'src/lib/abac/abac-model.conf')
 
@@ -191,6 +194,51 @@ export async function checkABACPermission(subject: string, object: string, actio
 
   // Log the decision using the normalized subject (email when available)
   structuredLogger.audit('ABAC_DECISION', { subject, object, action, context, allowed: result.allowed, responseTime: result.responseTime, appliedPolicies: result.appliedPolicies, performedBy: subject })
+  
+  // Registra no sistema de logging com banco de dados
+  try {
+    await DatabaseLogger.logAudit({
+      action: 'ACCESS',
+      resource: object,
+      resourceId: `${object}:${action}`,
+      success: result.allowed,
+      context: {
+        userId: subject,
+        correlationId: DatabaseLogger.generateCorrelationId(),
+        metadata: {
+          subject,
+          action,
+          context,
+          appliedPolicies: result.appliedPolicies,
+          responseTime: result.responseTime,
+          originalSubject,
+        },
+      },
+    });
+
+    // Se for negado, registra também no log de sistema
+    if (!result.allowed) {
+      await DatabaseLogger.logSystem({
+        level: 'WARN',
+        message: `Acesso negado: ${subject} tentou ${action} em ${object}`,
+        module: 'abac',
+        operation: 'permission_check',
+        context: {
+          userId: subject,
+          metadata: {
+            object,
+            action,
+            context,
+            appliedPolicies: result.appliedPolicies,
+            originalSubject,
+          },
+        },
+      });
+    }
+  } catch (dbError) {
+    structuredLogger.error('Failed to log ABAC decision to database', { error: dbError instanceof Error ? dbError.message : String(dbError) });
+  }
+
   // Persist a lightweight log line for quick debugging in XLOGS
   try {
     const logsDir = path.resolve(process.cwd(), 'XLOGS')

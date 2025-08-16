@@ -116,7 +116,7 @@ function AuthErrorContent() {
 
           {_error && (
             <div className='text-center'>
-              <p className='text-xs text-gray-500'>Código do erro: {_error}</p>
+              <p className='text-xs text-muted-foreground'>Código do erro: {_error}</p>
             </div>
           )}
         </CardContent>

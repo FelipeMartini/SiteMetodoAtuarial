@@ -108,7 +108,7 @@ export const OptimizedImage = memo(function OptimizedImage({
   if (hasError) {
     return (
       <div
-        className={`flex items-center justify-center bg-gray-200 text-gray-500 ${className}`}
+  className={`flex items-center justify-center bg-muted/10 text-muted-foreground ${className}`}
         style={{ width, height, ...style }}
       >
         <span className='text-sm'>Erro ao carregar imagem</span>
@@ -134,7 +134,7 @@ export const OptimizedImage = memo(function OptimizedImage({
         onError={handleError}
       />
       {isLoading && (
-        <div className='absolute inset-0 bg-gray-200 animate-pulse' style={{ width, height }} />
+  <div className='absolute inset-0 bg-muted/10 animate-pulse' style={{ width, height }} />
       )}
     </div>
   )

@@ -345,7 +345,7 @@ export default function EmailManagementPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+  <div className="flex min-h-screen bg-background">
       <div className="p-6 space-y-6">
         {/* Header */}
         <div className="space-y-2">

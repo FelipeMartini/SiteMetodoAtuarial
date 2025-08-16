@@ -170,7 +170,7 @@ export default function MonitoringDashboard() {
       case 'unhealthy':
         return <XCircle className='h-5 w-5 text-red-500' />
       default:
-        return <Monitor className='h-5 w-5 text-gray-500' />
+  return <Monitor className='h-5 w-5 text-muted-foreground' />
     }
   }
 
@@ -183,7 +183,7 @@ export default function MonitoringDashboard() {
       case 'unhealthy':
         return 'bg-red-500'
       default:
-        return 'bg-gray-500'
+  return 'bg-muted/10'
     }
   }
 

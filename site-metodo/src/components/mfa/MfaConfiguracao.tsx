@@ -320,7 +320,7 @@ export default function MfaConfiguracao() {
                     Escaneie este QR Code com seu app authenticator (Google Authenticator, Authy, etc.)
                   </p>
                   
-                  <div className="bg-gray-50 p-3 rounded border">
+                  <div className="bg-muted/10 p-3 rounded border">
                     <p className="text-xs font-semibold">Chave manual:</p>
                     <code className="text-sm break-all">{manualKey}</code>
                   </div>

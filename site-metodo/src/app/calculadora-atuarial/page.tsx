@@ -395,7 +395,7 @@ export default function CalculadoraAtuarialPage() {
                 </div>
 
                 {resultado.detalhes && (
-                  <div className="mt-4 p-3 bg-gray-50 rounded-lg">
+                  <div className="mt-4 p-3 bg-muted/10 rounded-lg">
                     <h4 className="font-medium text-gray-700 mb-2">Detalhes:</h4>
                     <div className="space-y-1 text-sm text-gray-600">
                       {Object.entries(resultado.detalhes).map(([key, value]) => (
@@ -412,7 +412,7 @@ export default function CalculadoraAtuarialPage() {
                 )}
               </div>
             ) : (
-              <div className="text-center text-gray-500 py-8">
+              <div className="text-center text-muted-foreground py-8">
                 <Shield className="w-12 h-12 mx-auto mb-4 text-gray-300" />
                 <p>Selecione um tipo de cálculo e preencha os parâmetros para ver os resultados</p>
               </div>

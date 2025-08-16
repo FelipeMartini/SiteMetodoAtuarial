@@ -34,6 +34,10 @@ model User {
   notifications           Notification[]
   sessions                Session[]
   notificationPreferences UserNotificationPreferences?
+  systemLogs              SystemLog[]
+  auditLogs               AuditLog[]
+  performanceLogs         PerformanceLog[]
+  pushSubscriptions       PushSubscription[]
 
   @@map("users")
 }
@@ -81,6 +85,84 @@ model AccessLog {
   user      User?    @relation(fields: [userId], references: [id])
 
   @@map("access_logs")
+}
+
+// Sistema completo de logging estruturado
+model SystemLog {
+  id            String   @id @default(cuid())
+  level         String   // ERROR, WARN, INFO, DEBUG
+  message       String
+  module        String?  // auth, abac, notification, etc
+  operation     String?  // login, permission_check, send_email, etc
+  userId        String?
+  sessionId     String?
+  correlationId String?  // Para rastrear operações relacionadas
+  metadata      Json?    // Dados estruturados adicionais
+  error         String?  // Stack trace se for erro
+  ip            String?
+  userAgent     String?
+  duration      Int?     // Tempo de operação em ms
+  createdAt     DateTime @default(now())
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([level])
+  @@index([module])
+  @@index([operation])
+  @@index([correlationId])
+  @@index([createdAt])
+  @@map("system_logs")
+}
+
+model AuditLog {
+  id            String   @id @default(cuid())
+  action        String   // CREATE, UPDATE, DELETE, VIEW, etc
+  resource      String   // user, policy, notification, etc
+  resourceId    String?  // ID do recurso afetado
+  userId        String?
+  sessionId     String?
+  correlationId String?
+  oldValues     Json?    // Valores anteriores (UPDATE/DELETE)
+  newValues     Json?    // Valores novos (CREATE/UPDATE)
+  metadata      Json?    // Contexto adicional
+  ip            String?
+  userAgent     String?
+  success       Boolean  @default(true)
+  errorMessage  String?
+  createdAt     DateTime @default(now())
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([action])
+  @@index([resource])
+  @@index([userId])
+  @@index([correlationId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+model PerformanceLog {
+  id            String   @id @default(cuid())
+  operation     String   // Nome da operação/endpoint
+  method        String?  // HTTP method ou tipo de operação
+  path          String?  // URL path ou identificador da operação
+  userId        String?
+  sessionId     String?
+  correlationId String?
+  duration      Int      // Duração em millisegundos
+  memoryUsage   Int?     // Uso de memória em bytes
+  cpuUsage      Float?   // % CPU utilizado
+  dbQueries     Int?     // Número de queries de banco
+  cacheHits     Int?     // Número de cache hits
+  cacheMisses   Int?     // Número de cache misses
+  metadata      Json?    // Dados adicionais de performance
+  ip            String?
+  userAgent     String?
+  createdAt     DateTime @default(now())
+  user          User?    @relation(fields: [userId], references: [id])
+
+  @@index([operation])
+  @@index([duration])
+  @@index([createdAt])
+  @@map("performance_logs")
 }
 
 model Account {
@@ -450,3 +532,137 @@ model ImportacaoMortalidade {
   @@index([iniciadaEm])
   @@map("importacoes_mortalidade")
 }
+
+// ========================================
+// PUSH NOTIFICATIONS MODELS
+// ========================================
+
+model PushSubscription {
+  id          String   @id @default(cuid())
+  userId      String
+  endpoint    String   @unique
+  p256dh      String   // Chave pública do cliente para criptografia
+  auth        String   // Chave de autenticação
+  userAgent   String?
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  
+  // Relacionamentos
+  user         User                  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  deliveries   PushDelivery[]
+
+  @@index([userId])
+  @@index([isActive])
+  @@index([createdAt])
+  @@map("push_subscriptions")
+}
+
+model PushNotification {
+  id          String   @id @default(cuid())
+  title       String
+  body        String
+  icon        String?
+  badge       String?
+  image       String?
+  data        Json?    // Dados customizados
+  actions     Json?    // Array de ações disponíveis
+  tag         String?  // Para agrupar/substituir notificações
+  priority    String   @default("normal") // low, normal, high
+  
+  // Configurações de comportamento
+  requireInteraction Boolean @default(false)
+  silent             Boolean @default(false)
+  vibrate            Json?   // Pattern de vibração
+  
+  // Agendamento e expiração
+  scheduleTime DateTime?
+  expiresAt    DateTime?
+  
+  // Metadados de controle
+  messageId     String   @unique
+  correlationId String?
+  createdBy     String?  // userId ou "system"
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relacionamentos
+  deliveries    PushDelivery[]
+  broadcasts    PushBroadcast[]
+
+  @@index([priority])
+  @@index([scheduleTime])
+  @@index([expiresAt])
+  @@index([createdAt])
+  @@index([messageId])
+  @@map("push_notifications")
+}
+
+model PushDelivery {
+  id             String   @id @default(cuid())
+  notificationId String
+  subscriptionId String
+  status         String   @default("pending") // pending, sent, delivered, failed, expired
+  errorMessage   String?
+  httpStatus     Int?
+  sentAt         DateTime?
+  deliveredAt    DateTime?
+  retryCount     Int      @default(0)
+  maxRetries     Int      @default(3)
+  nextRetryAt    DateTime?
+  
+  // Metadados
+  correlationId String?
+  duration      Int?     // tempo de envio em ms
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+  
+  // Relacionamentos
+  notification  PushNotification  @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+  subscription  PushSubscription  @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([sentAt])
+  @@index([nextRetryAt])
+  @@index([notificationId])
+  @@index([subscriptionId])
+  @@map("push_deliveries")
+}
+
+model PushBroadcast {
+  id             String   @id @default(cuid())
+  notificationId String
+  targetUserIds  Json     // Array de userIds alvo
+  status         String   @default("pending") // pending, processing, completed, failed
+  
+  // Estatísticas
+  totalTargets   Int      @default(0)
+  sentCount      Int      @default(0)
+  deliveredCount Int      @default(0)
+  failedCount    Int      @default(0)
+  
+  // Controle de processamento
+  startedAt      DateTime?
+  completedAt    DateTime?
+  duration       Int?     // tempo total em ms
+  errorMessage   String?
+  
+  // Metadados
+  correlationId  String?
+  createdBy      String?  // userId ou "system"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  
+  // Relacionamentos
+  notification   PushNotification @relation(fields: [notificationId], references: [id], onDelete: Cascade)
+
+  @@index([status])
+  @@index([startedAt])
+  @@index([completedAt])
+  @@index([createdBy])
+  @@map("push_broadcasts")
+}
+
+// ========================================
+// ADICIONAR RELACIONAMENTO AO USER MODEL
+// ========================================

@@ -241,7 +241,7 @@ function Error500PageView() {
 							/>
 							<path
 								d="M318.609 545C333.521 545 345.609 532.912 345.609 518C345.609 503.088 333.521 491 318.609 491C303.697 491 291.609 503.088 291.609 518C291.609 532.912 303.697 545 318.609 545Z"
-								className="text-gray-50"
+								className="text-muted-foreground"
 								fill="currentColor"
 							/>
 							<path
@@ -265,7 +265,7 @@ function Error500PageView() {
 							/>
 							<path
 								d="M362.609 561C362.609 568.732 342.7 584 320.609 584C298.518 584 277.609 569.732 277.609 562C277.609 554.268 298.518 556 320.609 556C342.7 556 362.609 553.268 362.609 561Z"
-								className="text-gray-50"
+								className="text-muted-foreground"
 								fill="currentColor"
 							/>
 						</g>

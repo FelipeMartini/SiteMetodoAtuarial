@@ -383,7 +383,7 @@ export default function RelatoriosAtuariaisPage() {
                   <CardContent>
                     <div className="space-y-4">
                       {relatorio.recomendacoes.map((recomendacao, index) => (
-                        <div key={index} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
+                        <div key={index} className="flex items-start gap-3 p-3 bg-muted/10 rounded-lg">
                           <CheckCircle className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                           <p className="text-sm text-gray-700">{recomendacao}</p>
                         </div>
@@ -407,7 +407,7 @@ export default function RelatoriosAtuariaisPage() {
                 <h3 className="text-lg font-medium text-gray-600 mb-2">
                   Nenhum relatório gerado
                 </h3>
-                <p className="text-gray-500">
+                <p className="text-muted-foreground">
                   Configure os parâmetros do produto e clique em &quot;Gerar Relatório&quot; para começar
                 </p>
               </CardContent>

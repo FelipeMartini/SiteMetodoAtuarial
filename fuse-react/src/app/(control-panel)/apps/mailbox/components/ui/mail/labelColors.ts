@@ -28,8 +28,8 @@ export type LabelColorDefsType = Record<LabelColorsType, LabelColorDef>;
  */
 export const labelColorDefs: LabelColorDefsType = {
 	gray: {
-		text: 'text-gray-500',
-		bg: 'bg-gray-500',
+		text: 'text-muted-foreground',
+		bg: 'bg-muted/10',
 		combined: 'text-gray-800 bg-gray-100'
 	},
 	red: {

@@ -223,7 +223,7 @@ export function NotificationIcon({ className }: NotificationIconProps) {
                 return (
                   <div 
                     key={notification.id}
-                    className={`p-3 hover:bg-gray-50 transition-colors ${
+                    className={`p-3 hover:bg-muted/10 transition-colors ${
                       !notification.read ? 'bg-blue-50/50 border-l-2 border-l-blue-600' : ''
                     }`}
                   >
