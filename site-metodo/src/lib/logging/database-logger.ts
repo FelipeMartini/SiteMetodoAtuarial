@@ -1,4 +1,7 @@
 import prisma from '@/lib/prisma';
+
+// Permite desabilitar gravação em banco para builds locais/prerender
+const DB_LOGS_DISABLED = process.env.DISABLE_DB_LOGS === 'true'
 // Import dinâmico de headers apenas quando disponível (ambiente server app router)
 let getHeaders: (() => Promise<any>) | null = null;
 try {
@@ -97,6 +100,11 @@ export class DatabaseLogger {
    */
   static async logSystem(data: SystemLogData): Promise<void> {
     try {
+      if (DB_LOGS_DISABLED) {
+        // durante build/prerender, não tentamos gravar no DB
+        console.debug('[DatabaseLogger] DB_LOGS_DISABLED active - skipping logSystem', { message: data.message })
+        return
+      }
       const requestContext = await this.getRequestContext();
       const context = { ...requestContext, ...data.context };
 
@@ -132,6 +140,10 @@ export class DatabaseLogger {
    */
   static async logAudit(data: AuditLogData): Promise<void> {
     try {
+      if (DB_LOGS_DISABLED) {
+        console.debug('[DatabaseLogger] DB_LOGS_DISABLED active - skipping logAudit', { action: data.action, resource: data.resource })
+        return
+      }
       const requestContext = await this.getRequestContext();
       const context = { ...requestContext, ...data.context };
 
@@ -167,6 +179,10 @@ export class DatabaseLogger {
    */
   static async logPerformance(data: PerformanceLogData): Promise<void> {
     try {
+      if (DB_LOGS_DISABLED) {
+        console.debug('[DatabaseLogger] DB_LOGS_DISABLED active - skipping logPerformance', { operation: data.operation })
+        return
+      }
       const requestContext = await this.getRequestContext();
       const context = { ...requestContext, ...data.context };
 
@@ -226,6 +242,10 @@ export class DatabaseLogger {
       if (endDate) where.createdAt.lte = endDate;
     }
 
+    if (DB_LOGS_DISABLED) {
+      return { logs: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
     const [logs, total] = await Promise.all([
       prisma.systemLog.findMany({
         where,
@@ -279,6 +299,10 @@ export class DatabaseLogger {
       where.createdAt = {};
       if (startDate) where.createdAt.gte = startDate;
       if (endDate) where.createdAt.lte = endDate;
+    }
+
+    if (DB_LOGS_DISABLED) {
+      return { logs: [], pagination: { page, limit, total: 0, totalPages: 0 } }
     }
 
     const [logs, total] = await Promise.all([
@@ -343,6 +367,10 @@ export class DatabaseLogger {
       if (endDate) where.createdAt.lte = endDate;
     }
 
+    if (DB_LOGS_DISABLED) {
+      return { logs: [], pagination: { page, limit, total: 0, totalPages: 0 } }
+    }
+
     const [logs, total] = await Promise.all([
       prisma.performanceLog.findMany({
         where,
@@ -377,7 +405,8 @@ export class DatabaseLogger {
    * Métrica rápida - últimos erros
    */
   static async getRecentErrors(limit: number = 10) {
-    return prisma.systemLog.findMany({
+  if (DB_LOGS_DISABLED) return []
+  return prisma.systemLog.findMany({
       where: { level: 'ERROR' },
       orderBy: { createdAt: 'desc' },
       take: limit,
@@ -393,7 +422,8 @@ export class DatabaseLogger {
    * Métrica rápida - operações mais lentas
    */
   static async getSlowestOperations(limit: number = 10) {
-    return prisma.performanceLog.findMany({
+  if (DB_LOGS_DISABLED) return []
+  return prisma.performanceLog.findMany({
       orderBy: { duration: 'desc' },
       take: limit,
       include: {
