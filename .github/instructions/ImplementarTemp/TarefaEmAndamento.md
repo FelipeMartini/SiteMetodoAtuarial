@@ -165,5 +165,5 @@ const ClientOnlyComponent = dynamic(() => import('./Component'), { ssr: false })
 - ✅ Performance não degradada significativamente
 
 ---
-**Atualização**: Em progresso - executando busca de fontes específicas sobre Zustand SSR
-**Próximo**: Implementar testes isolados baseados na pesquisa concluída
+**Atualização**: Todas as correções automáticas foram aplicadas no repositório: ajustes no store Zustand, client-side ABAC, enforcer unificado, logging em XLOGS e rotas atualizadas.
+**Próximo**: 1) Revisar manualmente as páginas de admin se desejar mudança de UX; 2) Opcional: habilitar captura automática de stacks via headless (requer dependências de sistema). 

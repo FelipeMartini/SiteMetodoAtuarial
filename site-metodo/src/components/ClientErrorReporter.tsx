@@ -8,10 +8,16 @@ export default function ClientErrorReporter() {
 
     const send = async (payload: any) => {
       try {
+        // include credentials so server can correlate session/user when available
         await fetch('/api/log-client-error', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload),
+          credentials: 'include',
+          body: JSON.stringify({
+            ...payload,
+            href: window.location.href,
+            userAgent: navigator.userAgent,
+          }),
         })
       } catch (e) {
         // avoid throwing in the error handler

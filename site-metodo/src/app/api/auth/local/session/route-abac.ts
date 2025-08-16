@@ -2,7 +2,7 @@
 
 import { NextResponse } from 'next/server'
 import { auth } from '@/auth'
-import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
+import { checkPermissionDetailed } from '@/lib/abac/enforcer-abac-puro'
 
 export async function GET() {
   try {
@@ -16,7 +16,7 @@ export async function GET() {
     }
 
     // Verificar permissão ABAC para visualizar sessão local
-    const hasPermission = await checkABACPermission(
+    const permissionResult = await checkPermissionDetailed(
       session.user.email || '',
       'resource:session:local',
       'read',
@@ -28,7 +28,7 @@ export async function GET() {
       }
     )
 
-    if (!hasPermission.allowed) {
+    if (!permissionResult.allowed) {
       return NextResponse.json(
         { error: 'Acesso negado' },
         { status: 403 }

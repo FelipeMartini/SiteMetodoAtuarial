@@ -17,10 +17,12 @@ export async function POST(request: NextRequest) {
     const session = await auth()
 
     if (!session?.user?.id) {
-      return NextResponse.json({ 
-        allowed: false, 
-        error: 'Não autenticado' 
-      }, { status: 401 })
+      // Retornamos 200 com allowed:false para diminuir ruído de 401 no console do cliente
+      // e permitir cache negativo no cliente em vez de múltiplos 401 que geram muitos logs.
+      return NextResponse.json({
+        allowed: false,
+        error: 'Não autenticado',
+      })
     }
 
     const body = await request.json()

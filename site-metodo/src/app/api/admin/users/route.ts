@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { prisma } from '@/lib/prisma'
-import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
+import { checkPermissionDetailed } from '@/lib/abac/enforcer-abac-puro'
 
 export async function GET() {
   try {
@@ -17,18 +17,18 @@ export async function GET() {
     // Verificar permissões ABAC para listar usuários
   // Use only email as ABAC subject. If no email, deny.
   const subject = session.user?.email ? String(session.user.email) : ''
-    const hasPermission = await checkABACPermission(
-      subject,
-      'admin:users',
-      'read',
-      {
-        time: new Date().toISOString(),
-        location: session.user.location || 'unknown',
-        department: session.user.department || 'unknown'
-      }
-    )
+    const permissionResult = await checkPermissionDetailed(
+        subject,
+        'admin:users',
+        'read',
+        {
+          time: new Date().toISOString(),
+          location: session.user.location || 'unknown',
+          department: session.user.department || 'unknown'
+        }
+      )
 
-    if (!hasPermission.allowed) {
+      if (!permissionResult.allowed) {
       return NextResponse.json(
         { error: 'Acesso negado pelo sistema ABAC' },
         { status: 403 }

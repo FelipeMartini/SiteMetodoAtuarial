@@ -308,13 +308,13 @@ export function AuditDashboard() {
 
                 <Select
                   value={filters.action}
-                  onValueChange={value => handleFilterChange('action', value)}
+                  onValueChange={value => handleFilterChange('action', value === 'ALL' ? '' : value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder='Ação' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value=''>Todas</SelectItem>
+                    <SelectItem value='ALL'>Todas</SelectItem>
                     <SelectItem value='LOGIN_SUCCESS'>Login Sucesso</SelectItem>
                     <SelectItem value='LOGIN_FAILED'>Login Falha</SelectItem>
                     <SelectItem value='USER_CREATE'>Criar Usuário</SelectItem>
@@ -326,13 +326,13 @@ export function AuditDashboard() {
 
                 <Select
                   value={filters.success}
-                  onValueChange={value => handleFilterChange('success', value)}
+                  onValueChange={value => handleFilterChange('success', value === 'ALL' ? '' : value)}
                 >
                   <SelectTrigger>
                     <SelectValue placeholder='Status' />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value=''>Todos</SelectItem>
+                    <SelectItem value='ALL'>Todos</SelectItem>
                     <SelectItem value='true'>Sucesso</SelectItem>
                     <SelectItem value='false'>Falha</SelectItem>
                   </SelectContent>

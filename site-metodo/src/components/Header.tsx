@@ -7,6 +7,8 @@ import { MobileNav } from '@/components/ui/mobile-nav'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { useAuth } from '@/hooks/useAuth'
+import { useEffect, useState } from 'react'
+import { checkClientPermission } from '@/lib/abac/client'
 import Link from 'next/link'
 import { signOut } from 'next-auth/react'
 
@@ -30,6 +32,30 @@ export function Header() {
       window.location.href = '/'
     }
   }
+
+  const [showAdmin, setShowAdmin] = useState<boolean>(false)
+
+  useEffect(() => {
+    let mounted = true
+    async function checkAdmin() {
+      if (!session?.user?.email) {
+        if (mounted) setShowAdmin(false)
+        return
+      }
+      try {
+        const allowed = await checkClientPermission(session.user.email, '/area-cliente/dashboard-admin', 'read')
+        if (mounted) setShowAdmin(allowed)
+      } catch (error) {
+        console.error('Erro ao verificar permissão admin no header:', error)
+        if (mounted) setShowAdmin(false)
+      }
+    }
+
+    checkAdmin()
+    return () => {
+      mounted = false
+    }
+  }, [session])
 
   return (
     <header className='sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60'>
@@ -75,11 +101,13 @@ export function Header() {
               {/* TODO: Implementar verificação ABAC para Dashboard Admin */}
               {/* Temporariamente comentado até implementar ABAC completo */}
               {/* {(session.user.role?.includes('admin') || session.user.role?.includes('staff')) && ( */}
-              <Link href='/area-cliente/dashboard-admin' className='hidden md:inline-flex'>
-                <Button variant='secondary' size='sm'>
-                  Dashboard Admin <span className="ml-2"><Badge variant="outline">Admin</Badge></span>
-                </Button>
-              </Link>
+              {showAdmin && (
+                <Link href='/area-cliente/dashboard-admin' className='hidden md:inline-flex'>
+                  <Button variant='secondary' size='sm'>
+                    Dashboard Admin <span className="ml-2"><Badge variant="outline">Admin</Badge></span>
+                  </Button>
+                </Link>
+              )}
               {/* )} */}
               <span className='hidden md:inline text-sm text-muted-foreground'>
                 Olá, {session.user.name || session.user.email}

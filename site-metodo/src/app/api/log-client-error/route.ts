@@ -6,9 +6,25 @@ export async function POST(req: Request) {
   try {
     const body = await req.json()
     const ts = new Date().toISOString()
-    const logPath = path.resolve(process.cwd(), 'XLOGS', 'client-errors.log')
-    const line = `${ts} ${JSON.stringify(body)}\n`
-    fs.appendFileSync(logPath, line, 'utf8')
+    const logDir = path.resolve(process.cwd(), 'XLOGS')
+    try { fs.mkdirSync(logDir, { recursive: true }) } catch (e) { /* ignore */ }
+    const logPath = path.resolve(logDir, 'client-errors.log')
+
+    // try to capture client-provided hints
+    const headers = Object.fromEntries(req.headers.entries())
+    const ip = headers['x-forwarded-for'] || headers['x-real-ip'] || 'unknown'
+
+    const entry = {
+      ts,
+      ip,
+      headers: {
+        referer: headers.referer || headers.origin || null,
+        userAgent: headers['user-agent'] || null,
+      },
+      body,
+    }
+
+    fs.appendFileSync(logPath, JSON.stringify(entry) + '\n', 'utf8')
     return NextResponse.json({ ok: true })
   } catch (err) {
     return NextResponse.json({ ok: false, error: String(err) }, { status: 500 })

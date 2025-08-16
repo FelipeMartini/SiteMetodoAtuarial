@@ -8,9 +8,9 @@ import { structuredLogger } from '@/lib/logger'
 
 const ABAC_MODEL_PATH = path.join(process.cwd(), 'src/lib/abac/abac-model.conf')
 
-type ABACContext = Record<string, unknown>
+export type ABACContext = Record<string, unknown>
 
-interface AuthResult {
+export interface AuthResult {
   allowed: boolean
   reason: string
   appliedPolicies: string[]
@@ -295,24 +295,16 @@ export async function reloadABACPolicies(): Promise<boolean> {
 }
 
 // Essas funções aceitam um email (preferido) ou um userId. Se receber um email, usará ele como subject; caso contrário, prefixa com 'user:'.
-export async function isAdmin(userIdOrEmail: string, context: ABACContext = {}): Promise<boolean> {
-  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
-  const result = await checkABACPermission(subject, 'system:admin', 'access', context)
-  return result.allowed
-}
-
-export async function canAccess(userIdOrEmail: string, resource: string, action: string = 'read', context: ABACContext = {}): Promise<boolean> {
-  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
-  const result = await checkABACPermission(subject, resource, action, context)
-  return result.allowed
-}
-
-export async function hasPermission(userIdOrEmail: string, resource: string, action: string, context: ABACContext = {}): Promise<AuthResult> {
-  const subject = userIdOrEmail.includes('@') ? userIdOrEmail : `user:${userIdOrEmail}`
-  return await checkABACPermission(subject, resource, action, context)
+/**
+ * Nova API unificada: retorna o AuthResult completo (allowed + metadata).
+ * Esta função é a fachada unificada para chamadas server-side que desejam
+ * o resultado detalhado da checagem ABAC.
+ */
+export async function checkPermissionDetailed(subject: string, object: string, action: string, context: ABACContext = {}): Promise<AuthResult> {
+  return await checkABACPermission(subject, object, action, context)
 }
 
 
-const abacEnforcerPuro = { checkABACPermission, addABACPolicy, removeABACPolicy, getAllABACPolicies, reloadABACPolicies, isAdmin, canAccess, hasPermission }
+const abacEnforcerPuro = { checkABACPermission, checkPermissionDetailed, addABACPolicy, removeABACPolicy, getAllABACPolicies, reloadABACPolicies }
 
 export default abacEnforcerPuro

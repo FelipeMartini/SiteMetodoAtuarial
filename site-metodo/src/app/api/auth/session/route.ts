@@ -1,6 +1,6 @@
 import { NextResponse, NextRequest } from 'next/server'
 import { auth, handlers } from '@/lib/auth'
-import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
+import { checkPermissionDetailed } from '@/lib/abac/enforcer-abac-puro'
 
 // Diagnostic wrapper: recebe o NextRequest para inspecionar headers/cookies
 export async function GET(request: NextRequest) {
@@ -46,7 +46,7 @@ export async function GET(request: NextRequest) {
     // enforcer now enforces email-only policies. If no email is present,
     // treat as unauthenticated for ABAC purposes.
     const subject = session.user?.email ? String(session.user.email) : ''
-    const hasPermission = await checkABACPermission(
+    const permissionResult = await checkPermissionDetailed(
       subject,
       'session:read',
       'read',
@@ -61,7 +61,7 @@ export async function GET(request: NextRequest) {
     // Set to 'true' to keep the old permissive behavior in development.
     const allowDevFallback = String(process.env.ABAC_ALLOW_DEV_FALLBACK || 'true') === 'true'
 
-    if (!hasPermission.allowed) {
+  if (!permissionResult.allowed) {
       if (process.env.NODE_ENV !== 'production' && allowDevFallback) {
         console.warn('ABAC denied session:read but ABAC_ALLOW_DEV_FALLBACK=true; allowing for dev', { subject })
       } else {
@@ -88,8 +88,8 @@ export async function GET(request: NextRequest) {
         },
         abac: {
           enabled: true,
-          permission: hasPermission,
-          context: hasPermission.context
+          permission: permissionResult,
+          context: permissionResult.context
         }
       },
       { status: 200 }

@@ -14,12 +14,10 @@ export async function checkClientPermission(
   const key = `${userEmail}:${resource}:${action}`
   const now = Date.now()
   const CACHE_TTL = 30_000 // 30s
-  // @ts-ignore: permissive cache entry
   if (typeof (checkClientPermission as any).cache === 'undefined') {
     ;(checkClientPermission as any).cache = new Map()
   }
-  // @ts-ignore
-  const cache: Map<string, { allowed: boolean; status: number; ts: number }> = (checkClientPermission as any).cache
+  const cache = (checkClientPermission as any).cache as Map<string, { allowed: boolean; status: number; ts: number }>
   const cached = cache.get(key)
   if (cached && now - cached.ts < CACHE_TTL) {
     console.log('[checkClientPermission] cache hit', { key, cached })
@@ -44,8 +42,6 @@ export async function checkClientPermission(
     if (!response.ok) {
       console.error('Permission check failed:', response.statusText, response.status)
       // cache negativo para evitar loop de requisições repetidas (ex: 401)
-      // para 401s, coloque um TTL maior para reduzir churn
-      const ttl = response.status === 401 ? Date.now() + (CACHE_TTL * 4) : Date.now()
       cache.set(key, { allowed: false, status: response.status, ts: Date.now() })
       return false
     }

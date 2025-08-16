@@ -15,7 +15,7 @@ function mapPriority(priority?: NotificationPriority): 'low' | 'medium' | 'high'
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { getNotificationService } from '@/lib/notifications/notification-service'
-import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
+import { checkPermissionDetailed } from '@/lib/abac/enforcer-abac-puro'
 import {
   NotificationFilter,
   NotificationType,
@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
 
     // Verifica permissão ABAC para criar notificações
     const subject = session.user.email ? String(session.user.email) : ''
-    const hasPermission = await checkABACPermission(
+    const permissionResult = await checkPermissionDetailed(
       subject,
       'resource:notifications',
       'create',
@@ -108,7 +108,7 @@ export async function POST(request: NextRequest) {
       }
     )
     
-    if (!hasPermission.allowed) {
+    if (!permissionResult.allowed) {
       return NextResponse.json({ error: 'Permissão insuficiente' }, { status: 403 })
     }
 

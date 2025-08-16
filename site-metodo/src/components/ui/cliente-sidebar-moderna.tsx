@@ -109,31 +109,32 @@ export function ClienteSidebarModerna({ className }: SidebarProps) {
 
   // Verifica se o usuário tem permissão admin
   React.useEffect(() => {
+    let mounted = true
     const checkAdminPermission = async () => {
       if (!session?.user?.email) {
         // se já é false, não atualiza para evitar renders desnecessários
-        setIsAdmin(prev => (prev === false ? prev : false));
-        return;
+        if (mounted) setIsAdmin(prev => (prev === false ? prev : false));
+        return
       }
-      let mounted = true;
       try {
         const hasAdminAccess = await checkClientPermission(
           session.user.email,
           'admin:dashboard',
           'read'
-        );
+        )
         if (!mounted) return
-        setIsAdmin(prev => (prev === hasAdminAccess ? prev : hasAdminAccess));
+        setIsAdmin(prev => (prev === hasAdminAccess ? prev : hasAdminAccess))
       } catch (error) {
-        console.error('Erro ao verificar permissões:', error);
-        if (mounted) setIsAdmin(false);
+        console.error('Erro ao verificar permissões:', error)
+        if (mounted) setIsAdmin(false)
       }
-      return () => {
-        mounted = false;
-      }
-    };
-    checkAdminPermission();
-  }, [session?.user?.email]);
+    }
+
+    checkAdminPermission()
+    return () => {
+      mounted = false
+    }
+  }, [session?.user?.email])
 
   const getUserInitials = () => {
     if (session?.user?.name) {
