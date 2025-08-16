@@ -45,6 +45,20 @@ function addCustomFunctions(enforcer: any) {
         return false
       }
     })
+    // Função para comparar objetos com suporte a wildcard '*' (converte para regex)
+    enforcer.addFunction('objMatch', (requestObj: string, policyObj: string) => {
+      try {
+        if (!policyObj || policyObj === '*') return true
+        // escape regex special chars except '*'
+        const escaped = String(policyObj).replace(/[-/\\^$+?.()|[\]{}]/g, '\\$&')
+        const regexStr = '^' + escaped.replace(/\\\*/g, '.*') + '$'
+        const re = new RegExp(regexStr)
+        return re.test(String(requestObj))
+      } catch (err) {
+        structuredLogger.error('objMatch error', { error: err instanceof Error ? err.message : String(err), requestObj, policyObj })
+        return false
+      }
+    })
   } catch (err) {
     structuredLogger.warn('Failed to add custom functions to enforcer', { error: err instanceof Error ? err.message : String(err) })
   }
@@ -157,7 +171,9 @@ export async function checkABACPermission(subject: string, object: string, actio
     let allowed = false
 
     try {
-      allowed = !!(await enforcer.enforce(subject, object, action))
+      // Passar contexto como quarto argumento para casar com request_definition r = sub,obj,act,ctx
+      const ctxArg = JSON.stringify(context || {})
+      allowed = !!(await enforcer.enforce(subject, object, action, ctxArg))
     } catch (_err) {
       structuredLogger.warn('Primary enforce failed, will try fallbacks', { error: _err instanceof Error ? _err.message : String(_err), subject, object, action })
     }
