@@ -7,7 +7,7 @@ export async function POST(req: Request) {
     const body = await req.json()
     const ts = new Date().toISOString()
     const logDir = path.resolve(process.cwd(), 'XLOGS')
-    try { fs.mkdirSync(logDir, { recursive: true }) } catch (e) { /* ignore */ }
+    try { fs.mkdirSync(logDir, { recursive: true }) } catch (_e) { /* ignore */ }
     const logPath = path.resolve(logDir, 'client-errors.log')
 
     // try to capture client-provided hints

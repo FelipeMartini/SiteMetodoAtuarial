@@ -207,28 +207,28 @@ export default function ABACPage() {
       value: policies.length.toString(),
       description: "Políticas ABAC ativas",
       icon: Shield,
-      trend: { value: 12, isPositive: true }
+      change: { value: 12, isPositive: true }
     },
     {
       title: "Políticas de Permissão",
       value: policies.filter(p => p.ptype === 'p').length.toString(),
       description: "Regras de acesso",
       icon: Lock,
-      trend: { value: 8, isPositive: true }
+      change: { value: 8, isPositive: true }
     },
     {
       title: "Políticas de Papel",
       value: policies.filter(p => p.ptype === 'g').length.toString(),
       description: "Atribuições de papel",
       icon: Users,
-      trend: { value: 4, isPositive: true }
+      change: { value: 4, isPositive: true }
     },
     {
       title: "Testes Realizados",
       value: "156",
       description: "Verificações hoje",
       icon: Activity,
-      trend: { value: 23, isPositive: true }
+      change: { value: 23, isPositive: true }
     }
   ];
 

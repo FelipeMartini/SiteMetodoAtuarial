@@ -37,6 +37,8 @@ interface DataTableProps<TData, TValue> {
   data: TData[]
   searchKey?: string
   searchPlaceholder?: string
+  caption?: string // Para acessibilidade
+  'aria-label'?: string // Para acessibilidade
 }
 
 export function DataTable<TData, TValue>({
@@ -44,6 +46,8 @@ export function DataTable<TData, TValue>({
   data,
   searchKey,
   searchPlaceholder = 'Buscar...',
+  caption,
+  'aria-label': ariaLabel,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -82,12 +86,18 @@ export function DataTable<TData, TValue>({
                 table.getColumn(searchKey)?.setFilterValue(event.target.value)
               }
               className='h-8 w-[150px] lg:w-[250px]'
+              aria-label={`Buscar na tabela por ${searchKey}`}
             />
           )}
         </div>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant='outline' size='sm' className='ml-auto h-8'>
+            <Button 
+              variant='outline' 
+              size='sm' 
+              className='ml-auto h-8'
+              aria-label="Configurar visibilidade das colunas"
+            >
               <Settings2 className='mr-2 h-4 w-4' />
               Colunas
               <ChevronDown className='ml-2 h-4 w-4' />
@@ -115,7 +125,8 @@ export function DataTable<TData, TValue>({
 
       {/* Table */}
       <div className='rounded-md border'>
-        <Table>
+        <Table aria-label={ariaLabel || 'Tabela de dados'}>
+          {caption && <caption className="sr-only">{caption}</caption>}
           <TableHeader>
             {table.getHeaderGroups().map(headerGroup => (
               <TableRow key={headerGroup.id}>

@@ -294,21 +294,21 @@ export default function NotificationsPage() {
       value: mockNotifications.length.toString(),
       description: "Notificações no sistema",
       icon: Bell,
-      trend: { value: 5, isPositive: true }
+      change: { value: 5, isPositive: true }
     },
     {
       title: "Não Lidas",
       value: mockNotifications.filter(n => !n.read).length.toString(),
       description: "Requerem atenção",
       icon: BellRing,
-      trend: { value: 2, isPositive: false }
+      change: { value: 2, isPositive: false }
     },
     {
       title: "Alta Prioridade",
       value: mockNotifications.filter(n => n.priority === 'high' || n.priority === 'urgent').length.toString(),
       description: "Notificações urgentes",
       icon: AlertTriangle,
-      trend: { value: 1, isPositive: false }
+      change: { value: 1, isPositive: false }
     },
     {
       title: "Hoje",
@@ -317,7 +317,7 @@ export default function NotificationsPage() {
       ).length.toString(),
       description: "Notificações de hoje",
       icon: Clock,
-      trend: { value: 8, isPositive: true }
+      change: { value: 8, isPositive: true }
     }
   ];
 

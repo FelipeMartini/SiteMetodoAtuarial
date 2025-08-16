@@ -20,11 +20,19 @@ import {
   Download,
   RefreshCw,
   Search,
-  TrendingUp
+  TrendingUp,
+  ChevronDown
 } from 'lucide-react';
 import { ColumnDef } from '@tanstack/react-table';
 import { DatePickerWithRange, DateRange } from '@/components/ui/date-range-picker';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { useStandardToast } from '@/utils/toast';
 
 interface AccessLog {
   id: string;
@@ -54,6 +62,7 @@ interface AuditStats {
 }
 
 export default function AuditLogsPage() {
+  const { exportSuccess, exportError } = useStandardToast()
   const [logs, setLogs] = React.useState<AccessLog[]>([]);
   const [stats, setStats] = React.useState<AuditStats | null>(null);
   const [loading, setLoading] = React.useState(true);
@@ -104,6 +113,40 @@ export default function AuditLogsPage() {
       setLoading(false);
     }
   }, [pagination.page, pagination.limit, filters]);
+
+  const handleExport = async (format: 'csv' | 'json') => {
+    try {
+      const params = new URLSearchParams();
+      
+      if (filters.subject) params.append('subject', filters.subject);
+      if (filters.object) params.append('object', filters.object);
+      if (filters.action) params.append('action', filters.action);
+      if (filters.allowed) params.append('allowed', filters.allowed);
+      if (filters.dateRange?.from) params.append('startDate', filters.dateRange.from.toISOString());
+      if (filters.dateRange?.to) params.append('endDate', filters.dateRange.to.toISOString());
+      
+      params.append('export', format);
+
+      const response = await fetch(`/api/admin/audit-logs?${params}`);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `audit-logs-${new Date().toISOString().split('T')[0]}.${format}`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+        exportSuccess(format);
+      } else {
+        throw new Error(`HTTP ${response.status}`);
+      }
+    } catch (_error) {
+      console.error('Erro ao exportar:', _error);
+      exportError(format);
+    }
+  };
 
   React.useEffect(() => {
     loadLogs();
@@ -230,28 +273,28 @@ export default function AuditLogsPage() {
       value: stats?.total24h.toString() || '0',
       description: "Eventos nas últimas 24 horas",
       icon: Activity,
-      trend: { value: 12, isPositive: true }
+      change: { value: 12, isPositive: true }
     },
     {
       title: "Permitidos",
       value: stats?.allowed.toString() || '0',
       description: "Acessos autorizados",
       icon: CheckCircle,
-      trend: { value: 8, isPositive: true }
+      change: { value: 8, isPositive: true }
     },
     {
       title: "Negados",
       value: stats?.denied.toString() || '0',
       description: "Acessos bloqueados",
       icon: XCircle,
-      trend: { value: 15, isPositive: false }
+      change: { value: 15, isPositive: false }
     },
     {
       title: "Taxa de Sucesso",
       value: stats ? `${Math.round((stats.allowed / (stats.allowed + stats.denied)) * 100)}%` : '0%',
       description: "Percentual de sucesso",
       icon: TrendingUp,
-      trend: { value: 3, isPositive: true }
+      change: { value: 3, isPositive: true }
     }
   ];
 
@@ -286,10 +329,23 @@ export default function AuditLogsPage() {
                 <RefreshCw className={`h-4 w-4 mr-2 ${loading ? 'animate-spin' : ''}`} />
                 Atualizar
               </Button>
-              <Button variant="outline">
-                <Download className="h-4 w-4 mr-2" />
-                Exportar
-              </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline">
+                    <Download className="h-4 w-4 mr-2" />
+                    Exportar
+                    <ChevronDown className="h-4 w-4 ml-2" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem onClick={() => handleExport('csv')}>
+                    Exportar CSV
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => handleExport('json')}>
+                    Exportar JSON
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         </div>
@@ -442,6 +498,8 @@ export default function AuditLogsPage() {
               columns={columns}
               searchKey="subject"
               searchPlaceholder="Buscar nos logs..."
+              caption="Lista completa de logs de auditoria do sistema"
+              aria-label="Tabela de logs de auditoria com filtros de busca e paginação"
             />
             
             {/* Paginação customizada */}

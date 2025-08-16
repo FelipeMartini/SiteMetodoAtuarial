@@ -89,7 +89,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
   // Em desenvolvimento, opcionalmente use um fallback local para isolar problemas com a store
   const isDev = process.env.NODE_ENV === 'development'
 
-  const [devOpen, setDevOpen] = React.useState(false)
+  const [_devOpen, _setDevOpen] = React.useState(false)
 
   // Sempre chamar os hooks separadamente para evitar snapshots instáveis
   const mobileMenuOpen = useUIStore((s: any) => s.mobileMenuOpen)
@@ -99,7 +99,7 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
   const hiddenNavItems = useUIStore((s: any) => s.hiddenNavItems)
 
   const { mobileMenuOpen: open } = isDev
-    ? { mobileMenuOpen: devOpen }
+    ? { mobileMenuOpen: _devOpen }
     : { mobileMenuOpen }
 
   // Selecionamos lista de navegação separadamente para reduzir re-renders quando abrir/fechar o menu

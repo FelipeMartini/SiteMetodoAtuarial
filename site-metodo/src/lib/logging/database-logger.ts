@@ -1,12 +1,15 @@
 import prisma from '@/lib/prisma';
 // Import dinâmico de headers apenas quando disponível (ambiente server app router)
-let getHeaders: (() => Headers) | null = null;
+let getHeaders: (() => Promise<any>) | null = null;
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  const mod = require('next/headers');
-  if (mod && typeof mod.headers === 'function') {
-    getHeaders = mod.headers;
-  }
+  // Usar dynamic import para evitar require
+  import('next/headers').then(mod => {
+    if (mod && typeof mod.headers === 'function') {
+      getHeaders = mod.headers;
+    }
+  }).catch(() => {
+    // Headers não disponível em cliente
+  });
 } catch (_e) {
   // Ignora em ambientes onde next/headers não está disponível
 }
@@ -67,7 +70,7 @@ export class DatabaseLogger {
    */
   private static async getRequestContext(): Promise<LogContext> {
     try {
-  const headersList = getHeaders ? getHeaders() : null;
+  const headersList = getHeaders ? await getHeaders() : null;
   const forwarded = headersList?.get('x-forwarded-for');
   const realIp = headersList?.get('x-real-ip');
   const ip = forwarded?.split(',')[0] || realIp || 'unknown';

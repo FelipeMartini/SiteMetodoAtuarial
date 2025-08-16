@@ -319,28 +319,28 @@ export default function EmailManagementPage() {
       value: logs.length.toString(),
       description: "Emails processados",
       icon: Mail,
-      trend: { value: 12, isPositive: true }
+      change: { value: 12, isPositive: true }
     },
     {
       title: "Entregues",
       value: logs.filter(e => e.status === 'sent').length.toString(),
       description: "Sucessos",
       icon: MailOpen,
-      trend: { value: 8, isPositive: true }
+      change: { value: 8, isPositive: true }
     },
     {
       title: "Falharam",
       value: logs.filter(e => e.status === 'failed').length.toString(),
       description: "Precisam reenvio",
       icon: MailX,
-      trend: { value: 2, isPositive: false }
+      change: { value: 2, isPositive: false }
     },
     {
       title: "Pendentes",
       value: logs.filter(e => e.status === 'pending').length.toString(),
       description: "Aguardando envio",
       icon: Clock,
-      trend: { value: 1, isPositive: true }
+      change: { value: 1, isPositive: true }
     }
   ];
 

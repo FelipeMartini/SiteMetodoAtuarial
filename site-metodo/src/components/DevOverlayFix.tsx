@@ -93,7 +93,7 @@ export default function DevOverlayFix() {
           }
           p = p.parentElement
         }
-      } catch (err) {
+      } catch (_err) {
         // ignore
       }
     }
@@ -111,6 +111,8 @@ export default function DevOverlayFix() {
             if (!(node instanceof Element)) return
             selectors.forEach(sel => {
               if (node.matches && node.matches(sel)) applyInlineFix(node)
+              // Aplicar fix inline para elementos filhos também
+              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
               node.querySelectorAll && node.querySelectorAll(sel).forEach(applyInlineFix)
             })
           })
@@ -158,7 +160,9 @@ export default function DevOverlayFix() {
       try {
         const reason = ev.reason ? (ev.reason.stack || String(ev.reason)) : 'Unhandled rejection'
         createFallbackOverlay('Unhandled promise rejection', reason)
-      } catch (e) {}
+      } catch (_e) {
+        // Silent catch for error handling
+      }
     }
 
     window.addEventListener('error', onErr)
