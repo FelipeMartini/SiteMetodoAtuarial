@@ -18,8 +18,8 @@ export const CalculosAtuariais = lazy(() => import('@/app/area-cliente/calculos-
 // Componentes de auditoria
 export const AuditoriaPage = lazy(() => import('@/app/admin/auditoria/page'))
 
-// Componente de ABAC admin
-export const ABACAdmin = lazy(() => import('@/app/admin/abac/page'))
+// Componente de ABAC admin (client-side)
+export const ABACAdmin = lazy(() => import('@/app/admin/abac/page-client'))
 
 // Componentes de dashboard do usuário
 export const DashboardAdmin = lazy(() => import('@/app/area-cliente/dashboard-admin/page'))

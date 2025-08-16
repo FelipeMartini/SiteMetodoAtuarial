@@ -23,7 +23,7 @@ import {
   NotificationStatus,
   NotificationPriority,
 } from '@/types/notifications'
-import { simpleLogger } from '@/lib/simple-logger'
+import { structuredLogger } from '@/lib/logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
 
@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
       data: result,
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao buscar notificações', { error: _error })
+    await structuredLogger.error('Erro ao buscar notificações', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -175,7 +175,7 @@ export async function POST(request: NextRequest) {
       },
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao criar notificação', { error: _error })
+    await structuredLogger.error('Erro ao criar notificação', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

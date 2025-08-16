@@ -97,8 +97,10 @@ export default function DevOverlayFix() {
         // ignore
       }
     }
-    // Aplicar fix inline para elementos filhos também
-    if (node.querySelectorAll) node.querySelectorAll(sel).forEach(applyInlineFix)
+    // Aplicar fix inline para elementos filhos também (para todos os seletores conhecidos)
+    selectors.forEach(selector => {
+      document.querySelectorAll(selector).forEach(applyInlineFix)
+    })
 
     // Aplica imediatamente a nós já presentes
     selectors.forEach(sel => {
@@ -109,13 +111,12 @@ export default function DevOverlayFix() {
     const mo = new MutationObserver(muts => {
       for (const m of muts) {
         if (m.type === 'childList' && m.addedNodes.length > 0) {
-          m.addedNodes.forEach(node => {
-            if (!(node instanceof Element)) return
+          m.addedNodes.forEach(n => {
+            if (!(n instanceof Element)) return
             selectors.forEach(sel => {
-              if (node.matches && node.matches(sel)) applyInlineFix(node)
+              if ((n as Element).matches && (n as Element).matches(sel)) applyInlineFix(n as Element)
               // Aplicar fix inline para elementos filhos também
-              // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-              node.querySelectorAll && node.querySelectorAll(sel).forEach(applyInlineFix)
+              try { (n as Element).querySelectorAll && (n as Element).querySelectorAll(sel).forEach(applyInlineFix) } catch (_e) {}
             })
           })
         }

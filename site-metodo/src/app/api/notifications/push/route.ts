@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@/lib/auth'
 import { createPushNotificationService, PushConfig } from '../../../../lib/notifications/push-service'
-import { simpleLogger } from '@/lib/simple-logger'
+import { structuredLogger } from '@/lib/logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'Ação não reconhecida' }, { status: 400 })
     }
   } catch (_error) {
-    simpleLogger.error('Erro na API de push notifications', { error: _error })
+    await structuredLogger.error('Erro na API de push notifications', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -124,7 +124,7 @@ export async function DELETE(request: NextRequest) {
       message: 'Subscription removida com sucesso',
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao remover push subscription', { error: _error })
+    await structuredLogger.error('Erro ao remover push subscription', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }
@@ -189,7 +189,7 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({ error: 'Ação não especificada' }, { status: 400 })
     }
   } catch (_error) {
-    simpleLogger.error('Erro ao obter dados de push notifications', { error: _error })
+    await structuredLogger.error('Erro ao obter dados de push notifications', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

@@ -228,8 +228,10 @@ export default function ABACPage() {
   return (
     <div>
       {/* Mantemos comportamento cliente intacto */}
-      <div className="mb-4">
-        <StatsCard items={statsData} />
+      <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+        {statsData.map((s, i) => (
+          <StatsCard key={i} title={s.title} value={s.value} description={s.description} icon={s.icon} change={s.change} />
+        ))}
       </div>
       <Card>
         <CardHeader>

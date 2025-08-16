@@ -8,6 +8,7 @@
  * @see https://authjs.dev/getting-started/adapters/prisma
  */
 import { PrismaClient } from '@prisma/client'
+import { structuredLogger } from '@/lib/logger'
 
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined
@@ -39,10 +40,10 @@ export async function disconnectPrisma() {
 export async function checkDatabaseConnection() {
   try {
     await prisma.$connect()
-    console.log('✅ Database connection successful')
+  await structuredLogger.info('Database connection successful')
     return true
   } catch (_error) {
-    console.error('❌ Database connection failed:')
+  await structuredLogger.error('Database connection failed', { error: _error instanceof Error ? _error.message : String(_error) })
     throw _error
   }
 }

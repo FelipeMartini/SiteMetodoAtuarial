@@ -1,9 +1,10 @@
-'use client'
+// Mantido como handler de API (server). Removido 'use client' para garantir execução server-side.
+
 
 import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { monitoring } from '@/lib/monitoring'
-import logger from '@/lib/logger-simple'
+import { structuredLogger as logger, performanceLogger } from '@/lib/logger'
 import { getClientIP } from '@/lib/utils/ip'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'
@@ -84,7 +85,7 @@ export async function GET(request: NextRequest) {
     )
 
     if (!authResult.allowed) {
-      logger.warn('Unauthorized metrics access attempt', {
+      await logger.warn('Unauthorized metrics access attempt', {
         userId: session.user.id,
         email: session.user.email,
         reason: authResult.reason,
@@ -131,7 +132,7 @@ export async function GET(request: NextRequest) {
       }
 
       // Log do acesso à métrica específica
-      logger.info('SPECIFIC_METRIC_ACCESSED', {
+  await logger.info('SPECIFIC_METRIC_ACCESSED', {
         performedBy: session.user.id || '',
         ip: context.ip,
         userAgent: context.userAgent,
@@ -207,7 +208,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Log do acesso completo às métricas
-    logger.info('METRICS_ACCESSED', {
+  await logger.info('METRICS_ACCESSED', {
       performedBy: session.user.id || '',
       ip: context.ip,
       userAgent: context.userAgent,
@@ -237,7 +238,7 @@ export async function GET(request: NextRequest) {
     })
 
   } catch (error) {
-    logger.error('Metrics endpoint error', { 
+  await logger.error('Metrics endpoint error', { 
       error: error instanceof Error ? error.message : 'Unknown error',
       stack: error instanceof Error ? error.stack : undefined
     })
@@ -316,7 +317,7 @@ export async function POST(request: NextRequest) {
     )
 
     if (!authResult.allowed) {
-      logger.warn('Unauthorized metrics admin action attempt', {
+      await logger.warn('Unauthorized metrics admin action attempt', {
         userId: session.user.id,
         reason: authResult.reason,
         context
@@ -336,7 +337,7 @@ export async function POST(request: NextRequest) {
         // Recarregar métricas
         // monitoring.clearCache?.() // Comentado - método pode não existir
         
-        logger.info('METRICS_RELOADED', {
+  await logger.info('METRICS_RELOADED', {
           performedBy: session.user.id,
           ip: context.ip,
           userAgent: context.userAgent
@@ -351,7 +352,7 @@ export async function POST(request: NextRequest) {
         // Limpar cache de métricas
         // monitoring.clearCache?.() // Comentado - método pode não existir
         
-        logger.info('METRICS_CACHE_CLEARED', {
+  await logger.info('METRICS_CACHE_CLEARED', {
           performedBy: session.user.id,
           ip: context.ip,
           userAgent: context.userAgent
@@ -369,7 +370,7 @@ export async function POST(request: NextRequest) {
     }
 
   } catch (error) {
-    logger.error('Metrics admin action error', { 
+  await logger.error('Metrics admin action error', { 
       error: error instanceof Error ? error.message : 'Unknown error'
     })
     

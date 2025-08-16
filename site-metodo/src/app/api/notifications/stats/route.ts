@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@/lib/auth'
 import { getNotificationService } from '@/lib/notifications/notification-service'
-import { simpleLogger } from '@/lib/simple-logger'
+import { structuredLogger } from '@/lib/logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
@@ -95,7 +95,7 @@ export async function GET(request: NextRequest) {
       },
     })
   } catch (_error) {
-    simpleLogger.error('Erro ao obter estatísticas de notificações', { error: _error })
+    await structuredLogger.error('Erro ao obter estatísticas de notificações', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server'
 
 import { auth } from '@/lib/auth'
 import { getNotificationService } from '@/lib/notifications/notification-service'
-import { simpleLogger } from '@/lib/simple-logger'
+import { structuredLogger } from '@/lib/logger'
 import { auditService } from '@/lib/audit'
 import { getClientIP } from '@/lib/utils/ip'
 
@@ -43,8 +43,8 @@ export async function POST(request: NextRequest) {
             await notificationService.markAsRead(notificationId, session.user.id)
             markedCount++
           } catch (_error) {
-            simpleLogger.warn('Erro ao marcar notificação como lida', {
-              error: _error,
+            await structuredLogger.warn('Erro ao marcar notificação como lida', {
+              error: _error instanceof Error ? _error.message : String(_error),
               notificationId,
               userId: session.user.id,
             })
@@ -60,8 +60,8 @@ export async function POST(request: NextRequest) {
             await notificationService.deleteNotification(notificationId, session.user.id)
             deletedCount++
           } catch (_error) {
-            simpleLogger.warn('Erro ao deletar notificação', {
-              error: _error,
+            await structuredLogger.warn('Erro ao deletar notificação', {
+              error: _error instanceof Error ? _error.message : String(_error),
               notificationId,
               userId: session.user.id,
             })
@@ -86,7 +86,7 @@ export async function POST(request: NextRequest) {
       data: result,
     })
   } catch (_error) {
-    simpleLogger.error('Erro em ação bulk de notificações', { error: _error })
+    await structuredLogger.error('Erro em ação bulk de notificações', { error: _error instanceof Error ? _error.message : String(_error) })
     return NextResponse.json({ error: 'Erro interno do servidor' }, { status: 500 })
   }
 }

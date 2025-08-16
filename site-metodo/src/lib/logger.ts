@@ -1,29 +1,15 @@
-// Shim: re-exporta o logger canônico `logger-simple`
-// Mantém compatibilidade para imports que usavam `@/lib/logger`
-import logger, { LOG_LEVELS } from './logger-simple'
+// Re-exporta a facade de logging para manter compatibilidade com imports
+// anteriores que usam `@/lib/logger`.
+import facade, { performanceLogger as facadePerf, DatabaseLogger } from './logging/facade'
+import { LOG_LEVELS } from './logger-simple'
 
 export type LogMeta = Record<string, unknown>
 
-export const structuredLogger = {
-  info: (m: string, meta?: LogMeta) => logger.info(m, meta),
-  warn: (m: string, meta?: LogMeta) => logger.warn(m, meta),
-  error: (m: string, meta?: LogMeta) => logger.error(m, meta),
-  debug: (m: string, meta?: LogMeta) => logger.debug(m, meta),
-  auth: (action: string, meta?: LogMeta) => logger.info(`AUTH: ${action}`, meta),
-  audit: (action: string, meta?: LogMeta) => logger.info(`AUDIT: ${action}`, meta),
-  security: (msg: string, level: string, meta?: LogMeta) => logger.warn(`SECURITY [${level}]: ${msg}`, meta),
-  http: (msg: string, meta?: LogMeta) => logger.info(`HTTP: ${msg}`, meta),
-  performance: (msg: string, meta?: LogMeta) => logger.info(`PERF: ${msg}`, meta),
-}
+export const structuredLogger = facade
 
 export default structuredLogger
 
-export const performanceLogger = {
-  time: (label: string) => logger.debug(`PERF START: ${label}`),
-  timeEnd: (label: string) => logger.debug(`PERF END: ${label}`),
-  api: (pathname: string, method: string, responseTime: number, status: number, meta?: LogMeta) =>
-    logger.info(`API: ${method} ${pathname} - ${status} (${responseTime}ms)`, meta),
-}
+export const performanceLogger = facadePerf
 
 export const logHelpers = {
   login: (userId: string, meta?: LogMeta) => structuredLogger.auth('login' as any, { ...meta, userId }),
@@ -35,4 +21,4 @@ export const logHelpers = {
     structuredLogger.audit('user_created' as any, { ...meta, performedBy, targetUser }),
 }
 
-export { LOG_LEVELS }
+export { LOG_LEVELS, DatabaseLogger }

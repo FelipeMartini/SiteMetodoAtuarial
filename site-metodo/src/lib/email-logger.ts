@@ -1,4 +1,4 @@
-import { simpleLogger } from '@/lib/simple-logger';
+import { structuredLogger, DatabaseLogger } from '@/lib/logger';
 import { prisma } from '@/lib/prisma';
 
 interface EmailLogWhereClause {
@@ -90,7 +90,7 @@ class EmailLogger {
         },
       });
 
-      simpleLogger.info('Email attempt logged', {
+      await structuredLogger.info('Email attempt logged', {
         logId: logEntry.id,
         to: entry.to,
         subject: entry.subject,
@@ -99,7 +99,7 @@ class EmailLogger {
 
       return logEntry.id;
     } catch (error) {
-      simpleLogger.error('Failed to log email attempt', {
+      await structuredLogger.error('Failed to log email attempt', {
         error: error instanceof Error ? error.message : String(error),
         entry: entry,
       });
@@ -125,13 +125,13 @@ class EmailLogger {
         },
       });
 
-      simpleLogger.info('Email status updated', {
+      await structuredLogger.info('Email status updated', {
         messageId,
         status,
         metadata,
       });
     } catch (error) {
-      simpleLogger.error('Failed to update email status', {
+      await structuredLogger.error('Failed to update email status', {
         messageId,
         status,
         error: error instanceof Error ? error.message : String(error),
@@ -191,7 +191,7 @@ class EmailLogger {
         updatedAt: log.updatedAt || undefined,
       }));
     } catch (error) {
-      simpleLogger.error('Failed to get email logs', {
+  await structuredLogger.error('Failed to get email logs', {
         filters,
         error: error instanceof Error ? error.message : String(error),
       });
@@ -263,7 +263,7 @@ class EmailLogger {
         deliveryRate: Math.round(deliveryRate * 100) / 100,
       };
     } catch (error) {
-      simpleLogger.error('Failed to get email metrics', {
+  await structuredLogger.error('Failed to get email metrics', {
         period,
         error: error instanceof Error ? error.message : String(error),
       });
@@ -346,7 +346,7 @@ class EmailLogger {
         byPriority,
       };
     } catch (error) {
-      simpleLogger.error('Failed to get email stats', {
+  await structuredLogger.error('Failed to get email stats', {
         error: error instanceof Error ? error.message : String(error),
       });
       throw error;
@@ -392,7 +392,7 @@ class EmailLogger {
         },
       });
 
-      simpleLogger.info('Old email logs cleaned up', {
+  await structuredLogger.info('Old email logs cleaned up', {
         deletedCount: result.count,
         cutoffDate,
         daysToKeep,
@@ -400,7 +400,7 @@ class EmailLogger {
 
       return result.count;
     } catch (error) {
-      simpleLogger.error('Failed to cleanup old email logs', {
+  await structuredLogger.error('Failed to cleanup old email logs', {
         daysToKeep,
         error: error instanceof Error ? error.message : String(error),
       });

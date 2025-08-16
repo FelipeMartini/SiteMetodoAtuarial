@@ -189,5 +189,71 @@ site-metodo/src/app/analise-excel
 
 
 
+/*
+  O resto do arquivo contia a versão client-side do admin ABAC com JSX e
+  hooks. Foi comentado temporariamente para resolver um erro de sintaxe
+  enquanto priorizamos correções transversais (logging, validação, etc).
+  Se precisar restaurar a UI, recompor a partir do arquivo original ou mover
+  para `page-client.tsx` e importar dinamicamente.
+*/
+## Checklists (Fase 1 - Unificação de Logging)
+- [x] Analisar contratos de logging existentes (DatabaseLogger, simpleLogger, auditLogger)
+- [x] Criar facade que exponha DatabaseLogger e funções compatíveis
+- [x] Mapear todos os usos de `simpleLogger` em rotas API e libs
+- [x] Mapear usos diretos de `logger-simple` (import logger from '@/lib/logger-simple')
+- [ ] Mapear `console.error|warn|info` relevantes em server side para migração
+- [ ] Definir função helper unificada (ex: `logError`, `logWarn`) na facade (se necessário)
+- [ ] Substituir imports críticos para usar facade (`structuredLogger` / `performanceLogger`)
+- [x] Migrar métricas (`/api/monitoring/metrics`) de `logger-simple` para facade
+- [x] Migrar rotas de notificações (`/api/notifications*`) de `simpleLogger` para `structuredLogger`
+- [ ] Migrar email-logger para usar `DatabaseLogger.logSystem` (manter fallback)
+- [ ] Migrar adapters ABAC (`prisma-adapter-abac.ts`) para `structuredLogger`
+- [ ] Revisar `prisma.ts` e substituir `console.error` por `structuredLogger.error`
+- [ ] Criar util de geração automática de `correlationId` para requests (middleware)
+- [ ] Implementar middleware que anexa correlationId no contexto (quando possível)
+- [ ] Adicionar captura de duração em pontos críticos (ex: métricas, notificações) via `performanceLogger.api`
+- [ ] Remover (ou deprecar com comentário) exports redundantes de simple-logger após migração
+- [ ] Rodar lint/typecheck
+- [ ] Rodar smoke tests locais (dev server) e verificar logs
+
+## Checklists (Fase 2 - Observabilidade UI Unificada)
+- [ ] Inventariar páginas: `/admin/logs`, `/admin/audit-logs`, `/admin/auditoria`, `/admin/abac`
+- [ ] Projetar página única "Central de Observabilidade" com tabs
+- [ ] Criar componente layout + tabs
+- [ ] Implementar tabelas reutilizáveis
+- [ ] Filtros avançados
+- [ ] Gráficos erros / taxa sucesso ABAC / p95 p99
+- [ ] Export centralizado
+- [ ] Endpoint unificado `/api/admin/observability`
+- [ ] Redirecionar páginas antigas
+
+## Checklists (Fase 3 - Scripts e Migração)
+- [ ] Script migrar logs console -> systemLog
+- [ ] Script limpeza (>90 dias)
+- [ ] CLI comandos logs:cleanup / logs:migrate-console
+
+## Checklists (Fase 4 - ABAC & Prisma)
+- [ ] Integrar validação de política em endpoints admin
+- [ ] Resolver Prisma Error 14
+- [ ] Testar enforcer.loadPolicy() em dev/staging
+
+## Checklists (Fase 5 - Documentação)
+- [ ] Atualizar README logging
+- [ ] Atualizar CHANGELOG
+- [ ] Guia adicionar novo tipo de log
+
+## Próxima Ação Imediata
+- Migrar `email-logger.ts`, `prisma-adapter-abac.ts`, `prisma.ts` e mapear console.*
+
+
+
+
+
+
+
+
+
+
+
 
 
