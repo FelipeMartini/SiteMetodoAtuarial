@@ -326,7 +326,8 @@ export class MonitoringService {
     responseTime?: number
   }> {
     try {
-      const { prisma } = await import('./prisma')
+      // Usar o singleton do projeto para evitar múltiplas instâncias do PrismaClient
+      const prisma = (await import('@/lib/prisma')).default
       const start = Date.now()
 
       await prisma.$queryRaw`SELECT 1`

@@ -21,8 +21,8 @@ export async function GET(req: Request) {
     const stats = await auditLogger.getAuditStats()
 
     return NextResponse.json({ logs, pagination: { ...pagination, total: (logs as any).total || 0 }, stats })
-  } catch (err) {
-    console.error('GET /api/admin/audit-logs error', err)
+  } catch (_err) {
+    console.error('GET /api/admin/audit-logs error', _err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

@@ -26,7 +26,7 @@ export async function POST(req: Request) {
 
     fs.appendFileSync(logPath, JSON.stringify(entry) + '\n', 'utf8')
     return NextResponse.json({ ok: true })
-  } catch (err) {
-    return NextResponse.json({ ok: false, error: String(err) }, { status: 500 })
+  } catch (_err) {
+    return NextResponse.json({ ok: false, error: String(_err) }, { status: 500 })
   }
 }

@@ -144,7 +144,7 @@ const adminMenuItems: AdminMenuItem[] = [
       },
       {
         title: 'Logs do Sistema',
-        url: '/admin/logs',
+  url: '/admin/audit-logs',
         icon: FileText,
       },
       {

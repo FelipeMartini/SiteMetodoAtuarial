@@ -6,8 +6,8 @@ export async function POST(req: Request, { params }: { params: { id: string } })
 		const id = params.id
 		const success = await notificationService.markAsRead(id, 'system')
 		return NextResponse.json({ success })
-	} catch (err) {
-		console.error('POST /api/admin/notifications/[id]/read error', err)
+	} catch (_err) {
+		console.error('POST /api/admin/notifications/[id]/read error', _err)
 		return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
 	}
 }

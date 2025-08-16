@@ -28,8 +28,8 @@ export async function GET(request: NextRequest) {
           console.warn('[session-route] handlers.GET did not return an authenticated session', { status, payload })
         }
       }
-    } catch (err) {
-      console.warn('[session-route] handlers.GET delegation failed', String(err))
+    } catch (_err) {
+      console.warn('[session-route] handlers.GET delegation failed', String(_err))
     }
 
     // fallback: call compatibility auth() helper

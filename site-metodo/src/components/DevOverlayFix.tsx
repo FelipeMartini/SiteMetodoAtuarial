@@ -78,7 +78,7 @@ export default function DevOverlayFix() {
           try {
             ;(((child as HTMLElement).style) as any).setProperty('transform', 'none', 'important')
             ;(((child as HTMLElement).style) as any).setProperty('position', 'static', 'important')
-          } catch (err) {
+          } catch (_err) {
             // ignore
           }
         })
@@ -88,7 +88,7 @@ export default function DevOverlayFix() {
         while (p && p.tagName.toLowerCase() !== 'body') {
           try {
             ;(((p as HTMLElement).style) as any).setProperty('transform', 'none', 'important')
-          } catch (err) {
+          } catch (_err) {
             // ignore
           }
           p = p.parentElement
@@ -137,7 +137,7 @@ export default function DevOverlayFix() {
         overlay.style.fontFamily = 'Menlo, monospace'
         overlay.innerHTML = `<h2 style="margin-top:0;color:#ff6b6b">Client error</h2><pre style="white-space:pre-wrap">${escapeHtml(errMsg)}\n${escapeHtml(stack||'')}</pre>`
         document.body.appendChild(overlay)
-      } catch (e) {
+      } catch (_e) {
         // ignore
       }
     }
@@ -151,7 +151,7 @@ export default function DevOverlayFix() {
         const msg = event && event.message ? `${event.message}` : 'Unknown error'
         const stack = event && (event.error && event.error.stack) ? event.error.stack : ''
         createFallbackOverlay(msg, stack)
-      } catch (e) {}
+  } catch (_e) {}
     }
 
     const onRejection = (ev: PromiseRejectionEvent) => {

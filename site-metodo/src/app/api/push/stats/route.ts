@@ -1,15 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
 import DatabaseLogger from '@/lib/logging/database-logger';
 import { authOptions } from '@/auth';
 import { prisma } from '@/lib/database/prisma-client';
-import { enforcer } from '@/lib/abac/enforcer-abac-puro';
+import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro';
+import { PushNotificationServiceStats } from '@/lib/notifications/push-service';
 
-export async function GET(request: NextRequest) {
+export async function GET(_request: NextRequest) {
   const correlationId = DatabaseLogger.generateCorrelationId();
   
   try {
-    const session = await getServerSession(authOptions);
+  const mod = await import('next-auth');
+  const getServerSession = (mod as any).getServerSession || (mod as any).default?.getServerSession;
+  const session = await (getServerSession as any)(authOptions);
     
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -19,31 +21,20 @@ export async function GET(request: NextRequest) {
     }
 
     // Verifica permissão para visualizar estatísticas de push
-    const hasPermission = await enforcer.enforce(
-      session.user.email,
-      'push_notifications',
-      'read',
-      { correlationId }
-    );
+  const hasPermission = await checkABACPermission(session.user.email, 'push_notifications', 'read', { correlationId })
 
-    if (!hasPermission.allowed) {
+  if (!hasPermission.allowed) {
       return NextResponse.json(
         { error: 'Acesso negado' },
         { status: 403 }
       );
     }
 
-    // Estatísticas de assinaturas
-    const subscriptionStats = await prisma.pushSubscription.groupBy({
-      by: ['isActive'],
-      _count: {
-        id: true,
-      },
-    });
-
-    const totalSubscriptions = subscriptionStats.reduce((acc, stat) => acc + stat._count.id, 0);
-    const activeSubscriptions = subscriptionStats.find(stat => stat.isActive)?._count.id || 0;
-    const inactiveSubscriptions = subscriptionStats.find(stat => !stat.isActive)?._count.id || 0;
+  // Use PushNotificationServiceStats to collect subscription counts
+  const stats = await PushNotificationServiceStats.getStats();
+  const totalSubscriptions = stats.totalSubscriptions;
+  const activeSubscriptions = stats.activeSubscriptions;
+  const inactiveSubscriptions = stats.inactiveSubscriptions;
 
     // Estatísticas de notificações (últimos 30 dias)
     const thirtyDaysAgo = new Date();
@@ -60,13 +51,13 @@ export async function GET(request: NextRequest) {
       },
     });
 
-    let totalNotifications = notificationStats.length;
+  const totalNotifications = notificationStats.length;
     let totalDeliveries = 0;
     let successfulDeliveries = 0;
     let failedDeliveries = 0;
 
-    notificationStats.forEach(notification => {
-      notification.deliveries.forEach(delivery => {
+    notificationStats.forEach((notification: any) => {
+      notification.deliveries.forEach((delivery: any) => {
         totalDeliveries++;
         if (delivery.status === 'sent' || delivery.status === 'delivered') {
           successfulDeliveries++;
@@ -130,7 +121,7 @@ export async function GET(request: NextRequest) {
       take: 10,
     });
 
-    const response = {
+  const response = {
       subscriptions: {
         total: totalSubscriptions,
         active: activeSubscriptions,
@@ -143,22 +134,22 @@ export async function GET(request: NextRequest) {
         successfulDeliveries,
         failedDeliveries,
         deliveryRate,
-        priorityBreakdown: priorityStats.map(stat => ({
+        priorityBreakdown: priorityStats.map((stat: any) => ({
           priority: stat.priority,
           count: stat._count.id,
         })),
       },
-      recentNotifications: recentNotifications.map(notification => ({
+      recentNotifications: recentNotifications.map((notification: any) => ({
         id: notification.id,
         title: notification.title,
         body: notification.body.substring(0, 100) + (notification.body.length > 100 ? '...' : ''),
         priority: notification.priority,
         createdAt: notification.createdAt,
         deliveryCount: notification.deliveries.length,
-        successCount: notification.deliveries.filter(d => d.status === 'sent' || d.status === 'delivered').length,
-        failedCount: notification.deliveries.filter(d => d.status === 'failed').length,
+        successCount: notification.deliveries.filter((d: any) => d.status === 'sent' || d.status === 'delivered').length,
+        failedCount: notification.deliveries.filter((d: any) => d.status === 'failed').length,
       })),
-      topUsers: topUsers.map(user => ({
+      topUsers: topUsers.map((user: any) => ({
         id: user.id,
         name: user.name || 'Usuário sem nome',
         email: user.email,

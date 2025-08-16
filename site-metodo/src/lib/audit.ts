@@ -11,7 +11,7 @@ export const auditService = {
       } else {
         await auditLogger.logAuth?.(AuditAction.LOGIN_FAILED as any, userEmail || 'unknown', false, details as any)
       }
-    } catch (e) {
+    } catch (_e) {
       // fallback silencioso para não interromper autenticação
     }
   },
@@ -19,7 +19,7 @@ export const auditService = {
   async logUserEvent(action: AuditAction | string, targetUserEmail?: string, performedBy?: string, details?: Record<string, unknown>) {
     try {
       await auditLogger.logUserManagement?.(action as any, targetUserEmail || 'unknown', performedBy || 'system', details as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
@@ -27,7 +27,7 @@ export const auditService = {
   async logSecurityEvent(message: string, severity: AuditSeverity = AuditSeverity.MEDIUM, details?: Record<string, unknown>) {
     try {
       await auditLogger.logSecurityEvent?.(message, severity as any, details as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
@@ -35,7 +35,7 @@ export const auditService = {
   async logSessionEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
     try {
       await auditLogger.log?.({ action: AuditAction.ACCESS_DENIED as any, severity: AuditSeverity.LOW, success: true, userEmail, description: `${action}`, ...(details as any) } as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
@@ -43,7 +43,7 @@ export const auditService = {
   async logOAuthEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
     try {
       await auditLogger.log?.({ action: AuditAction.DATA_ACCESS as any, severity: AuditSeverity.LOW, success: true, userEmail, description: `oauth:${action}`, ...(details as any) } as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
@@ -67,7 +67,7 @@ export const auditService = {
   async getAuditLogs(filters: Record<string, unknown> = {}, pagination = { page: 1, limit: 50 }) {
     try {
       return (await auditLogger.getAuditLogs?.(filters as any, pagination as any)) as any
-    } catch (e) {
+    } catch (_e) {
       return { logs: [], total: 0, page: pagination.page, limit: pagination.limit, pages: 0 }
     }
   },
@@ -76,7 +76,7 @@ export const auditService = {
     try {
       // auditLogger.getAuditStats pode não aceitar filtros na implementação atual
       return (await auditLogger.getAuditStats?.()) as any
-    } catch (e) {
+    } catch (_e) {
       return { totalEvents: 0, successfulLogins: 0, failedLogins: 0 }
     }
   },

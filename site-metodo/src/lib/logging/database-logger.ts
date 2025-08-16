@@ -1,20 +1,5 @@
-import { PrismaClient } from '@prisma/client';
+import prisma from '@/lib/prisma';
 import { headers } from 'next/headers';
-
-let prisma: PrismaClient;
-
-// Singleton pattern para o cliente Prisma
-if (process.env.NODE_ENV === 'production') {
-  prisma = new PrismaClient();
-} else {
-  const globalWithPrisma = globalThis as typeof globalThis & {
-    __prisma: PrismaClient;
-  };
-  if (!globalWithPrisma.__prisma) {
-    globalWithPrisma.__prisma = new PrismaClient();
-  }
-  prisma = globalWithPrisma.__prisma;
-}
 
 // Tipos para logs estruturados
 export interface LogContext {
@@ -72,17 +57,17 @@ export class DatabaseLogger {
    */
   private static async getRequestContext(): Promise<LogContext> {
     try {
-      const headersList = headers();
-      const forwarded = headersList.get('x-forwarded-for');
-      const realIp = headersList.get('x-real-ip');
-      const ip = forwarded?.split(',')[0] || realIp || 'unknown';
-      const userAgent = headersList.get('user-agent') || 'unknown';
+  const headersList = await headers();
+  const forwarded = headersList.get('x-forwarded-for');
+  const realIp = headersList.get('x-real-ip');
+  const ip = forwarded?.split(',')[0] || realIp || 'unknown';
+  const userAgent = headersList.get('user-agent') || 'unknown';
 
       return {
         ip,
         userAgent,
       };
-    } catch (error) {
+    } catch (_error) {
       return {};
     }
   }
@@ -118,8 +103,8 @@ export class DatabaseLogger {
           duration: context.duration,
         },
       });
-    } catch (error) {
-      console.error('[DatabaseLogger] Falha ao salvar log de sistema:', error);
+    } catch (_error) {
+      console.error('[DatabaseLogger] Falha ao salvar log de sistema:', _error);
       // Fallback para console se banco falhar
       console.log(`[${data.level}] ${data.message}`, { 
         module: data.module, 

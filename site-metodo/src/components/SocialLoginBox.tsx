@@ -40,7 +40,7 @@ async function loginSocial(provider: string) {
 
     document.body.appendChild(form)
     form.submit()
-  } catch (err) {
+  } catch (_err) {
     // fallback para GET se não conseguirmos o csrf (pior caso)
     window.location.href = `/api/auth/signin/${provider}`
   }

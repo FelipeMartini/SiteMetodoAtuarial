@@ -1,4 +1,5 @@
 import DatabaseLogger from '../logging/database-logger';
+import prisma from '@/lib/prisma';
 
 export interface PushNotificationPayload {
   title: string;
@@ -377,35 +378,87 @@ export class PushNotificationService {
    * Encontra assinatura existente por endpoint
    */
   private static async findExistingSubscription(_userId: string, _endpoint: string): Promise<UserPushSubscription | null> {
-    // TODO: Buscar no banco de dados
-    // Por enquanto retorna null (nova assinatura sempre)
-    return null;
+    // Busca no banco de dados por endpoint
+    try {
+      const rec = await prisma.pushSubscription.findUnique({ where: { endpoint: _endpoint } });
+      if (!rec) return null;
+      return {
+        id: rec.id,
+        userId: rec.userId,
+        subscription: { endpoint: rec.endpoint, keys: { p256dh: rec.p256dh, auth: rec.auth } },
+        userAgent: rec.userAgent || undefined,
+        createdAt: rec.createdAt,
+        isActive: rec.isActive,
+      };
+    } catch (error) {
+      await DatabaseLogger.logSystem({
+        level: 'ERROR',
+        message: 'Erro ao buscar assinatura existente',
+        module: 'push_notifications',
+        operation: 'find_existing_subscription',
+        error: error instanceof Error ? error.stack : String(error),
+        context: {},
+      });
+      return null;
+    }
   }
 
   /**
    * Obtém todas as assinaturas ativas de um usuário
    */
-  private static async getUserSubscriptions(_userId: string): Promise<UserPushSubscription[]> {
-    // TODO: Buscar no banco de dados
-    // Por enquanto retorna array vazio (implementação stub)
-    return [];
+  static async getUserSubscriptions(_userId: string): Promise<UserPushSubscription[]> {
+    // Busca todas as assinaturas ativas do usuário no banco
+    try {
+  const recs = await prisma.pushSubscription.findMany({ where: { userId: _userId, isActive: true } });
+  return recs.map((rec: any) => ({
+        id: rec.id,
+        userId: rec.userId,
+        subscription: { endpoint: rec.endpoint, keys: { p256dh: rec.p256dh, auth: rec.auth } },
+        userAgent: rec.userAgent || undefined,
+        createdAt: rec.createdAt,
+        isActive: rec.isActive,
+      }));
+    } catch (error) {
+      await DatabaseLogger.logSystem({
+        level: 'ERROR',
+        message: 'Erro ao obter assinaturas do usuário',
+        module: 'push_notifications',
+        operation: 'get_user_subscriptions',
+        error: error instanceof Error ? error.stack : String(error),
+        context: { userId: _userId },
+      });
+      return [];
+    }
   }
 
   /**
    * Desativa uma assinatura
    */
-  private static async deactivateSubscription(subscriptionId: string, reason: string): Promise<void> {
-    // TODO: Atualizar no banco de dados
-    await DatabaseLogger.logAudit({
-      action: 'UPDATE',
-      resource: 'push_subscription',
-      resourceId: subscriptionId,
-      oldValues: { isActive: true },
-      newValues: { isActive: false, reason },
-      context: {
-        metadata: { deactivationReason: reason },
-      },
-    });
+  static async deactivateSubscription(subscriptionId: string, reason: string): Promise<void> {
+    try {
+      const old = await prisma.pushSubscription.findUnique({ where: { id: subscriptionId } });
+      await prisma.pushSubscription.update({ where: { id: subscriptionId }, data: { isActive: false } });
+
+      await DatabaseLogger.logAudit({
+        action: 'UPDATE',
+        resource: 'push_subscription',
+        resourceId: subscriptionId,
+        oldValues: old ? { isActive: old.isActive } : null,
+        newValues: { isActive: false, reason },
+        context: {
+          metadata: { deactivationReason: reason },
+        },
+      });
+    } catch (error) {
+      await DatabaseLogger.logSystem({
+        level: 'ERROR',
+        message: 'Erro ao desativar assinatura',
+        module: 'push_notifications',
+        operation: 'deactivate_subscription',
+        error: error instanceof Error ? error.stack : String(error),
+        context: { metadata: { subscriptionId, reason } },
+      });
+    }
   }
 
   /**
@@ -418,8 +471,11 @@ export class PushNotificationService {
     const correlationId = DatabaseLogger.generateCorrelationId();
     
     try {
-      // TODO: Implementar limpeza no banco de dados
-      const removed = 0; // Placeholder
+  const cutoff = new Date();
+  cutoff.setDate(cutoff.getDate() - daysOld);
+
+  const result = await prisma.pushSubscription.deleteMany({ where: { isActive: false, updatedAt: { lt: cutoff } } });
+  const removed = result.count;
 
       await DatabaseLogger.logSystem({
         level: 'INFO',
@@ -446,7 +502,7 @@ export class PushNotificationService {
         },
       });
 
-      return { removed: 0, errors: [String(error)] };
+  return { removed: 0, errors: [String(error)] };
     }
   }
 
@@ -580,6 +636,97 @@ export class PushNotificationService {
       throw error;
     }
   }
+}
+
+// Estatísticas utilitárias do serviço
+export const PushNotificationServiceStats = {
+  async getStats() {
+    try {
+      const total = await prisma.pushSubscription.count();
+      const active = await prisma.pushSubscription.count({ where: { isActive: true } });
+      const inactive = total - active;
+      return { totalSubscriptions: total, activeSubscriptions: active, inactiveSubscriptions: inactive };
+    } catch (error) {
+      await DatabaseLogger.logSystem({ level: 'ERROR', message: 'Erro ao coletar estatísticas de push', module: 'push_notifications', operation: 'get_stats', error: error instanceof Error ? error.stack : String(error) });
+      return { totalSubscriptions: 0, activeSubscriptions: 0, inactiveSubscriptions: 0 };
+    }
+  }
+} as const
+
+// Tipos e factory exportados para compatibilidade com shims e imports existentes
+export interface PushConfig {
+  vapidPublicKey?: string;
+  vapidPrivateKey?: string;
+  vapidEmail?: string;
+}
+
+/**
+ * Factory compatível com `notification-service.ts` que espera métodos como
+ * `sendToUser` e `sendToUsers`.
+ */
+export function createPushNotificationService(_config?: PushConfig) {
+  return {
+    // compat wrapper para enviar a um usuário
+    async sendToUser(userId: string, request: any) {
+      // request pode conter { notification, priority, scheduleTime, expiresAt }
+      const notification = request.notification || request;
+      return await PushNotificationService.sendNotification({
+        userId,
+        notification,
+        priority: request.priority,
+        scheduleTime: request.scheduleTime,
+        expiresAt: request.expiresAt,
+      });
+    },
+
+    // compat wrapper para enviar a múltiplos usuários
+    async sendToUsers(userIds: string[], request: any) {
+      const notification = request.notification || request;
+      return await PushNotificationService.sendBroadcast(userIds, notification, request.priority || 'normal');
+    },
+
+    // expor registro de assinatura
+    async registerSubscription(userId: string, subscription: any, userAgent?: string, context?: any) {
+      return await PushNotificationService.registerSubscription(userId, subscription, userAgent, context);
+    },
+
+    async cleanupInactiveSubscriptions(daysOld?: number) {
+      return await PushNotificationService.cleanupInactiveSubscriptions(daysOld);
+    },
+    // Métodos compatíveis adicionais esperados por shims/rotas legadas
+    async testPushNotification(userId: string) {
+      // Execução de teste: chama sendNotification com payload mínimo (não persiste)
+      try {
+        const res = await PushNotificationService.sendNotification({
+          userId,
+          notification: { title: 'Test', body: 'Test push notification from system' },
+        });
+        return res;
+      } catch (err) {
+        return { success: false, messageId: '', deliveredCount: 0, failedCount: 1, errors: [String(err)] };
+      }
+    },
+
+    async unregisterSubscription(endpoint: string) {
+      try {
+        const rec = await prisma.pushSubscription.findUnique({ where: { endpoint } });
+        if (!rec) return false;
+        await PushNotificationService.deactivateSubscription(rec.id, 'unregister');
+        return true;
+      } catch (error) {
+        await DatabaseLogger.logSystem({ level: 'ERROR', message: 'Erro ao desregistrar assinatura', module: 'push_notifications', operation: 'unregister_subscription', error: error instanceof Error ? error.stack : String(error), context: { metadata: { endpoint } } });
+        return false;
+      }
+    },
+
+    async getUserSubscriptions(userId: string) {
+      return await PushNotificationService.getUserSubscriptions(userId);
+    },
+
+    async getStats() {
+      return await PushNotificationServiceStats.getStats();
+    },
+  };
 }
 
 export default PushNotificationService;

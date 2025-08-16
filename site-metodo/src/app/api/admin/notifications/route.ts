@@ -11,8 +11,8 @@ export async function GET(req: Request) {
     const data = await notificationService.getStats(undefined)
 
     return NextResponse.json({ notifications: [], stats: data, pagination: { page, limit, total: 0 } })
-  } catch (err) {
-    console.error('GET /api/admin/notifications error', err)
+  } catch (_err) {
+    console.error('GET /api/admin/notifications error', _err)
     return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

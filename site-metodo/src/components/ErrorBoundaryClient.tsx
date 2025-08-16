@@ -20,7 +20,7 @@ export default class ErrorBoundaryClient extends React.Component<Props, { hasErr
       console.error('[ErrorBoundaryClient] Captured error:', error, info)
       // opcional: enviar para API interna de logs
       // fetch('/api/logs/client-error', { method: 'POST', body: JSON.stringify({ error: String(error), info }) })
-    } catch (e) {
+    } catch (_e) {
       // ignore
     }
   }

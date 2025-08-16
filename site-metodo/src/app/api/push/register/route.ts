@@ -1,6 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from 'next-auth';
-import PushNotificationService from '@/lib/notifications/push-service';
+import { createPushNotificationService } from '@/lib/notifications/push-service';
 import DatabaseLogger from '@/lib/logging/database-logger';
 import { authOptions } from '@/auth';
 import { prisma } from '@/lib/database/prisma-client';
@@ -9,7 +8,9 @@ export async function POST(request: NextRequest) {
   const correlationId = DatabaseLogger.generateCorrelationId();
   
   try {
-    const session = await getServerSession(authOptions);
+  const mod = await import('next-auth');
+  const getServerSession = (mod as any).getServerSession || (mod as any).default?.getServerSession;
+  const session = await (getServerSession as any)(authOptions);
     
     if (!session?.user?.email) {
       return NextResponse.json(
@@ -18,7 +19,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const { subscription, userAgent } = await request.json();
+  const { subscription, userAgent } = await request.json();
 
     if (!subscription?.endpoint || !subscription?.keys?.p256dh || !subscription?.keys?.auth) {
       return NextResponse.json(
@@ -39,103 +40,29 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Verifica se já existe uma assinatura com o mesmo endpoint
-    const existingSubscription = await prisma.pushSubscription.findUnique({
-      where: { endpoint: subscription.endpoint },
-    });
-
-    let result;
-
-    if (existingSubscription) {
-      // Atualiza assinatura existente
-      result = await prisma.pushSubscription.update({
-        where: { id: existingSubscription.id },
-        data: {
-          userId: user.id,
-          p256dh: subscription.keys.p256dh,
-          auth: subscription.keys.auth,
-          userAgent,
-          isActive: true,
-          updatedAt: new Date(),
-        },
-      });
-
-      await DatabaseLogger.logAudit({
-        action: 'UPDATE',
-        resource: 'push_subscription',
-        resourceId: result.id,
-        oldValues: {
-          userId: existingSubscription.userId,
-          isActive: existingSubscription.isActive,
-        },
-        newValues: {
-          userId: user.id,
-          isActive: true,
-          userAgent,
-        },
-        context: {
-          userId: user.id,
-          correlationId,
-          metadata: {
-            endpoint: subscription.endpoint,
-            updated: true,
-          },
-        },
-      });
-    } else {
-      // Cria nova assinatura
-      result = await prisma.pushSubscription.create({
-        data: {
-          userId: user.id,
-          endpoint: subscription.endpoint,
-          p256dh: subscription.keys.p256dh,
-          auth: subscription.keys.auth,
-          userAgent,
-          isActive: true,
-        },
-      });
-
-      await DatabaseLogger.logAudit({
-        action: 'CREATE',
-        resource: 'push_subscription',
-        resourceId: result.id,
-        newValues: {
-          userId: user.id,
-          endpoint: subscription.endpoint,
-          userAgent,
-          isActive: true,
-        },
-        context: {
-          userId: user.id,
-          correlationId,
-          metadata: {
-            endpoint: subscription.endpoint,
-            created: true,
-          },
-        },
-      });
-    }
+    // Delegate to canonical PushNotificationService (compat factory)
+    const service = createPushNotificationService();
+    const registered = await service.registerSubscription(user.id, subscription, userAgent, { correlationId });
 
     await DatabaseLogger.logSystem({
       level: 'INFO',
-      message: `Push subscription ${existingSubscription ? 'atualizada' : 'registrada'} para usuário ${user.email}`,
+      message: `Push subscription registrada/atualizada para usuário ${user.email}`,
       module: 'push_notifications',
       operation: 'register_subscription',
       context: {
         userId: user.id,
         correlationId,
         metadata: {
-          subscriptionId: result.id,
+          subscriptionId: (registered as any)?.id,
           endpoint: subscription.endpoint,
-          action: existingSubscription ? 'update' : 'create',
         },
       },
     });
 
     return NextResponse.json({
       success: true,
-      subscriptionId: result.id,
-      action: existingSubscription ? 'updated' : 'created',
+      subscriptionId: (registered as any)?.id || null,
+      action: 'upserted',
     });
   } catch (error) {
     await DatabaseLogger.logSystem({

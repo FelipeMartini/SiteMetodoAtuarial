@@ -1,13 +1,9 @@
 
-// Re-export canônico para compatibilidade com rotas que importavam do root
-export { handlers } from './src/lib/auth'
+// Re-exports do arquivo canônico de auth para compatibilidade com imports antigos
+export { handlers, authOptions, signIn, signOut } from './src/lib/auth'
 
-// Importar o helper de sessão canônico, mas expor um shim `auth` que
-// funciona tanto como helper (sem argumentos) quanto como wrapper de
-// middleware (quando passado um handler). Isso mantém compatibilidade
-// com imports antigos em `middleware.ts` que fazem `auth(handler)`.
+// Importar o helper de sessão canônico e expor um shim compatível
 import { auth as compatAuth } from './src/lib/auth'
-
 export { compatAuth as compatAuthHelper }
 
 export function auth(handler?: any) {

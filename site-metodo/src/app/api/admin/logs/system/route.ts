@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     const page = parseInt(searchParams.get('page') || '1');
     const limit = Math.min(parseInt(searchParams.get('limit') || '50'), 100); // Máximo 100
     const level = searchParams.get('level') || undefined;
-    const module = searchParams.get('module') || undefined;
+  const moduleName = searchParams.get('module') || undefined;
     const operation = searchParams.get('operation') || undefined;
     const userId = searchParams.get('userId') || undefined;
     const startDate = searchParams.get('startDate') ? new Date(searchParams.get('startDate')!) : undefined;
@@ -44,7 +44,7 @@ export async function GET(request: NextRequest) {
       page,
       limit,
       level,
-      module,
+  module: moduleName,
       operation,
       userId,
       startDate,
@@ -58,7 +58,7 @@ export async function GET(request: NextRequest) {
       context: {
         userId: session.user.id,
         metadata: {
-          filters: { level, module, operation, userId },
+          filters: { level, module: moduleName, operation, userId },
           pagination: { page, limit },
         },
       },

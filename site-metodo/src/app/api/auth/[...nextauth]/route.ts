@@ -5,8 +5,8 @@ import { NextRequest } from 'next/server'
 export async function GET(request: NextRequest) {
 	try {
 		console.log('[auth-route] GET', { url: request.url, method: 'GET', query: request.nextUrl.searchParams.toString() })
-	} catch (err) {
-		console.log('[auth-route] GET failed to parse url', String(err))
+	} catch (_err) {
+		console.log('[auth-route] GET failed to parse url', String(_err))
 	}
 	return handlers.GET(request as any)
 }
@@ -14,8 +14,8 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
 	try {
 		console.log('[auth-route] POST', { url: request.url, method: 'POST' })
-	} catch (err) {
-		console.log('[auth-route] POST failed to parse url', String(err))
-	}
+	} catch (_err) {
+			console.log('[auth-route] POST failed to parse url', String(_err))
+		}
 	return handlers.POST(request as any)
 }

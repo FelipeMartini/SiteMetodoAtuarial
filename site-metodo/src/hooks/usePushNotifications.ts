@@ -167,9 +167,10 @@ export function usePushNotifications(): PushNotificationHook {
 
       // Cria nova assinatura
       const applicationServerKey = urlB64ToUint8Array(VAPID_PUBLIC_KEY);
+      // Cast to any because lib.dom types may use ArrayBuffer while browsers return SharedArrayBuffer in some contexts
       const subscription = await registration.pushManager.subscribe({
         userVisibleOnly: true,
-        applicationServerKey: applicationServerKey as ArrayBuffer
+        applicationServerKey: applicationServerKey as any,
       });
 
       // Envia assinatura para o servidor

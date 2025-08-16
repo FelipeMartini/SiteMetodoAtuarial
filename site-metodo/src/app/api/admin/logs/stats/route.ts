@@ -55,14 +55,14 @@ export async function GET(_request: NextRequest) {
     ]);
 
     const stats = {
-      recentErrors: recentErrors.map(log => ({
+      recentErrors: recentErrors.map((log: any) => ({
         id: log.id,
         message: log.message,
         module: log.module,
         createdAt: log.createdAt,
         user: log.user,
       })),
-      slowestOperations: slowestOps.map(log => ({
+      slowestOperations: slowestOps.map((log: any) => ({
         id: log.id,
         operation: log.operation,
         duration: log.duration,
@@ -76,7 +76,7 @@ export async function GET(_request: NextRequest) {
       summary: {
         totalErrors: recentErrors.length,
         avgResponseTime: slowestOps.length > 0 
-          ? Math.round(slowestOps.reduce((sum, op) => sum + op.duration, 0) / slowestOps.length)
+          ? Math.round(slowestOps.reduce((sum: number, op: any) => sum + op.duration, 0) / slowestOps.length)
           : 0,
         lastErrorTime: recentErrors[0]?.createdAt || null,
       },

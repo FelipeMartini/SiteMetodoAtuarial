@@ -55,7 +55,7 @@ const PROTECTED_ROUTES = [
 ]
 
 // 🎯 Rotas sensíveis que requerem verificação ABAC adicional
-const ADMIN_ROUTES = ['/admin', '/admin/users', '/admin/settings', '/admin/logs', '/api/admin']
+const ADMIN_ROUTES = ['/admin', '/admin/users', '/admin/settings', '/api/admin']
 
 const MODERATOR_ROUTES = ['/moderation', '/api/moderation']
 

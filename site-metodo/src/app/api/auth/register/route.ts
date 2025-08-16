@@ -70,8 +70,8 @@ export async function POST(request: NextRequest) {
           await prisma.casbinRule.create({ data: { ptype: 'p', v0: p.subject, v1: p.object, v2: p.action, v3: p.effect } })
         }
       }
-    } catch (err) {
-      console.error('Erro ao criar políticas casbin para novo usuário:', err)
+    } catch (_err) {
+      console.error('Erro ao criar políticas casbin para novo usuário:', _err)
     }
 
     return NextResponse.json({

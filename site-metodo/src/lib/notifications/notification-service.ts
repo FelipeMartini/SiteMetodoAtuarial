@@ -18,7 +18,11 @@ export const notificationService = {
     const r = await _push.sendToUsers(request.userIds || [], request as any)
     return request.userIds.map((_: any, i: number) => `notification-${Date.now()}-${i}`)
   },
-  async sendBulkNotifications(request: { userIds: string[]; [k: string]: any }) { return _push.sendToUsers(request.userIds || [], request as any).then(r => ({ sent: r.sent, failed: r.failed })) },
+  async sendBulkNotifications(request: { userIds: string[]; [k: string]: any }) {
+    const r = await _push.sendToUsers(request.userIds || [], request as any)
+    // r has shape { messageId, totalUsers, successCount, failureCount, details }
+    return { sent: r.successCount, failed: r.failureCount }
+  },
   async getNotifications(userId: string, pagination = { page: 1, limit: 20 }) { return { notifications: [], total: 0, page: pagination.page, limit: pagination.limit, pages: 0 } },
   async markAsRead(notificationId: string, userId: string) { return true },
   async markAllAsRead(userId: string) { return 0 },
