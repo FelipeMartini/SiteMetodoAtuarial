@@ -1,5 +1,15 @@
 import prisma from '@/lib/prisma';
-import { headers } from 'next/headers';
+// Import dinâmico de headers apenas quando disponível (ambiente server app router)
+let getHeaders: (() => Headers) | null = null;
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const mod = require('next/headers');
+  if (mod && typeof mod.headers === 'function') {
+    getHeaders = mod.headers;
+  }
+} catch (_e) {
+  // Ignora em ambientes onde next/headers não está disponível
+}
 
 // Tipos para logs estruturados
 export interface LogContext {
@@ -57,11 +67,11 @@ export class DatabaseLogger {
    */
   private static async getRequestContext(): Promise<LogContext> {
     try {
-  const headersList = await headers();
-  const forwarded = headersList.get('x-forwarded-for');
-  const realIp = headersList.get('x-real-ip');
+  const headersList = getHeaders ? getHeaders() : null;
+  const forwarded = headersList?.get('x-forwarded-for');
+  const realIp = headersList?.get('x-real-ip');
   const ip = forwarded?.split(',')[0] || realIp || 'unknown';
-  const userAgent = headersList.get('user-agent') || 'unknown';
+  const userAgent = headersList?.get('user-agent') || 'unknown';
 
       return {
         ip,

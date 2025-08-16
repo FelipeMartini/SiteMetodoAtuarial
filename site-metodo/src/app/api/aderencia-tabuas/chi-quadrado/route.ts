@@ -1,6 +1,89 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
 
+// Implementação numérica básica para CDF de Chi-Quadrado usando gamma incompleta regularizada
+// Referências:
+// - Wikipedia Chi-squared distribution
+// - Numerical Recipes (série para P(a,x) e fração contínua para Q(a,x))
+
+function gammaln(z: number): number {
+  // Lanczos approximation
+  const p = [
+    676.5203681218851,
+    -1259.1392167224028,
+    771.32342877765313,
+    -176.61502916214059,
+    12.507343278686905,
+    -0.13857109526572012,
+    9.9843695780195716e-6,
+    1.5056327351493116e-7
+  ]
+  if (z < 0.5) {
+    return Math.log(Math.PI) - Math.log(Math.sin(Math.PI * z)) - gammaln(1 - z)
+  }
+  z -= 1
+  let x = 0.99999999999980993
+  for (let i = 0; i < p.length; i++) {
+    x += p[i] / (z + i + 1)
+  }
+  const t = z + p.length - 0.5
+  return 0.5 * Math.log(2 * Math.PI) + (z + 0.5) * Math.log(t) - t + Math.log(x)
+}
+
+function lowerGammaSeries(s: number, x: number): number {
+  // Série para P(s,x) quando x < s+1
+  let sum = 1 / s
+  let term = sum
+  let n = 1
+  while (n < 1000) {
+    term *= x / (s + n)
+    sum += term
+    if (term < sum * 1e-12) break
+    n++
+  }
+  return sum * Math.exp(-x + s * Math.log(x) - gammaln(s))
+}
+
+function upperGammaContinuedFraction(s: number, x: number): number {
+  // Fração contínua para Q(s,x) quando x >= s+1
+  const EPS = 1e-12
+  let a0 = 1
+  let a1 = x
+  let b0 = 0
+  let b1 = 1
+  let fac = 1 / a1
+  let g = fac
+  let n = 1
+  while (n < 1000) {
+    const an = n
+    const ana = an - s
+    a0 = (a1 + a0 * ana)
+    b0 = (b1 + b0 * ana)
+    const anf = an * fac
+    a1 = x * a0 + anf * a1
+    b1 = x * b0 + anf * b1
+    if (a1 !== 0) {
+      fac = 1 / a1
+      const gold = g
+      g = b1 * fac
+      if (Math.abs((g - gold) / g) < EPS) break
+    }
+    n++
+  }
+  return Math.exp(-x + s * Math.log(x) - gammaln(s)) * g
+}
+
+function regularizedGammaLower(s: number, x: number): number {
+  if (x <= 0) return 0
+  if (x < s + 1) return lowerGammaSeries(s, x)
+  return 1 - upperGammaContinuedFraction(s, x)
+}
+
+function chiSquareCDF(x: number, k: number): number {
+  if (x < 0) return 0
+  return regularizedGammaLower(k / 2, x / 2)
+}
+
 // Schema para validação dos dados de entrada
 const ChiQuadradoRequestSchema = z.object({
   massa_participantes: z.array(z.object({
@@ -67,22 +150,12 @@ function calcularValorCritico(grausLiberdade: number, nivelSignificancia: number
   return tabelaCritica[grauMaisProximo][nivelKey] || 3.841
 }
 
-// Função para calcular o valor-p aproximado
+// Função para calcular o valor-p exato (cauda superior) via CDF
 function calcularValorP(chiQuadrado: number, grausLiberdade: number): number {
-  // Implementação simplificada usando aproximação
-  // Em uma implementação real, usaria biblioteca estatística como scipy
-  
-  // Aproximação grosseira baseada em valores críticos conhecidos
-  const valorCritico05 = calcularValorCritico(grausLiberdade, 0.05)
-  const valorCritico01 = calcularValorCritico(grausLiberdade, 0.01)
-  
-  if (chiQuadrado < valorCritico05) {
-    return Math.max(0.05, 1 - (chiQuadrado / valorCritico05) * 0.95)
-  } else if (chiQuadrado < valorCritico01) {
-    return 0.05 - ((chiQuadrado - valorCritico05) / (valorCritico01 - valorCritico05)) * 0.04
-  } else {
-    return Math.max(0.001, 0.01 - (chiQuadrado - valorCritico01) / valorCritico01 * 0.009)
-  }
+  if (grausLiberdade <= 0) return 1
+  const cdf = chiSquareCDF(chiQuadrado, grausLiberdade)
+  const pUpper = Math.max(0, Math.min(1, 1 - cdf))
+  return pUpper
 }
 
 // Função principal para calcular chi-quadrado
@@ -171,7 +244,7 @@ function calcularChiQuadrado(dados: ChiQuadradoRequest) {
     calculos_estatisticos: {
       graus_liberdade: grausLiberdade,
       chi_quadrado: parseFloat(chiQuadrado.toFixed(4)),
-      valor_p: parseFloat(valorP.toFixed(4)),
+  valor_p: parseFloat(valorP.toFixed(6)),
       valor_critico: parseFloat(valorCritico.toFixed(4)),
       nivel_significancia: config.nivel_significancia!,
       resultado_teste: resultadoTeste as 'ACEITA' | 'REJEITA'

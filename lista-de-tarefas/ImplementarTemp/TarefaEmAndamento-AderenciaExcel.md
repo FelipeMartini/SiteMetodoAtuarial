@@ -18,7 +18,7 @@ Unificar e aprofundar:
 
 ## Checklist Geral (Resumo Alto Nível)
 - [ ] A) Pesquisa e Referências (40 fontes mín.)
-- [ ] B) Mapeamento completo de arquivos já existentes (aderência / análises / cálculos)
+- [x] B) Mapeamento completo de arquivos já existentes (aderência / análises / cálculos) ✅ (endpoints e componentes inventariados)
 - [ ] C) Definir modelo de dados intermediário (normalização massa + óbitos + qx)
 - [ ] D) Fluxo ExcelJS: upload -> parsing -> normalização -> preview -> persistência
 - [ ] E) Fluxo OpenPyXL: script Python -> JSON -> API -> unificação contrato
@@ -32,20 +32,20 @@ Unificar e aprofundar:
 
 ## Detalhamento de Tarefas (40+ Itens)
 ```markdown
-- [ ] 1. Listar todos os endpoints `/api/aderencia-tabuas/*` e descrever função atual
-- [ ] 2. Inventariar componentes em `app/aderencia-tabuas/componentes/*`
-- [ ] 3. Mapear tipos existentes relacionados a aderência e cálculos (interfaces, d.ts)
+- [x] 1. Listar todos os endpoints `/api/aderencia-tabuas/*` e descrever função atual (upload, analise-exceljs, analise-python, chi-quadrado, configuracao-avancada, relatorio, salvar-dados, validar-upload)
+- [x] 2. Inventariar componentes em `app/aderencia-tabuas/componentes/*` (FormularioUploadExcel, AnalisePrevia, TesteChiQuadrado, VisualizacaoResultados, RelatorioAderencia)
+- [x] 3. Mapear tipos existentes relacionados a aderência e cálculos (interfaces, d.ts) ✅ (analise: `analise-excel.d.ts`, schemas zod em rotas upload/analise/salvar-dados, novo `aderencia-tabuas.d.ts`)
 - [ ] 4. Identificar duplicações entre página `dashboard/aderencia-tabuas` e `aderencia-tabuas`
 - [ ] 5. Padronizar nomenclatura ("aderencia-tabuas" vs "aderencia-tábuas")
-- [ ] 6. Definir interface canônica `MassaParticipante { matricula, idade, sexo, ... }`
-- [ ] 7. Definir interface `ObitoRegistro { matricula, dataObito, idade, sexo }`
-- [ ] 8. Definir interface `TabuaMortalidadeLinha { idade, qx_m, qx_f }`
-- [ ] 9. Definir agregados: agrupamento por faixa etária (configurável)
-- [ ] 10. Planejar enum / config de faixas etárias padrão (ex: 0-29, 30-39, ...)
-- [ ] 11. Especificar fórmula completa do Qui-Quadrado aplicada (Σ (O-E)^2 / E)
+- [x] 6. Definir interface canônica `MassaParticipante { matricula, idade, sexo, ... }` ✅ (arquivo `src/types/aderencia-tabuas.d.ts`)
+- [x] 7. Definir interface `ObitoRegistro { matricula, dataObito, idade, sexo }` ✅ (arquivo tipos criado)
+- [x] 8. Definir interface `TabuaMortalidadeLinha { idade, qx_m, qx_f }` ✅ (arquivo tipos criado)
+ - [x] 9. Definir agregados: agrupamento por faixa etária (configurável) ✅ (util `agrupamento.ts` e rota atualizada)
+ - [x] 10. Planejar enum / config de faixas etárias padrão (ex: 0-29, 30-39, ...) ✅ (tamanho configurável + heurística adaptativa fallback)
+ - [x] 11. Especificar fórmula completa do Qui-Quadrado aplicada (Σ (O-E)^2 / E) ✅ (implementada em rota chi-quadrado com correção Yates opcional)
 - [ ] 12. Calcular graus de liberdade corretos (k - 1 - m ajustes se existirem)
-- [ ] 13. Implementar função p-valor (aprox. distribuição χ²) via mathjs
-- [ ] 14. Validar extremos (E < 5 consolidar grupos) — regra estatística
+ - [x] 13. Implementar função p-valor (aprox. distribuição χ²) via mathjs ✅ (substituída por cálculo exato via gamma regularizada; futura validação cruzada com mathjs)
+ - [x] 14. Validar extremos (E < 5 consolidar grupos) — regra estatística ✅ (consolidação automática na rota)
 - [ ] 15. Implementar normalização ExcelJS (sheet -> arrays tipados)
 - [ ] 16. Extrair planilhas relevantes (massa, óbitos, qx, cálculos massa) de forma resiliente
 - [ ] 17. Validar colunas obrigatórias e formatar erros amigáveis
@@ -84,12 +84,29 @@ Unificar e aprofundar:
 - [ ] 50. Checklist final de revisão antes merge (lint, type-check, testes, docs)
 ```
 
-## Fontes (Placeholder – coletar na etapa A)
-Início da coleta (2/40):
+## Fontes (Coleta em andamento — meta ≥ 40)
 1. TailAdmin Next.js Dashboard (estrutura de componentes, dark mode, layout responsivo) - https://github.com/TailAdmin/free-nextjs-admin-dashboard
 2. Next Shadcn Admin Dashboard (colocation, theming presets, uso shadcn/ui) - https://github.com/arhamkhnz/next-shadcn-admin-dashboard
+3. IBGE Tábuas Completas de Mortalidade 2023 (qx oficiais ambos sexos, homens, mulheres) - https://www.ibge.gov.br/estatisticas/sociais/populacao/9126-tabuas-completas-de-mortalidade.html
+4. SUSEP Portal (normativos e supervisão atuária/previdência aberta) - https://www.gov.br/susep/pt-br
+5. NIST Chi-Square Critical Values (valores críticos distribuição χ²) - (fonte a adicionar URL exata Tabela NIST)
+6. Wikipedia Chi-squared distribution (definição, pdf, cdf) - https://en.wikipedia.org/wiki/Chi-squared_distribution
+7. ExcelJS GitHub (parsing, streaming de planilhas) - https://github.com/exceljs/exceljs
+8. OpenPyXL Documentation (Workbook, leitura células, performance) - https://openpyxl.readthedocs.io/
+9. Node.js Child Process (spawn integração Python) - https://nodejs.org/api/child_process.html
+10. WHO Mortality / Life Tables (validação cruzada biométrica) - (adicionar URL específica WHO life tables)
+11. Society of Actuaries (SOA) Experience Studies (metodologias aderência) - (adicionar URL estudo experiência SOA relevante)
+12. Math.js Library (funções estatísticas potenciais para χ²) - https://mathjs.org/
+13. Journal referência regra E >= 5 (agregação categorias em χ²) - (adicionar citação acadêmica)
+14. Documentação Tailwind CSS (design system utilitário) - https://tailwindcss.com/docs
+15. shadcn/ui Docs (componentização acessível) - https://ui.shadcn.com/
+16. TanStack Query Docs (data fetching, caching) - https://tanstack.com/query/latest
+17. TanStack Table Docs (tabelas reativas para relatórios) - https://tanstack.com/table/latest
+18. Zod Documentation (validação esquemas) - https://zod.dev/
+19. Auth.js v5 Docs (controle acesso e sessão) - https://authjs.dev/
+20. Prisma Docs (schema, migrations, performance) - https://www.prisma.io/docs
 
-Demais referências estatística, mortalidade, chi-square, ExcelJS, OpenPyXL, tábuas atuariais oficiais (IBGE, SUSEP, SOA, OMS) serão adicionadas na conclusão da etapa A.
+Restante das fontes (≥20 adicionais) a serem incluídas: literatura atuarial brasileira (IBGE metodologias, SUSEP normativos específicos de provisões, mortalidade previdenciária), papers de ajuste de tábuas, bibliotecas de estatística avançada em JS/Python (scipy.stats referência para validação), normas de testes estatísticos, guidelines de performance para parsing de grandes XLSX.
 
 ## Próximos Passos Imediatos
 1. Coletar 40 fontes (Google acadêmico, docs libs) e preencher seção Fontes.
