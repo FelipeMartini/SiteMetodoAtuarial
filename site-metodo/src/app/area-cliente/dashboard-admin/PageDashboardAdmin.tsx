@@ -3,6 +3,7 @@ export const dynamic = 'force-dynamic'
 
 import React, { useEffect, useState } from 'react'
 import { useAuth } from '@/app/hooks/useAuth'
+import { checkClientPermission } from '@/lib/abac/client'
 import { Skeleton } from '@/components/ui/skeleton'
 import { AdminLayout } from '@/components/admin-layout'
 import DashboardAdmin from '@/app/area-cliente/DashboardAdmin'
@@ -14,45 +15,32 @@ const PageDashboardAdmin: React.FC = () => {
 
   // Verificar permissões ABAC para admin dashboard
   useEffect(() => {
+    let mounted = true
     const checkAdminAccess = async () => {
       if (!session?.user?.id) {
-        setIsCheckingAccess(false)
+        if (mounted) setIsCheckingAccess(false)
         return
       }
 
       try {
-        // Verificar se o usuário tem acesso ao admin dashboard via ABAC
-        const response = await fetch('/api/abac/check', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            // Usar apenas o email como subject (padronizar)
-            subject: session.user.email,
-            object: 'admin:dashboard',
-            action: 'read',
-            context: {
-              time: new Date().toISOString(),
-              location: session.user.location || 'unknown',
-              department: session.user.department || 'unknown'
-            }
-          })
-        })
-
-        if (response.ok) {
-          const result = await response.json()
-          setHasAdminAccess(result.allowed)
-        } else {
-          setHasAdminAccess(false)
-        }
+        const allowed = await checkClientPermission(
+          session.user.email,
+          'admin:dashboard',
+          'read'
+        )
+        if (mounted) setHasAdminAccess(prev => (prev === allowed ? prev : allowed))
       } catch (error) {
         console.error('Erro ao verificar permissões ABAC:', error)
-        setHasAdminAccess(false)
+        if (mounted) setHasAdminAccess(false)
       } finally {
-        setIsCheckingAccess(false)
+        if (mounted) setIsCheckingAccess(false)
       }
     }
 
     checkAdminAccess()
+    return () => {
+      mounted = false
+    }
   }, [session])
 
   if (status === 'loading' || isCheckingAccess) {

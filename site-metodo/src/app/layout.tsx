@@ -1,10 +1,11 @@
-// Import estático de CSS global (produção e dev). Em dev injetamos apenas regras de overlay via componente client-side.
 import './globals.css'
 import DevOverlayFix from '@/components/DevOverlayFix'
 import LayoutCliente from '@/app/LayoutCliente'
+import ErrorBoundaryClient from '@/components/ErrorBoundaryClient'
+import ClientErrorReporter from '@/components/ClientErrorReporter'
 
 import ThemeProviderClient from '@/components/ui/ThemeProviderClient'
-import { HydrateCurrentUser } from '@/components/ui/ThemeProviderZustand'
+import { HydrateCurrentUser, HydrateUIStore } from '@/components/ui/ThemeProviderZustand'
 import { FeatureFlagProvider } from '@/components/feature-flags/FeatureFlagProvider'
 import TanstackQueryProvider from '@/app/providers/TanstackQueryProvider'
 
@@ -46,12 +47,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <>
           <FeatureFlagProvider>
             <TanstackQueryProvider>
-              <LayoutCliente>
-                <HydrateCurrentUser />
-                <ThemeProviderClient />
-                <DevOverlayFix />
-                {children}
-              </LayoutCliente>
+              <ErrorBoundaryClient>
+                <LayoutCliente>
+                  <ClientErrorReporter />
+                  <HydrateUIStore />
+                  <HydrateCurrentUser />
+                  <ThemeProviderClient />
+                  <DevOverlayFix />
+                  {children}
+                </LayoutCliente>
+              </ErrorBoundaryClient>
             </TanstackQueryProvider>
           </FeatureFlagProvider>
         </>

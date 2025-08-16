@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { checkClientPermission } from '@/lib/abac/client'
 import { useSession } from 'next-auth/react'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
@@ -24,55 +25,56 @@ export default function AuditoriaPage() {
   const [hasPermission, setHasPermission] = useState<boolean | null>(null)
 
   useEffect(() => {
+    let mounted = true
     const checkPermissions = async () => {
       if (!session?.user?.email) {
-        setHasPermission(false)
-        setLoading(false)
+        if (mounted) {
+          setHasPermission(false)
+          setLoading(false)
+        }
         return
       }
 
       try {
-        const response = await fetch('/api/abac/check', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            subject: session.user.email,
-            action: 'read',
-            resource: 'audit_logs',
-          }),
-        })
-
-        const result = await response.json()
-        setHasPermission(result.allowed)
-
-        if (result.allowed) {
-          // Simular carregamento de logs de auditoria
-          setTimeout(() => {
-            setAuditLogs([
-              {
-                id: '1',
-                userId: session?.user?.id || '',
-                action: 'LOGIN',
-                resource: 'auth',
-                timestamp: new Date().toISOString(),
-                details: 'Usuário fez login no sistema',
-                ipAddress: '127.0.0.1'
-              }
-            ])
+        const allowed = await checkClientPermission(session.user.email, 'audit_logs', 'read')
+        if (mounted) {
+          setHasPermission(allowed)
+          if (allowed) {
+            // Simular carregamento de logs de auditoria
+            setTimeout(() => {
+              if (!mounted) return
+              setAuditLogs([
+                {
+                  id: '1',
+                  userId: session?.user?.id || '',
+                  action: 'LOGIN',
+                  resource: 'auth',
+                  timestamp: new Date().toISOString(),
+                  details: 'Usuário fez login no sistema',
+                  ipAddress: '127.0.0.1'
+                }
+              ])
+              setLoading(false)
+            }, 1000)
+          } else {
             setLoading(false)
-          }, 1000)
-        } else {
-          setLoading(false)
+          }
         }
       } catch (error) {
         console.error('Erro ao verificar permissões:', error)
-        setHasPermission(false)
-        setLoading(false)
+        if (mounted) {
+          setHasPermission(false)
+          setLoading(false)
+        }
       }
     }
 
     if (status !== 'loading') {
       checkPermissions()
+    }
+
+    return () => {
+      mounted = false
     }
   }, [session, status])
 

@@ -10,6 +10,21 @@ export async function checkClientPermission(
   resource: string,
   action: string
 ): Promise<boolean> {
+  // cache simples em memória para evitar chamadas repetidas que podem causar loops
+  const key = `${userEmail}:${resource}:${action}`
+  const now = Date.now()
+  const CACHE_TTL = 30_000 // 30s
+  // @ts-ignore: permissive cache entry
+  if (typeof (checkClientPermission as any).cache === 'undefined') {
+    ;(checkClientPermission as any).cache = new Map()
+  }
+  // @ts-ignore
+  const cache: Map<string, { allowed: boolean; status: number; ts: number }> = (checkClientPermission as any).cache
+  const cached = cache.get(key)
+  if (cached && now - cached.ts < CACHE_TTL) {
+    console.log('[checkClientPermission] cache hit', { key, cached })
+    return cached.allowed
+  }
   try {
     // Log para rastrear todas as chamadas
     console.log('[checkClientPermission] chamada', { userEmail, resource, action })
@@ -26,12 +41,16 @@ export async function checkClientPermission(
     })
 
     if (!response.ok) {
-      console.error('Permission check failed:', response.statusText)
+      console.error('Permission check failed:', response.statusText, response.status)
+      // cache negativo para evitar loop de requisições repetidas (ex: 401)
+      cache.set(key, { allowed: false, status: response.status, ts: Date.now() })
       return false
     }
 
     const data = await response.json()
-    return data.allowed || false
+    const allowed = !!data.allowed
+    cache.set(key, { allowed, status: response.status, ts: Date.now() })
+    return allowed
   } catch (_error) {
     console.error('Permission check error:', String(_error))
     return false

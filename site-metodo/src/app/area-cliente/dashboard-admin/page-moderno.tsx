@@ -1,6 +1,7 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { checkClientPermission } from '@/lib/abac/client'
 import { useAuth } from '@/app/hooks/useAuth'
 import { AdminDashboardStats } from '@/components/admin/dashboard-stats'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -24,61 +25,53 @@ export default function PageDashboardAdminModerno() {
 
   // Verificar permissão ABAC para acesso ao dashboard admin
   useEffect(() => {
+    let mounted = true
     const checkPermissions = async () => {
       // Se não há sessão, não faz a verificação ABAC
       if (!session?.user?.email) {
-        setHasAccess(false)
-        setIsLoading(false)
+        if (mounted) {
+          setHasAccess(false)
+          setIsLoading(false)
+        }
         return
       }
 
       try {
-        setIsLoading(true)
-        setPermissionError(null)
-
-        const response = await fetch('/api/abac/check', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            subject: session.user.email,
-            object: '/admin/dashboard',
-            action: 'read',
-            context: {
-              userEmail: session.user.email,
-              timestamp: new Date().toISOString(),
-            }
-          }),
-        })
-
-        if (!response.ok) {
-          throw new Error(`Erro ${response.status}: ${response.statusText}`)
+        if (mounted) {
+          setIsLoading(true)
+          setPermissionError(null)
         }
 
-        const result = await response.json()
-        
-        console.log('🔍 Verificação ABAC para dashboard admin:', {
+        const allowed = await checkClientPermission(
+          session.user.email,
+          '/admin/dashboard',
+          'read'
+        )
+
+        console.log('🔍 Verificação ABAC para dashboard admin (cached):', {
           userEmail: session.user.email,
-          hasAccess: result.allowed,
-          reason: result.reason,
+          hasAccess: allowed,
         })
 
-        setHasAccess(result.allowed)
-
-        if (!result.allowed) {
-          setPermissionError('Acesso negado: permissões insuficientes para acessar o dashboard administrativo.')
+        if (mounted) {
+          setHasAccess(prev => (prev === allowed ? prev : allowed))
+          if (!allowed) setPermissionError('Acesso negado: permissões insuficientes para acessar o dashboard administrativo.')
         }
       } catch (error) {
         console.error('Erro ao verificar permissões ABAC:', error)
-        setPermissionError('Erro ao verificar permissões. Tente novamente.')
-        setHasAccess(false)
+        if (mounted) {
+          setPermissionError('Erro ao verificar permissões. Tente novamente.')
+          setHasAccess(false)
+        }
       } finally {
-        setIsLoading(false)
+        if (mounted) setIsLoading(false)
       }
     }
 
     checkPermissions()
+    return () => {
+      mounted = false
+    }
   }, [session?.user?.email])
 
   if (status === 'loading') {

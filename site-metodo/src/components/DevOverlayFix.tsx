@@ -39,6 +39,8 @@ body > .react-error-overlay * {
 export default function DevOverlayFix() {
   React.useEffect(() => {
     const hostname = typeof window !== 'undefined' ? window.location.hostname : ''
+    const enabled = typeof process !== 'undefined' && (process.env.NEXT_PUBLIC_ENABLE_DEV_OVERLAY_FIX === '1')
+    if (!enabled) return
     const isDev = hostname === 'localhost' || hostname === '127.0.0.1' || hostname === ''
     if (!isDev) return
 
