@@ -1,29 +1,17 @@
-'use client';
+import Link from 'next/link'
 
-import React from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { DataTable } from '@/components/admin/data-table';
-import { StatsCard } from '@/components/admin/stats-card';
-import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
-import { 
-  Shield, 
-  Activity, 
-  CheckCircle, 
-  XCircle, 
-  Eye,
-  Filter,
-  Download,
-  RefreshCw,
-  Search,
-  TrendingUp,
-  ChevronDown
-} from 'lucide-react';
-import { ColumnDef } from '@tanstack/react-table';
+export default function LegacyAuditLogsNotice() {
+  if (typeof window !== 'undefined') {
+    setTimeout(() => { window.location.href = '/admin/observabilidade?type=auditoria' }, 300)
+  }
+  return (
+    <div className="p-6 text-sm">
+      <p className="mb-2 font-medium">Logs de auditoria migrados para a central unificada.</p>
+      <p>Nova rota: <Link className="underline" href="/admin/observabilidade?type=auditoria">/admin/observabilidade</Link></p>
+    </div>
+  )
+}
+
 import { DatePickerWithRange, DateRange } from '@/components/ui/date-range-picker';
 import {
   DropdownMenu,

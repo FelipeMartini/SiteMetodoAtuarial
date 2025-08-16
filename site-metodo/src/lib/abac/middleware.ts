@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { structuredLogger } from '@/lib/logger'
 import { getEnforcer } from './enforcer-abac-puro'
 // import { AuthorizationError } from './types';
 
@@ -82,7 +83,7 @@ async function getUserFromRequest(request: NextRequest): Promise<{
 
     return null
   } catch (_error) {
-    console.error('Error getting user from request:', String(_error))
+  structuredLogger.error('abac middleware: error getting user', { error: String(_error) })
     return null
   }
 }
@@ -140,7 +141,7 @@ export async function abacMiddleware(
       if (!isAllowed) {
         // Log unauthorized access attempt
         if (mergedConfig.enableLogging) {
-          console.warn(`Unauthorized access attempt: ${user.email} -> ${pathname} (${action})`)
+          structuredLogger.warn('Unauthorized access attempt', { email: user.email, pathname, action })
         }
 
         // Custom unauthorized handler or default
@@ -160,13 +161,13 @@ export async function abacMiddleware(
 
       // Log successful access
       if (mergedConfig.enableLogging) {
-        console.log(`Access granted: ${user.email} -> ${pathname} (${action})`)
+  structuredLogger.info('Access granted', { email: user.email, pathname, action })
       }
     }
 
     return NextResponse.next()
   } catch (_error) {
-    console.error('ABAC Middleware error:', String(_error))
+  structuredLogger.error('ABAC Middleware error', { error: String(_error) })
 
     // In case of error, allow access but log the error
     // In production, you might want to deny access instead
@@ -259,7 +260,7 @@ export function withABACAuthorization(
 
       return handler(request)
     } catch (_error) {
-      console.error('Authorization error:', String(_error))
+  structuredLogger.error('Authorization error', { error: String(_error) })
       return new NextResponse('Internal Server Error', { status: 500 })
     }
   }
@@ -284,7 +285,7 @@ export async function checkPermission(
 
     return isAllowed
   } catch (_error) {
-    console.error('Permission check error:', String(_error))
+  structuredLogger.error('Permission check error', { error: String(_error) })
     return false
   }
 }

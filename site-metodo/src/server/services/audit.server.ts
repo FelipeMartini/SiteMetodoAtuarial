@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma'
+import { structuredLogger } from '@/lib/logger'
 
 // Tipagem dinâmica parcial para evitar any excessivo
 interface AuditLogRecord {
@@ -45,7 +46,7 @@ export async function auditLog(params: {
       },
     })
   } catch (e) {
-    console.warn('[audit] falha ao registrar', e)
+    structuredLogger.warn('[audit] falha ao registrar', { error: String(e) })
   }
 }
 
@@ -60,7 +61,7 @@ export async function listarAuditoria(limit = 20) {
     })
     return rows
   } catch (e) {
-    console.warn('[audit] falha ao listar', e)
+    structuredLogger.warn('[audit] falha ao listar', { error: String(e) })
     return []
   }
 }

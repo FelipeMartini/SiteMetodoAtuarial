@@ -1,3 +1,21 @@
+## Checklist Implementação Observabilidade (Fase C)
+
+- [x] Migrar console.* em monitor-simple.ts
+- [x] Mapear restantes console.* server-side (nenhum restante em src/server)
+- [x] Integrar DataTable avançado em tabs observabilidade (base)
+  - [x] Definir colunas por tipo
+  - [x] Substituir tabela manual por DataTable
+  - [x] Paginação controlada (server side) mantendo filtros
+  - [x] Ações de export dentro toolbar DataTable
+  - [x] Export multi-page (streaming ou loop paginação)
+- [x] Export multi-page/streaming
+- [x] Documentar (docs/observability.md) e atualizar CHANGELOG (pendente entrada detalhada no CHANGELOG principal)
+- [x] Revisar pendências e próximos passos
+# Notas Próximas Etapas
+
+Export multi-page: estratégia prevista -> endpoint /api/admin/observability-export que pagina internamente (loop) agregando resultados em stream (ReadableStream) para CSV grande, respeitando limite configurável (ex: 50k linhas) e header de aviso.
+
+Documentação: criar docs/observability.md cobrindo: arquitetura (facade logger + AsyncLocalStorage correlationId), endpoint unificado, parâmetros de filtro, resumo (summary), DataTable integração e roadmap (streaming export, alertas futuros).
 # ✅ UNIFICAÇÃO COMPLETA DO SISTEMA ADERÊNCIA DE TÁBUAS - FINALIZADA
 
 ## 📋 LISTA DE TAREFAS CONCLUÍDAS

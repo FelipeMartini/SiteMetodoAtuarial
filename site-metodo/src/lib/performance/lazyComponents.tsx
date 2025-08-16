@@ -18,8 +18,9 @@ export const CalculosAtuariais = lazy(() => import('@/app/area-cliente/calculos-
 // Componentes de auditoria
 export const AuditoriaPage = lazy(() => import('@/app/admin/auditoria/page'))
 
-// Componente de ABAC admin (client-side)
-export const ABACAdmin = lazy(() => import('@/app/admin/abac/page-client'))
+// Componente de ABAC admin (client-side) - precisa apontar para o arquivo client
+// Garantimos retorno no formato { default: Component } para satisfazer React.lazy
+export const ABACAdmin = lazy(() => import('@/app/admin/abac/page-client').then(m => ({ default: m.default })))
 
 // Componentes de dashboard do usuário
 export const DashboardAdmin = lazy(() => import('@/app/area-cliente/dashboard-admin/page'))

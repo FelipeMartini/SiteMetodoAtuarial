@@ -6,6 +6,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 // usar tipos locais para compatibilidade com diferentes versões das libs
 import { prisma } from '@/lib/prisma'
+import { structuredLogger } from '@/lib/logger'
 import { sanitizePolicyArray } from './utils'
 
 type AnyModel = any
@@ -33,7 +34,7 @@ export class PrismaAdapter /* implements Adapter */ {
           model.addPolicy('p', 'p', filtered)
         }
     } catch (error) {
-      console.error('Erro ao carregar políticas:', error)
+      structuredLogger.error('Erro ao carregar políticas', { error: String(error) })
       throw error
     }
   }
@@ -64,7 +65,7 @@ export class PrismaAdapter /* implements Adapter */ {
 
       return true
     } catch (error) {
-      console.error('Erro ao salvar políticas:', error)
+      structuredLogger.error('Erro ao salvar políticas', { error: String(error) })
       return false
     }
   }
@@ -86,7 +87,7 @@ export class PrismaAdapter /* implements Adapter */ {
         }
       })
     } catch (error) {
-      console.error('Erro ao adicionar política:', error)
+      structuredLogger.error('Erro ao adicionar política', { error: String(error) })
       throw error
     }
   }
@@ -108,7 +109,7 @@ export class PrismaAdapter /* implements Adapter */ {
         }
       })
     } catch (error) {
-      console.error('Erro ao remover política:', error)
+      structuredLogger.error('Erro ao remover política', { error: String(error) })
       throw error
     }
   }
@@ -129,7 +130,7 @@ export class PrismaAdapter /* implements Adapter */ {
 
       await this.prisma.casbinRule.deleteMany({ where })
     } catch (error) {
-      console.error('Erro ao remover políticas filtradas:', error)
+      structuredLogger.error('Erro ao remover políticas filtradas', { error: String(error) })
       throw error
     }
   }

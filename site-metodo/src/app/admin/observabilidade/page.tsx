@@ -2,10 +2,11 @@ import React from 'react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Card, CardHeader, CardTitle, CardContent, CardDescription } from '@/components/ui/card'
 import { structuredLogger } from '@/lib/logger'
+import ObservabilidadeTabsClient from './tabs-client'
 
-// Página inicial unificada de observabilidade (esqueleto inicial)
+// Página server que apenas registra acesso e delega render client para busca dinâmica
 export default async function ObservabilidadePage() {
-  await structuredLogger.info('ObservabilidadePage accessed')
+  structuredLogger.info('ObservabilidadePage accessed')
   return (
     <div className="p-6 space-y-6">
       <Card>
@@ -24,22 +25,22 @@ export default async function ObservabilidadePage() {
               <TabsTrigger value="notificacoes">Notificações</TabsTrigger>
             </TabsList>
             <TabsContent value="sistema" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Logs de sistema (em construção)</p>
+              <ObservabilidadeTabsClient type="sistema" />
             </TabsContent>
             <TabsContent value="auditoria" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Logs de auditoria (em construção)</p>
+              <ObservabilidadeTabsClient type="auditoria" />
             </TabsContent>
             <TabsContent value="performance" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Métricas e performance (em construção)</p>
+              <ObservabilidadeTabsClient type="performance" />
             </TabsContent>
             <TabsContent value="email" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Envios de email (em construção)</p>
+              <ObservabilidadeTabsClient type="email" />
             </TabsContent>
             <TabsContent value="seguranca" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Eventos de segurança (em construção)</p>
+              <ObservabilidadeTabsClient type="seguranca" />
             </TabsContent>
             <TabsContent value="notificacoes" className="space-y-4">
-              <p className="text-sm text-muted-foreground">Notificações (em construção)</p>
+              <ObservabilidadeTabsClient type="notificacoes" />
             </TabsContent>
           </Tabs>
         </CardContent>

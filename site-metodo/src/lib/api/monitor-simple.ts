@@ -70,7 +70,8 @@ export class SimpleApiMonitor {
       recentErrors: [],
     })
 
-    console.log(`API endpoint registered: ${name} (${method} ${url})`)
+  // logging substituído por structuredLogger (adiar import dinâmico para não quebrar env) 
+  import('@/lib/logger').then(m => m.structuredLogger.info('API endpoint registered', { name, method, url })).catch(()=>{})
   }
 
   /**
@@ -79,7 +80,7 @@ export class SimpleApiMonitor {
   unregisterEndpoint(name: string): boolean {
     const deleted = this.endpoints.delete(name)
     if (deleted) {
-      console.log(`API endpoint unregistered: ${name}`)
+  import('@/lib/logger').then(m => m.structuredLogger.info('API endpoint unregistered', { name })).catch(()=>{})
     }
     return deleted
   }
@@ -95,7 +96,7 @@ export class SimpleApiMonitor {
     const endpoint = this.endpoints.get(endpointName)
 
     if (!endpoint) {
-      console.warn(`Attempted to record metrics for unregistered endpoint: ${endpointName}`)
+  import('@/lib/logger').then(m => m.structuredLogger.warn('Attempted to record metrics for unregistered endpoint', { endpointName })).catch(()=>{})
       return
     }
 
@@ -135,7 +136,7 @@ export class SimpleApiMonitor {
     )
     this.systemMetrics.averageResponseTime = totalResponseTime / this.systemMetrics.totalRequests
 
-    console.log(`Metrics recorded for ${endpointName}: ${responseTime}ms, success: ${success}`)
+  import('@/lib/logger').then(m => m.structuredLogger.info('Metrics recorded', { endpointName, responseTime, success })).catch(()=>{})
   }
 
   /**
@@ -231,7 +232,7 @@ export class SimpleApiMonitor {
       recentErrors: [],
     })
 
-    console.log(`Metrics reset for endpoint: ${endpointName}`)
+  import('@/lib/logger').then(m => m.structuredLogger.info('Metrics reset', { endpointName })).catch(()=>{})
     return true
   }
 
@@ -247,7 +248,7 @@ export class SimpleApiMonitor {
         if (endpoint.recentErrors.length >= maxErrors) {
           endpoint.circuitBreakerState = 'OPEN'
           endpoint.healthy = false
-          console.warn(`Circuit breaker opened for ${endpoint.name}`)
+          import('@/lib/logger').then(m => m.structuredLogger.warn('Circuit breaker opened', { endpoint: endpoint.name })).catch(()=>{})
         }
         break
 
@@ -256,7 +257,7 @@ export class SimpleApiMonitor {
         const lastError = Math.max(...endpoint.recentErrors)
         if (Date.now() - lastError > 30000) {
           endpoint.circuitBreakerState = 'HALF_OPEN'
-          console.log(`Circuit breaker half-opened for ${endpoint.name}`)
+          import('@/lib/logger').then(m => m.structuredLogger.info('Circuit breaker half-opened', { endpoint: endpoint.name })).catch(()=>{})
         }
         break
 
@@ -264,11 +265,11 @@ export class SimpleApiMonitor {
         if (endpoint.recentErrors.length >= maxErrors) {
           endpoint.circuitBreakerState = 'OPEN'
           endpoint.healthy = false
-          console.warn(`Circuit breaker re-opened for ${endpoint.name}`)
+          import('@/lib/logger').then(m => m.structuredLogger.warn('Circuit breaker re-opened', { endpoint: endpoint.name })).catch(()=>{})
         } else if (endpoint.successfulRequests > endpoint.errorCount) {
           endpoint.circuitBreakerState = 'CLOSED'
           endpoint.healthy = true
-          console.log(`Circuit breaker closed for ${endpoint.name}`)
+          import('@/lib/logger').then(m => m.structuredLogger.info('Circuit breaker closed', { endpoint: endpoint.name })).catch(()=>{})
         }
         break
     }

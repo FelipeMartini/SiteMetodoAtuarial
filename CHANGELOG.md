@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### Unreleased
+
+#### Added
+- Observabilidade Unificada: endpoint `/api/admin/observability` + export streaming `/api/admin/observability/export` com correlationId.
+- DataTable avançado em /admin/observabilidade com paginação server-side e export CSV/JSON + streaming multi-page.
+
+#### Changed
+- Migração dos logs server-side de console.* para `structuredLogger` com AsyncLocalStorage (correlationId automático).
+
+#### Documentation
+- Adicionado `docs/observability.md` descrevendo arquitetura e uso.
+
 ### 1.0.1 (2025-08-09)
 
 

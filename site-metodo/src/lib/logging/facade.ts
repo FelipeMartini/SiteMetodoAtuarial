@@ -7,6 +7,7 @@
 import DatabaseLogger from './database-logger'
 import simpleLogger from '../logger-simple'
 import auditCompat from '@/lib/audit/auditLogger'
+import { getCorrelationId } from './context'
 
 const isServer = typeof window === 'undefined'
 
@@ -17,48 +18,56 @@ export const databaseLogger = DatabaseLogger
 // Wrapper compatível com a API usada pelo projeto
 export const structuredLogger = {
   info: async (m: string, meta?: Record<string, unknown>) => {
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
     if (isServer) {
       try {
-        await DatabaseLogger.logSystem({ level: 'INFO', message: m, module: meta?.module as any, operation: meta?.operation as any, context: { metadata: meta } })
+        await DatabaseLogger.logSystem({ level: 'INFO', message: m, module: enriched?.module as any, operation: enriched?.operation as any, context: { metadata: enriched } })
         return
       } catch (e) {
         console.error('[structuredLogger] fallback INFO', e)
       }
     }
-    simpleLogger.info(m, meta)
+    simpleLogger.info(m, enriched)
   },
   warn: async (m: string, meta?: Record<string, unknown>) => {
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
     if (isServer) {
       try {
-        await DatabaseLogger.logSystem({ level: 'WARN', message: m, module: meta?.module as any, operation: meta?.operation as any, context: { metadata: meta } })
+        await DatabaseLogger.logSystem({ level: 'WARN', message: m, module: enriched?.module as any, operation: enriched?.operation as any, context: { metadata: enriched } })
         return
       } catch (e) {
         console.error('[structuredLogger] fallback WARN', e)
       }
     }
-    simpleLogger.warn(m, meta)
+    simpleLogger.warn(m, enriched)
   },
   error: async (m: string, meta?: Record<string, unknown>) => {
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
     if (isServer) {
       try {
-        await DatabaseLogger.logSystem({ level: 'ERROR', message: m, module: meta?.module as any, operation: meta?.operation as any, error: (meta && (meta.error as any)) || undefined, context: { metadata: meta } })
+        await DatabaseLogger.logSystem({ level: 'ERROR', message: m, module: enriched?.module as any, operation: enriched?.operation as any, error: (enriched && (enriched.error as any)) || undefined, context: { metadata: enriched } })
         return
       } catch (e) {
         console.error('[structuredLogger] fallback ERROR', e)
       }
     }
-    simpleLogger.error(m, meta)
+    simpleLogger.error(m, enriched)
   },
   debug: async (m: string, meta?: Record<string, unknown>) => {
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
     if (!isServer) {
-      simpleLogger.debug(m, meta)
+      simpleLogger.debug(m, enriched)
       return
     }
     // Em server, grava como DEBUG se necessário
     try {
-      await DatabaseLogger.logSystem({ level: 'DEBUG', message: m, context: { metadata: meta } })
+      await DatabaseLogger.logSystem({ level: 'DEBUG', message: m, context: { metadata: enriched } })
     } catch (e) {
-      console.debug('[structuredLogger] debug fallback', m, meta)
+      console.debug('[structuredLogger] debug fallback', m, enriched)
     }
   },
 
@@ -84,15 +93,19 @@ export const structuredLogger = {
     }
   },
   http: (msg: string, meta?: Record<string, unknown>) => {
-    simpleLogger.info(`HTTP: ${msg}`, meta)
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
+    simpleLogger.info(`HTTP: ${msg}`, enriched)
     if (isServer) {
-      DatabaseLogger.logSystem({ level: 'INFO', message: `HTTP: ${msg}`, context: { metadata: meta } }).catch(() => {})
+      DatabaseLogger.logSystem({ level: 'INFO', message: `HTTP: ${msg}`, context: { metadata: enriched } }).catch(() => {})
     }
   },
   performance: (msg: string, meta?: Record<string, unknown>) => {
-    simpleLogger.info(`PERF: ${msg}`, meta)
-    if (isServer && meta && typeof (meta as any).duration === 'number') {
-      DatabaseLogger.logPerformance({ operation: (meta as any).operation as any || msg, duration: (meta as any).duration as number, method: (meta as any).method as any, path: (meta as any).path as any, context: { metadata: meta } }).catch(() => {})
+    const correlationId = getCorrelationId()
+    const enriched = correlationId ? { ...meta, correlationId } : meta
+    simpleLogger.info(`PERF: ${msg}`, enriched)
+    if (isServer && enriched && typeof (enriched as any).duration === 'number') {
+      DatabaseLogger.logPerformance({ operation: (enriched as any).operation as any || msg, duration: (enriched as any).duration as number, method: (enriched as any).method as any, path: (enriched as any).path as any, context: { metadata: enriched } }).catch(() => {})
     }
   },
 }

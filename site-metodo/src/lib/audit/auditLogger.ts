@@ -3,6 +3,7 @@
  * Mantém compatibilidade com a interface anterior enquanto usa o novo sistema
  */
 import DatabaseLogger, { type LogContext, type AuditLogData, type SystemLogData } from '../logging/database-logger';
+import { structuredLogger } from '@/lib/logger'
 
 // Interface de compatibilidade para auditoria
 export interface AuditEvent {
@@ -121,9 +122,9 @@ export class AuditLogger {
         await DatabaseLogger.logSystem(systemData);
       }
     } catch (error) {
-      console.error('[AuditLogger] Falha ao registrar evento:', error);
+    structuredLogger.error('[AuditLogger] Falha ao registrar evento', { error: String(error) });
       // Fallback para console
-      console.log(`[AUDIT] ${event.action} ${event.resource}`, {
+    structuredLogger.info(`[AUDIT] ${event.action} ${event.resource}`, {
         userId: event.userId,
         success: event.success,
         error: event.error,
@@ -146,7 +147,7 @@ export class AuditLogger {
         endDate: params.endDate,
       });
     } catch (error) {
-      console.error('[AuditLogger] Falha ao buscar logs:', error);
+    structuredLogger.error('[AuditLogger] Falha ao buscar logs', { error: String(error) });
       return {
         logs: [],
         pagination: {
@@ -175,7 +176,7 @@ export class AuditLogger {
         lastLogDate: totalLogs.logs[0]?.createdAt || null,
       };
     } catch (error) {
-      console.error('[AuditLogger] Falha ao obter estatísticas:', error);
+    structuredLogger.error('[AuditLogger] Falha ao obter estatísticas', { error: String(error) });
       return {
         recentErrors: 0,
         totalLogs: 0,

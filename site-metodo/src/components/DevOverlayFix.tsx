@@ -97,14 +97,9 @@ export default function DevOverlayFix() {
         // ignore
       }
     }
-    // Aplicar fix inline para elementos filhos também (para todos os seletores conhecidos)
+    // Aplica fix inline imediatamente a nós já presentes
     selectors.forEach(selector => {
       document.querySelectorAll(selector).forEach(applyInlineFix)
-    })
-
-    // Aplica imediatamente a nós já presentes
-    selectors.forEach(sel => {
-      document.querySelectorAll(sel).forEach(applyInlineFix)
     })
 
     // Observador para aplicar quando overlays forem injetados dinamicamente
@@ -113,10 +108,14 @@ export default function DevOverlayFix() {
         if (m.type === 'childList' && m.addedNodes.length > 0) {
           m.addedNodes.forEach(n => {
             if (!(n instanceof Element)) return
-            selectors.forEach(sel => {
-              if ((n as Element).matches && (n as Element).matches(sel)) applyInlineFix(n as Element)
+            selectors.forEach(selector => {
+              if ((n as Element).matches && (n as Element).matches(selector)) applyInlineFix(n as Element)
               // Aplicar fix inline para elementos filhos também
-              try { (n as Element).querySelectorAll && (n as Element).querySelectorAll(sel).forEach(applyInlineFix) } catch (_e) {}
+              try {
+                if ((n as Element).querySelectorAll) {
+                  (n as Element).querySelectorAll(selector).forEach(applyInlineFix)
+                }
+              } catch (_e) {}
             })
           })
         }
@@ -153,12 +152,12 @@ export default function DevOverlayFix() {
 
     const onErr = (event: ErrorEvent) => {
       try {
-        const msg = event && event.message ? `${event.message}` : 'Unknown error'
-        const stack = event && (event.error && event.error.stack) ? event.error.stack : ''
+        const msg = event?.message ? `${event.message}` : 'Unknown error'
+        const stack = event?.error?.stack || ''
         createFallbackOverlay(msg, stack)
-        } catch (_e) {
-          // ignore
-        }
+      } catch (_e) {
+        // ignore
+      }
     }
 
     const onRejection = (ev: PromiseRejectionEvent) => {
@@ -177,7 +176,7 @@ export default function DevOverlayFix() {
       style.remove()
       window.removeEventListener('error', onErr)
       window.removeEventListener('unhandledrejection', onRejection)
-      const fo = document.getElementById('__devoverlay_fallback')
+  const fo = document.getElementById('__devoverlay_fallback')
   if (fo) fo.remove()
     }
   }, [])

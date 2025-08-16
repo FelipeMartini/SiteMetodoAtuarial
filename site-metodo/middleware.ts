@@ -18,7 +18,8 @@ import { auth } from './auth'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { structuredLogger } from './src/lib/logger'
-import { createComprehensiveMiddleware } from './src/middleware/logging'
+import { withRequestContext } from './src/lib/logging/context'
+import { randomUUID } from 'crypto'
 import { getClientIP } from './src/lib/utils/ip'
 
 // 🌍 Rotas públicas (não requerem autenticação)
@@ -102,12 +103,15 @@ function checkABACAuthorization(
     // Para outras rotas protegidas, apenas verificar se está autenticado e ativo
     return true
   } catch (error) {
-    console.error('ABAC Authorization Error:', error)
+    structuredLogger.error('ABAC Authorization Error', { error: String(error) })
     return false
   }
 }
 
 export default auth((req: NextRequest & { auth: any }) => {
+  const incomingId = req.headers.get('x-correlation-id') || req.headers.get('x-request-id')
+  const correlationId = incomingId || randomUUID()
+  return withRequestContext(correlationId, () => {
   const startTime = Date.now()
   const { pathname } = req.nextUrl
   const session = req.auth
@@ -135,7 +139,7 @@ export default auth((req: NextRequest & { auth: any }) => {
 
   // 📝 Log para debugging (apenas em desenvolvimento)
   if (process.env.NODE_ENV === 'development') {
-    console.log(`[Middleware] ${method} ${pathname} - User: ${session?.user?.email || 'Anonymous'}`)
+    structuredLogger.debug('[middleware] request debug', { method, pathname, user: session?.user?.email })
   }
 
   // 🚫 Ignorar arquivos estáticos e APIs internas do Next.js
@@ -277,7 +281,10 @@ export default auth((req: NextRequest & { auth: any }) => {
     }
   }
 
-  return NextResponse.next()
+    const res = NextResponse.next()
+    res.headers.set('x-correlation-id', correlationId)
+    return res
+  })
 })
 
 // 🎯 Configuração de correspondência de rotas otimizada

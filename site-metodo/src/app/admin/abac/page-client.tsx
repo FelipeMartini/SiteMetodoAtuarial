@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'; // UI de cartões
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -200,37 +200,44 @@ export default function ABACPage() {
     }
   ];
 
-  // Mock data for stats
+  // Dados de estatísticas básicas
   const statsData = [
     {
       title: "Total de Políticas",
       value: policies.length.toString(),
       description: "Políticas ABAC ativas",
-      icon: Shield,
+      icon: Shield as any,
       change: { value: 12, isPositive: true }
     },
     {
       title: "Políticas de Permissão",
       value: policies.filter(p => p.ptype === 'p').length.toString(),
       description: "Regras de acesso",
-      icon: Lock,
+      icon: Lock as any,
       change: { value: 8, isPositive: true }
     },
     {
       title: "Políticas de Papel",
       value: policies.filter(p => p.ptype === 'g').length.toString(),
       description: "Associação de papeis",
-      icon: Users,
+      icon: Users as any,
       change: { value: 3, isPositive: false }
     }
-  ];
+  ]
 
   return (
     <div>
       {/* Mantemos comportamento cliente intacto */}
       <div className="mb-4 grid grid-cols-1 md:grid-cols-3 gap-4">
         {statsData.map((s, i) => (
-          <StatsCard key={i} title={s.title} value={s.value} description={s.description} icon={s.icon} change={s.change} />
+          <StatsCard
+            key={i}
+            title={s.title}
+            value={s.value}
+            description={s.description}
+            icon={s.icon}
+            change={s.change}
+          />
         ))}
       </div>
       <Card>
