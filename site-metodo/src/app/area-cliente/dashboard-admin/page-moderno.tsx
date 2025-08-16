@@ -1,7 +1,6 @@
-'use client'
+"use client"
 
-import React, { useState, useEffect } from 'react'
-import { checkClientPermission } from '@/lib/abac/client'
+import React from 'react'
 import { useAuth } from '@/app/hooks/useAuth'
 import { AdminDashboardStats } from '@/components/admin/dashboard-stats'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
@@ -10,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Skeleton } from '@/components/ui/skeleton'
 import { Users, Activity, Settings, Shield, BarChart3, Database, AlertTriangle } from 'lucide-react'
+import { ABACProtectedPage } from '@/lib/abac/hoc'
 
 /**
  * Dashboard administrativo modernizado
@@ -17,62 +17,6 @@ import { Users, Activity, Settings, Shield, BarChart3, Database, AlertTriangle }
  */
 export default function PageDashboardAdminModerno() {
   const { data: session, status } = useAuth()
-
-  // Estados para verificação de permissões ABAC
-  const [hasAccess, setHasAccess] = useState(false)
-  const [isLoading, setIsLoading] = useState(true)
-  const [permissionError, setPermissionError] = useState<string | null>(null)
-
-  // Verificar permissão ABAC para acesso ao dashboard admin
-  useEffect(() => {
-    let mounted = true
-    const checkPermissions = async () => {
-      // Se não há sessão, não faz a verificação ABAC
-      if (!session?.user?.email) {
-        if (mounted) {
-          setHasAccess(false)
-          setIsLoading(false)
-        }
-        return
-      }
-
-      try {
-        if (mounted) {
-          setIsLoading(true)
-          setPermissionError(null)
-        }
-
-        const allowed = await checkClientPermission(
-          session.user.email,
-          '/admin/dashboard',
-          'read'
-        )
-
-        console.log('🔍 Verificação ABAC para dashboard admin (cached):', {
-          userEmail: session.user.email,
-          hasAccess: allowed,
-        })
-
-        if (mounted) {
-          setHasAccess(prev => (prev === allowed ? prev : allowed))
-          if (!allowed) setPermissionError('Acesso negado: permissões insuficientes para acessar o dashboard administrativo.')
-        }
-      } catch (error) {
-        console.error('Erro ao verificar permissões ABAC:', error)
-        if (mounted) {
-          setPermissionError('Erro ao verificar permissões. Tente novamente.')
-          setHasAccess(false)
-        }
-      } finally {
-        if (mounted) setIsLoading(false)
-      }
-    }
-
-    checkPermissions()
-    return () => {
-      mounted = false
-    }
-  }, [session?.user?.email])
 
   if (status === 'loading') {
     return (
@@ -88,53 +32,9 @@ export default function PageDashboardAdminModerno() {
     )
   }
 
-  // Verifica se o usuário está autenticado
-  if (!session?.user) {
-    if (typeof window !== 'undefined') {
-      window.location.href = '/'
-    }
-    return null
-  }
-
-  // Loading state
-  if (isLoading) {
-    return (
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-red-500 mx-auto mb-4"></div>
-            <p className="text-muted-foreground">Verificando permissões...</p>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
-  // Access denied
-  if (!hasAccess) {
-    return (
-      <div className="container mx-auto py-8 px-4 max-w-7xl">
-        <div className="flex items-center justify-center min-h-[400px]">
-          <div className="text-center">
-            <Shield className="h-16 w-16 text-red-500 mx-auto mb-4" />
-            <h2 className="text-2xl font-bold mb-2">Acesso Restrito</h2>
-            <p className="text-muted-foreground mb-4">
-              {permissionError || 'Você não tem permissão para acessar esta área.'}
-            </p>
-            <button
-              onClick={() => window.location.href = '/area-cliente'}
-              className="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg transition-colors"
-            >
-              Voltar à Área do Cliente
-            </button>
-          </div>
-        </div>
-      </div>
-    )
-  }
-
   return (
-    <div className='container mx-auto py-8 px-4 max-w-7xl'>
+    <ABACProtectedPage object='admin:dashboard' action='read'>
+      <div className='container mx-auto py-8 px-4 max-w-7xl'>
       {/* Header do Dashboard */}
       <div className='mb-8'>
         <div className='flex items-center justify-between'>
@@ -144,7 +44,7 @@ export default function PageDashboardAdminModerno() {
               Dashboard Administrativo
             </h1>
             <p className='text-muted-foreground mt-2'>
-              Painel de controle completo do sistema - Bem-vindo, {session.user.name || 'Admin'}
+              Painel de controle completo do sistema - Bem-vindo, {session?.user?.name || session?.user?.email || 'Admin'}
             </p>
           </div>
           <div className='flex items-center gap-3'>
@@ -165,7 +65,7 @@ export default function PageDashboardAdminModerno() {
         <AdminDashboardStats />
       </div>
 
-      {/* Tabs de Gerenciamento */}
+  {/* Tabs de Gerenciamento */}
       <Tabs defaultValue='users' className='space-y-6'>
         <TabsList className='grid w-full grid-cols-5'>
           <TabsTrigger value='users' className='flex items-center gap-2'>
@@ -345,6 +245,7 @@ export default function PageDashboardAdminModerno() {
           </Card>
         </TabsContent>
       </Tabs>
-    </div>
+      </div>
+    </ABACProtectedPage>
   )
 }

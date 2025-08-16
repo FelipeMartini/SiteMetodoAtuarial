@@ -140,8 +140,26 @@ site-metodo/src/types/next-auth.d.ts
 site-metodo/src/types/next-auth-abac.d.ts
 
 
+Vou ler arquivos de tipos next-auth duplicados para planejar unificação.
 
+Leitura next-auth.d.ts, linhas 1 para 120
 
+Vou ler início do outro arquivo duplicado next-auth-abac.d.ts para comparar.
+
+Leitura next-auth-abac.d.ts, linhas 1 para 140
+
+Vou inspecionar endpoints aderencia-tabuas e rota analise-python, refatorar dashboard admin para ABACProtectedPage, remover tipo duplicado e iniciar coleta de fontes.
+
+Leia aderencia-tabuas
+
+Vou começar refatoração dashboard-admin para ABACProtectedPage (FE-2).
+
+page-moderno.tsx+8-107
+Vou verificar erros no arquivo modificado dashboard-admin.
+
+import React, { useState, useEffect } from 'react'
+import { checkClientPermission } from '@/lib/abac/client'
+              Painel de controle completo do sistema - Bem-vindo, {session?.user?.name || session?.user?.email || 'Admin'}
 
 
 

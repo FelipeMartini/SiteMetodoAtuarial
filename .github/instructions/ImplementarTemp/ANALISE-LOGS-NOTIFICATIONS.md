@@ -93,7 +93,7 @@ Estas tarefas focam apenas em alterar arquivos existentes (nenhum novo top-level
 
 ```markdown
 - [ ] FE-1: Unificar fonte canônica de logs nas páginas admin (audit-logs vs notifications): página principal mostra subset e linka para audit-logs detalhada.
-- [ ] FE-2: Garantir checagem de permissão comum via `ABACProtectedPage` em todas páginas de auditoria/logs.
+- [ ] FE-2: Garantir checagem de permissão comum via `ABACProtectedPage` em todas páginas de auditoria/logs. (PARCIAL – páginas `admin/auditoria` e dashboard admin em processo de refatoração)
 - [ ] FE-3: Padronizar componente/função de export (usar endpoint `/api/admin/audit-logs?export=true`).
 - [ ] FE-4: Padronizar `StatsCard` (props: title, value, description, icon, trend) em audit-logs, notifications e dashboard.
 - [ ] FE-5: Padronizar DataTable com i18n + caption acessível (usuarios, audit-logs, notifications).

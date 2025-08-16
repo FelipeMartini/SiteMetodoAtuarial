@@ -118,7 +118,7 @@ Checklist extraída dos requisitos do usuário
 
 ```markdown
 - [ ] FE-1: Unificar fonte canônica de logs (audit-logs vs notifications) com subset + link detalhado.
-- [ ] FE-2: Garantir permissão via `ABACProtectedPage` em páginas de auditoria/logs.
+- [ ] FE-2: Garantir permissão via `ABACProtectedPage` em páginas de auditoria/logs. (PARCIAL – iniciada refatoração)
 - [ ] FE-3: Padronizar export `/api/admin/audit-logs?export=true`.
 - [ ] FE-4: Padronizar `StatsCard` (title,value,description,icon,trend).
 - [ ] FE-5: Padronizar DataTable (i18n + caption) em usuários, audit-logs, notifications.
@@ -130,6 +130,7 @@ Checklist extraída dos requisitos do usuário
 - [ ] FE-11: Export streaming CSV/JSON com UI de progresso.
 - [ ] FE-12: Padronizar datas pt-BR via util central.
 - [ ] FE-13: Varredura final de imports diretos Prisma em `src`.
+- [ ] FE-13b: Limpeza de duplicados de tipos next-auth (next-auth-abac.d.ts removido).
 - [ ] FE-14: Lint pass complementar (unused-expressions etc.).
 - [ ] FE-15: Documentar política scripts (shim vs singleton) — já adicionada.
 - [ ] FE-16: Testes mínimos (date/export helpers + smoke DataTable).
