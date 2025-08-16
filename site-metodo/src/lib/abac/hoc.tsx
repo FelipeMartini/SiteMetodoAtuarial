@@ -224,6 +224,7 @@ export function ABACProtectedPage({
   object,
   action,
   redirectTo = '/unauthorized',
+  serverAuthResult, // optional server-side AuthResult
 }: {
   children: React.ReactNode
   requiredAction?: string
@@ -231,6 +232,7 @@ export function ABACProtectedPage({
   object?: string // nome do recurso padronizado para policy
   action?: string // ação padronizada para policy
   redirectTo?: string
+  serverAuthResult?: any
 }) {
   const { data: session, status } = useSession()
   const router = useRouter()
@@ -242,6 +244,12 @@ export function ABACProtectedPage({
 
       if (!session?.user?.email) {
         router.push('/login')
+        return
+      }
+
+      // If server provided an AuthResult, use it (avoids extra network call)
+      if (serverAuthResult && typeof serverAuthResult.allowed === 'boolean') {
+        setIsAuthorized(!!serverAuthResult.allowed)
         return
       }
 
@@ -271,7 +279,7 @@ export function ABACProtectedPage({
     }
 
     checkAuth()
-  }, [session, status, resource, requiredAction, router, object, action])
+  }, [session, status, resource, requiredAction, router, object, action, serverAuthResult])
 
   // Incluímos 'redirectTo' nas dependências para garantir que mudanças sejam refletidas corretamente.
   // O ESLint pode sugerir que é desnecessário se for constante, mas é seguro e recomendado manter.

@@ -7,7 +7,7 @@ import { prisma } from '@/lib/prisma'
 import { structuredLogger } from '@/lib/logger'
 import DatabaseLogger from '@/lib/logging/database-logger'
 
-const logger = structuredLogger
+const _logger = structuredLogger
 
 const ABAC_MODEL_PATH = path.join(process.cwd(), 'src/lib/abac/abac-model.conf')
 
@@ -40,8 +40,8 @@ function addCustomFunctions(enforcer: any) {
           if ((reqContext as any)[key] !== value) return false
         }
         return true
-      } catch (err) {
-        structuredLogger.error('Context match error', { error: err instanceof Error ? err.message : String(err), requestCtx, policyCtx })
+      } catch (_err) {
+        structuredLogger.error('Context match error', { error: _err instanceof Error ? _err.message : String(_err), requestCtx, policyCtx })
         return false
       }
     })
@@ -60,16 +60,16 @@ async function initializeEnforcer(): Promise<any> {
     if (typeof setter === 'function') {
       await setter.call(enforcer, adapter)
     }
-  } catch (err) {
-    structuredLogger.warn('setAdapter failed', { error: err instanceof Error ? err.message : String(err) })
+  } catch (_err) {
+    structuredLogger.warn('setAdapter failed', { error: _err instanceof Error ? _err.message : String(_err) })
   }
 
   addCustomFunctions(enforcer)
 
   try {
     await enforcer.loadPolicy()
-  } catch (err) {
-    structuredLogger.warn('loadPolicy failed, attempting manual load', { error: err instanceof Error ? err.message : String(err) })
+  } catch (_err) {
+    structuredLogger.warn('loadPolicy failed, attempting manual load', { error: _err instanceof Error ? _err.message : String(_err) })
     // Tentativa automática de correção: sanitizar registros no DB e tentar recarregar
     try {
       // import dinâmico para evitar que bundlers interpretem require/exports e causem erro
@@ -80,8 +80,8 @@ async function initializeEnforcer(): Promise<any> {
       if (res && (res as any).error) structuredLogger.error('sanitize script failed to execute', { error: (res as any).error.message })
       else structuredLogger.info('sanitize script executed, retrying enforcer.loadPolicy()')
       await enforcer.loadPolicy()
-    } catch (repairErr) {
-      structuredLogger.error('Automatic policy sanitization failed', { error: repairErr instanceof Error ? repairErr.message : String(repairErr) })
+    } catch (_repairErr) {
+      structuredLogger.error('Automatic policy sanitization failed', { error: _repairErr instanceof Error ? _repairErr.message : String(_repairErr) })
       // segue para manual load
     try {
       const dbPolicies = await prisma.casbinRule.findMany()
@@ -95,13 +95,13 @@ async function initializeEnforcer(): Promise<any> {
         if (p.v5) parts.push(String(p.v5))
         try {
           if (parts.length > 0) await enforcer.addPolicy(...parts)
-        } catch (addErr) {
-          structuredLogger.error('Failed to add policy during manual load', { error: addErr instanceof Error ? addErr.message : String(addErr), policy: parts })
+        } catch (_addErr) {
+          structuredLogger.error('Failed to add policy during manual load', { error: _addErr instanceof Error ? _addErr.message : String(_addErr), policy: parts })
         }
       }
-    } catch (dbErr) {
-      structuredLogger.error('Failed to read policies from DB for manual load', { error: dbErr instanceof Error ? dbErr.message : String(dbErr) })
-      throw dbErr
+    } catch (_dbErr) {
+      structuredLogger.error('Failed to read policies from DB for manual load', { error: _dbErr instanceof Error ? _dbErr.message : String(_dbErr) })
+      throw _dbErr
     }
   }
   }
@@ -158,8 +158,8 @@ export async function checkABACPermission(subject: string, object: string, actio
 
     try {
       allowed = !!(await enforcer.enforce(subject, object, action))
-    } catch (err) {
-      structuredLogger.warn('Primary enforce failed, will try fallbacks', { error: err instanceof Error ? err.message : String(err), subject, object, action })
+    } catch (_err) {
+      structuredLogger.warn('Primary enforce failed, will try fallbacks', { error: _err instanceof Error ? _err.message : String(_err), subject, object, action })
     }
 
   if (!allowed) {
@@ -185,7 +185,7 @@ export async function checkABACPermission(subject: string, object: string, actio
             const actMatch = (pAct === '*' || pAct === action) || (pAct.endsWith('*') && action.startsWith(pAct.slice(0, -1)))
             if (subMatch && objMatch && actMatch) { allowed = true; break }
           }
-        } catch (err) { structuredLogger.error('Fallback policy check failed', { error: err instanceof Error ? err.message : String(err) }) }
+  } catch (_err) { structuredLogger.error('Fallback policy check failed', { error: _err instanceof Error ? _err.message : String(_err) }) }
       }
     }
 

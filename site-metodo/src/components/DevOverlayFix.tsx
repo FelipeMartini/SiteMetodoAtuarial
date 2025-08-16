@@ -97,6 +97,8 @@ export default function DevOverlayFix() {
         // ignore
       }
     }
+    // Aplicar fix inline para elementos filhos também
+    if (node.querySelectorAll) node.querySelectorAll(sel).forEach(applyInlineFix)
 
     // Aplica imediatamente a nós já presentes
     selectors.forEach(sel => {
@@ -153,7 +155,9 @@ export default function DevOverlayFix() {
         const msg = event && event.message ? `${event.message}` : 'Unknown error'
         const stack = event && (event.error && event.error.stack) ? event.error.stack : ''
         createFallbackOverlay(msg, stack)
-  } catch (_e) {}
+        } catch (_e) {
+          // ignore
+        }
     }
 
     const onRejection = (ev: PromiseRejectionEvent) => {
@@ -173,7 +177,7 @@ export default function DevOverlayFix() {
       window.removeEventListener('error', onErr)
       window.removeEventListener('unhandledrejection', onRejection)
       const fo = document.getElementById('__devoverlay_fallback')
-      fo && fo.remove()
+  if (fo) fo.remove()
     }
   }, [])
 

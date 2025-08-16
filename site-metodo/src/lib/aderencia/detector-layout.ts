@@ -90,7 +90,7 @@ async function readFirstRowsFromExcel(buffer: any, maxRows = 50) {
   const rows: any[][] = []
   if (!sheet) return rows
   let count = 0
-  sheet.eachRow({ includeEmpty: false }, (row, rowNumber) => {
+  sheet.eachRow({ includeEmpty: false }, (row, _rowNumber) => {
     if (count >= maxRows) return
     const vals = row.values as any[]
     // ExcelJS row.values is 1-based
@@ -119,7 +119,7 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
   if (ext === 'xlsx' || ext === 'xls') {
     try {
       rows = await readFirstRowsFromExcel(buffer, nRows)
-    } catch (e) {
+    } catch (_e) {
       // ignorar e tentar CSV
     }
   }
@@ -210,7 +210,7 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
           const hdr = String(s.header || '')
           const headerIsDate = /^\d{1,2}\/\d{1,2}\/\d{4}$/.test(hdr) || /^\d{4}-\d{2}-\d{2}/.test(hdr)
           if (headerIsDate && ageProp > 0.6) sc += 6
-        } catch (err) {
+        } catch (_err) {
           // ignore
         }
       }
@@ -277,7 +277,7 @@ export async function detectarLayout(buffer: Buffer, filename: string, opts?: { 
         columnSummary[bestAgeCol].topScore = perColumnScores[bestAgeCol]?.idade ?? Math.round((bestAgeCount / nonEmpty) * 50)
       }
     }
-  } catch (err) {
+  } catch (_err) {
     // ignore
   }
 

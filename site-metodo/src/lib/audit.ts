@@ -51,7 +51,7 @@ export const auditService = {
   async logMFAEvent(action: string, userEmail: string, details: Record<string, unknown> = {}) {
     try {
       await auditLogger.log?.({ action: AuditAction.DATA_ACCESS as any, severity: AuditSeverity.LOW, success: true, userEmail, description: `mfa:${action}`, ...(details as any) } as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
@@ -59,20 +59,20 @@ export const auditService = {
   async logApiAccess(userEmail: string | null, method: string, path: string, clientIp?: string, details: Record<string, unknown> = {}) {
     try {
       await auditLogger.logAccess?.(userEmail || 'anonymous', path, true, { method, clientIp, ...(details || {}) } as any)
-    } catch (e) {
+    } catch (_e) {
       // noop
     }
   },
 
-  async getAuditLogs(filters: Record<string, unknown> = {}, pagination = { page: 1, limit: 50 }) {
+  async getAuditLogs(_filters: Record<string, unknown> = {}, pagination = { page: 1, limit: 50 }) {
     try {
-      return (await auditLogger.getAuditLogs?.(filters as any, pagination as any)) as any
+      return (await auditLogger.getAuditLogs?.(_filters as any, pagination as any)) as any
     } catch (_e) {
-      return { logs: [], total: 0, page: pagination.page, limit: pagination.limit, pages: 0 }
+      // noop
     }
   },
 
-  async getAuditStats(filters: Record<string, unknown> = {}) {
+  async getAuditStats(_filters: Record<string, unknown> = {}) {
     try {
       // auditLogger.getAuditStats pode não aceitar filtros na implementação atual
       return (await auditLogger.getAuditStats?.()) as any

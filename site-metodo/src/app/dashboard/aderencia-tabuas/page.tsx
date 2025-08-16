@@ -37,7 +37,6 @@ import {
   Clock,
   TrendingUp,
   Calculator,
-  FileText,
   Database,
   Brain,
   Zap,
@@ -283,7 +282,7 @@ function DashboardUnificado() {
           qx_masculino: q.qxMasculino || 0.001,
           qx_feminino: q.qxFeminino || 0.001
         })),
-        calculos_massa_qx: dataExcel.dadosProcessados.massa_participantes.map((p: any, idx: number) => ({
+      calculos_massa_qx: dataExcel.dadosProcessados.massa_participantes.map((p: any, _idx: number) => ({
           matricula: p.matricula,
           sexo: p.sexo,
           idade: p.idade,
@@ -611,8 +610,8 @@ function DashboardUnificado() {
                         <div className="grid grid-cols-2 gap-4 text-sm">
                           {estado.deteccaoAutomatica.estatisticasColunas
                             .filter(col => col.confianca > 0.5)
-                            .map((col, idx) => (
-                            <div key={idx} className="flex justify-between">
+                            .map((col, _idx) => (
+                            <div key={_idx} className="flex justify-between">
                               <span>{col.header || `Coluna ${col.indice}`}:</span>
                               <span className="font-medium">{col.tipo}</span>
                             </div>
@@ -639,8 +638,8 @@ function DashboardUnificado() {
                         </tr>
                       </thead>
                       <tbody>
-                        {estado.previewData.slice(0, 10).map((row: any, idx: number) => (
-                          <tr key={idx} className="border-b">
+                        {estado.previewData.slice(0, 10).map((row: any, _idx: number) => (
+                          <tr key={_idx} className="border-b">
                             <td className="p-2">{row.matricula}</td>
                             <td className="p-2">{row.sexo === 1 ? 'M' : 'F'}</td>
                             <td className="p-2">{row.idade}</td>
@@ -956,8 +955,8 @@ function DashboardUnificado() {
                           </tr>
                         </thead>
                         <tbody>
-                          {estado.resultadoAnalise.intervalos_detalhados.map((intervalo, idx) => (
-                            <tr key={idx} className="border-b">
+                          {estado.resultadoAnalise.intervalos_detalhados.map((intervalo, _idx) => (
+                            <tr key={_idx} className="border-b">
                               <td className="p-2 font-medium">{intervalo.faixa}</td>
                               <td className="text-right p-2">{intervalo.observados}</td>
                               <td className="text-right p-2">{intervalo.esperados.toFixed(2)}</td>

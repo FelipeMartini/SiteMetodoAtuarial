@@ -30,9 +30,9 @@ export default function DebugOverlayPage() {
       closeBtn.style.position = 'absolute'
       closeBtn.style.right = '12px'
       closeBtn.style.top = '12px'
-      closeBtn.onclick = () => {
-        overlay && (overlay.style.display = 'none')
-      }
+        closeBtn.onclick = () => {
+          if (overlay) overlay.style.display = 'none'
+        }
 
       const content = document.createElement('pre')
       content.id = '__debug_persistent_overlay_content'
@@ -100,7 +100,7 @@ export default function DebugOverlayPage() {
       b3.textContent = 'Remove static overlay'
       b3.onclick = () => {
         const el = document.getElementById('__debug_static_overlay')
-        el && el.remove()
+    if (el) el.remove()
       }
       const b4 = document.createElement('button')
       b4.textContent = 'Show last error'
@@ -108,7 +108,7 @@ export default function DebugOverlayPage() {
         const last = (document.getElementById('__debug_persistent_overlay_content') as HTMLElement)
         if (last && last.textContent) {
           const ov = document.getElementById('__debug_persistent_overlay')
-          ov && (ov.style.display = 'block')
+          if (ov) ov.style.display = 'block'
         } else {
           alert('Nenhum erro capturado ainda')
         }
@@ -165,11 +165,11 @@ export default function DebugOverlayPage() {
       window.removeEventListener('error', onErrorHandler)
       window.removeEventListener('unhandledrejection', onRejection)
       const el = document.getElementById(id)
-      el && el.remove()
+    if (el) el.remove()
       const ctrl = document.getElementById(controlId)
-      ctrl && ctrl.remove()
+    if (ctrl) ctrl.remove()
       const s = document.getElementById(styleId)
-      s && s.remove()
+    if (s) s.remove()
     }
   }, [])
 
@@ -211,9 +211,9 @@ export default function DebugOverlayPage() {
           Inject static overlay
         </button>
         <button
-          onClick={() => {
+            onClick={() => {
             const el = document.getElementById('__debug_static_overlay')
-            el && el.remove()
+            if (el) el.remove()
           }}
         >
           Remove static overlay
@@ -224,7 +224,7 @@ export default function DebugOverlayPage() {
             const last = (document.getElementById('__debug_persistent_overlay_content') as HTMLElement)
             if (last && last.textContent) {
               const ov = document.getElementById('__debug_persistent_overlay')
-              ov && (ov.style.display = 'block')
+              if (ov) ov.style.display = 'block'
             } else {
               alert('Nenhum erro capturado ainda')
             }

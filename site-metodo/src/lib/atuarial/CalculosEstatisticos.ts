@@ -11,7 +11,7 @@
  * - dashboard lógicas de teste
  */
 
-import { agruparPorFaixaEtaria, consolidarGruposBaixaExpectancia, type GrupoFaixaEtaria } from '@/utils/aderenciaAgrupamento'
+import { agruparPorFaixaEtaria, consolidarGruposBaixaExpectancia } from '@/utils/aderenciaAgrupamento'
 
 // ===== TIPOS UNIFICADOS =====
 

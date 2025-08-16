@@ -18,21 +18,28 @@ async function setupABACPolicies() {
   try {
   // 1. Política admin universal para felipemartinii@gmail.com
   const adminEmail = 'felipemartinii@gmail.com'
-  await addABACPolicy(adminEmail, '*', '*', 'allow', { department: 'admin', location: '*', time: '*' })
+  // Verifica existência antes de adicionar para evitar duplicatas
+  async function ensurePolicy(subject: string, object: string, action: string, effect: 'allow' | 'deny' = 'allow', context?: Record<string, unknown>) {
+    const exists = await prisma.casbinRule.findFirst({ where: { v0: subject, v1: object, v2: action, v3: effect } })
+    if (exists) {
+      console.log('policy exists, skipping', { subject, object, action, effect })
+      return
+    }
+    await addABACPolicy(subject, object, action, effect, context)
+  }
+
+  await ensurePolicy(adminEmail, '*', '*', 'allow', { department: 'admin', location: '*', time: '*' })
 
   // 2. Política para acesso de sessão (admin explicit)
-  await addABACPolicy(adminEmail, 'session:read', 'read', 'allow', { time: '*', location: '*' })
-  await addABACPolicy(adminEmail, 'session:write', 'write', 'allow', { time: '*', location: '*' })
-
-  // 3. Política para área cliente (admin explicit)
-  await addABACPolicy(adminEmail, 'area-cliente', 'read', 'allow', { time: 'business_hours', location: '*' })
+  await ensurePolicy(adminEmail, 'session:read', 'read', 'allow', { time: '*', location: '*' })
+  await ensurePolicy(adminEmail, 'session:write', 'write', 'allow', { time: '*', location: '*' })
 
   // 4. Política para admin:abac (admin explicit)
-  await addABACPolicy(adminEmail, 'admin:abac', 'read', 'allow', { time: '*', location: '*' })
-  await addABACPolicy(adminEmail, 'admin:abac', 'write', 'allow', { time: '*', location: '*' })
+  await ensurePolicy(adminEmail, 'admin:abac', 'read', 'allow', { time: '*', location: '*' })
+  await ensurePolicy(adminEmail, 'admin:abac', 'write', 'allow', { time: '*', location: '*' })
 
   // 5. Política específica para endpoint ABAC check (admin only)
-  await addABACPolicy(adminEmail, 'api:abac:check', 'read', 'allow', { time: '*', location: '*' })
+  await ensurePolicy(adminEmail, 'api:abac:check', 'read', 'allow', { time: '*', location: '*' })
 
     // Recarregar políticas
     await reloadABACPolicies()

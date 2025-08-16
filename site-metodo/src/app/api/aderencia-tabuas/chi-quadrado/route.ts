@@ -34,7 +34,7 @@ const ChiQuadradoRequestSchema = z.object({
   }).optional()
 })
 
-type ChiQuadradoRequest = z.infer<typeof ChiQuadradoRequestSchema>
+type _ChiQuadradoRequest = z.infer<typeof ChiQuadradoRequestSchema>
 
 export async function POST(request: NextRequest) {
   try {
