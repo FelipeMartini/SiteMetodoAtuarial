@@ -11,6 +11,7 @@
 
 import { prisma } from '../src/lib/prisma'
 import { addABACPolicy, reloadABACPolicies } from '../src/lib/abac/enforcer-abac-puro'
+import { validatePolicy } from '../src/lib/abac/validatePolicy'
 
 async function setupABACPolicies() {
   console.log('🚀 Iniciando setup de políticas ABAC...')
@@ -26,7 +27,15 @@ async function setupABACPolicies() {
       console.log('policy exists, skipping', { subject, object, action, effect })
       return
     }
-    await addABACPolicy(subject, object, action, effect, context)
+    // validate and sanitize before inserting
+    const val = validatePolicy([subject, object, action, effect, context ? JSON.stringify(context) : '', ''])
+    if (!val.ok) {
+      console.error('Policy validation failed, skipping insert', { subject, object, action, effect, error: val.error })
+      return
+    }
+    const [s,o,a,e,v4,v5] = val.sanitized
+    // if context was provided it will be v4 sanitized
+    await addABACPolicy(s, o, a, e as 'allow'|'deny', v4 ? JSON.parse(v4 as string) : undefined)
   }
 
   // Função para garantir binding de usuário -> role (ptype = 'g')

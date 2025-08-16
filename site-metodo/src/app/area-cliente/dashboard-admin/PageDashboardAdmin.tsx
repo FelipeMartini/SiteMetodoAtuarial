@@ -1,5 +1,6 @@
 import { auth } from '@/lib/auth'
 import { serverCheckPermissionDetailed } from '@/lib/abac/server'
+import { redirect } from 'next/navigation'
 import { AdminLayout } from '@/components/admin-layout'
 import DashboardAdmin from '@/app/area-cliente/DashboardAdmin'
 import { ABACProtectedPage } from '@/lib/abac/hoc'
@@ -10,13 +11,13 @@ export default async function PageDashboardAdmin() {
   const session = await auth()
   if (!session?.user?.email) {
     // Not authenticated -> server redirect to login
-    return new Response(null, { status: 302, headers: { Location: '/login' } })
+    redirect('/login')
   }
 
   const authResult = await serverCheckPermissionDetailed(session.user.email, 'admin:dashboard', 'read', { ip: 'server' })
   if (!authResult.allowed) {
     // Server-side redirect to unauthorized page
-    return new Response(null, { status: 302, headers: { Location: '/unauthorized' } })
+    redirect('/unauthorized')
   }
 
   return (
