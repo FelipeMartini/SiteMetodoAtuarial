@@ -156,7 +156,7 @@ export default function UsuariosTable({
                           ●
                         </span>
                       ) : (
-                        <span title='MFA não habilitado' className='text-gray-400'>
+                        <span title='MFA não habilitado' className='text-muted-foreground'>
                           ○
                         </span>
                       )}

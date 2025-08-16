@@ -233,7 +233,7 @@ export default function ABACPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50/50">
+  <div className="flex min-h-screen bg-background">
       <div className="flex h-screen">
         {/* Main Content */}
         <div className="flex-1 overflow-auto">

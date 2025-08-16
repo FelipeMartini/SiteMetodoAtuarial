@@ -9,12 +9,12 @@ export default function AreaClienteLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen bg-gray-50/50">
+    <div className="flex min-h-screen bg-background">
       {/* Sidebar moderna responsiva */}
       <ClienteSidebarModerna />
 
       {/* Conteúdo principal */}
-      <div className="flex-1 overflow-auto">
+      <div className="flex-1 overflow-auto bg-muted/30">
         {children}
       </div>
     </div>
