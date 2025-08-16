@@ -60,7 +60,7 @@ export default function DashboardAderenciaTabuas() {
   const [analiseResults, setAnaliseResults] = useState<AnaliseAderencia | null>(null)
   const [loading, setLoading] = useState(false)
   const [previewData, setPreviewData] = useState<any | null>(null)
-  const [confirmSaving, setConfirmSaving] = useState(false)
+  // removido confirmSaving (não utilizado)
   const [manualMapping, setManualMapping] = useState<Record<string, number | null> | null>(null)
   
   // Configurações avançadas

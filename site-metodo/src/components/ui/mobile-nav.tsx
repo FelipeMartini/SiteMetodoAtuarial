@@ -7,7 +7,6 @@ import type { Session } from 'next-auth'
 
 import { cn } from '@/lib/utils'
 import useUIStore from '@/lib/zustand/uiStore'
-import { shallow } from 'zustand/shallow'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
 import {
@@ -99,14 +98,12 @@ export function MobileNav({ session, onLogout }: MobileNavProps) {
   const allowedNavItems = useUIStore((s: any) => s.allowedNavItems)
   const hiddenNavItems = useUIStore((s: any) => s.hiddenNavItems)
 
-  const { mobileMenuOpen: open, setMobileMenuOpen: setMobileMenuOpenFinal, toggleMobileMenu: toggleMobileMenuFinal } = isDev
-    ? { mobileMenuOpen: devOpen, setMobileMenuOpen: (v: boolean) => setDevOpen(v), toggleMobileMenu: () => setDevOpen(o => !o) }
-    : { mobileMenuOpen, setMobileMenuOpen, toggleMobileMenu }
+  const { mobileMenuOpen: open } = isDev
+    ? { mobileMenuOpen: devOpen }
+    : { mobileMenuOpen }
 
   // Selecionamos lista de navegação separadamente para reduzir re-renders quando abrir/fechar o menu
-  const { allowedNavItems: allowed, hiddenNavItems: hidden } = isDev
-    ? { allowedNavItems: undefined as string[] | undefined, hiddenNavItems: undefined as string[] | undefined }
-    : { allowedNavItems, hiddenNavItems }
+  // allowedNavItems / hiddenNavItems já referenciados diretamente
   const pathname = usePathname()
 
   const isActive = (href: string) => {

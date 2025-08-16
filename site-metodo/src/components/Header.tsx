@@ -36,6 +36,9 @@ export function Header() {
   const [showAdmin, setShowAdmin] = useState<boolean>(false)
 
   useEffect(() => {
+    // Verificação ABAC para exibir link Admin.
+    // IMPORTANTE: a policy gravada no banco usa objeto 'admin:dashboard'.
+    // Antes estava sendo consultado '/area-cliente/dashboard-admin' causando negação.
     let mounted = true
     async function checkAdmin() {
       if (!session?.user?.email) {
@@ -43,18 +46,16 @@ export function Header() {
         return
       }
       try {
-        const allowed = await checkClientPermission(session.user.email, '/area-cliente/dashboard-admin', 'read')
+        // Usa objeto padronizado conforme policies existentes
+        const allowed = await checkClientPermission(session.user.email, 'admin:dashboard', 'read')
         if (mounted) setShowAdmin(allowed)
       } catch (error) {
-        console.error('Erro ao verificar permissão admin no header:', error)
+        console.error('[Header] Erro ao verificar permissão admin:', error)
         if (mounted) setShowAdmin(false)
       }
     }
-
     checkAdmin()
-    return () => {
-      mounted = false
-    }
+    return () => { mounted = false }
   }, [session])
 
   return (

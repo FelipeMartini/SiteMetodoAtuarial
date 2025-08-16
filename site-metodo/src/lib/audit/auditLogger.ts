@@ -71,7 +71,8 @@ export const auditLogger = {
     simpleLogger.warn(`security:${severity}`, { message, ...details })
   },
 
-  async getAuditLogs(filters?: Record<string, unknown>, pagination?: { page: number; limit: number }) {
+  async getAuditLogs(_filters?: Record<string, unknown>, _pagination?: { page: number; limit: number }) {
+    // FUTURO: implementar consulta real (ex: Prisma AccessLog) com paginação
     return [] as any
   },
 

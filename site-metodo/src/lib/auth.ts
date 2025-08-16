@@ -219,7 +219,7 @@ export const { handlers, signIn, signOut } = NextAuth({
 		verifyRequest: '/auth/verify-request',
 		newUser: '/auth/new-user',
 	},
-	events: {
+		events: {
 		async signIn({ user, account, profile, isNewUser }) {
 			console.log('🔐 SignIn event:', { userId: user.id, email: user.email, provider: account?.provider, isNewUser })
 		},
@@ -246,7 +246,7 @@ export const { handlers, signIn, signOut } = NextAuth({
 		async linkAccount({ user, account, profile }) {
 			console.log('🔗 LinkAccount event:', { userId: user.id, provider: account.provider })
 		},
-		async session({ session, token }) {},
+		async session({ session: _session, token: _token }) {},
 	},
 })
 
