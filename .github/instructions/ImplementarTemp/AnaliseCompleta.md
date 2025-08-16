@@ -15,10 +15,11 @@
 - [x] Examinar endpoints restantes (relatorio 812 linhas, configuracao-avancada 623 linhas, validar-upload)
 - [x] Analisar bibliotecas auxiliares (detector-layout 339 linhas)
 - [x] Identificar duplicações e dependências problemáticas
-- [ ] Mapear todas as funções chi-quadrado duplicadas no sistema
-- [ ] Criar biblioteca unificada de cálculos estatísticos
-- [ ] Consolidar processamento Excel em pipeline único
-- [ ] Unificar dashboard removendo componentes duplicados
+- [x] Criar biblioteca unificada de cálculos estatísticos (CalculosEstatisticos.ts)
+- [x] Criar processador Excel unificado (ProcessadorUnificado.ts)
+- [x] Atualizar endpoint chi-quadrado para usar biblioteca unificada
+- [x] Atualizar endpoint analise-exceljs para usar processador unificado
+- [ ] Consolidar dashboard removendo componentes duplicados
 - [ ] Substituir referências xlsx por exceljs onde necessário
 - [ ] Implementar sistema de cache para cálculos pesados
 - [ ] Otimizar queries do banco de dados
