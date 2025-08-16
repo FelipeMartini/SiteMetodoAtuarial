@@ -30,6 +30,7 @@ export async function checkClientPermission(
     console.log('[checkClientPermission] chamada', { userEmail, resource, action })
     const response = await fetch('/api/abac/check', {
       method: 'POST',
+      credentials: 'include', // garantir envio de cookies/session
       headers: {
         'Content-Type': 'application/json',
       },
@@ -43,6 +44,8 @@ export async function checkClientPermission(
     if (!response.ok) {
       console.error('Permission check failed:', response.statusText, response.status)
       // cache negativo para evitar loop de requisições repetidas (ex: 401)
+      // para 401s, coloque um TTL maior para reduzir churn
+      const ttl = response.status === 401 ? Date.now() + (CACHE_TTL * 4) : Date.now()
       cache.set(key, { allowed: false, status: response.status, ts: Date.now() })
       return false
     }

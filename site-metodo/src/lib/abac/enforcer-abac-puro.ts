@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import path from 'path'
+import fs from 'fs'
 import { newEnforcer } from 'casbin'
 import { PrismaAdapter } from 'casbin-prisma-adapter'
 import { prisma } from '@/lib/prisma'
@@ -190,6 +191,27 @@ export async function checkABACPermission(subject: string, object: string, actio
 
   // Log the decision using the normalized subject (email when available)
   structuredLogger.audit('ABAC_DECISION', { subject, object, action, context, allowed: result.allowed, responseTime: result.responseTime, appliedPolicies: result.appliedPolicies, performedBy: subject })
+  // Persist a lightweight log line for quick debugging in XLOGS
+  try {
+    const logsDir = path.resolve(process.cwd(), 'XLOGS')
+    if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true })
+    const logPath = path.join(logsDir, 'abac-enforcer.log')
+    const entry = {
+      ts: new Date().toISOString(),
+      subject,
+      object,
+      action,
+      allowed: result.allowed,
+      reason: result.reason,
+      responseTime: result.responseTime,
+      appliedPoliciesCount: Array.isArray(result.appliedPolicies) ? result.appliedPolicies.length : 0,
+      contextPreview: Object.keys(result.context || {}).length > 0 ? Object.fromEntries(Object.entries(result.context as any).slice(0, 5)) : {}
+    }
+    fs.appendFileSync(logPath, JSON.stringify(entry) + '\n')
+  } catch (e) {
+    structuredLogger.error('Failed to write ABAC enforcer XLOGS line', { error: e instanceof Error ? e.message : String(e) })
+  }
+
   await saveAccessLog(subject, object, action, result)
     return result
   } catch (error) {

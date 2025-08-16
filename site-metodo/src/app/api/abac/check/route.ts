@@ -2,6 +2,8 @@ import { NextRequest, NextResponse } from 'next/server'
 import { auth } from '@/lib/auth'
 import { checkABACPermission } from '@/lib/abac/enforcer-abac-puro'
 import { z } from 'zod'
+import fs from 'fs'
+import path from 'path'
 
 const CheckPermissionSchema = z.object({
   subject: z.string(),
@@ -34,13 +36,27 @@ export async function POST(request: NextRequest) {
 
     const { subject, object, action, context = {} } = result.data
 
-    // Verificar permissão via ABAC
+    // Verificar permissão via ABAC e medir tempo
+    const start = Date.now()
     const permissionResult = await checkABACPermission(
       subject,
       object,
       action,
       context
     )
+    const duration = Date.now() - start
+
+    // Persistir log simples em XLOGS/abac-check.log
+    try {
+      const logsDir = path.resolve(process.cwd(), 'XLOGS')
+      if (!fs.existsSync(logsDir)) fs.mkdirSync(logsDir, { recursive: true })
+      const logPath = path.join(logsDir, 'abac-check.log')
+      const ip = request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip') || 'local'
+      const entry = JSON.stringify({ ts: new Date().toISOString(), subject, object, action, ip, allowed: permissionResult.allowed, reason: permissionResult.reason, responseTime: permissionResult.responseTime, routeDurationMs: duration }) + '\n'
+      fs.appendFileSync(logPath, entry)
+    } catch (e) {
+      console.error('Falha ao escrever log ABAC:', e)
+    }
 
     return NextResponse.json({
       allowed: permissionResult.allowed,
