@@ -1,6 +1,9 @@
 'use client'
 
 import React, { useState, useEffect } from 'react'
+import { fetchWithJsonError } from '@/utils/fetchWithJsonError'
+import { formatDateTime } from '@/utils/dateFormat'
+import { ABACProtectedPage } from '@/lib/abac/hoc'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
@@ -97,9 +100,7 @@ export default function DashboardAderenciaTabuas() {
 
   const carregarImportacoes = async () => {
     try {
-      const res = await fetch('/api/aderencia-tabuas/upload')
-      if (!res.ok) throw new Error(`Falha ao listar importações: ${res.status}`)
-      const data = await res.json()
+      const data = await fetchWithJsonError('/api/aderencia-tabuas/upload')
       // API retorna { importacoes, estatisticas }
       setImportacoes(data.importacoes || [])
     } catch (error) {
@@ -121,17 +122,7 @@ export default function DashboardAderenciaTabuas() {
       formData.append('arquivo', file)
       formData.append('data_referencia', new Date().toISOString().slice(0,10))
 
-      const res = await fetch('/api/aderencia-tabuas/validar-upload', {
-        method: 'POST',
-        body: formData
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || `Upload falhou: ${res.status}`)
-      }
-
-      const data = await res.json()
+  const data = await fetchWithJsonError('/api/aderencia-tabuas/validar-upload', { method: 'POST', body: formData })
       // Atualiza lista e seleciona importacao
       await carregarImportacoes()
       if (data.importacaoId) setImportacaoSelecionada(data.importacaoId)
@@ -153,9 +144,10 @@ export default function DashboardAderenciaTabuas() {
         })
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro no upload:', error)
-      alert((error as Error).message)
+      // TODO: substituir por toast unificado (FE-19)
+      window?.alert?.(error.message || 'Erro no upload')
     } finally {
       setIsUploading(false)
       setUploadProgress(0)
@@ -183,18 +175,7 @@ export default function DashboardAderenciaTabuas() {
         }
       }
 
-      const res = await fetch('/api/aderencia-tabuas/analise-exceljs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || `Análise falhou: ${res.status}`)
-      }
-
-      const data = await res.json()
+  const data = await fetchWithJsonError('/api/aderencia-tabuas/analise-exceljs', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       // a API retorna dadosProcessados e proximoPasso
       if (data.dadosProcessados) {
         // extrair estatísticas básicas para exibir
@@ -225,9 +206,9 @@ export default function DashboardAderenciaTabuas() {
       // refresh importacoes
       await carregarImportacoes()
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro na análise:', error)
-      alert((error as Error).message)
+      window?.alert?.(error.message || 'Erro na análise')
     } finally {
       setLoading(false)
     }
@@ -249,24 +230,13 @@ export default function DashboardAderenciaTabuas() {
         manualMapping: manualMapping || undefined
       }
 
-      const res = await fetch('/api/aderencia-tabuas/salvar-dados', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || `Falha ao salvar: ${res.status}`)
-      }
-
-      const data = await res.json()
-      alert('Persistência concluída: ' + (data?.summary || 'Concluído'))
+  const data = await fetchWithJsonError('/api/aderencia-tabuas/salvar-dados', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
+  window?.alert?.('Persistência concluída: ' + (data?.summary || 'Concluído'))
       await carregarImportacoes()
       setPreviewData(null)
     } catch (error) {
-      console.error('Erro ao salvar preview:', error)
-      alert((error as Error).message)
+  console.error('Erro ao salvar preview:', error)
+  window?.alert?.((error as Error).message)
     } finally {
       setLoading(false)
     }
@@ -282,18 +252,7 @@ export default function DashboardAderenciaTabuas() {
 
     try {
       const payload = { importacaoId: importacaoSelecionada, formato, configuracao }
-      const res = await fetch('/api/aderencia-tabuas/relatorio', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      })
-
-      if (!res.ok) {
-        const err = await res.json().catch(() => ({}))
-        throw new Error(err.error || `Falha ao gerar relatório: ${res.status}`)
-      }
-
-      const data = await res.json()
+  const data = await fetchWithJsonError('/api/aderencia-tabuas/relatorio', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(payload) })
       // Se o backend retornou caminho do arquivo, tentar baixar
       const arquivoPath = data?.arquivos && (data.arquivos.excel || data.arquivos.pdf || data.arquivos.json)
       if (arquivoPath) {
@@ -322,9 +281,9 @@ export default function DashboardAderenciaTabuas() {
         URL.revokeObjectURL(url)
       }
 
-    } catch (error) {
+    } catch (error: any) {
       console.error('Erro ao gerar relatório:', error)
-      alert((error as Error).message)
+      window?.alert?.(error.message || 'Erro ao gerar relatório')
     } finally {
       setLoading(false)
     }
@@ -359,7 +318,8 @@ export default function DashboardAderenciaTabuas() {
   }
 
   return (
-    <div className="container mx-auto p-6 space-y-6">
+  <ABACProtectedPage object='aderencia:tabuas' action='read'>
+  <div className="container mx-auto p-6 space-y-6">
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Análise de Aderência de Tábuas de Mortalidade</h1>
@@ -600,7 +560,7 @@ export default function DashboardAderenciaTabuas() {
                         <div>
                           <p className="font-medium">{importacao.nomeArquivo}</p>
                           <p className="text-sm text-muted-foreground">
-                            {new Date(importacao.criadoEm).toLocaleString('pt-BR')}
+                            {formatDateTime(importacao.criadoEm)}
                           </p>
                         </div>
                       </div>
@@ -1090,5 +1050,6 @@ export default function DashboardAderenciaTabuas() {
         </TabsContent>
       </Tabs>
     </div>
+    </ABACProtectedPage>
   )
 }

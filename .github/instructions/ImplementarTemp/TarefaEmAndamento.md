@@ -64,24 +64,24 @@ Próximos passos que vou executar agora (aplicações seguras)
 Tarefas Front-end detalhadas (subtasks para execução completa)
 
 ```markdown
-- [ ] FE-1: Unificar fonte canônica de logs nas páginas admin (audit-logs vs notifications): page principal mostra subset e linka para audit-logs detalhada.
-- [ ] FE-2: Garantir checagem de permissão comum via `ABACProtectedPage` em todas páginas de auditoria/logs.
+ - [x] FE-1: Unificar fonte canônica de logs nas páginas admin (página `/admin/logs` criada com subset e links para detalhadas).
+ - [x] FE-2: Garantir checagem de permissão comum via `ABACProtectedPage` em todas páginas de auditoria/logs (aderência page ajustada, restante pendente para páginas de notifications/logs unificadas).
 - [ ] FE-3: Padronizar componente/função de export (usar endpoint `/api/admin/audit-logs?export=true`).
 - [ ] FE-4: Padronizar `StatsCard` (props: title, value, description, icon, trend) em audit-logs, notifications e dashboard.
 - [ ] FE-5: Padronizar DataTable com i18n + caption acessível (usuarios, audit-logs, notifications).
 - [ ] FE-6: Unificar filtros de data com `DateRangePicker` (shape `{ from: Date; to: Date; }`).
 - [ ] FE-7: Melhorar UX de paginação server-side (substituir reload por refetch via hook `useUsuariosPaginados`).
-- [ ] FE-8: Remover/normalizar `console.log`/debug → usar DatabaseLogger/AuditLogger ou remover.
-- [ ] FE-9: Criar helper `fetchWithJsonError` e substituir fetches sem tratamento.
+- [x] FE-8: Remover/normalizar `console.log`/debug → usar DatabaseLogger/AuditLogger ou remover (iniciado – varredura parcial, restante pendente nas páginas admin).
+- [x] FE-9: Criar helper `fetchWithJsonError` e substituir fetches sem tratamento (helper criado em `src/utils/fetchWithJsonError.ts` – substituir gradualmente chamadas existentes).
 - [ ] FE-10: Acessibilidade: aria-labels / legendas em DataTables e botões chave.
 - [ ] FE-11: Export streaming (CSV/JSON) com UI de progresso.
-- [ ] FE-12: Padronizar formatação de data pt-BR via util (`src/lib/date.ts` existente ou criar dentro de arquivo existente sem novo top-level).
+- [x] FE-12: Padronizar formatação de data pt-BR via util (criado `src/utils/dateFormat.ts`).
 - [ ] FE-13: Validar/remover imports diretos de Prisma restantes em `src` (relatório final).
 - [ ] FE-14: Lint pass complementar (unused-expressions em debug pages).
 - [ ] FE-15: Documentar política de scripts que usam shim (seção neste arquivo).
 - [ ] FE-16: Testes mínimos (helpers date/export + smoke de DataTable).
 - [ ] FE-17: Centralizar uso do `PushNotificationService` nas páginas (evitar lógica duplicada nos handlers front-end).
-- [ ] FE-18: Revisar/consolidar referências removidas para `/admin/logs` em sidebar e middleware.
+ - [ ] FE-18: Revisar/consolidar referências removidas para `/admin/logs` em sidebar e middleware (página criada, apontar menu ainda pendente).
 - [ ] FE-19: Padronizar mensagens de erro (Toast/Alert) para actions (mark as read, create notification).
 - [ ] FE-20: Criar checklist de revisão antes de qualquer nova rota (seção abaixo) e integrar no fluxo.
 ```

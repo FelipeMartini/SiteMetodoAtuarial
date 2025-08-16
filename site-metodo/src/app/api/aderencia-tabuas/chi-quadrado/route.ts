@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { z } from 'zod'
+import { agruparPorFaixaEtaria, consolidarGruposBaixaExpectancia } from '@/utils/aderenciaAgrupamento'
 
 // Implementação numérica básica para CDF de Chi-Quadrado usando gamma incompleta regularizada
 // Referências:
@@ -169,42 +170,18 @@ function calcularChiQuadrado(dados: ChiQuadradoRequest) {
 
   let dadosProcessados = [...dados.calculos_massa_qx]
 
-  // Agrupamento por faixa etária se solicitado
+  // Agrupamento por faixa etária se solicitado (util centralizado) + consolidação E<5
   if (config.agrupar_por_faixa_etaria) {
-    const grupos: Record<string, {
-      faixa: string;
-      observados: number;
-      esperados: number;
-      participantes: number;
-    }> = {}
-
-    for (const item of dados.calculos_massa_qx) {
-      const faixaInicio = Math.floor(item.idade / config.tamanho_faixa!) * config.tamanho_faixa!
-      const faixaFim = faixaInicio + config.tamanho_faixa! - 1
-      const chave = `${faixaInicio}-${faixaFim}`
-
-      if (!grupos[chave]) {
-        grupos[chave] = {
-          faixa: chave,
-          observados: 0,
-          esperados: 0,
-          participantes: 0
-        }
-      }
-
-      grupos[chave].observados += item.obitos_observados
-      grupos[chave].esperados += item.obitos_esperados
-      grupos[chave].participantes += 1
-    }
-
-    dadosProcessados = Object.values(grupos).map((grupo, index) => ({
-      matricula: `GRUPO_${index}`,
+    const gruposBase = agruparPorFaixaEtaria(dados.calculos_massa_qx, config.tamanho_faixa!)
+    const gruposConsolidados = consolidarGruposBaixaExpectancia(gruposBase, 5)
+    dadosProcessados = gruposConsolidados.map((g, idx) => ({
+      matricula: `GRUPO_${idx}`,
       ano_obito: 0,
       sexo: 1,
-      idade: parseInt(grupo.faixa.split('-')[0]),
-      qx_aplicado: grupo.esperados / grupo.participantes,
-      obitos_observados: grupo.observados,
-      obitos_esperados: grupo.esperados
+      idade: g.idadeInicio,
+      qx_aplicado: g.participantes ? g.esperados / g.participantes : 0,
+      obitos_observados: g.observados,
+      obitos_esperados: g.esperados
     }))
   }
 
