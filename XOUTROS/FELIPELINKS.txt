@@ -133,3 +133,19 @@ sim faça isso com uma descrição de commit bem detalhada do commit mas o resto
 
 
 
+
+
+DUPLICADO REVER E REMOVER UM ALTERANDO ONDE FOR PRECISO COMPARAR ANTES 
+site-metodo/src/types/next-auth.d.ts
+site-metodo/src/types/next-auth-abac.d.ts
+
+
+
+
+
+
+
+
+
+
+
