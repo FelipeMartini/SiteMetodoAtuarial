@@ -167,3 +167,27 @@ import { checkClientPermission } from '@/lib/abac/client'
 
 
 
+
+site-metodo/src/app/api/analise-excel
+site-metodo/src/app/calculadora-atuarial
+site-metodo/src/app/api/aderencia-tabuas
+site-metodo/src/app/api/atuarial
+site-metodo/src/app/admin/calculos-atuariais
+site-metodo/src/app/aderencia-tabuas
+site-metodo/src/app/relatorios-atuariais
+site-metodo/src/lib/actuarial
+site-metodo/src/lib/aderencia
+site-metodo/src/lib/analise-excel
+site-metodo/src/lib/atuarial
+site-metodo/src/types/aderencia-tabuas.d.ts
+site-metodo/src/types/analise-excel.d.ts
+site-metodo/src/utils/aderenciaAgrupamento.ts
+site-metodo/src/utils/dateFormat.ts
+site-metodo/src/app/analise-excel
+
+
+
+
+
+
+
